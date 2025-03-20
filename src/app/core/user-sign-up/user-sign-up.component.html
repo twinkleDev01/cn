@@ -1,0 +1,100 @@
+<div class="signup_form_container">
+  <div class="form_con">
+    <div class="container">
+      <div class="form_box">
+        <form class="cn_field" [formGroup]="signUpForm" (ngSubmit)="signUpFormSubmit(signUpForm)">
+          <p class="form_tlt">
+            <span>Welcome to Carrier</span>
+            <span class="txt_p"> Network</span>
+          </p>
+          <div class="row">
+            <div class="col-md-12">
+              <p class="cn_input_lbl">Company Name<span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none">
+                <input matInput type="text" formControlName="companyName" placeholder="Enter Company Name" maxlength="128" class="form-control cn_input" autocomplete="off"/>
+                <mat-error *ngIf="submitted && signUpForm.get('companyName').errors?.['required']" class="error_mess">Last Name is required.</mat-error>
+                <mat-error *ngIf="signUpForm.get('companyName').errors?.['maxlength']" class="error_mess">First name must not exceed 128 characters.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-12">
+              <p class="cn_input_lbl">Email<span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none">
+                <input matInput type="text" formControlName="email" placeholder="Enter Email Address" maxlength="129" class="form-control cn_input"  autocomplete="off"/>
+                <mat-error *ngIf="submitted && signUpForm.get('email').errors?.['required']" class="error_mess"> Email is required.</mat-error>
+                <mat-error *ngIf="signUpForm.get('email').errors?.['pattern']" class="error_mess">Please enter valid email address.</mat-error>
+                <mat-error *ngIf="(signUpForm.get('email').errors?.['maxlength']) && !(signUpForm.get('username').errors?.['pattern'])" class="error_mess">Email must not exceed 128 characters.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <p class="cn_input_lbl">First Name<span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none">
+                <input matInput type="text" formControlName="firstName" placeholder="Enter First Name" maxlength="128" class="form-control cn_input" autocomplete="off" />
+                <mat-error *ngIf="submitted && signUpForm.get('firstName').errors?.['required']" class="error_mess"> First Name is required.</mat-error>
+                <mat-error *ngIf="signUpForm.get('firstName').errors?.['maxlength']" class="error_mess">First name must not exceed 128 characters.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <p class="cn_input_lbl">Last Name<span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none">
+                <input matInput type="text" formControlName="lastName" placeholder="Enter Last Name" maxlength="128" class="form-control cn_input" autocomplete="off"/>
+                <mat-error *ngIf="submitted && signUpForm.get('lastName').errors?.['required']" class="error_mess">Last Name is required.</mat-error>
+                <mat-error *ngIf="signUpForm.get('lastName').errors?.['maxlength']" class="error_mess">First name must not exceed 128 characters.</mat-error>
+              </mat-form-field>
+            </div>
+          
+           
+
+            <!-- systen -->
+            <div class="col-md-12">
+            <p class="cn_input_lbl">Contact Number
+              <img *ngIf="defualtCountryFlag" [src]="defualtCountryFlag" class="flag_img">
+              <img *ngIf="!defualtCountryFlag" src="https://carriernetwork.ai/images/country/US.png" width="20px">
+              <span class="txt_d"> *</span>
+            </p>
+            <div class="country_code_dropdown">
+              <mat-form-field appearance="none" class="cn_inpt_drop">
+                <div class="country_code_fld">
+                  <mat-select formControlName="countryCode" (selectionChange)="selectCountryCode($event.value)"
+                    placeholder="Select Country Code" class="form-control custom_input">
+                    <mat-option *ngFor="let cou of countryList" [value]="cou.code">
+                      <img [src]="cou.flag" name="cla" class="flag_img">
+                      <span style="margin-left: 5px;">+{{cou.countryCode}}</span>
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </mat-form-field>
+              <mat-form-field appearance="none">
+                <input matInput type="text" formControlName="phone" (keypress)="onlyNumberKey($event)" placeholder="Enter Contact Number" maxlength="10" class="form-control cn_input" autocomplete="off" />
+                <mat-error class="error_mess d_inline" *ngIf="signUpForm?.get('phone').errors?.['required']">Contact number is required.</mat-error>
+                <mat-error class="error_mess d_inline me-1" *ngIf="signUpForm?.get('phone').errors?.['maxLength']">Contact Number should be 10 digit.</mat-error>
+                <mat-error class="error_mess d_inline me-1" *ngIf="signUpForm?.get('phone').errors?.['minlength'] && (!signUpForm?.get('phone').errors?.['pattern'])">Contact Number should be 10 digit.</mat-error>
+                <mat-error class="error_mess d_inline" *ngIf="(signUpForm?.get('phone').errors?.['pattern'])">Contact number should be number.</mat-error>
+              </mat-form-field>
+            </div>
+            </div>
+            <!-- system -->
+            <div class="col-md-12 cn_pfix_sfix">
+              <p class="cn_input_lbl">Password<span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none" class="ic_password">
+                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" placeholder="Enter Password" class="form-control cn_input"  minlength="6" maxlength="17"/>
+                <mat-icon matSuffix  class="txt_lb password_icn" (click)="showHidePassword(hide)">{{ hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-error *ngIf="submitted && signUpForm.get('password').errors?.['required']" class="error_mess">Password is required.</mat-error>
+                <mat-error *ngIf="signUpForm.get('password').errors?.['minlength']" class="error_mess">Password must be at least 6 characters long.</mat-error>
+                <mat-error *ngIf="signUpForm.get('password').errors?.['maxlength']" class="error_mess">Only 16 characters are allowed.</mat-error>
+              </mat-form-field>
+              <small class="remember_password error_mess" *ngIf="loginmessageError">{{loginmessageError}}</small>
+            </div>            
+            <div class="form_action">
+              <button class="cn_btn" type="submit">Sign UP</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <p class="acc_sign_up">
+        <span>Already have an account?</span> 
+        <span class="signup_txt" (click)="signIn()"> Sign in</span>
+      </p>
+    </div>
+  </div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

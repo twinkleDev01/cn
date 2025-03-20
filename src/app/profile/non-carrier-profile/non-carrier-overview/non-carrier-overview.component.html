@@ -1,0 +1,145 @@
+<div class="edit_overview_con">
+  <div *ngIf="getUserData  && !skeletonLoader">
+    <div class="form_box">
+      <h3 class="form_tlt">overview</h3>
+      <form autocomplete="off" [formGroup]="profileEdit" (ngSubmit)="profileUpdateValue(profileEdit)" class="cn_field">
+        <div class="row">
+          <div class="col-md-6">
+            <p class="cn_input_lbl">Company Name <span class="txt_d"> *</span></p>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="companyName" placeholder="Enter Company Name" class="form-control cn_input" maxlength="65"/>
+              <mat-error *ngIf="profileEdit.get('companyName').errors?.['required']" class="error_mess">Company name is required.</mat-error>
+              <mat-error *ngIf="profileEdit.get('companyName').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed.</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <p class="cn_input_lbl"><span>First Name</span> 
+              <span class="material-icons info_icon" matTooltip="{{information?.firstName}}"> info_outline </span>
+              <span class="txt_d"> *</span></p>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="firstName" placeholder="Enter First Name" class="form-control cn_input" maxlength="64"/>
+              <mat-error *ngIf="profileEdit.get('firstName').errors?.['required']" class="error_mess">First name is required.</mat-error>
+              <mat-error *ngIf="profileEdit.get('firstName').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed.</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <p class="cn_input_lbl">
+              <span>Last Name</span> 
+              <span class="material-icons info_icon" matTooltip="{{information?.lastName}}"> info_outline </span>
+              <span class="txt_d"> *</span></p>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="lastName" placeholder="Enter Last Name" class="form-control cn_input" maxlength="64" />
+              <mat-error *ngIf="profileEdit.get('lastName').errors?.['required']" class="error_mess">Last name is required.</mat-error>
+              <mat-error *ngIf="profileEdit.get('lastName').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed.</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <p class="cn_input_lbl">
+              <span>Website</span>
+              <span class="material-icons info_icon" matTooltip="As a {{userType}}, maintaining a public website is essential for fostering trust among major business partnership. A company's online presence through a website is indicative of its strength in the market."> info_outline </span>
+
+            </p>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="website" placeholder="Enter Website" class="form-control cn_input" maxlength="64" />
+              <mat-error *ngIf="profileEdit.get('website').errors?.['pattern']" class="error_mess">Enter only website url.</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>Email </span>
+                <span class="material-icons info_icon" matTooltip="Your registered email is your primary email. If you want to change it, you can do so on the user settings page."> info_outline </span>
+              </p>
+              <p class="lable_vlu">{{emailID}}</p>
+            </div>
+          </div>
+          <!-- <div class="col-md-6"></div> -->
+          <div class="col-md-6">
+            <p class="cn_input_lbl">Contact Number
+              <img *ngIf="defualtCountryFlag" [src]="defualtCountryFlag" class="flag_img">
+              <img *ngIf="!defualtCountryFlag" src="https://carriernetwork.ai/images/country/US.png" width="20px">
+              <span class="txt_d"> *</span>
+            </p>
+            <div class="country_code_dropdown">
+              <mat-form-field appearance="none" class="cn_inpt_drop">
+                <div class="country_code_fld">
+                  <mat-select formControlName="countryCode" (selectionChange)="selectCountryCode($event.value)"
+                    placeholder="Select Country Code" class="form-control custom_input">
+                    <mat-option *ngFor="let cou of countryList" [value]="cou.code">
+                      <img [src]="cou.flag" name="cla" class="flag_img">
+                      <span style="margin-left: 5px;">+{{cou.countryCode}}</span>
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </mat-form-field>
+              <mat-form-field appearance="none">
+                <input matInput type="text" formControlName="phone" maxlength="10" placeholder="Enter Contact Number" class="form-control cn_input" maxlength="10" />
+                <mat-error *ngIf="profileEdit.get('phone').errors?.['required']" class="error_mess">Contact number is required.</mat-error>
+                <mat-error *ngIf="profileEdit.get('phone').errors?.['maxlength']" class="error_mess">Contact number should be 10 digit.</mat-error>
+                <mat-error *ngIf="profileEdit.get('phone').errors?.['minlength'] && !profileEdit.get('phone').errors?.['pattern']" class="error_mess">Phone Number should be 10 digit.</mat-error>  
+                <mat-error *ngIf="profileEdit.get('phone').errors?.['pattern']">
+                  Contact number should be number.
+                 </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- <div class="col-md-6"></div> -->
+          <div class="col-md-6">
+            <div class="input_field">
+              <p class="cn_input_lbl">
+                <span>Select State</span>
+                <span class="material-icons info_icon" matTooltip="States play a crucial role in finding the perfect match for your business and network growth through our recommendation engine."> info_outline </span>
+                <span class="txt_d"> *</span>
+
+              </p>
+              <mat-form-field appearance="none">
+                <mat-select class="form-control cn_input" placeholder="Select State" formControlName="stateId" (selectionChange)="selectPickLaneRegions($event)">
+                  <mat-option *ngFor="let regionsData of state?.state" [value]="regionsData.id">{{regionsData?.name}} </mat-option>
+                </mat-select>
+                <mat-error *ngIf="profileEdit.get('stateId').errors?.['required']" class="error_mess">State is required</mat-error>	
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- <div class="col-md-6"></div> -->
+          <div class="col-md-6">
+            <div class="input_field">
+              <p class="cn_input_lbl"><span>Search City</span>
+                <span class="material-icons info_icon" matTooltip="City play a crucial role in finding the perfect match for your business and network growth through our recommendation engine."> info_outline </span>
+                <span class="txt_d"> *</span>
+
+              </p>
+              <mat-form-field class="cn_pfix_icn" appearance="none">
+                <span matSuffix class="material-icons srch_icn">search</span>
+                <input type="text" [matAutocomplete]="auto1" (keyup)="searchUserType($event)" placeholder="Select from City" aria-label="Test" matInput formControlName="cityId"  class="form-control cn_input">
+                <div class="loard_box" *ngIf="loaderSearch">
+                  <span class="custom_spinner spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </span>
+                </div>
+                <mat-autocomplete #auto1="matAutocomplete">
+                  <mat-option *ngFor="let regionsCity of laneCity_one?.city" [value]="regionsCity.name">{{regionsCity?.name}} </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="profileEdit.get('cityId').errors?.['required']" class="error_mess">City is required</mat-error>			
+                	 
+              </mat-form-field>
+              <mat-error *ngIf="dropdownError && !profileEdit.get('cityId').errors" class="error_mess" style="margin-top: -20px;">Select the city from the dropdown </mat-error>			
+            </div>
+          </div>
+          <div class="btn_action mt-1 mb-2">
+            <button class="cn_btn" type="submit">Update Profile</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="skt_eifr" *ngIf="!getUserData && skeletonLoader">
+    <div *ngFor="let fake of generateFakeSkeleton(6)">
+      <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '16px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+      <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '30px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+    </div>
+  </div>
+</div>
+  
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

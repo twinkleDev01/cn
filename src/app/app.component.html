@@ -1,0 +1,20 @@
+<div class="cn_index_body">
+	<div class="cn_header_bar">
+		<app-header></app-header>
+	</div>
+	<div class="cn_proflie_info"></div>
+	<div class="cn_container" [class.hidden]="!isSidebarVisible">
+		<div class="cn_side_menu_overview">
+			<div class="cn_smo_l" *ngIf="isLoggedIn" (mouseenter)="showToggleButton()" (mouseleave)="hideToggleButton()">
+  			<button class="sidebar_toggle" *ngIf="isToggleVisible" (click)="toggleSidebar()">
+  				<i class="st_lft_icn fa-duotone fa-solid fa-angles-left"></i>
+  				<i class="st_rgt_icn fa-duotone fa-solid fa-angles-right"></i>
+  			</button>
+				<app-sidebar class="sm_navbar_hide"></app-sidebar>
+			</div>
+			<div class="cn_smo_r containerQW">
+				<router-outlet></router-outlet>
+			</div>
+		</div>
+	</div>
+</div>

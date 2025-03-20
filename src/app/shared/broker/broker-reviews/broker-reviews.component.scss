@@ -1,0 +1,16 @@
+.detail_value { font-size: 15px; color: #818181; }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 25%; }
+.email_data span:first-child { width: 40%; }
+.arting_line { border-radius: 20px; display: inline-flex; height: 10px; width: 100%; background: linear-gradient(90deg, #34C759, #228B22); }
+.review_box { display: flex;  }
+.review_box .box:first-child { width: 27%; }
+.review_box .box:nth-child(2) { width: 35%; margin-right: 40px; border: 1px solid #ddd; border-top: 0px; border-bottom: 0; padding-left: 40px; }
+.review_box .box:nth-child(3) { width: 35%; }
+.ro_rtng_line { background: #dfdfdf; border-radius: 20px; display: flex ; width: calc(100% - 180px); }
+.ro_rtng_txt { width: 180px; }
+
+@media screen and (max-width: 767px) {
+.email_data span:first-child { width: 100%; }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 50%; }
+.carrier_profile h4 { font-size: 16px; }
+}

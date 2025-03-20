@@ -1,0 +1,133 @@
+<div class="content_box">
+  <h3 class="content_tlt">
+    <span>Saved Note<span *ngIf="savedNotesList?.length > 1 && totalItems > 1">s</span> ({{totalItems ? totalItems : '0'}})</span>
+  </h3>
+  <div class="content_body">
+    <p class="content_dis">Welcome to your Saved Notes features! This is your personal space where you can store and manage important information. You can edit and delete your notes directly from this page. Simply click on the edit note icon you want to modify, make your changes, and save. If you need to remove a note, click on the delete option. Enjoy organizing and maintaining your notes efficiently.</p>
+
+    <div class="trrb_form_box" *ngIf="!skeletonLoader">
+      <div class="cslc_box" *ngFor="let myNoteslist of savedNotesList; let i=index;">
+        <div class="cslc_crd">
+          <div class="cslc_crd_l">
+            <div class="cslc_crd_ll">
+              <div class="cslc_bl_img" *ngIf="myNoteslist?.carrier?.profileImage">
+                <img src="{{myNoteslist?.carrier?.profileImage}}" class="img-fluid">
+              </div>
+              <div class="cslc_bl_initail" *ngIf="!myNoteslist?.carrier?.profileImage">
+                <!-- <i class="fa-duotone fa-solid fa-circle-user user_icon initail"></i> -->
+                <i class="fa-sharp-duotone fa-solid fa-square-user initail"></i>
+                <!-- <i class="fa-duotone fa-solid fa-square-user initail"></i> -->
+                <!-- <i class="fa-sharp-duotone fa-solid fa-square-user initail"></i> -->
+                <!-- <span class="initail">{{myNoteslist?.carrier?.companyName | acronymOfName}}</span> -->
+              </div>
+            </div>
+            <div class="cslc_crd_lr">
+              <div class="tlt_5 fw_6 txt_333 cslc_nm">
+                <span class="txt_ellipsis" matTooltip="{{myNoteslist?.carrier.companyName | titleCase | convertEnd}}">{{myNoteslist?.carrier.companyName | titleCase | convertEnd}} </span>
+                <div class="sav_ca_tages">
+                  <!-- <span class="sc_tag unclaimed" *ngIf="!myNoteslist?.carrierId">{{userVerification[0].name}}</span>
+                  <span class="sc_tag" *ngIf="myNoteslist?.carrierId"> {{userVerification[1].name}}</span> -->
+                  <span class="sc_tag unclaimed" *ngIf="!myNoteslist?.carrierId" matTooltip="Unclaimed"><i class="fa-duotone fa-solid fa-badge-check"></i></span>
+                  <span class="sc_tag" *ngIf="myNoteslist?.carrierId" matTooltip="Register"><i class="fa-duotone fa-solid fa-badge-check"></i></span>
+                  <b class="sc_tag" *ngIf="myNoteslist?.carrier?.carrierOperation"> {{carrierOperationName ? carrierOperationName : '-'}}</b>
+                </div>
+              </div>
+              <div class="txt_2 fw_4 txt_666 cslc_locatn" *ngIf="myNoteslist?.carrier.phyCity || myNoteslist?.carrier?.phyStateCode">
+                <span>{{getFormattedAddress(myNoteslist?.carrier.phyCity,myNoteslist?.carrier.phyStateCode,myNoteslist?.carrier?.phyZip,null)}}
+                </span>
+              </div>
+              <div *ngIf="!myNoteslist?.carrier.phyCity && !myNoteslist?.carrier?.phyStateCode">
+                <span>-</span>
+              </div>
+              <div class="txt_2 fw_5 txt_333 cslc_dot_active">
+                <p class="cslc_dot">
+                  <b class="txt_lb fw_4">DOT #: </b>
+                  <span>{{myNoteslist?.carrier.dotNumber ? myNoteslist?.carrier.dotNumber : '-'}}</span>
+                </p>
+                <span class="txt_666 ope_3 cslc_sapration"> | </span>
+                <p class="cslc_dot">
+                  <b class="txt_lb fw_4">Docket: </b>
+                  <span>{{myNoteslist?.carrier.dunsNumber ? myNoteslist?.carrier.dunsNumber : '-'}}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="cslc_crd_r">
+            <div class="cslc_reviw">
+              <p class="txt_333 fw_5 avrg_rtng">{{myNoteslist?.carrier?.averageRatingValue ? myNoteslist?.carrier?.averageRatingValue : '0'}}</p>
+              <app-review-show [averageRating]="myNoteslist?.carrier?.averageRatingValue ? myNoteslist?.carrier?.averageRatingValue : '0'" class="my-carrier-saved-ratting"></app-review-show>
+              <div class="txt_3 fw_5 reviws">
+                <a href="https://carriernetwork.ai/carrier-profile/{{myNoteslist?.carrier.dotNumber}}/{{myNoteslist?.carrier.companyName}}/#review"  target="_blank" (click)="redirectPageCarrier(myNoteslist.carrier.dotNumber,myNoteslist?.carrier.companyName)" class="txt_lb">{{myNoteslist?.carrier?.averageRatingCount ? myNoteslist?.carrier?.averageRatingCount : '0'}} <span>Review<span *ngIf="myNoteslist?.carrier?.averageRatingCount > 1">s</span></span> </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="note_box">
+          <div class="txt_3 fw_4 txt_lb fst-italic mb-2">{{myNoteslist?.note ? myNoteslist?.note : '-'}}</div>
+          <div class="nb_b">
+            <div class="inc_fotr">
+              <div class="inc_fotr_l">
+                <div class="inc_date_box">
+                  <div class="fw_5 inc_date" matTooltip="Created At {{UTCDate(myNoteslist?.createdAt) | date: 'MMM dd, yyyy HH:mm'}}">
+                    <i class="fa-sharp-duotone fa-regular fa-calendar-circle-plus txt_p"></i>
+                    <!-- <mat-icon class="material-icon">calendar_month</mat-icon> -->
+                    <span>
+                      {{UTCDate(myNoteslist?.createdAt) | date: 'MMM dd, yyyy HH:mm'}}
+                    </span>
+                  </div>
+                  <div class="fw_5 inc_date" matTooltip="Updated At {{UTCDate(myNoteslist?.createdAt) | date: 'MMM dd, yyyy HH:mm'}}">
+                    <i class="fa-sharp-duotone fa-regular fa-calendar-lines-pen txt_p"></i>
+                    <!-- <mat-icon class="material-icon">calendar_month</mat-icon> -->
+                    <span>
+                      {{UTCDate(myNoteslist?.updatedAt) | date: 'MMM dd, yyyy HH:mm'}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="inc_fotr_r">
+                <div class="ed_del_buttons">
+                  <button class="ed_edit_btn btn_txt_ani" (click)="addNotes(myNoteslist.id,myNoteslist)">
+                    <span class="material-icons-outlined c_green">edit</span>
+                    <span class="ani_txt">Edit Note</span>
+                  </button>
+                  <button class="ed_dtl_btn btn_txt_ani" (click)="removeNote(myNoteslist,i,myNoteslist?.id)">
+                    <span class="material-icons-outlined c_red">delete</span>
+                    <span class="ani_txt">Delete Note</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="savedNotesList?.length > 0 && dataNotFound && !skeletonLoader" class="noMore_record">
+    	<span>There are no more records to show.</span>
+    </div>
+
+    <div class="text-center" *ngIf="savedNotesList?.length > 0 && spinnerLoader">
+      <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+    </div>
+
+    <div class="saved_carrier_list_con" class="skeletonloader" *ngIf="savedNotesList?.length==0 && !skeletonLoader">
+      <div class="empty-state">
+        <div class="empty-state__content">
+          <div class="empty-state__icon">
+            <img src="./assets/images/no_data_found_img.jpg" alt="">
+          </div>
+          <div class="empty-state__message">My Saved Note</div>
+          <p class="empty-state__help">This is no my saved note.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="saved_carrier_list_con"class="skt_eifr" *ngIf="skeletonLoader">
+      <div class="mb-3">
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '24px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+      </div>
+      <div class="scl_row pt-3 px-3" *ngFor="let fake of generateFakeSkeleton(5)" style="display: block;">
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '32px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+      </div>
+    </div>
+    </div>
+</div>

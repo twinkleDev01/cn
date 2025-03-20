@@ -1,0 +1,414 @@
+<div class="vertical_side_menu" id="sideBar">
+	<div class="vsm_con">
+		<ul>
+			<li class="lbl_1" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+				<!-- <a class="main_menu_a" [routerLink]="['/dashboard']">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+						<path
+							d="M2.54 0H5.92C7.33 0 8.46 1.15 8.46 2.561V5.97C8.46 7.39 7.33 8.53 5.92 8.53H2.54C1.14 8.53 0 7.39 0 5.97V2.561C0 1.15 1.14 0 2.54 0ZM2.54 11.4697H5.92C7.33 11.4697 8.46 12.6107 8.46 14.0307V17.4397C8.46 18.8497 7.33 19.9997 5.92 19.9997H2.54C1.14 19.9997 0 18.8497 0 17.4397V14.0307C0 12.6107 1.14 11.4697 2.54 11.4697ZM17.4601 0H14.0801C12.6701 0 11.5401 1.15 11.5401 2.561V5.97C11.5401 7.39 12.6701 8.53 14.0801 8.53H17.4601C18.8601 8.53 20.0001 7.39 20.0001 5.97V2.561C20.0001 1.15 18.8601 0 17.4601 0ZM14.0801 11.4697H17.4601C18.8601 11.4697 20.0001 12.6107 20.0001 14.0307V17.4397C20.0001 18.8497 18.8601 19.9997 17.4601 19.9997H14.0801C12.6701 19.9997 11.5401 18.8497 11.5401 17.4397V14.0307C11.5401 12.6107 12.6701 11.4697 14.0801 11.4697Z" />
+					</svg>
+					<span>Dashboard</span>
+				</a> -->
+			</li>
+			<li class="lbl_2" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+				<div [ngClass]="toggleDropdown ? 'menu_max' : 'menu_min'">
+					<a class="v_drop_menu" (click)="menuToggleEvent($event,'profile')">
+						<div>
+							<i class="fa-duotone fa-solid fa-user-pen"></i>
+							<span>Edit Profile</span>
+						</div>
+						<span class="material-icons-outlined">expand_more</span>
+					</a>
+					<ul class="v_sub_menu">
+						<li *ngIf="userType =='CARRIER'" [routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/overview']" (click)="isMobile ? mobMenuToggleEvent() : null">Overview</a>
+						</li>
+						<li *ngIf="userType =='BROKER'" [routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/overview']" (click)="isMobile ? mobMenuToggleEvent() : null">Overview</a>
+						</li>
+						<li *ngIf="userType ==='SELLER'  || userType ==='SHIPPER' || userType === 'DISPATCHER'" [routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/overview']" (click)="isMobile ? mobMenuToggleEvent() :null">Overview</a>
+						</li>
+						<li *ngIf="userType =='CARRIER'" [routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/business-information']"  (click)="isMobile ? mobMenuToggleEvent() :null">Business Information</a>
+						</li>
+						<li *ngIf="userType === 'BROKER'"
+							[routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/business-information']"  (click)="isMobile ? mobMenuToggleEvent() :null">Business Information</a>
+						</li>
+						<li *ngIf="userType ==='SELLER' || userType ==='SHIPPER' || userType === 'DISPATCHER'"
+							[routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/business-information']"  (click)="isMobile ? mobMenuToggleEvent() :null">Business Information</a>
+						</li>
+						<!-- <li [routerLinkActive]="['active']" *ngIf="userType =='CARRIER'">
+							<a class="sub_menu_a" [routerLink]="['/profile/insurance']">Insurance</a>
+						</li> -->
+						<li [routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="userType =='CARRIER' ? ['profile/lanes-regions-terminals'] : userType =='BROKER' ? ['profile/lanes-regions-terminals']: ['profile/non-carrier-lanes-regions']">
+							<span *ngIf="userType == 'CARRIER' || userType == 'BROKER'" (click)="isMobile ? mobMenuToggleEvent() :null">Lanes, Regions & Terminals</span>
+							<span *ngIf="userType ==='SELLER' || userType ==='SHIPPER' || userType === 'DISPATCHER'" (click)="isMobile ? mobMenuToggleEvent() :null">Lanes & Regions</span>
+							</a>
+						</li>
+						<!-- <li *ngIf="userType ==='SELLER' || userType ==='BROKER' || userType ==='SHIPPER' || userType === 'DISPATCHER'" [routerLinkActive]="['active']"><a class="sub_menu_a" [routerLink]="['/profile/non-carrier-lanes-regions']">Lanes & Regions</a></li> -->
+						<li *ngIf="userType =='CARRIER'" [routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/media-gallery']" (click)="isMobile ? mobMenuToggleEvent() :null">Media Gallery</a>
+						</li>
+						<li *ngIf="userType =='CARRIER'" [routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/contact-information']" (click)="isMobile ? mobMenuToggleEvent() :null">Contact Information</a>
+						</li>
+						<li *ngIf="userType =='BROKER'" [routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/contact-information']" (click)="isMobile ? mobMenuToggleEvent() :null">Contact Information</a>
+						</li>
+						<li *ngIf="userType =='CARRIER'" [routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/insurance-insights']" (click)="isMobile ? mobMenuToggleEvent() :null">Insurence</a>
+						</li>
+						<li *ngIf="userType =='CARRIER'" [routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/authority-insights']" (click)="isMobile ? mobMenuToggleEvent() :null">Authority</a>
+						</li>
+						<li *ngIf="userType =='BROKER'" [routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/insurance-insights']" (click)="isMobile ? mobMenuToggleEvent() :null">Insurence</a>
+						</li>
+						<li *ngIf="userType =='BROKER'" [routerLinkActive]="['active']">
+							<a class="sub_menu_a" [routerLink]="['profile/authority-insights']" (click)="isMobile ? mobMenuToggleEvent() :null">Authority</a>
+						</li>
+					</ul>
+				</div>
+			</li>
+			<li class="lbl_1" [ngClass]="activeSubTab=='mySavedCarriers' ? 'active' :  ''"
+				*ngIf="userType ==='SELLER' || userType ==='BROKER' || userType ==='SHIPPER' || userType === 'DISPATCHER'">
+				<a class="" [ngClass]="activeSubTab=='mySavedCarriers' ? 'main_menu_a' :  ''"
+					[routerLink]="['/my-saved-carriers']">
+					
+					<i class="fa-duotone fa-solid fa-address-card"></i>
+					<span (click)="isMobile ? mobMenuToggleEvent() :null">My Saved Carriers</span>
+				</a>
+			</li>
+			<li class="lbl_1"
+				*ngIf="userType ==='SELLER' || userType ==='BROKER' || userType ==='SHIPPER' || userType === 'DISPATCHER'"
+				[routerLinkActive]="['active']">
+				<a class="main_menu_a" [routerLink]="['/my-saved-notes']">
+					
+					<i class="fa-duotone fa-solid fa-note-medical"></i>
+					<span (click)="isMobile ? mobMenuToggleEvent() :null">My Saved Notes</span>
+				</a>
+			</li>
+			<!-- <li class="lbl_1" *ngIf="userType ==='SELLER' || userType ==='BROKER' || userType ==='SHIPPER' || userType === 'DISPATCHER'" [routerLinkActive]="['active']"> -->
+			<li class="lbl_1"
+				*ngIf="userType ==='SELLER' || userType ==='CARRIER' ||  userType ==='BROKER' || userType ==='SHIPPER' || userType === 'DISPATCHER'"
+				[routerLinkActive]="['active']">
+				<a class="main_menu_a"
+				[routerLink]="userType =='CARRIER' ? ['/profile/recent-profile-views'] : userType =='BROKER' ? ['/profile/broker-recent-profile-views']: ['/profile/non-carrier-recent-views']">
+
+					<i class="fa-duotone fa-solid fa-users-viewfinder"></i>
+					<span *ngIf="userType !=='CARRIER' && userType !=='BROKER'" (click)="isMobile ? mobMenuToggleEvent() :null">Recent View</span>
+					<span *ngIf="userType =='CARRIER' || userType =='BROKER'" (click)="isMobile ? mobMenuToggleEvent() :null">Profile Viewed</span>
+				</a>
+			</li>
+
+			<!-- Performance Analytics -->
+			<li class="lbl_2" *ngIf="userType ==='CARRIER' || userType ==='BROKER'" [ngClass]="(activeSubTab=='profileAnalytics' || activeSubTab=='contactLead') ? 'active' :  '' ">
+				<div [ngClass]="togglePerformanceAnalytics ? 'menu_max' : 'menu_min'" >
+					<a class="v_drop_menu" (click)="menuToggleEvent($event,'performanceAnalytics')">
+						<div class="d-flex">
+							<i class="fa-duotone fa-solid fa-chart-user"></i>
+							<span>Performance Analytics</span>
+						</div>
+						<span class="material-icons-outlined">expand_more</span>
+					</a>
+
+					<ul class="v_sub_menu">
+						<li [ngClass]="activeSubTab=='profileAnalytics' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='profileAnalytics' ? 'sub_menu_a' :  ''" [routerLink]="['performance-analytics/profile']" (click)="isMobile ? mobMenuToggleEvent() :null">Profile Analytics</a>
+						</li>
+						<li [ngClass]="activeSubTab=='contactLead' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='contactLead' ? 'sub_menu_a' :  ''" [routerLink]="['performance-analytics/contact-lead']" (click)="isMobile ? mobMenuToggleEvent() :null">Contact Lead</a>
+						</li>
+					</ul>
+				</div>
+			</li>
+
+			<!-- Browse History -->
+			<li class="lbl_2" *ngIf="userType ==='CARRIER' || userType ==='BROKER'"
+			 [ngClass]="(activeSubTab=='truckingCompanies' || activeSubTab=='brokerageCompanies') ? 'active' :  '' ">
+				<div [ngClass]="toggleDropdownBrowseHistory ? 'menu_max' : 'menu_min'" >
+					<a class="v_drop_menu" (click)="menuToggleEvent($event,'browseHistory')">
+						<div class="d-flex">
+							<i class="fa-sharp-duotone fa-regular fa-rectangle-history-circle-user"></i>
+							<span>Browse History</span>
+						</div>
+						<span class="material-icons-outlined">expand_more</span>
+					</a>
+					<ul class="v_sub_menu">
+						<li [ngClass]="activeSubTab=='truckingCompanies' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='truckingCompanies' ? 'sub_menu_a' :  ''" [routerLink]="['/browse-history/trucking-companies']" (click)="isMobile ? mobMenuToggleEvent() :null">Trucking Companies</a>
+						</li>
+						<li [ngClass]="activeSubTab=='brokerageCompanies' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='brokerageCompanies' ? 'sub_menu_a' :  ''" [routerLink]="['/browse-history/brokerage-companies']" (click)="isMobile ? mobMenuToggleEvent() :null">Brokerage Companies</a>
+						</li>
+					</ul>
+				</div>
+			</li>
+
+			<!-- for review -->
+			<li class="lbl_2"
+				[ngClass]="(activeSubTab=='writeReview' || activeSubTab=='manageReview' || activeSubTab=='reviewInvitation' || activeSubTab=='inviteReview' || activeSubTab=='manageMyReview' || activeSubTab=='pendingReviewInvitation') ? 'active' :  '' ">
+				<div [ngClass]="toggleDropdownReview ? 'menu_max' : 'menu_min'" >
+					<a class="v_drop_menu" (click)="menuToggleEvent($event,'review')">
+						<div class="d-flex">
+							
+							<i class="fa-sharp-duotone fa-solid fa-star-sharp-half-stroke"></i>
+							<span>Review</span>
+						</div>
+						<span class="material-icons-outlined">expand_more</span>
+					</a>
+					<ul class="v_sub_menu">
+						<li *ngIf="userType =='CARRIER'" [ngClass]="activeSubTab=='inviteReview' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='inviteReview' ? 'sub_menu_a' :  ''"
+								[routerLink]="['/review/invite-for-review']" (click)="isMobile ? mobMenuToggleEvent() :null">Invite for Review</a>
+						</li>
+						<li [ngClass]="activeSubTab=='writeReview' ? 'active' :  ''"
+							*ngIf=" userType =='CARRIER' || userType =='BROKER' || userType ==='SELLER' ||  userType ==='SHIPPER' || userType === 'DISPATCHER'">
+							<a [ngClass]="activeSubTab=='writeReview' ? 'sub_menu_a' :  ''"
+								[routerLink]="['/review/write-a-review']" >
+							
+								<span (click)="isMobile ? mobMenuToggleEvent() :null">Write a Review</span>
+							</a>
+						</li>
+						<li class="" *ngIf="userType =='CARRIER' || userType =='BROKER'"
+							[ngClass]="activeSubTab=='manageMyReview' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='manageMyReview' ? 'sub_menu_a' :  ''"
+								[routerLink]="['/review/manage-my-reviews']">
+								
+								<span (click)="isMobile ? mobMenuToggleEvent() :null">Review About You</span>
+							</a>
+						</li>
+						<li [ngClass]="activeSubTab=='manageReview' ? 'active' :  ''"
+							*ngIf="userType ==='SELLER' || userType ==='CARRIER'|| userType ==='BROKER'||  userType ==='SHIPPER' || userType === 'DISPATCHER'">
+							<a [ngClass]="activeSubTab=='manageReview' ? 'sub_menu_a' :  ''"
+								[routerLink]="['/review/non-carrier-manage-reviews']">
+							
+								<span (click)="isMobile ? mobMenuToggleEvent() :null">Reviews You’ve Written</span>
+							</a>
+						</li>
+						<!-- durgesh gumasta -->
+						<li [ngClass]="activeSubTab=='reviewInvitation' ? 'active' :  ''"
+						*ngIf="userType ==='SELLER' || userType ==='BROKER' ||  userType ==='SHIPPER' || userType === 'DISPATCHER'">
+						<a [ngClass]="activeSubTab=='reviewInvitation' ? 'sub_menu_a' :  ''"
+							[routerLink]="['/review/non-carrier-review-invitation']" >
+							
+							<span (click)="isMobile ? mobMenuToggleEvent() :null">Review Invitation</span>
+						</a>
+					</li>
+						<!-- new component added -->
+						<li *ngIf="userType =='CARRIER'" [ngClass]="activeSubTab=='pendingReviewInvitation' ? 'active' :''">
+							<a [ngClass]="activeSubTab=='pendingReviewInvitation' ? 'sub_menu_a' :  ''"
+								[routerLink]="['/review/pending-review-invitation']">
+								<span (click)="isMobile ? mobMenuToggleEvent() :null">Pending Review Invitation</span>
+							
+							</a>
+						</li>
+					</ul>
+				</div>
+			</li>
+
+			<!-- Digital Marketing  -->
+			<li class="lbl_2" *ngIf="userType ==='CARRIER' || userType ==='BROKER'"
+				[ngClass]="(activeSubTab=='seo' || activeSubTab=='analytics' || activeSubTab=='social-media' ) ? 'active' :  ''">
+				<div [ngClass]="toggleDropdownDigitalMarketing ? 'menu_max' : 'menu_min'">
+					<a class="v_drop_menu" (click)="menuToggleEvent($event,'digitalMarketing')">
+						<div class="d-flex align-items-center">
+							<i class="fa-duotone fa-solid fa-megaphone"></i>
+							<!-- <i class="fa-sharp fa-solid fa-megaphone"></i> -->
+							<span>Digital Marketing</span>
+						</div>
+						<span class="material-icons-outlined">expand_more</span>
+					</a>
+					<ul class="v_sub_menu">
+						<li *ngIf="userType =='CARRIER' || userType =='BROKER'" [ngClass]="activeSubTab=='seo' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='seo' ? 'sub_menu_a' :  ''"
+								[routerLink]="['/digital-marketing/seo']"><span (click)="isMobile ? mobMenuToggleEvent() :null"> SEO </span></a>
+						</li>
+						<li *ngIf="userType =='CARRIER' || userType =='BROKER'"
+							[ngClass]="activeSubTab=='analytics' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='analytics' ? 'sub_menu_a' :  ''"
+								[routerLink]="['digital-marketing/analytics']"><span (click)="isMobile ? mobMenuToggleEvent() :null">Google Analytics
+								</span></a>
+						</li>
+						<li class="" *ngIf="userType =='CARRIER' || userType =='BROKER'"
+							[ngClass]="activeSubTab=='social-media' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='social-media' ? 'sub_menu_a' :  ''"
+								[routerLink]="['digital-marketing/social-media']">
+
+								<span (click)="isMobile ? mobMenuToggleEvent() :null">Social Media</span>
+							</a>
+						</li>
+
+					</ul>
+				</div>
+			</li>
+
+			<!--Forecast Availability -->
+			<!-- <li class="lbl_2" *ngIf="userType ==='CARRIER'"
+				[ngClass]="(activeSubTab=='add-availability' || activeSubTab=='manage-availability') ? 'active' :  ''">
+				<div [ngClass]="toggleDropdownForecastAvailability ? 'menu_max' : 'menu_min'">
+					<a class="v_drop_menu" (click)="menuToggleEvent($event,'forecastAvailibilty')">
+						<div class="d-flex">
+							<i class="fa-sharp-duotone fa-solid fa-star-sharp-half-stroke"></i>
+							<span>My Truck Availability</span>
+						</div>
+						<span class="material-icons-outlined">expand_more</span>
+					</a>
+					<ul class="v_sub_menu">
+						<li *ngIf="userType =='CARRIER'" [ngClass]="activeSubTab=='add-availability' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='add-availability' ? 'sub_menu_a' :  ''"
+								[routerLink]="['forecastAvailibilty/add-availability']" (click)="isMobile ? mobMenuToggleEvent() :null">Add Availability</a>
+						</li>
+
+						<li class="" *ngIf="userType =='CARRIER'"
+							[ngClass]="activeSubTab=='manage-availability' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='manage-availability' ? 'sub_menu_a' :  ''"
+								[routerLink]="['forecastAvailibilty/manage-availability']">
+								<span (click)="isMobile ? mobMenuToggleEvent() :null">Manage Availability</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</li> -->
+			<!-- My Truck Availability -->
+			<li class="lbl_1" *ngIf="userType ==='CARRIER'" [routerLinkActive]="['active']">
+				<a class="main_menu_a" [routerLink]="['my-truck-availability']">
+					<i class="fa-sharp-duotone fa-regular fa-truck-container"></i>
+					<span (click)="isMobile ? mobMenuToggleEvent() :null">My Truck Availability</span>
+				</a>
+			</li>
+
+
+			<!--Load qoute -->
+			<li class="lbl_1" *ngIf="userType ==='CARRIER' || userType ==='SELLER' || userType ==='BROKER' || userType ==='SHIPPER' || userType === 'DISPATCHER'" [routerLinkActive]="['active']">
+				<a class="main_menu_a" [routerLink]="['requested-load']">
+					<i class="fa-sharp-duotone fa-solid fa-comments-dollar"></i>
+					<span (click)="isMobile ? mobMenuToggleEvent() :null">Requested Leads & Quotes</span>
+				</a>
+			</li>
+
+			<li class="lbl_1" *ngIf="userType ==='BROKER' || userType ==='CARRIER'" [routerLinkActive]="['active']">
+				<a class="main_menu_a" [routerLink]="['received-load']">
+					<i class="fa-sharp-duotone fa-solid fa-comments-dollar"></i>
+				<span (click)="isMobile ? mobMenuToggleEvent() :null"> Received Leads & Quotes</span>
+				</a>
+			</li>
+				
+			<!--carrier Search -->
+			<!-- <li class="lbl_2" *ngIf="userType !=='CARRIER'"
+				[ngClass]="(activeSubTab=='carrier-search' || activeSubTab=='report') ? 'active' :  ''">
+				<div [ngClass]="toggleDropdownCarrier ? 'menu_max' : 'menu_min'">
+					<a class="v_drop_menu" (click)="menuToggleEvent($event,'carrier')">
+						<div class="d-flex">
+							<i class="fa-sharp-duotone fa-solid fa-star-sharp-half-stroke"></i>
+							<span>Carrier</span>
+						</div>
+						<span class="material-icons-outlined">expand_more</span>
+					</a>
+					<ul class="v_sub_menu">
+						<li *ngIf="userType !=='CARRIER'" [ngClass]="activeSubTab=='carrier-search' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='carrier-search' ? 'sub_menu_a' :  ''"
+								[routerLink]="['carrier/carrier-search']" >Carrier Search</a>
+						</li>
+
+						<li class="" *ngIf="userType !== 'CARRIER'"
+							[ngClass]="activeSubTab=='report' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='report' ? 'sub_menu_a' :  ''"
+								[routerLink]="['carrier/report']"  >
+								<span>Report</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</li> -->
+			
+			<!-- only for review -->
+			<li class="lbl_1"
+				*ngIf="userType ==='SELLER' || userType ==='BROKER' || userType ==='SHIPPER' || userType === 'DISPATCHER'"
+				[routerLinkActive]="['active']">
+				<a class="main_menu_a" [routerLink]="['/subscription/manage']">
+					<i class="fa-sharp fa-regular fa-award"></i>
+					<span (click)="isMobile ? mobMenuToggleEvent() :null">Manage Subscription</span>
+				</a>
+			</li>
+			<li class="lbl_1" *ngIf="userType ==='CARRIER'" [routerLinkActive]="['active']">
+				<a class="main_menu_a" [routerLink]="['/subscription/manage']">
+					<i class="fa-sharp fa-regular fa-award"></i>
+				<span (click)="isMobile ? mobMenuToggleEvent() :null">Manage Subscription</span>
+				</a>
+			</li>
+
+			<li class="lbl_2" *ngIf="userType !=='CARRIER'" [ngClass]="(activeSubTab=='find-carriers' ||activeSubTab=='download-report') ? 'active' :  ''" >
+				<div [ngClass]="toggleDropdownFindCarrier ? 'menu_max' : 'menu_min'">
+					<a class="v_drop_menu" (click)="menuToggleEvent($event,'find-carriers')">
+						<div class="d-flex align-items-center">
+							<i class="fa-duotone fa-solid fa-file-export"></i>
+							<span>Carrier Data Exports</span>
+						</div>
+						<span class="material-icons-outlined">expand_more</span>
+					</a>
+					<ul class="v_sub_menu">					
+						<li *ngIf="userType !='CARRIER'" [ngClass]="(activeSubTab=='find-carriers') ? 'active' :  ''" >
+							<a  [ngClass]="activeSubTab=='find-carriers' ? 'sub_menu_a' :  ''" [routerLink]="['/carrier-data-exports/find-carriers']" (click)="isMobile ? mobMenuToggleEvent() :null">Find Carriers</a>
+						</li>
+						
+						<li  [ngClass]="(activeSubTab=='download-report') ? 'active' :  ''" *ngIf="userType !='CARRIER'">
+							<a  [ngClass]="(activeSubTab=='download-report') ? 'sub_menu_a' :  ''" [routerLink]="['/carrier-data-exports/download-report']" >
+								<span (click)="isMobile ? mobMenuToggleEvent() :null">Download report</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</li>
+
+			<li class="lbl_2"  [ngClass]="(activeSubTab=='calculatorMile'|| activeSubTab=='manage-cp-mile' || activeSubTab=='calculatorMonth'||activeSubTab=='manage-cp-month') ? 'active' :  ''" >
+				<div [ngClass]="toggleDropdownRcalculatorReview ? 'menu_max' : 'menu_min'">
+				<a class="v_drop_menu" (click)="menuToggleEvent($event,'calculatorReview')">
+					<div class="d-flex align-items-center">
+							<!-- <mat-icon class="">list_alt</mat-icon> -->
+							<i class="fa-solid fa-calculator-simple"></i>
+							<span>Calculator</span>
+					</div>
+					<span class="material-icons-outlined">expand_more</span>
+				</a>
+				<ul class="v_sub_menu">
+					<li  [ngClass]="(activeSubTab=='calculatorMile'||activeSubTab=='manage-cp-mile') ? 'active' :  ''" >
+						<a  [ngClass]="(activeSubTab=='calculatorMile'||activeSubTab=='manage-cp-mile') ? 'sub_menu_a' :  ''" [routerLink]="['/calculator/manage-cp-mile']" (click)="isMobile ? mobMenuToggleEvent() :null">Cost Per Miles</a>
+					</li>
+					
+					<li  [ngClass]="(activeSubTab=='calculatorMonth'||activeSubTab=='manage-cp-month') ? 'active' :  ''" >
+						<a  [ngClass]="(activeSubTab=='calculatorMonth'||activeSubTab=='manage-cp-month') ? 'sub_menu_a' :  ''" [routerLink]="['/calculator/manage-cp-month']">
+							<span (click)="isMobile ? mobMenuToggleEvent() :null">Monthly Cost</span>
+						</a>
+					</li>
+				</ul>
+				
+			</div>
+			</li>
+			
+			<li class="lbl_1" [routerLinkActive]="['active']">
+				<a class="main_menu_a last_a_bdr" (click)="logout()">
+				
+					<i class="fa-duotone fa-right-from-bracket"></i>
+					<span>Logout</span>
+				</a>
+			</li>
+		</ul>
+		<div class="profile_strength_box">
+			<div class="dhb_r_t">
+				<span class="dhb_rt_lbl">Complete Your Profile</span>
+				<!-- <span class="dhb_rt_dis">80 %</span> -->
+				<span class="dhb_rt_dis" *ngIf="totalStrenth">{{ showStrength(totalStrenth) }} %</span>
+			</div>
+			<div class="custom_slid profile_slide" *ngIf="totalStrenth">
+				<mat-slider [disabled]="strengthdisabled" [max]="100" [min]="0" [(ngModel)]="totalStrenth">
+					<input matSliderThumb>
+				</mat-slider>
+			</div>
+		</div>
+	</div>
+</div>

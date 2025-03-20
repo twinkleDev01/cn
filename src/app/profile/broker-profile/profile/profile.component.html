@@ -1,0 +1,317 @@
+<div class="edit_overview_con">
+  <div *ngIf="getUserData  && !skeletonLoader">
+    <div class="form_box">
+      <h3 class="form_tlt">Edit Profile</h3>
+      <form autocomplete="off" [formGroup]="profileEdit" (ngSubmit)="profileUpdate(profileEdit)" class="cn_field">
+        <div class="row">
+          <div class="col-md-6">
+            <p class="cn_input_lbl">Company Name
+              <span class="material-icons info_icon" matTooltip="{{information?.notEditable}}"> info_outline </span>
+              <span class="txt_d"> *</span>
+            </p>
+            <mat-form-field appearance="none">
+              <input *ngIf="getUserData?.companyName" readonly matInput type="text" 
+                placeholder="Enter Company Name" class="form-control cn_input" maxlength="64"
+                [value]="(profileEdit.get('companyName')?.value | titleCase | convertEnd)" />
+              <mat-error *ngIf="profileEdit.get('companyName').errors?.['required']" class="error_mess">Company name is required.</mat-error>
+              <mat-error *ngIf="profileEdit.get('companyName').errors?.['maxlength']" class="error_mess">Only 64
+                characters are allowed..</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6"></div>
+          <div class="col-md-6">
+            <p class="cn_input_lbl">
+              <span>First Name</span>
+              <span class="material-icons info_icon" matTooltip="{{information?.firstName}}"> info_outline </span>
+              <span class="txt_d"> *</span>
+            </p>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="firstName" placeholder="Enter First Name"
+                class="form-control cn_input" maxlength="64" />
+              <mat-error *ngIf="profileEdit.get('firstName').errors?.['required']" class="error_mess">First name is
+                required.</mat-error>
+              <mat-error *ngIf="profileEdit.get('firstName').errors?.['maxlength']" class="error_mess">Only 64 characters
+                are allowed..</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <p class="cn_input_lbl"><span>Last Name</span>
+              <span class="material-icons info_icon" matTooltip="{{information?.lastName}}"> info_outline </span>
+              <span class="txt_d"> *</span>
+            </p>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="lastName" placeholder="Enter Last Name"
+                class="form-control cn_input" maxlength="64" />
+              <mat-error *ngIf="profileEdit.get('lastName').errors?.['required']" class="error_mess">Last name is
+                required.</mat-error>
+              <mat-error *ngIf="profileEdit.get('lastName').errors?.['maxlength']" class="error_mess">Only 64 characters
+                are allowed..</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <p class="cn_input_lbl">
+              <span>Website</span>
+              <span class="material-icons info_icon"
+                matTooltip="As a {{userType}}, maintaining a public website is essential for fostering trust among major business partnership. A company's online presence through a website is indicative of its strength in the market.">
+                info_outline </span>
+
+            </p>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="website" placeholder="Enter Website"
+                class="form-control cn_input" maxlength="64" />
+              <mat-error *ngIf="profileEdit.get('website').errors?.['pattern']" class="error_mess">Enter only website
+                url.</mat-error>
+            </mat-form-field>
+          </div>
+
+
+
+          <div class="col-md-6">
+            <p class="cn_input_lbl">
+              <span>Company Slogan</span>
+              <span class="material-icons info_icon" matTooltip="{{information?.companySlogan}}"> info_outline </span>
+              <span class="txt_d"> *</span>
+            </p>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="companySlogan" placeholder="Enter Company Slogan"
+                class="form-control cn_input" maxlength="100" />
+              <mat-error *ngIf="profileEdit.get('companySlogan').errors?.['required']" class="error_mess">Company slogan
+                is required.</mat-error>
+              <mat-error *ngIf="profileEdit.get('companySlogan').errors?.['maxlength']" class="error_mess">Only 100
+                characters are allowed..</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <p class="cn_input_lbl">
+              <span>Scac</span>
+              <span class="material-icons info_icon" matTooltip="{{information?.SCAC}}"> info_outline </span>
+            </p>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="scacNumber" (keypress)="onlyAlphabetsKey($event)"
+                placeholder="Enter Scac. Example: ABFS" class="form-control cn_input" maxlength="4" />
+              <mat-error *ngIf="profileEdit.get('scacNumber').errors?.['pattern']" class="error_mess">Only characters
+                are allowed.</mat-error>
+              <mat-error
+                *ngIf="profileEdit.get('scacNumber').errors?.['maxlength'] && !profileEdit.get('scacNumber').errors?.['pattern']"
+                class="error_mess">Only 4 characters
+                are allowed..</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <p class="cn_input_lbl">
+              <span>Duns</span>
+              <span class="material-icons info_icon" matTooltip="{{information?.DUNS}}"> info_outline </span>
+              <span></span>
+            </p>
+            <mat-form-field appearance="none">
+              <input matInput type="text" (keypress)="onlyNumberKey($event)" formControlName="dunsNumber"
+                placeholder="Enter Duns. Example: 123456789" class="form-control cn_input" maxlength="9" />
+              <mat-error *ngIf="profileEdit.get('dunsNumber').errors?.['maxlength']" class="error_mess">Only 9 numbers
+                are allowed..</mat-error>
+              <mat-error *ngIf="profileEdit.get('dunsNumber').errors?.['pattern']" class="error_mess">Only numbers
+                are allowed.</mat-error>
+              <mat-error
+                *ngIf="profileEdit.get('dunsNumber').errors?.['minlength'] && !profileEdit.get('dunsNumber').errors?.['pattern']"
+                class="error_mess">Duns code should have minimum 9 digits.</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-12" (click)="subsciptionPlanCheck()">
+            <div class="mt-4 mb-4">
+              <div class="">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="text_area_input_box">
+                      <div class="topbar"><span class="fs_13 top_txt">Company Overview :
+                          <span class="txt_d"> *</span>
+
+                        </span><span><i class="fa-solid fa-wand-magic-sparkles"></i> <i
+                            class="fa-solid fa-brackets-curly"></i></span></div>
+                      <div class="box_header">
+                        <div class="email_dropdown">
+                          <button type="button" class="header_options fs_13" (click)="toggleDropdown()">
+                            <span class="ai_btn">
+                              <i class="fa-duotone fa-microchip-ai me-2"></i>Overview AI</span></button>
+                          <div *ngIf="dropdownOpen" id="dropdown" class="dropdown">
+                            <ul (click)="subsciptionPlanCheck()">
+                              <li><button class="sub_btn" type="button" (click)="sendInformation('AIGenerated')">Let AI write for me</button></li>
+                              <li><button class="sub_btn" type="button" (click)="sendInformation('Enter custom prompt')"> Enter custom prompt</button></li>
+                              <li class="list_one" [class.disabled]="!enableDisable">
+                                <button class="sub_btn" type="button">Improve writing <i class="fa-duotone fa-pen-swirl"></i>
+                                  <ul class="option_one child_nesting" [class.disabled]="improvewriting">
+                                    <li class="child_list" (click)="sendInformation('Fix spelling and grammar')">Fix spelling and grammar</li>
+                                    <li class="child_list" (click)="sendInformation('Make it longer')">Make it longer</li>
+                                    <li class="child_list" (click)="sendInformation('Make it shorter')">Make it shorter </li>
+                                    <li class="child_list" (click)="sendInformation('Rewrite')">Rewrite</li>
+                                    <li class="child_list" (click)="sendInformation('Improve structure')">Improve structure</li>
+                                    <li class="child_list" (click)="sendInformation('Make more persuasive')">Make more persuasive</li>
+                                    <li class="child_list" (click)="sendInformation('Summarize')">Summarize</li>
+                                  </ul>
+                                </button>
+                              </li>
+                              <li class="list_two" [class.disabled]="!enableDisable"><button type="button"
+                                  class="sub_btn"> Change tone <i class="fa-brands fa-cotton-bureau"></i>
+                                  <ul class="option_one child_nesting" [class.disabled]="changeTone">
+                                    <li class="child_list" (click)="sendInformation('Professional')">Professional</li>
+                                    <li class="child_list" (click)="sendInformation('Friendly')">Friendly</li>
+                                    <li class="child_list" (click)="sendInformation('Informative')">Informative</li>
+                                    <li class="child_list" (click)="sendInformation('Helpful')">Helpful</li>
+                                  </ul>
+                                </button></li>
+                              <li [class.disabled]="!enableDisable"><button type="button" class="sub_btn"
+                                  (click)="sendInformation('Generate based on summary')"> Generate based on
+                                  summary</button></li>
+                            </ul>
+                          </div>
+                        </div>
+                        <!-- <button class="header_options fs_13" type="button" (click)="userGenerated()"><span></span><span>Let me Write</span> </button> -->
+                      </div>
+                      <div class="filter_banner" id="filter_banner" *ngIf="isSendMessage">
+                        <input type="text" class="filter_input" [(ngModel)]="newMessage"
+                          (keydown.enter)="$event.preventDefault()" [ngModelOptions]="{standalone: true}"
+                          placeholder="Write a detailed instruction of what you'd like to see in your email">
+
+                        <button class="submit_btn" type="button" [disabled]="!newMessage" (click)="sendMessage()"><i
+                            class="fa-duotone fa-pen-nib"></i></button>
+                      </div>
+                      <div class="" style="position: relative;">
+                        <textarea cols="20" rows="10" (input)="checkTextarea($event)"
+                          [ngModelOptions]="{standalone: true}" (click)="saveUserGenerated()" [(ngModel)]="description"
+                          (keypress)="checkDecription($event)" class="text_area" maxlength="1024"
+                          placeholder="Start typing the company overview here. If you're a Business Pro user, you can get help of AI assistance to generate the overview for you."
+                          #descriptionInput="ngModel" required>
+                    </textarea> <!-- (paste)="onPaste($event)" -->
+                        <div
+                          *ngIf="!errorMessage && descriptionInput.invalid && (descriptionInput.dirty || descriptionInput.touched)">
+                          <span *ngIf="descriptionInput.invalid && isButtonDisabled" class="error_mess">Company Overview
+                            is required.</span>
+                        </div>
+                        <div *ngIf="errorMessage">
+                          <p class="error_mess">Company Overview cannot exceed 1024 characters.</p>
+                        </div>
+                        <!-- <div *ngIf=" errorMessage && errerApi">
+                      <p>Description cannot exceed 1024 characters .</p>
+                    </div> -->
+                        <div style="position: absolute; top: 0px;">
+                          <div class="mb-4 ai_mess_gen">
+                            <span *ngFor="let message of messages" class="message"
+                              [ngClass]="{'user-message': message.role === 'user', 'ai-message': message.role === 'assistant'}">
+                              {{ message.content }}</span>
+                          </div>
+                          <div class="d-flex align-itmes-center submit_btn_group" *ngIf="showEditAbleButton">
+                            <button class="cn_btn save_btn d-block" type="button" (click)="useGeneratedText()">
+                              <mat-icon class="fs_20 height_20">check</mat-icon>Use
+                            </button>
+                            <button class="cn_btn d-block ms-2 other_action" type="button"
+                              (click)="tryAgainGeneratedText('tryAgain')">
+                              <mat-icon>refresh</mat-icon>Try again
+                            </button>
+                            <button class="cn_btn d-block ms-2 other_action" type="button"
+                              (click)="discardGeneratedText()">
+                              <mat-icon class="fs_20 height_20">delete</mat-icon>Discard
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="btn_action mt-1 mb-2">
+            <button class="cn_btn" type="submit" [disabled]="isButtonDisabled">Update Profile</button>
+            <!-- [disabled]="isButtonDisabled" -->
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="non_editable_con mb-4">
+      <div class="nec_head">
+        <p class="nec_tlt">You and we cannot edit below information. Below information is only managed and updated by
+          FMCSA. In case of any discrepancy Please. <a href="https://carriernetwork.ai/contact-us" target="_blank">
+            contact us</a>.</p>
+      </div>
+      <div class="card_con pb-0">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>OIC State</span>
+                <span class="material-icons info_icon" matTooltip="{{information?.OICState}}"> info_outline </span>
+              </p>
+              <p class="lable_vlu">{{getUserData?.oicState ? getUserData?.oicState : '-'}}</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>Dot Number </span>
+                <span class="material-icons info_icon" matTooltip="{{information?.dotNumber}}"> info_outline </span>
+              </p>
+              <p class="lable_vlu">{{getUserData?.dotNumber ? getUserData?.dotNumber : '-'}}</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>Docket Number </span>
+                <span class="material-icons info_icon" matTooltip="{{information?.docketNumber}}"> info_outline </span>
+              </p>
+              <p class="lable_vlu">{{getUserData?.mcNumber ? getUserData?.mcNumber : '-'}}</p>
+            </div>
+          </div>
+          <!-- new key added  -->
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>Physical Address </span>
+              </p>
+              <p
+                *ngIf="isAddressEmpty(getUserData.phyAddress?.phyAddrLine1, getUserData.phyAddress?.phyAddrLine2, getUserData.phyAddress?.phyCity, getUserData.phyAddress?.phyCountryCode, getUserData.phyAddress?.phyStateCode, getUserData.phyAddress?.phyZipShort)">
+                -</p>
+              <p class="lable_vlu formatted-address"
+                *ngIf="!isAddressEmpty(getUserData.phyAddress?.phyAddrLine1, getUserData.phyAddress?.phyAddrLine2, getUserData.phyAddress?.phyCity, getUserData.phyAddress?.phyCountryCode, getUserData.phyAddress?.phyStateCode, getUserData.phyAddress?.phyZipShort)">
+                {{ getFormattedAddress(getUserData.phyAddress?.phyAddrLine1, getUserData.phyAddress?.phyAddrLine2,
+                getUserData.phyAddress?.phyCity, getUserData.phyAddress?.phyCountryCode,
+                getUserData.phyAddress?.phyStateCode, getUserData.phyAddress?.phyZipShort) }}
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>Mailing Address </span>
+              </p>
+              <p
+                *ngIf="isAddressEmpty(getUserData.mailingAddress?.mailingAddrLine1, getUserData.mailingAddress?.mailingAddrLine2, getUserData.mailingAddress?.mailingCity, getUserData.mailingAddress?.mailingCountryCode, getUserData.mailingAddress?.mailingStateCode, getUserData.mailingAddress?.mailingZipShort)">
+                -</p>
+              <p class="lable_vlu formatted-address"
+                *ngIf="!isAddressEmpty(getUserData.mailingAddress?.mailingAddrLine1, getUserData.mailingAddress?.mailingAddrLine2, getUserData.mailingAddress?.mailingCity, getUserData.mailingAddress?.mailingCountryCode, getUserData.mailingAddress?.mailingStateCode, getUserData.mailingAddress?.mailingZipShort)">
+                {{ getFormattedAddress(getUserData.mailingAddress?.mailingAddrLine1,
+                getUserData.mailingAddress?.mailingAddrLine2, getUserData.mailingAddress?.mailingCity,
+                getUserData.mailingAddress?.mailingCountryCode, getUserData.mailingAddress?.mailingStateCode,
+                getUserData.mailingAddress?.mailingZipShort) }}
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="skt_eifr" *ngIf="!getUserData && skeletonLoader">
+    <!-- <ngx-skeleton-loader count="1" [theme]="{ width: '80%', height: '30px', margin: '0px 0 24px' }"></ngx-skeleton-loader> -->
+    <div *ngFor="let fake of generateFakeSkeleton(8)">
+      <ngx-skeleton-loader count="1"
+        [theme]="{ width: '100%', height: '16px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+      <ngx-skeleton-loader count="1"
+        [theme]="{ width: '100%', height: '30px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+    </div>
+  </div>
+</div>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

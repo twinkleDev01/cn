@@ -1,0 +1,432 @@
+<header class="custom_header mob_style" [ngClass]="checkLogin ? 'header_after_login' : 'header_before_login'">
+  <div class="container-fluid">
+    <div class="header_box">
+      <div class="logo_search">
+        <!-- <div class="header_srch"> -->
+        <div class="header_l pointer">
+          <a href="/" class="cn_logo_box" (click)="logoRedirect()">
+            <img src="./assets/images/cn-logo.png" class="img-fluid desk_img">
+            <img src="./assets/images/cn-logo-mob.png" class="img-fluid mob_img">
+          </a>
+        </div>
+        <div class="header_r">
+          <div class="src_prt_c" id="search_div_home">
+            <!-- active_src_rslt -->
+            <div class="src_prt_box {{srcPrtBox}}">
+              <div class="inpt_src_box">
+                <div class="inpt_src_l">
+                  <div class="inpt_src_ll">
+                    <div class="nsl_box d-flex align-items-center" >
+                      <mat-form-field appearance="none" class="cn_inpt_drop user_type_input">
+                        <div class="country_code_fld">
+                          <mat-select [(value)]="getsearchType" (selectionChange)="selectSearchtype($event.value)"
+                            class="select_filter select_option">
+                            <mat-option value="carrier">Carrier</mat-option>
+                            <mat-option value="broker">Brokerage</mat-option>
+                            <mat-option value="parking">Parking</mat-option>
+                          </mat-select>
+                        </div>
+                      </mat-form-field>
+                      <input type="text" class="form-control custom_input show_src_popup search search_id_header"
+                        #myInput placeholder="Search for carriers in the by country, state, city, or carrier name"
+                        (keyup)="searchUserType($event)" autocomplete="off" searchData>
+                    </div>
+                    <div class="loard_box" *ngIf="loaderSearch">
+                      <span class="custom_spinner spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </span>
+                    </div>
+                  </div>
+                  <!-- <span class="inpt_src_icon" type="button">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </span> -->
+                </div>
+                <div class="inpt_src_r" (click)="closeSearch(myInput)">
+                  <span class="cncl_txt hide_src_popup"><i class="fa-solid fa-xmark"></i></span>
+                </div>
+              </div>
+              <div class="src_rslt_box">
+                <div class="src_rslt_city">
+                  <p class="rslt_lbl">Cities</p>
+                  <div class="src_cty_list" *ngIf="cityData?.length > 0">
+                    <ul *ngFor="let cityRecord of cityData; let i=index;">
+                      <li (click)="redirectPageCity(cityRecord?.country, cityRecord?.state, cityRecord?.city)">
+                        <div class="rslt_row">
+                          <p class="rslt_row_l"><span><img src="{{cityRecord?.countryFlag}}" width="16px">
+                              {{cityRecord.city | titleCase}}, {{cityRecord.state}}</span></p>
+                          <div class="rslt_row_lt txt_ellipsis d-flex align-items-center justify-content-between">
+                            <span class="rslt_row_r txt_ellipsis"><span> {{cityRecord.zipCode}}</span></span>
+                            <span class="rslt_row_r txt_ellipsis" *ngIf="cityRecord?.carrierCount && getsearchType === 'carrier'">Carrier: {{cityRecord.carrierCount}}</span>
+                            <span class="rslt_row_r txt_ellipsis" *ngIf="cityRecord?.brokerCount">Brokerage: {{cityRecord.brokerCount}}</span>
+                            <span class="rslt_row_r txt_ellipsis" *ngIf="cityRecord?.parkingCount">Parking: {{cityRecord.parkingCount}}</span>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- <div class="not_found" *ngIf="emtpyData">
+                    <span class="">City data not found</span>
+                  </div> -->
+                </div>
+                <!-- <div class="src_rslt_carrier">
+                  <p class="rslt_lbl">Carriers</p>
+                  <div class="src_cty_list" *ngIf="searchResult?.carrierData?.length > 0">
+                    <ul *ngFor="let carrierRecord of searchResult?.carrierData; let i=index;">
+                      <li (click)="redirectPageCarrier(carrierRecord.dotNumber,carrierRecord.companyName)">
+                        <div class="rslt_row">
+                          <p class="rslt_row_l txt_ellipsis"><span> <i
+                                class="fa-solid fa-circle custom_circal_green"></i> {{carrierRecord?.companyName |
+                              titleCase | convertEnd}}, {{carrierRecord?.dotNumber}}</span></p>
+                          <p class="rslt_row_lt txt_ellipsis d-flex align-items-center justify-content-between">
+                            <span class="rslt_row_r  txt_ellipsis">
+                              <img src="{{carrierRecord?.countryFlag}}">
+                              <span class="txt_4"> {{carrierRecord?.phyCity | titleCase}},
+                                {{carrierRecord?.phyStateCode}} , {{carrierRecord?.phyCountryCode}}</span>
+                            </span>
+                            <span>
+                              <span class="rslt_row_r" *ngIf="carrierRecord?.driversNumbers">Drivers:
+                                {{carrierRecord?.driversNumbers}} </span>
+                              <span class="rslt_row_r" *ngIf="carrierRecord?.trucksNumbers">Truck:
+                                {{carrierRecord?.trucksNumbers}} </span>
+                            </span>
+                          </p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="src_cty_list" *ngIf="searchResult?.length==0 && emtpyData">
+                    <span>Carrier data not found</span>
+                  </div>
+                </div> -->
+                <div class="src_rslt_carrier">
+                  <!-- Carrier Data Section -->
+                  <p class="rslt_lbl" *ngIf="getsearchType === 'carrier'">Carriers</p>
+                  <div class="src_cty_list" *ngIf="searchResult?.carrierData?.length > 0">
+                    <ul *ngFor="let carrierRecord of searchResult?.carrierData; let i = index;">
+                      <li (click)="redirectPageCarrier(carrierRecord.dotNumber, carrierRecord.companyName)">
+                        <div class="rslt_row">
+                          <p class="rslt_row_l txt_ellipsis">
+                            <span>
+                              <i class="fa-solid fa-circle" [ngClass]="carrierRecord?.isActive == 1?  'custom_circal_green' : 'custom_circal_red'"></i> {{ carrierRecord?.companyName | titleCase | convertEnd }}, {{ carrierRecord?.dotNumber }}
+                            </span>
+                          </p>
+                          <p class="rslt_row_lt txt_ellipsis d-flex align-items-center justify-content-between">
+                            <span class="rslt_row_r txt_ellipsis">
+                              <img src="{{ carrierRecord?.countryFlag }}">
+                              <span class="txt_4">
+                                {{ carrierRecord?.phyCity | titleCase }}, {{ carrierRecord?.phyStateCode }}, {{ carrierRecord?.phyCountryCode }}
+                              </span>
+                            </span>
+                            <span>
+                              <!-- <span class="rslt_row_r" *ngIf="carrierRecord?.driversNumbers">Drivers: {{ carrierRecord?.driversNumbers }}</span> -->
+                              <span class="rslt_row_r" *ngIf="carrierRecord?.trucksNumbers">Truck: {{ carrierRecord?.trucksNumbers }}</span>
+                            </span>
+                          </p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="src_cty_list" *ngIf="searchResult?.carrierData?.length == 0 && emtpyData">
+                    <span>Carrier data not found</span>
+                  </div>
+                
+                  <!-- Broker Data Section -->
+                  <p class="rslt_lbl" *ngIf="getsearchType === 'broker'">Brokerage</p>
+                  <div class="src_cty_list" *ngIf="searchResult?.brokerData?.length > 0">
+                    <ul *ngFor="let brokerRecord of searchResult?.brokerData; let i = index;">
+                      <li (click)="redirectPageBroker(brokerRecord.brokerId, brokerRecord.companyName)">
+                        <div class="rslt_row">
+                          <p class="rslt_row_l txt_ellipsis">
+                            <span>
+                              <i class="fa-solid fa-circle" [ngClass]="brokerRecord?.isActive == 1?  'custom_circal_green' : 'custom_circal_red'"></i>  {{ brokerRecord?.companyName | titleCase }}, {{ brokerRecord?.brokerId }}
+                            </span>
+                          </p>
+                          <p class="rslt_row_lt txt_ellipsis d-flex align-items-center justify-content-between">
+                            <span class="txt_4">
+                              {{ brokerRecord?.city | titleCase }}, {{ brokerRecord?.stateCode }}, {{ brokerRecord?.countryCode }}
+                            </span>
+                          </p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="src_cty_list" *ngIf="searchResult?.brokerData?.length == 0 && emtpyData">
+                    <span>Broker data not found</span>
+                  </div>
+                
+                  <!-- Parking Data Section -->
+                  <p class="rslt_lbl"*ngIf="getsearchType === 'parking'">Parking</p>
+                  <div class="src_cty_list" *ngIf="searchResult?.parkingData?.length > 0">
+                    <ul *ngFor="let parkingRecord of searchResult?.parkingData; let i = index;">
+                      <li (click)="redirectPageParking(parkingRecord.parkingId, parkingRecord.locationName)">
+                        <div class="rslt_row">
+                          <p class="rslt_row_l txt_ellipsis">
+                            <span>
+                               {{ parkingRecord?.companyName | titleCase }}
+                            </span>
+                          </p>
+                          <p class="rslt_row_lt txt_ellipsis d-flex align-items-center justify-content-between">
+                            <span class="txt_4">
+                              {{ parkingRecord?.city | titleCase }}, {{ parkingRecord?.stateCode }}, {{ parkingRecord?.countryCode }}
+                            </span>
+                            <span>
+                              <span class="rslt_row_r" *ngIf="parkingRecord?.capacity">Capacity: {{ parkingRecord?.capacity }}</span>
+                            </span>
+                          </p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="src_cty_list" *ngIf="searchResult?.parkingData?.length == 0 && emtpyData">
+                    <span>Parking data not found</span>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <ul class="mob_frnt_brns p-0 m-0 load_avail_one" *ngIf="checkLogin">
+            <li style="list-style: none;"><a href="/insurance-validator" class="Primery_btn" id="load_avail">Verify Insurance Policy</a></li>
+          </ul>
+          <!-- </div> -->
+          <div class="header_btns after_signin_head" [ngClass]="mobile_leftMenu_css ? 'hide_mob_sidemenu' : 'show_mob_sidemenu'">
+            <div class="mob_sidebar_menu">
+              <div class="msm_head">
+                <img src="./assets/images/cn-logo-mob.png" class="img-fluid">
+                <!-- on click remove class from body -->
+                <span class="material-icons msm_close_icn" (click)="mobMenuToggleEvent()">close</span>
+              </div>
+              <!-- this will show after loggin -->
+              <app-sidebar class="sm_navbar_hide" *ngIf="checkLogin"></app-sidebar>
+              <!-- this name will open befor loging -->
+              <div class="mobile_custom_menuQW">
+                <nav class="mobile-menu" *ngIf="!checkLogin">
+                  <ul>
+                    <li class="manageTokanLogin">
+                      <a href="/app/sign-in" *ngIf="!checkLogin">Sign In</a>
+                    </li>
+                    <li class="after_login_new logoutUser" id="logoutUser" *ngIf="checkLogin">
+                      <a href="#">Logout</a>
+                    </li>
+                    <li class="has-children"  [class.open]="isOpen" (click)="toggleDropdown($event)">
+                      <a href="#">Trucking Companies <span class="icon-arrow">{{ isOpen ? '▲' : '▼' }}</span></a>
+                      <span class="icon-arrow"></span>
+                      <ul class="children" *ngIf="isOpen">
+                        <li><a href="/trucking-companies/united-states">United States</a></li>
+                        <li><a href="/trucking-companies/canada">Canada</a></li>
+                        <li><a href="/trucking-companies/mexico">Mexico</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="/freight-brokerages">Freight Brokerages</a></li>
+                        <li class=""><a href="/insurance-validator"><span class="ins_vail_badge">Insurance Validator</span></a></li>
+                        <li><a href="/truck-parking">Truck Parking</a></li>
+                        <li><a href="/user-pricing">Pricing</a></li>
+                        <li><a href="/load-availability">Load Availability</a></li>
+                        <li><a href="/boc3">BOC-3 Agents</a></li>
+                        <li><a href="/contact-us">Contact Us</a></li>
+                  </ul>
+                  <div class="social_media_box">
+                    <p class="mb-1">Follow Us</p>
+                    <div class="social_media_icon follow_us">
+                      <a href="https://www.facebook.com/carriernetworkai/" target="_blank" rel="noopener">
+                        <img
+                          src="https://carriernetwork.ai/blogs/wp-content/uploads/2024/10/facebook-f-brands-solid-MConverter.eu_.avif"
+                          alt="CarrierNetwork Facebook">
+                      </a>
+                      <a href="https://www.instagram.com/carriernetworkai/" target="_blank" rel="noopener">
+                        <img
+                          src="https://carriernetwork.ai/blogs/wp-content/uploads/2024/10/instagram-brands-solid-MConverter.eu_.avif"
+                          alt="CarrierNetwork Instagram">
+                      </a>
+                      <a href="https://x.com/@CarrierNetwork" target="_blank" rel="noopener">
+                        <img
+                          src="https://carriernetwork.ai/blogs/wp-content/uploads/2024/10/x-twitter-brands-solid-MConverter.eu_.avif"
+                          alt="CarrierNetwork Twitter">
+                      </a>
+                      <a href="https://www.linkedin.com/company/carriernetworkai" target="_blank" rel="noopener">
+                        <img
+                          src="https://carriernetwork.ai/blogs/wp-content/uploads/2024/10/linkedin-brands-solid-1-MConverter.eu_.avif"
+                          alt="CarrierNetwork LinkedIn">
+                      </a>
+                      <a href="https://www.youtube.com/@CarrierNetworkAI" target="_blank" rel="noopener">
+                        <img src="https://carriernetwork.ai/blogs/wp-content/uploads/2024/10/youtube-brands-solid.svg"
+                          alt="CarrierNetwork YouTube">
+                      </a>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </div>
+
+            <ul class="mob_frnt_brns" *ngIf="!checkLogin">
+              <li *ngIf="!isSignUp">
+                <a class="h_btn pointer p-0" id="signup" (click)="redirectSignSignUp('SignIn')">Sign In</a>
+              </li>
+              <li *ngIf="isSignUp">
+                <a class="h_btn pointer p-0" id="sign" (click)="redirectSignSignUp('SignIn')">Sign In</a>
+              </li>
+              <li><a href="/insurance-validator" class="Primery_btn" id="load_avail">Verify Insurance Policy</a></li>
+              <li>
+                <a (click)="writeReview()" class="h_btn reviw_btn">Write a Review</a>
+              </li>
+            </ul>
+
+            <div class="header_dropdown" *ngIf="checkLogin">
+              <div class="cn_user_name">
+                <span>{{getUserData?.companyName ? (getUserData?.companyName | titleCase | convertEnd): '-'}}</span>
+              </div>
+              <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <span class="header_proImg" *ngIf="!getUserData">
+                    <ngx-skeleton-loader count="1" [theme]="{ 'border-radius': '50%', width: '35px', height: '35px' }"
+                      class="loader_mb_0"></ngx-skeleton-loader>
+                  </span>
+                  <div *ngIf="getUserData?.profileImage" class="hed_profile_img">
+                    <img src="{{getUserData?.profileImage}}" class="img-fluid">
+                  </div>
+                  <div *ngIf="getUserData?.companyName && !getUserData?.profileImage" class="hed_profile_img">
+                    <span class="head_inicial">{{getUserData?.companyName | acronymForOneLetter}}</span>
+                  </div>
+                  <!-- <div *ngIf="getUserData?.firstName && !getUserData?.companyName && !getUserData?.profileImage"
+                    class="hed_profile_img">
+                    <span class="head_inicial">{{getUserData?.companyName | acronymOfName}}</span>
+                  </div> -->
+                </a>
+                <div *ngIf="checkLoginUserProfile" class="profile_menu">
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item" *ngIf="userType == 'CARRIER'" [routerLink]="['/profile/overview']">
+                      <i class="fa-duotone fa-solid fa-user-pen"></i>
+                      <span>Edit Profile</span>
+                    </a>
+                    <a class="dropdown-item" *ngIf="userType == 'BROKER'" [routerLink]="['/profile/broker-overview']">
+                      <i class="fa-duotone fa-solid fa-user-pen"></i>
+                      <span>Edit Profile</span>
+                    </a>
+                    <a class="dropdown-item" *ngIf="userType !== 'CARRIER' && userType !== 'BROKER'"
+                      [routerLink]="['/profile/non-carrier-overview']">
+                      <i class="fa-duotone fa-solid fa-user-pen"></i>
+                      <span>Edit Profile</span>
+                    </a>
+                    <a class="dropdown-item" *ngIf="userType == 'CARRIER'" [routerLink]="['/subscription/manage']">
+                      <i _ngcontent-wxc-c61="" class="fa-sharp fa-regular fa-award"></i>
+                      <span>Manage Subscription</span>
+                    </a>
+                    <a class="dropdown-item" *ngIf="userType !== 'CARRIER'" [routerLink]="['/subscription/manage']">
+                      <i _ngcontent-wxc-c61="" class="fa-sharp fa-regular fa-award"></i>
+                      <span>Manage Subscription</span>
+                    </a>
+                    <a class="dropdown-item" [routerLink]="['/user/settings']">
+                      <i class="fa-sharp-duotone fa-solid fa-gear"></i>
+                      <span>Settings</span>
+                    </a>
+                    <a href="/insurance-validator" class="dropdown-item" id="load_avail_one"><i
+                        class="fa-sharp-duotone fa-solid fa-truck-ramp-box"></i><span>Verify Insurance Policy</span></a>
+                    <a class="dropdown-item logout" id="logout" (click)="logout()">
+                      <i class="fa-duotone fa-right-from-bracket"></i>
+                      <span>Logout</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="dropdown-menu dropdown-menu-end" *ngIf="checkLogin && !checkLoginUserProfile"
+                  style="inset: unset !important; transform: translate(-130px, 57px) !important;">
+                  <a class="dropdown-item logout" id="logout" (click)="logout()">Logout</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="mobile_custom_menu">
+            <div class="hamburger-menu" (click)="mobMenuToggleEvent()">
+              <div class="inner_con">
+                <div>
+                  <div class="bar"></div>
+                </div>
+              </div>
+            </div>
+            <!-- nav code above inside-->
+          </div>
+
+          <!-- <ul class="mob_frnt_brns" *ngIf="!checkLogin">
+            <li *ngIf="!isSignUp">
+              <a class="h_btn pointer p-0" id="signup" (click)="redirectSignSignUp('SignIn')">Sign In</a>
+            </li>
+            <li *ngIf="isSignUp">
+              <a class="h_btn pointer p-0" id="sign" (click)="redirectSignSignUp('SignIn')">Sign In</a>
+            </li>
+            <li><a href="/insurance-validator" class="Primery_btn" id="load_avail">Verify Insurance Policy</a></li>
+            <li>
+              <a (click)="writeReview()" class="h_btn reviw_btn">Write a Review</a>
+            </li>
+          </ul> -->
+  <!-- commanted this code because getting two manu after user loggin -->
+          <!-- <div class="header_dropdown" *ngIf="checkLogin">
+            <div class="cn_user_name">
+              <span>{{getUserData?.companyName ? (getUserData?.companyName | titleCase | convertEnd): '-'}}</span>
+            </div>
+            <div class="dropdown">
+              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span class="header_proImg" *ngIf="!getUserData">
+                  <ngx-skeleton-loader count="1" [theme]="{ 'border-radius': '50%', width: '35px', height: '35px' }"
+                    class="loader_mb_0"></ngx-skeleton-loader>
+                </span>
+                <div *ngIf="getUserData?.profileImage" class="hed_profile_img">
+                  <img src="{{getUserData?.profileImage}}" class="img-fluid">
+                </div>
+                <div *ngIf="getUserData?.firstName && !getUserData?.profileImage" class="hed_profile_img">
+                  <span class="head_inicial">{{getUserData?.firstName + getUserData?.lastName | acronymOfName}}</span>
+                </div>
+                <div *ngIf="getUserData?.firstName && !getUserData?.companyName && !getUserData?.profileImage"
+                  class="hed_profile_img">
+                  <span class="head_inicial">{{getUserData?.firstName + getUserData?.lastName | acronymOfName}}</span>
+                </div>
+              </a>
+              <div *ngIf="checkLoginUserProfile" class="profile_menu">
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a class="dropdown-item" *ngIf="userType == 'CARRIER'" [routerLink]="['/profile/overview']">
+                    <i class="fa-duotone fa-solid fa-user-pen"></i>
+                    <span>Edit Profile</span>
+                  </a>
+                  <a class="dropdown-item" *ngIf="userType == 'BROKER'" [routerLink]="['/profile/broker-overview']">
+                    <i class="fa-duotone fa-solid fa-user-pen"></i>
+                    <span>Edit Profile</span>
+                  </a>
+                  <a class="dropdown-item" *ngIf="userType !== 'CARRIER' && userType !== 'BROKER'"
+                    [routerLink]="['/profile/non-carrier-overview']">
+                    <i class="fa-duotone fa-solid fa-user-pen"></i>
+                    <span>Edit Profile</span>
+                  </a>
+                  <a class="dropdown-item" *ngIf="userType == 'CARRIER'" [routerLink]="['/subscription/manage']">
+                    <i _ngcontent-wxc-c61="" class="fa-sharp fa-regular fa-award"></i>
+                    <span>Manage Subscription</span>
+                  </a>
+                  <a class="dropdown-item" *ngIf="userType !== 'CARRIER'" [routerLink]="['/subscription/manage']">
+                    <i _ngcontent-wxc-c61="" class="fa-sharp fa-regular fa-award"></i>
+                    <span>Manage Subscription</span>
+                  </a>
+                  <a class="dropdown-item" [routerLink]="['/user/settings']">
+                    <i class="fa-sharp-duotone fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                  </a>
+                  <a href="/insurance-validator" class="dropdown-item" id="load_avail_one"><i
+                      class="fa-sharp-duotone fa-solid fa-truck-ramp-box"></i><span>Verify Insurance Policy</span></a>
+                  <a class="dropdown-item logout" id="logout" (click)="logout()">
+                    <i class="fa-duotone fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                  </a>
+                </div>
+              </div>
+              <div class="dropdown-menu dropdown-menu-end" *ngIf="checkLogin && !checkLoginUserProfile"
+                style="inset: unset !important; transform: translate(-130px, 57px) !important;">
+                <a class="dropdown-item logout" id="logout" (click)="logout()">Logout</a>
+              </div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

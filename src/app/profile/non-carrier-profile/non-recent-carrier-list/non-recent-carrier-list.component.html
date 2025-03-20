@@ -1,0 +1,215 @@
+<div class="nor_ca_resent_view">
+  <div class="ncrv_con">
+    <div *ngIf="!skeletonLoader">
+      <div class="lable_field">
+        <p class="edt_pg_tlt mb-2">
+          <span>Recent View<span *ngIf="nonCarrierRecentViewList?.length > 1 && !totalRecords == 0">s</span>
+            ({{totalRecords ? totalRecords : '0'}})</span>
+        </p>
+        <p class="lable_vlu">The recent view feature allows you to quickly see the list of carriers you've recently
+          viewed. This list is automatically updated anytime you view a carrier, making it an excellent tool for
+          tracking your interactions. You can also add notes for any carrier in the list and you have another option
+          which is you can easily save any carrier from the list of carriers by simply clicking on the save carrier icon
+          for future reference, which improves your capacity to efficiently manage and organize information.</p>
+      </div>
+
+      <div class="sav_ca_row" *ngFor="let showCarrierData of nonCarrierRecentViewList;let i=index;">
+        <div class="sav_ca_t">
+          <div class="sav_ca_box">
+            <div class="sav_ca_l">
+              <div class="sav_ca_ll">
+                <div class="sav_ca_ll_img" *ngIf="showCarrierData?.carrier?.profileImage">
+                  <img src="{{showCarrierData?.carrier?.profileImage}}" class="img-fluid">
+                </div>
+                <div class="sav_ca_ll_initail" *ngIf="!showCarrierData?.carrier?.profileImage">
+                  <span class="initail">{{showCarrierData?.carrier?.companyName | acronymOfName}} </span>
+                  <span class="src_cr_dotno">
+                    <span>DOT #: </span>
+                    <span class="dot_no">{{showCarrierData?.carrier.dotNumber ? showCarrierData?.carrier.dotNumber :
+                      '-'}}</span>
+                  </span>
+                </div>
+              </div>
+              <div class="sav_ca_br">
+                <div class="sav_ca_nm">
+                  <span class="txt_ellipsis" matTooltip="{{(showCarrierData?.carrier?.companyName | titleCase | convertEnd)}}">{{(showCarrierData?.carrier?.companyName | titleCase | convertEnd)}} </span>
+                    <span class="sc_tag unclaimed" matTooltip="This profile is currently unclaimed by Mcneece Bros Oil Co Inc. All information listed is provided by the FMCSA and CarrierNetwork. Do you work for Mcneece Bros Oil Co Inc? Claim your profile to add additional information and start getting reviews from your customers." *ngIf="!showCarrierData?.carrier?.carrierId">
+                      <i class="fa-duotone fa-solid fa-badge-check" style="color: #818181;"></i> <!-- <span>{{userVerification[0].name}}</span> -->
+                    </span>
+                    <!-- <span class="sc_tag" *ngIf="showCarrierData?.carrier?.carrierId"> {{userVerification[1].name}}</span> -->
+                    <span class="" *ngIf="showCarrierData?.carrier?.carrierId" matTooltip="Register"> <i class="fa-duotone fa-solid fa-badge-check" ></i></span>
+                    <b class="dful_chip m-0 ms-2 grn_chip" *ngIf="carrierOperationName"> {{carrierOperationName ?
+                      carrierOperationName : '-'}}</b>
+                </div>
+                <div class="sav_ca_reviw">
+                  <app-review-show [averageRating]="showCarrierData?.carrier?.averageRatingValue"></app-review-show>
+                  <span class="reviws">
+                    <a href="https://carriernetwork.ai/carrier-profile/{{showCarrierData?.carrier.dotNumber}}/{{showCarrierData?.carrier.companyName}}/#review"
+                      target="_blank" class="reviws_lnk pointer"
+                      (click)="redirectPageCarrier(showCarrierData.carrier.dotNumber,showCarrierData?.carrier.companyName)">(
+                      {{showCarrierData?.carrier?.averageRatingCount ? showCarrierData?.carrier?.averageRatingCount :
+                      '0'}} Review<span *ngIf="showCarrierData?.carrier?.averageRatingCount > 1">s</span>
+                      )</a>
+                    <span class="txt_lb">{{showCarrierData?.carrier?.averageRatingValue ?
+                      showCarrierData?.carrier?.averageRatingValue : '0'}} out of 5</span>
+                  </span>
+                </div>
+                <div class="sav_ca_locatn">
+                  <mat-icon class="material-icon"
+                    *ngIf="showCarrierData?.carrier?.phyCity && showCarrierData?.carrier?.phyStateCode && showCarrierData?.carrier?.phyZip">location_on</mat-icon>
+                  <span
+                    *ngIf="showCarrierData?.carrier?.phyCity && showCarrierData?.carrier?.phyStateCode && showCarrierData?.carrier?.phyZip">{{showCarrierData?.carrier?.phyCity | titleCase}},
+                    {{showCarrierData?.carrier?.phyStateCode}}, {{showCarrierData?.carrier?.phyZip}} </span>
+                  <span
+                    *ngIf="!showCarrierData?.carrier?.phyCity && !showCarrierData?.carrier?.phyStateCode && !showCarrierData?.carrier?.phyZip">-</span>
+                </div>
+                <div class="sav_ca_dot_active">
+                  <p class="sav_ca_dot">
+                    <span class="txt_lb">DOT Number:</span>
+                    <b class="txt_b"> {{showCarrierData?.carrier?.dotNumber ? showCarrierData?.carrier?.dotNumber :
+                      '-'}}</b>
+                  </p>
+                  <span class="sav_ca_sapration"> | </span>
+                  <p class="sav_ca_dot">
+                    <span class="txt_lb">Docket:</span>
+                    <b class="txt_b"> {{showCarrierData?.carrier?.dunsNumber ? showCarrierData?.carrier?.dunsNumber :
+                      '-'}}</b>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="sav_ca_r">
+              <div class="sav_ca_btns">
+                <div class="ae_btns">
+                  <button class="ad_edit_btn" *ngIf="showCarrierData?.carrier?.CarrierNotes?.note"
+                    (click)="addNotes(showCarrierData?.carrier?.carrierId,showCarrierData?.carrier?.CarrierNotes)"
+                    matTooltip="Edit Notes">
+                    <mat-icon class="material-icons">note_alt</mat-icon>
+                  </button>
+                  <button class="ad_edit_btn" *ngIf="!showCarrierData?.carrier?.CarrierNotes?.note"
+                    (click)="addNotes(showCarrierData?.carrier?.carrierId)" matTooltip="Add Notes">
+                    <mat-icon class="material-icons">note_add</mat-icon>
+                  </button>
+                </div>
+                <button class="sav_btn" (click)="savedCarrier(showCarrierData?.carrier?.carrierId)"
+                  matTooltip="Saved Carrier">
+                  <mat-icon class="material-icons">person_add_alt</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sav_ca_b" *ngIf="showSummeryInfo[i]">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="sav_ca_othrs">
+                <span class="txt_b">Freight ({{showCarrierData?.cargoType?.length ? showCarrierData?.cargoType?.length :
+                  '0'}}):</span>
+                <span class="sco_chip" *ngFor="let cargoTypeName of showCarrierData?.cargoType">
+                  {{cargoTypeName?.cargoTypeName}} </span>
+                <span class="" *ngIf="!showCarrierData?.cargoType"> - </span>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="sav_ca_othrs d-inline-flex gap-2 align-items-center me-0 flex-wrap">
+                <span class="txt_b">Truck Types ({{showCarrierData?.equipmentType?.length ?
+                  showCarrierData?.equipmentType?.length : '0'}}):</span>
+                <span class="sco_chip" *ngFor="let equipmentTypeName of showCarrierData?.equipmentType">
+                  {{equipmentTypeName?.equipmentTypeName}} </span>
+                <span class="ps-1" *ngIf="!showCarrierData?.equipmentType"> - </span>
+              </div>
+            </div>
+            <div class="col-md-12 wqwqwqw">
+              <div class="sav_ca_othrs">
+                <span class="txt_b">Fleet Size:</span>
+                <span> {{showCarrierData?.carrier?.trucksNumbers ? showCarrierData?.carrier?.trucksNumbers : '0' }}
+                </span>
+              </div>
+              <div class="sav_ca_othrs">
+                <span class="txt_b">Safety Rating:</span>
+                <span> Satisfactory </span>
+              </div>
+            </div>
+            <div class="col-md-12" *ngFor="let insuranceValue of showCarrierData?.insurance">
+              <div class="sav_ca_othrs">
+                <span class="txt_b">Insurance Limit:</span>
+                <span> {{insuranceValue?.policyLimit | currency:'USD'}}</span>
+              </div>
+              <div class="sav_ca_othrs">
+                <span class="txt_b">Insurance Type:</span>
+                <span>{{insuranceValue?.insuranceType}}</span>
+                <span> {{getInsuranceName(insuranceValue?.insuranceType)}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+        <div class="cslc_dot_active">
+          <p class="cslc_dot">
+            <b>Last Date: </b>
+            <span>{{calculateDiff(showCarrierData.createdAt) | date: 'MMM dd, yyyy HH:MM'}}</span>
+            <span (click)="calculateDiff(showCarrierData.createdAt)"> 
+              {{days}} days <span>{{hours}} hours </span> <span> {{minutes}} minutes</span> Ago
+            </span>
+          </p>
+        </div>
+        <div class="cslc_dot_active">
+          <p class="cslc_dot">
+            <b>latest Date: </b>
+            <span>{{calculateDiff(showCarrierData.updatedAt) | date: 'MMM dd, yyyy HH:MM'}}</span>
+            <span (click)="calculateDiff(showCarrierData.updatedAt)"> 
+              {{days}} days <span>{{hours}} hours </span> <span> {{minutes}} minutes</span> Ago
+            </span>
+          </p>
+        </div>
+      </div>
+
+        <div class="sh_actn">
+          <span class="view_full_review" (click)="showSummery('showSummery',i)" *ngIf="!showSummeryInfo[i]">
+            <span>Show Summary</span>
+            <span class="material-icons">keyboard_arrow_down</span>
+          </span>
+          <span class="view_full_review mt-1" (click)="showSummery('hideSummery',i)" *ngIf="showSummeryInfo[i]">
+            <span>Hide Summary</span>
+            <span class="material-icons">keyboard_arrow_up</span>
+          </span>
+        </div>
+        <div class="view_count">
+          <p>
+            View Count: <span *ngIf="showCarrierData?.viewCount">{{showCarrierData?.viewCount}}</span>
+            <span *ngIf="!showCarrierData?.viewCount">-</span>
+          </p>
+          </div>
+      </div>
+    </div>
+
+    <div class="text-center" *ngIf="nonCarrierRecentViewList?.length > 0 && spinnerLoader">
+      <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+    </div>
+
+    <div class="skeletonloader" *ngIf="nonCarrierRecentViewList?.length==0 && !skeletonLoader">
+      <div class="empty-state">
+        <div class="empty-state__content">
+          <div class="empty-state__icon">
+            <img src="./assets/images/no_data_found_img.jpg" alt="">
+          </div>
+          <div class="empty-state__message">Recent Viewed Carrier List</div>
+          <p class="empty-state__help">This is no Viewed Carrier List</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="nonCarrierRecentViewList?.length > 0 && dataNotFound && !skeletonLoader" class="noMore_record">
+    <span>There are no more records to show.</span>
+  </div>
+  <div class="ncrv_con" *ngIf="skeletonLoader">
+    <div class="mb-3">
+      <ngx-skeleton-loader count="1"
+        [theme]="{ width: '100%', height: '24px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+    </div>
+    <div class="scl_row pt-3 px-3" *ngFor="let fake of generateFakeSkeleton(5)" style="display: block;">
+      <ngx-skeleton-loader count="1"
+        [theme]="{ width: '100%', height: '32px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+    </div>
+  </div>
+</div>

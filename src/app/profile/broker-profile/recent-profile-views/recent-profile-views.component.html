@@ -1,0 +1,102 @@
+<div class="recent_profile_views_con">
+	<p class="edt_pg_tlt">Recent Profile View<span *ngIf="totalRecords > 1">s</span> ({{totalRecords ? totalRecords : '0'}})</p>
+	<p class="lable_vlu">In the 'Profile Views' section, you can see a list of users like Shippers, Brokers, Dispatchers, or Sellers who have checked out your profile, and it's updated in real-time. This helps you keep an eye on how well your profile is doing.</p>
+	<div class="rpvc_box">
+
+		<div class="cslc_box">
+			<div class="cslc_crd" *ngFor="let showRecentProfileView of recentProfileView">
+				<div class="cslc_crd_l">
+					<div class="cslc_crd_ll">
+						<div class="cslc_bl_img" *ngIf="showRecentProfileView?.userDetails?.profileImage">
+							<img src="{{showRecentProfileView?.userDetails?.profileImage}}" class="img-fluid">
+						</div>
+						<div class="cslc_bl_initail" *ngIf="!showRecentProfileView?.userDetails?.profileImage && showRecentProfileView?.userDetails?.firstName !=null && showRecentProfileView?.userDetails?.lastName !=null">
+							<!-- <span class="initail">{{showRecentProfileView?.userDetails?.firstName | acronymOfName}}</span> -->
+							<span class="initail">{{showRecentProfileView?.userDetails?.companyName | acronymOfName}}</span>
+						</div>
+					</div>
+					<div class="cslc_crd_lr">
+						<div class="cslc_nm">
+					
+							<span class="txt_ellipsis" matTooltip="{{(showRecentProfileView?.userDetails?.companyName | titleCase | convertEnd)}}">{{showRecentProfileView?.userDetails?.companyName | titleCase | convertEnd}}</span>
+							<span class="plan_icon">
+								<mat-icon class="material-icons" class="txt_p" matTooltip="Business Plan" *ngIf="showRecentProfileView?.userDetails?.subscriptionPlanType === 3">verified</mat-icon>
+								<mat-icon class="material-icons" class="txt_p" matTooltip ="Free Plan" *ngIf="showRecentProfileView?.userDetails?.subscriptionPlanType === 1">verified</mat-icon>
+
+								<mat-icon class="material-icons" class="txt_lb" matTooltip ="" *ngIf="!showRecentProfileView?.userDetails?.subscriptionPlanType">-</mat-icon>
+								
+								<mat-icon class="material-icons" class="txt_p" matTooltip="Starter Plan" *ngIf="showRecentProfileView?.userDetails?.subscriptionPlanType === 2">verified</mat-icon>
+							</span>
+							<span class="dful_chip  m-0 ms-2" [ngClass]="showRecentProfileView.userType == 'GUEST' ? 'gry_chip ' : 'grn_chip'">{{showRecentProfileView.userType}}</span>
+						</div>
+						<div class="cslc_locatn" *ngIf="showRecentProfileView?.userDetails?.city && showRecentProfileView?.userDetails?.state">
+							<span>{{getFormattedAddress(showRecentProfileView?.userDetails?.city,showRecentProfileView?.userDetails?.state,showRecentProfileView?.userDetails?.phyZip)}}</span>
+						</div>
+						<div class="cslc_locatn" *ngIf="!showRecentProfileView?.userDetails?.city && !showRecentProfileView?.userDetails?.state">
+							<span>-</span>
+							</div>
+							<div class="cslc_dot_active">
+								<p class="cslc_dot">
+									<b>View Count: </b>
+								<span *ngIf="showRecentProfileView?.viewCount">{{showRecentProfileView?.viewCount}}</span>
+								<span *ngIf="!showRecentProfileView?.viewCount">-</span>
+								</p>
+							</div>
+							
+						<div class="cslc_dot_active">
+							<p class="cslc_dot">
+								<b>Last Date: </b>
+								<span>{{calculateDiff(showRecentProfileView.createdAt) | date: 'MMM dd, yyyy HH:MM'}}</span>
+								<span (click)="calculateDiff(showRecentProfileView.createdAt)"> 
+									{{days}} days <span>{{this.hours}} hours </span> <span> {{minutes}} minutes</span> Ago
+								</span>
+							</p>
+						</div>
+						<div class="cslc_dot_active">
+							<p class="cslc_dot">
+								<b>latest Date: </b>
+								<span>{{calculateDiff(showRecentProfileView.updatedAt) | date: 'MMM dd, yyyy HH:MM'}}</span>
+								<span (click)="calculateDiff(showRecentProfileView.updatedAt)"> 
+									{{days}} days <span>{{this.hours}} hours </span> <span> {{minutes}} minutes</span> Ago
+								</span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<!-- spinner loader -->
+		<div class="skeletonloader" *ngIf="recentProfileView.length==0 && !skeletonLoader">
+			<div class="empty-state">
+				<div class="empty-state__content">
+					<div class="empty-state__icon">
+						<img src="https://img.freepik.com/free-vector/upload-concept-illustration_114360-1343.jpg?size=626&ext=jpg"
+							alt="">
+					</div>
+					<div class="empty-state__message">Manage Review</div>
+					<p class="empty-state__help">This is no Review available</p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="text-center"*ngIf="recentProfileView.length > 0 && spinnerLoader">
+			<span class="spinner-border" role="status" style="color: #00b4fc;"></span>
+		</div>
+
+		<div *ngIf="recentProfileView.length > 0 && dataNotFound" class="noMore_record">
+			<span>There are no more records to show.</span>
+		</div>
+	</div>
+
+	<div class="saved_carrier_list_con"class="skt_eifr" *ngIf="skeletonLoader">
+		<div class="mb-3">
+		  <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '24px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+		</div>
+		<div class="scl_row pt-3 px-3" *ngFor="let fake of generateFakeSkeleton(5)" style="display: block;">
+		  <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '32px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+		</div>
+	</div>
+</div>

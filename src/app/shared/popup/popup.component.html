@@ -1,0 +1,1614 @@
+<div class="cn_popup_box" *ngIf="data.openPop=='testing'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Contact Details</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn">Call to Carrier</button>
+      <button type="button" class="cn_btn">Email to Carrier</button>
+    </div>
+  </div>
+</div>
+
+<div class="cn_popup_box" *ngIf="data.openPop=='emailConfirmation'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Email Address</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="my-4 text-center cn_input_lbl">Do you want to remove email address?.</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Ok</button>
+    </div>
+  </div>
+</div>
+
+<div class="cn_popup_box" *ngIf="data.openPop=='removeInsurence'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Insurence</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="cn_input_lbl my-4 text-center">Do you want to remove carrier insurence.</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Ok</button>
+    </div>
+  </div>
+</div>
+<!-- withdrawal Pending Review Invitation -->
+<div class="cn_popup_box" *ngIf="data.openPop=='withdrawalPendingReviewInvitation'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Pending Review Invitation</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="my-4 text-center cn_input_lbl">Do you want to withdrawal Pending Review Invitation?</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Ok</button>
+    </div>
+  </div>
+</div>
+
+<!-- Feature -->
+<div class="cn_popup_box" *ngIf="data.openPop=='addToFavorites' || data.openPop=='removeToFromFavorites'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Featured review</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p *ngIf="data.openPop=='addToFavorites'" class="cn_input_lbl my-4 text-center ">Would you like to highlight this review
+        as a featured one?.</p>
+      <p *ngIf="data.openPop=='removeToFromFavorites'" class="cn_input_lbl my-4 text-center">Would you like to remove this
+        review as a featured one?.</p>
+    </div>
+
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Ok</button>
+    </div>
+  </div>
+</div>
+<div class="cn_popup_box" *ngIf="data.openPop=='laneConfirmation' || data.openPop=='terminalConfirmation'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Lanes & Regions</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="cn_input_lbl my-4 text-center">Do you want to remove <span *ngIf="data.openPop=='laneConfirmation'">lane?</span>
+        <span *ngIf="data.openPop=='terminalConfirmation'">terminal?</span>.
+      </p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Ok</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- View panding review invitation  -->
+<div class="cn_popup_box" *ngIf="data.openPop=='viewPendingreviewInvitation' ">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Pending Review Invitation</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="inc_data_updt">
+
+    <div class="cn_v_scroll cn_popup_body">
+
+      <div class="mb-3">
+        <p class="compny_nm">{{data?.fullName ?
+          data?.fullName : '-'}}</p>
+        <p class="inc_row phone_no mt-2 txt_p">
+          <i class="fa-duotone fa-envelope me-2"></i>{{data?.email}}
+        </p>
+      </div>
+
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="inc_date">
+          <mat-icon class="material-icon">calendar_month</mat-icon>
+          <span class="fs_12">
+            <span class="text_lb">Invitation Date</span>
+            <span class="txt_b ms-1">{{data?.invitationDate | date: 'MMM dd, yyyy'}}</span>
+          </span>
+        </div>
+        <div class="inc_date" *ngIf="data?.reInvitationDate">
+          <mat-icon class="material-icon">calendar_month</mat-icon>
+          <span class="fs_12">
+            <span class="text_lb">Re-invite Date</span>
+            <span class="txt_b ms-1">{{data?.reInvitationDate | date: 'MMM dd, yyyy,'}}</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="rmb_mess">
+        <div class="quote_mess">
+          <span class="quote_dis">{{data?.invitationMessage}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Ok</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="cn_popup_box" *ngIf="data.openPop=='reviewConfirmation'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Manage Review</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="cn_input_lbl my-4 text-center">Do you want to remove review?.</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Ok</button>
+    </div>
+  </div>
+</div>
+
+<div class="cn_popup_box" *ngIf="data.openPop=='phoneConfirmation'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Phone Number</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="my-4 text-center cn_input_lbl">Do you want to remove phone number?.</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Ok</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="data.openPop=='addEmail' || data.openPop=='editEmail'">
+  <div class="cn_popup_box">
+    <form [formGroup]="emailFormGroup" (ngSubmit)="emailFormSubmit(emailFormGroup)" class="mb-0 cn_field">
+      <div class="cn_popup_head">
+        <p class="cn_ph_tlt" *ngIf="data.openPop=='addEmail'">Add Email Detail</p>
+        <p class="cn_ph_tlt" *ngIf="data.openPop=='editEmail'">Edit Email Detail</p>
+        <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+      </div>
+      <div class="cn_v_scroll">
+        <div class="cn_popup_body">
+          <p class="cn_input_lbl">Email Address<span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none">
+            <input matInput type="text" formControlName="email" maxlength="128" placeholder="Enter Email Address"
+              class="form-control cn_input" />
+            <mat-error *ngIf="!errorAlreadyEmailMeg && emailFormGroup.get('email').errors?.['required']" class="error_mess">Email is
+              required</mat-error>
+            <mat-error *ngIf="!errorAlreadyEmailMeg && emailFormGroup.get('email').errors?.['pattern']" class="error_mess">
+              Please enter valid email address</mat-error>
+          </mat-form-field>
+          <mat-error *ngIf="errorAlreadyEmailMeg"
+            class="ccd_error_mess">{{errorAlreadyEmailMeg}}</mat-error>
+          <p class="cn_input_lbl">Email Belong For<span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none">
+            <input matInput type="text" formControlName="belongFor" placeholder="Enter Email Belong For" maxlength="64"
+              class="form-control cn_input" />
+            <mat-error *ngIf="emailFormGroup.get('belongFor').errors?.['required']" class="error_mess">Email belong is
+              required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="cn_popup_footer">
+        <div class="cn_f_acn">
+          <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+          <button type="submit" class="cn_btn" *ngIf="data.openPop=='addEmail'">Add Details</button>
+          <button type="submit" class="cn_btn" *ngIf="data.openPop=='editEmail'">Update Details</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="data.openPop=='addPhone' || data.openPop=='editPhone'">
+  <div class="cn_popup_box">
+    <form [formGroup]="phoneFormGroup" (ngSubmit)="phoneFormSubmit(phoneFormGroup)" class="mb-0 cn_field">
+      <div class="cn_popup_head">
+        <p class="cn_ph_tlt" *ngIf="data.openPop=='addPhone'">Add Contact Detail</p>
+        <p class="cn_ph_tlt" *ngIf="data.openPop=='editPhone'">Edit Contact Detail</p>
+        <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+      </div>
+      <div class="cn_v_scroll">
+        <div class="cn_popup_body">
+          <p class="cn_input_lbl">Contact Number
+            <img *ngIf="defualtPickupCountryFlag" [src]="defualtPickupCountryFlag" class="flag_img">
+            <img *ngIf="!defualtPickupCountryFlag" src="https://carriernetwork.ai/images/country/US.png"
+              class="flag_img">
+            <span class="txt_d"> *</span>
+          </p>
+          <div class="country_code_dropdown">
+            <mat-form-field appearance="none" class="cn_inpt_drop">
+              <div class="country_code_fld">
+                <mat-select formControlName="mobileCountryCode" (selectionChange)="selectPickCountryCode($event.value)"
+                  placeholder="Select country Code" class="form-control cn_input" style="padding: 8px 10px;">
+                  <mat-option *ngFor="let cou of countryList" [value]="cou.code">
+                    <img [src]="cou.flag" name="cla" class="flag_img">
+                    <span style="margin-left: 5px;">+{{cou.countryCode}}</span>
+                  </mat-option>
+                </mat-select>
+              </div>
+            </mat-form-field>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="mobile" (keypress)="onlyNumberKey($event)"
+                placeholder="Enter Phone Number" maxlength="10" class="form-control cn_input" />
+              <mat-error *ngIf="submit && !errorAlreadyexitPhone &&  phoneFormGroup.get('mobile').errors?.['required']" class="error_mess">Phone
+                Number is required.</mat-error>
+                <mat-error *ngIf="submit && !errorAlreadyexitPhone && phoneFormGroup.get('mobile').errors?.['pattern']" class="error_mess">Phone number should be numeric. </mat-error>
+              <mat-error *ngIf="submit && !errorAlreadyexitPhone && !phoneFormGroup.get('mobile').errors?.['pattern'] && phoneFormGroup.get('mobile').errors?.['minlength']" class="error_mess">Contact Number should be 10 digit.</mat-error>
+            </mat-form-field>
+          </div>
+          <mat-error *ngIf=" errorAlreadyexitPhone"
+            class="ccd_error_mess">{{errorAlreadyexitPhone}}</mat-error>
+
+          <p class="cn_input_lbl">Phone Number Belongs For<span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none">
+            <input matInput type="text" formControlName="belongFor" placeholder="Enter Belong Number"
+              class="form-control cn_input" maxlength="64" />
+            <mat-error *ngIf="submit &&phoneFormGroup.get('belongFor').errors?.['required']" class="error_mess">Phone
+              belong is required</mat-error>
+          </mat-form-field>
+
+          <mat-checkbox formControlName="allowWhatsappChat">
+            <span class="txt_3 fw_4 txt_666">Allow Whatsapp Chat<span class="txt_d"></span></span>
+          </mat-checkbox>
+        </div>
+      </div>
+      <div class="cn_popup_footer">
+        <div class="cn_f_acn">
+          <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+          <button type="submit" class="cn_btn" *ngIf="data.openPop=='addPhone'">Add Details</button>
+          <button type="submit" class="cn_btn" *ngIf="data.openPop=='editPhone'">Update Details</button>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="cn_popup_box" *ngIf="data.openPop=='removeMyReview'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Manage My Review</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="cn_input_lbl my-4 text-center">Do you want to remove review?.</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Yes</button>
+    </div>
+  </div>
+</div>
+<div class="cn_popup_box" *ngIf="data.openPop=='removeListItem'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Item</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="cn_input_lbl my-4 text-center">Do you want to remove item.</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Ok</button>
+    </div>
+  </div>
+</div>
+
+<div class="cn_popup_box" *ngIf="data.openPop=='removeSaveCarrierList' || data.openPop=='removeSaveCarrier'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt" *ngIf="data.openPop=='removeSaveCarrierList'">Saved Carrier List</p>
+    <p class="cn_ph_tlt" *ngIf="data.openPop=='removeSaveCarrier'">Saved Carrier</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="cn_input_lbl my-4 text-center" *ngIf="data.openPop=='removeSaveCarrierList'">Do you want to remove this save
+        carrier list?.</p>
+      <p class="cn_input_lbl my-4 text-center" *ngIf="data.openPop=='removeSaveCarrier'">Do you want to remove this save
+        carrier?.</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">No</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Yes</button>
+    </div>
+  </div>
+</div>
+
+<!--saveCarrier List  -->
+<div class="cn_popup_box" *ngIf="data.openPop=='saveCarrier'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Saved Carrier List</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_popup_box">
+    <div *ngIf="showCreateNewList">
+      <form [formGroup]="listFormGroup" (ngSubmit)="carrierListFormSubmit(listFormGroup)" class="mb-0 cn_field">
+
+        <div class="cn_v_scroll">
+          <div class="cn_popup_body">
+            <div class="cn_popup_head">
+              <p class="cn_input_lbl">Create New List<span class="txt_d"></span></p>
+              <span class="material-icons cn_close_icn" (click)="closeNewList()">close</span>
+            </div>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="listName" placeholder="Enter new list name" maxlength="64"
+                class="form-control cn_input" />
+              <mat-error *ngIf="submit && listFormGroup.get('listName').errors?.['required']" class="error_mess">List
+                name is required.</mat-error>
+            </mat-form-field>
+            <button type="submit" class="cn_btn">Create List</button>
+
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="cn_popup_body">
+      <p>Select one or many checkbox</p>
+      <div class="">
+      <mat-checkbox (change)="ValueSelected($event,myListData?.id,myListData?.userId,i)"
+        *ngFor="let myListData of carrierList;let i = index;" class="me-3 d-block" >
+        {{myListData?.listName ? myListData?.listName :'-'}}<span *ngIf="myListData?.listName">({{myListData?.carrierCount}})</span>
+      </mat-checkbox>
+    </div>
+      <p class="mt-4">
+        If you want to add this carrier into a new list. 
+        <button type="submit" (click)="showCreateList()"
+          style="background: #fff; border: none; color: #00b4fc;">Click Here</button> 
+         to create a new list
+      </p>
+    </div>
+    <div class="cn_popup_footer" *ngIf="showSaveButton">
+      <div class="text-center">
+        <button type="submit" class="cn_btn" (click)="saveChanges()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="data.openPop=='addNote' || data.openPop=='editNote'">
+  <div class="cn_popup_box">
+    <form [formGroup]="noteFormGroup" (ngSubmit)="addNoteFormSubmit(noteFormGroup)" class="mb-0 cn_field">
+      <div class="cn_popup_head">
+        <p class="cn_ph_tlt" *ngIf="data.openPop=='addNote'">Add Note</p>
+        <p class="cn_ph_tlt" *ngIf="data.openPop=='editNote'">Edit Note</p>
+        <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+      </div>
+      <div class="cn_v_scroll">
+        <div class="cn_popup_body">
+          <p class="cn_input_lbl" *ngIf="data.openPop=='addNote'">Add Note <span class="txt_d"> *</span></p>
+          <p class="cn_input_lbl" *ngIf="data.openPop=='editNote'">Edit Note</p>
+          <mat-form-field appearance="none">
+            <textarea matInput type="text" formControlName="note" placeholder="Enter Note" class="form-control cn_input"
+              maxlength="500"></textarea>
+            <mat-error *ngIf="submit && noteFormGroup.get('note').errors?.['required']" class="error_mess">Note is
+              required.</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="cn_popup_footer">
+        <div class="cn_f_acn">
+          <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+          <button type="submit" class="cn_btn" *ngIf="data.openPop=='addNote'">Add Note</button>
+          <button type="submit" class="cn_btn" *ngIf="data.openPop=='editNote'">Update Note</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- remove nots -->
+<div class="cn_popup_box" *ngIf="data.openPop=='removeNote'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Remove Note</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="cn_input_lbl my-4 text-center">Do you want to remove note?.</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Ok</button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="data.openPop=='editCarrierList' || data.openPop =='createCarrierList'">
+  <div class="cn_popup_box">
+    <form [formGroup]="listFormGroup" (ngSubmit)="carrierListFormSubmit(listFormGroup)" class="mb-0 cn_field">
+      <div class="cn_popup_head">
+        <p class="cn_ph_tlt" *ngIf="data.openPop=='editCarrierList'">Edit List Name</p>
+        <p class="cn_ph_tlt" *ngIf="data.openPop =='createCarrierList'">Add List Name</p>
+        <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+      </div>
+      <div class="cn_v_scroll">
+        <div class="cn_popup_body">
+          <p class="cn_input_lbl" *ngIf="data.openPop=='createCarrierList'">Add List Name <span class="txt_d"> *</span>
+          </p>
+          <p class="cn_input_lbl" *ngIf="data.openPop=='editCarrierList'">Edit List Name <span class="txt_d"> *</span>
+          </p>
+          <mat-form-field appearance="none">
+            <input matInput type="text" formControlName="listName" placeholder="Enter List Name" maxlength="64"
+              class="form-control cn_input" />
+            <mat-error *ngIf="submit && listFormGroup.get('listName').errors?.['required']" class="error_mess">List name
+              is required.</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="cn_popup_footer">
+        <div class="cn_f_acn">
+          <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+          <button type="submit" class="cn_btn" *ngIf="data.openPop=='editCarrierList'">Update</button>
+          <button type="submit" class="cn_btn" *ngIf="data.openPop =='createCarrierList'">Add</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!--Update Image-->
+<div *ngIf="data.openPop ==='medialUpload' || data.openPop ==='videoUpload'">
+  <div class="cn_popup_box">
+    <form [formGroup]="profileImageForm" (ngSubmit)="profileImageSave(profileImageForm)" class="mb-0 cn_field"
+      autocomplete="off">
+      <div class="cn_popup_head">
+        <p class="cn_ph_tlt" *ngIf="data.openPop ==='videoUpload'">Add Videos</p>
+        <p class="cn_ph_tlt" *ngIf="data.openPop ==='pdfUpload'">Add documents</p>
+        <p class="cn_ph_tlt" *ngIf="data.openPop ==='medialUpload'">Add images</p>
+        <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+      </div>
+      <div class="cn_v_scroll">
+        <div class="cn_popup_body" style="max-height: 80vh;">
+          <div class="row">
+            <div class="col-md-12">
+              <p *ngIf="data.openPop ==='medialUpload'" class="cn_input_lbl">Image Upload
+                <span class="txt_d">* </span>
+              </p>
+              <p *ngIf="data.openPop ==='videoUpload'" class="cn_input_lbl">Video Upload
+                <span class="txt_d">* </span>
+              </p>
+
+              <div class="cn_field">
+                <mat-form-field appearance="none" *ngIf="data.openPop ==='medialUpload'" class="custom_matSuffix_icon">
+                  <input matInput type="text" placeholder="Upload image" class="form-control cn_input"
+                    readonly="readonly">
+                  <mat-icon matSuffix>
+                    <input accept=".png, .jpg, .jpeg" class="inputfile" id="file" name="file" type="file"
+                      (change)="fileChangeEvent($event)" style="display: none;">
+                    <mat-error *ngIf="submit && profileImageForm.get('media').errors?.['required']"
+                      class="error_mess uplod_ree_mess" style="bottom: 33.8rem; left: -69px;">Image is required.</mat-error>
+                    <label class="uif_icon" for="file">
+                      <mat-icon class="material-symbols-outlined">logout</mat-icon>
+                    </label>
+                  </mat-icon>
+                  <mat-hint *ngIf="showImgName">Uploaded Image: {{imgName}}</mat-hint>
+                </mat-form-field>
+                <mat-form-field appearance="none" *ngIf="data.openPop ==='videoUpload'" class="custom_matSuffix_icon">
+                  <input matInput type="text" placeholder="Upload Video" class="form-control  cn_input"
+                    readonly="readonly">
+                  <mat-icon matSuffix>
+                    <input accept=".mp4,.webm,.ogg" class="inputfile" id="file" name="file" type="file"
+                      (change)="multiUpload($event)" style="display: none;">
+                    <mat-error *ngIf="submit && profileImageForm.get('media').errors?.['required']"
+                      class="error_mess uplod_ree_mess" style="bottom: 34.5rem; left: -72px;">Video is required.</mat-error>
+                    <label class="uif_icon" for="file">
+                      <mat-icon class="material-symbols-outlined">logout</mat-icon>
+                    </label>
+                  </mat-icon>
+                  <mat-hint *ngIf="data.openPop ==='videoUpload' && videoName">Uploaded Video: {{videoName}}</mat-hint>
+                </mat-form-field>
+              </div>
+
+              <div *ngIf="data.openPop ==='medialUpload'">
+                <p class="cn_input_lbl">Image Name<span class="txt_d"> *</span></p>
+                <mat-form-field appearance="none" class="custom_matSuffix_icon">
+                  <input matInput type="text" formControlName="mediaName" placeholder="Enter Image Name" maxlength="64"
+                    class="form-control cn_input" />
+                  <mat-error *ngIf="submit && profileImageForm.get('mediaName').errors?.['required']"
+                    class="error_mess">Image name is required.</mat-error>
+                </mat-form-field>
+              </div>
+              <div *ngIf="data.openPop ==='videoUpload'">
+                <p class="cn_input_lbl">Video Name<span class="txt_d"> *</span></p>
+                <mat-form-field appearance="none" class="custom_matSuffix_icon">
+                  <input matInput type="text" formControlName="mediaName" placeholder="Enter Video Name" maxlength="64"
+                    class="form-control cn_input" />
+                  <mat-error *ngIf="submit && profileImageForm.get('mediaName').errors?.['required']"
+                    class="error_mess">Video name is required.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="img_croper_con" *ngIf="onlyCropper">
+                <div *ngIf="data.openPop ==='medialUpload'">
+                  <image-cropper *ngIf="showProfileCropper" [imageChangedEvent]="imageChangedEvent"
+                    [maintainAspectRatio]="true" [aspectRatio]="3 / 2" (imageCropped)="imageCropped($event)"
+                    (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()">
+                  </image-cropper>
+                </div>
+                <p class="crop_img_name" *ngIf="showImgName">{{imgName}}</p>
+              </div>
+              <p class="hints mb-4" *ngIf="data.openPop ==='medialUpload'">Supported image size (480*320 OR 3:2).
+                Supported image format png, jpg, jpeg.</p>
+            </div>
+            <div class="col-md-6 mx-auto text-center" *ngIf="imgURL">
+              <img [src]="imgURL" style="width: 100px; height: 100px;">
+            </div>
+          </div>
+          <p class="txt_4 fw_5 txt_d text-center" *ngIf="multiUploadErrorMsg && data.openPop ==='videoUpload'">The total
+            size of video cannot be greater than 26 MB.</p>
+          <p class="txt_4 fw_5 txt_d text-center" *ngIf="multiUploadErrorMsg && data.openPop ==='medialUpload'">The
+            total size of image cannot be greater than 11 MB.</p>
+        </div>
+      </div>
+      <div class="cn_popup_footer">
+        <div class="cn_f_acn">
+          <span class="cn_btn btn_b" (click)="onNoClick()">Cancel</span>
+          <button type="submit" [disabled]="disbu" class="cn_btn" *ngIf="data.openPop ==='medialUpload'">Upload</button>
+          <button type="submit" [disabled]="multiUploadDisableIndicator" class="cn_btn"
+            *ngIf="data.openPop ==='videoUpload'">Upload</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- upload -->
+
+
+
+
+<!-- Upload pdf  -->
+<div *ngIf="data.openPop ==='pdfUpload'">
+  <div class="cn_popup_box">
+    <form [formGroup]="profileImageForm" (ngSubmit)="profileImageSave(profileImageForm)" class="mb-0 cn_field">
+      <div class="cn_popup_head">
+        <p class="cn_ph_tlt">Add documents</p>
+        <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+      </div>
+      <div class="cn_v_scroll">
+        <div class="cn_popup_body" style="max-height: 80vh;">
+          <p class="cn_input_lbl">Upload PDF <span class="txt_d"> *</span></p>
+          <div class="cn_field">
+            <mat-form-field appearance="none" class="custom_matSuffix_icon">
+              <input matInput type="text" placeholder="Upload PDF" class="form-control cn_input" readonly="readonly">
+              <mat-icon matSuffix>
+                <input accept="application/pdf" class="inputfile" id="file" name="file" type="file"
+                  (change)="onSelectedContract($event)" style="display: none;">
+                <mat-error *ngIf="submit && profileImageForm.get('media').errors?.['required']"
+                  class="error_mess uplod_ree_mess">Document is required.</mat-error>
+                <label class="uif_icon" for="file">
+                  <mat-icon class="material-symbols-outlined">logout</mat-icon>
+                </label>
+              </mat-icon>
+              <mat-hint *ngIf="pdfName">Uploaded PDF: {{pdfName}}</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <p class="cn_input_lbl">PDF Name <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none">
+            <input matInput type="text" formControlName="mediaName" placeholder="Enter File Name" maxlength="64"
+              class="form-control cn_input" />
+            <mat-error *ngIf="submit && profileImageForm.get('mediaName').errors?.['required']"
+              class="error_mess">Document name is required.</mat-error>
+          </mat-form-field>
+
+          <!-- <div class="upload_dock reg_upload_dock">
+            <mat-form-field appearance="none" class="custom_matSuffix_icon">
+              <input matInput type="text" value="{{name}}" placeholder="Browse Document" class="form-control cn_input" readonly="readonly">
+              <mat-error *ngIf="imagmessage" class="error_mess">{{ imagmessage }}</mat-error>
+            </mat-form-field>
+            <div>
+              <input accept="application/pdf" class="inputfile" id="file" name="file" type="file" (change)="onSelectedContract($event)" style="display: none;">
+              <label class="btn btn-primary py-0 mb-3" for="file" style="background: #f5f5f5; border-radius: 0 4px 4px 0; margin: 0;">
+                <img class="icon icon-ic-upload fs_16 txt_lb" src="https://staticprod.laneaxis.com/portal/icon/ic_upload_grey_icon.svg">
+              </label>
+            </div>
+            <mat-form-field appearance="none" class="custom_matSuffix_icon">
+              <input matInput type="text" formControlName="mediaName" placeholder="Enter List Name" maxlength="64" class="form-control cn_input" />
+              <mat-error *ngIf="submit && profileImageForm.get('mediaName').errors?.['required']" class="error_mess">Media name is required.</mat-error>
+            </mat-form-field>
+          </div> -->
+        </div>
+        <!-- <p class="txt_4 fw_5 txt_d text-center"></p> -->
+      </div>
+      <div class="cn_popup_footer">
+        <div class="cn_f_acn">
+          <span class="cn_btn btn_b" (click)="onNoClick()">Cancel</span>
+          <button type="submit" [disabled]="disbu" class="cn_btn">Update</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- add another certificate popup -->
+<div *ngIf="data.openPop ==='certifcateInsurence' || data?.openPop =='editInsurence'" class="pdf_doc_upload">
+  <div class="cn_popup_box">
+    <form [formGroup]="certifcateInsurence" (ngSubmit)="certifcateUpload(certifcateInsurence)" class="mb-0 cn_field">
+      <div class="cn_popup_head">
+        <p class="cn_ph_tlt" *ngIf="data.openPop ==='certifcateInsurence'">Add Insurence Certificate</p>
+        <p class="cn_ph_tlt" *ngIf="data?.openPop =='editInsurence'">Edit Insurance Details</p>
+        <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+      </div>
+      <div class="cn_v_scroll">
+        <div class="cn_popup_body" style="height: 58vh;">
+          <p class="cn_input_lbl">Insurance Type
+            <span *ngIf="data?.insuranceType" class="material-icons info_icon" matTooltip="{{information?.notEditable}}"> info_outline </span>
+            <span class="txt_d"> *</span>
+          </p>
+          <mat-form-field appearance="none">
+            <mat-select formControlName="insuranceType" placeholder="Select Insurance" [disabled]="data?.insuranceType">
+              <!-- <mat-option class="form-control cn_input" value='0'>Select Insurance</mat-option> -->
+              <mat-option class="form-control cn_input" *ngFor="let insuranceData of InsuranceTypesData"
+                [value]="insuranceData?.id">{{insuranceData?.name}}</mat-option>
+            </mat-select>
+            <mat-error class="error_mess"
+              *ngIf="certifcateInsurence.get('insuranceType').errors?.['required']">Insurance Type is
+              required.</mat-error>
+
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Effective from Date <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none" class="cn_pfix_icn">
+            <input matInput formControlName="effectiveDate" [matDatepicker]="pickupDatePicker" [matDatepicker]="dp2"
+              placeholder="Select Date" [max]="maxDateEffective" [readonly]="true" class="form-control cn_input">
+            <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+            <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+            <mat-error class="error_mess"
+              *ngIf="certifcateInsurence.get('effectiveDate').errors?.['required']">Effective Date is
+              required.</mat-error>
+          </mat-form-field>
+
+
+          <p class="cn_input_lbl">Expiry at Date <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none" class="cn_pfix_icn">
+            <input matInput formControlName="expiryDate" [matDatepicker]="dropDatePicker" [matDatepicker]="dp1"
+              placeholder="Enter Expiry Date" [min]="minDate" [max]="maxDate"
+              (dateChange)="pickDateEvent($event,'expireDate')" [readonly]="true" class="form-control cn_input">
+            <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+            <mat-datepicker #dp1 disabled="false"></mat-datepicker>
+            <mat-error class="error_mess" *ngIf="certifcateInsurence.get('expiryDate').errors?.['required']">Expiry date
+              is required.</mat-error>
+            <mat-error *ngIf="certifcateInsurence.get('expiryDate').errors?.['matDatepickerMin']"
+              class="error_mess">Insurance date is expired.</mat-error>
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Insurance Company Name <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none">
+            <input matInput formControlName="insuranceCompanyName" placeholder="Enter Insurance Company Name"
+              class="form-control cn_input" maxlength="32">
+            <mat-error *ngIf="certifcateInsurence.get('insuranceCompanyName').errors?.['required']"
+              class="error_mess">Company name is required.</mat-error>
+            <mat-error *ngIf="certifcateInsurence.get('insuranceCompanyName').errors?.['pattern']"
+              class="error_mess">Please enter valid information.</mat-error>
+            <mat-error *ngIf="certifcateInsurence.get('insuranceCompanyName').errors?.['maxlength']"
+              class="error_mess">Only 32 characters are allowed.</mat-error>
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Policy Number <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none">
+            <input matInput formControlName="policyNumber" placeholder="Enter Insurance Policy Number"
+              class="form-control cn_input" maxlength="16">
+            <mat-error *ngIf="certifcateInsurence.get('policyNumber').errors?.['required']" class="error_mess">Policy
+              Number is required.</mat-error>
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Policy Limit <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none" class="inpt_before_icn">
+            <span matPrefix class="fsm_5 txt_b prefix_txt">$&nbsp;</span>
+            <input matInput formControlName="policyLimit" (keypress)="onlyNumberKey($event)"
+              placeholder="Enter Policy Limit" class="form-control cn_input" maxlength="7">
+            <mat-error *ngIf="certifcateInsurence.get('policyLimit').errors?.['required']" class="error_mess">Policy
+              Limit is required.</mat-error>
+            <mat-error *ngIf="certifcateInsurence.get('policyLimit').errors?.['pattern']" class="error_mess">Policy
+              Limit should be number.</mat-error>
+            <mat-error *ngIf="certifcateInsurence.get('policyLimit').errors?.['maxlength']" class="error_mess">Only 7
+              characters are allowed.</mat-error>
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Address <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none">
+            <input matInput formControlName="address" placeholder="Enter Address" class="form-control cn_input"
+              maxlength="64">
+            <mat-error *ngIf="certifcateInsurence.get('address').errors?.['required']" class="error_mess">Address name
+              is required.</mat-error>
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Phone Number
+            <img *ngIf="defualtCountryFlag" [src]="defualtCountryFlag" class="flag_img">
+            <img *ngIf="!defualtCountryFlag" src="https://carriernetwork.ai/images/country/US.png" class="flag_img">
+            <span class="txt_d"> *</span>
+          </p>
+          <div class="country_code_dropdown">
+            <mat-form-field appearance="none" class="cn_inpt_drop">
+              <div class="country_code_fld">
+                <mat-select formControlName="countryCode" (selectionChange)="selectCountryCode($event.value)"
+                  placeholder="Select Country Code" class="form-control cn_input" style="padding: 8px 10px ;">
+                  <mat-option *ngFor="let cou of countryList" [value]="cou.code">
+                    <img [src]="cou.flag" name="cla" class="flag_img">
+                    <span style="margin-left: 5px;">+{{cou.countryCode}}</span>
+                  </mat-option>
+                </mat-select>
+              </div>
+            </mat-form-field>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="phone" (keypress)="onlyNumberKey($event)"
+                placeholder="Enter Phone Number" maxlength="10" class="form-control cn_input" />
+              <mat-error *ngIf="certifcateInsurence.get('phone').errors?.['required']" class="error_mess">Phone Number
+                is required.</mat-error>
+              <mat-error *ngIf="certifcateInsurence.get('phone').errors?.['pattern']" class="error_mess">Contact Number
+                should be number.</mat-error>
+              <mat-error *ngIf="certifcateInsurence.get('phone').errors?.['minlength']" class="error_mess">Contact
+                Number should be 10 digit.</mat-error>
+            </mat-form-field>
+
+          </div>
+          <!-- <span class="error_mess"
+          *ngIf="errorMessageInsurance && data.openPop ==='certifcateInsurence' ">{{errorMessageInsurance}}</span> -->
+          <span class="error_mess"
+          *ngIf="errorMessageInsurance && data.openPop ==='certifcateInsurence'&& certifcateInsurence?.valid ">{{errorMessageInsurance}}</span>
+        </div>
+      </div>
+      <div>
+       
+      </div>
+      <div class="cn_popup_footer">
+        <div class="cn_f_acn">
+          <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+          <button type="submit" class="cn_btn" *ngIf="data.openPop ==='certifcateInsurence'">Add</button>
+          <button type="submit" class="cn_btn" *ngIf="data?.openPop =='editInsurence'">Update</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- remove load -->
+<div class="cn_popup_box" *ngIf="data.openPop=='removeLoadAvailList'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Load Availability</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="my-4 cn_input_lbl text-center">Do you want to delete Load?</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Ok</button>
+    </div>
+  </div>
+</div>
+
+<!-- add another certificate popup -->
+<div *ngIf="data?.openPop =='editLoadAvailList'" class="pdf_doc_upload">
+  <div class="cn_popup_box">
+    <form [formGroup]="editAvailabilityForm" (ngSubmit)="editAvailabilityFormSubmit(editAvailabilityForm)"
+      class="mb-0 cn_field">
+      <div class="cn_popup_head">
+        <p class="cn_ph_tlt">Edit Load Availability Details</p>
+        <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+      </div>
+      <div class="cn_v_scroll">
+        <div class="cn_popup_body edit_load_avail" style="height: 58vh;">
+          <p class="cn_input_lbl">Source Location <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none" style="position: relative;">
+            <input matInput type="text" formControlName="sourceLocation" maxlength="65" [value]="sourceLoc?.location"
+              placeholder="Enter Source Location" (keyup)="searchUserType($event)" class="form-control cn_input" />
+            <mat-error class="error_mess d_inline"
+              *ngIf="submitted && editAvailabilityForm?.get('sourceLocation').errors?.['required']">Source Location is
+              required.</mat-error>
+            <mat-error *ngIf="editAvailabilityForm.get('sourceLocation').errors?.['maxlength']" class="error_mess">Only
+              64 characters are allowed</mat-error>
+            <div class="src_cty_list" *ngIf="sourceCityData?.length > 0 && sourceLocSearch">
+              <div class="input_dropdown">
+                <p *ngFor="let cityRecord of sourceCityData; let i=index;" (click)="getSourceLoc(cityRecord)"
+                  class="input_option">{{cityRecord?.city}}, {{cityRecord?.state}}</p>
+              </div>
+            </div>
+          </mat-form-field>
+          <div class="loard_box" *ngIf="loaderSearch">
+            <span class="custom_spinner spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </div>
+
+          <p class="cn_input_lbl">Source Date <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none" class="cn_pfix_icn">
+            <input matInput formControlName="sourceDate" (dateChange)="updateMinNextDate($event.value)"
+              [matDatepicker]="pickupDatePicker" [matDatepicker]="dp2" placeholder="Select  Source Date"
+              [min]="minSourceDate" [readonly]="true" class="form-control cn_input">
+            <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+            <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+            <mat-error *ngIf="submitted && editAvailabilityForm.get('sourceDate').errors?.['required']"
+              class="error_mess">Source Date is required.</mat-error>
+            <mat-error *ngIf="submitted && editAvailabilityForm.get('sourceDate').errors?.['pastDate']"
+              class="error_mess">Source Date cannot be a past date.</mat-error>
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Destination Location <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none" style="position: relative;">
+            <input matInput type="text" formControlName="destinationLocation" maxlength="65"
+              placeholder="Enter Destination Location" class="form-control cn_input" [value]="destinyLoc?.location"
+              (keyup)="searchUserTypeForDestination($event)" />
+            <mat-error class="error_mess d_inline"
+              *ngIf="submitted && editAvailabilityForm?.get('destinationLocation').errors?.['required']">Destination
+              Location is required.</mat-error>
+            <mat-error *ngIf="editAvailabilityForm.get('destinationLocation').errors?.['maxlength']"
+              class="error_mess">Only 64 characters are allowed</mat-error>
+            <div class="src_cty_list" *ngIf="destinationCityData?.length > 0 && destinationSearch">
+              <div class="input_dropdown">
+                <p *ngFor="let cityRecord of destinationCityData; let i=index;" (click)="getDestinyLoc(cityRecord)"
+                  class="input_option">{{cityRecord.city}}, {{cityRecord.state}}</p>
+              </div>
+            </div>
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Destination Date <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none" class="cn_pfix_icn">
+            <input matInput formControlName="destinationDate" [matDatepicker]="dropDatePicker" [matDatepicker]="dp1"
+              placeholder="Select Destination Date" [min]="minNextDate" [readonly]="true" class="form-control cn_input">
+            <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+            <mat-datepicker #dp1 disabled="false" [disabled]="dropTimedisabled"></mat-datepicker>
+            <mat-error *ngIf="submitted && editAvailabilityForm.get('destinationDate').errors?.['required']"
+              class="error_mess">Destination Date is required.</mat-error>
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Shipment Type<span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none" class="cn_inpt_drop">
+            <mat-select formControlName="shipmentTypes" class="form-control cn_input"
+              placeholder="Select Shipment Types">
+              <mat-option class="mat_dropdown" *ngFor="let shipType of shipmentType"
+                [value]="shipType.id">{{shipType?.name}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="submitted && editAvailabilityForm.get('shipmentTypes').errors?.['required']"
+              class="error_mess">Shipment types is required.</mat-error>
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Truck Types / Equipment Types<span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none" class="cn_inpt_drop">
+            <mat-select formControlName="equipmentType" class="form-control cn_input" placeholder="Select Truck Types">
+              <mat-option class="mat_dropdown" *ngFor="let equip of equipmentType"
+                [value]="equip?.equipmentTypeId ? equip?.equipmentTypeId : equip?.id">{{equip?.equipmentTypeName ?
+                equip?.equipmentTypeName : equip?.name}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="submitted && editAvailabilityForm.get('equipmentType').errors?.['required']"
+              class="error_mess">Truck Types / Equipment Types is required.</mat-error>
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Miles <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none">
+            <input matInput type="text" formControlName="miles" (keypress)="onlyNumberKeyCost($event)" maxlength="8"
+              placeholder="Enter Miles" class="form-control cn_input" />
+            <mat-error class="error_mess d_inline"
+              *ngIf="submitted && editAvailabilityForm?.get('miles').errors?.['required']">Miles is
+              required.</mat-error>
+              <mat-error class="error_mess d_inline"
+              *ngIf="submitted && editAvailabilityForm?.get('miles').errors?.['pattern']">Please enter a valid number.</mat-error>
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Cost Per Mile <span class="txt_d"> *</span></p>
+          <mat-form-field appearance="none">
+            <input matInput type="text" formControlName="costPerMile" (keypress)="onlyNumberKeyCost($event)"
+              maxlength="8" placeholder="Enter Cost Per Mile" class="form-control cn_input" />
+            <mat-error class="error_mess d_inline"
+              *ngIf="submitted && editAvailabilityForm?.get('costPerMile').errors?.['required']">Cost Per Mile is
+              required.</mat-error>
+              <mat-error class="error_mess d_inline"
+              *ngIf="submitted && editAvailabilityForm?.get('costPerMile').errors?.['pattern']">Please enter a valid number.</mat-error>
+          </mat-form-field>
+
+          <p class="cn_input_lbl">Notes </p>
+          <mat-form-field appearance="none">
+            <textarea matInput type="text" formControlName="notes" maxlength="517" placeholder="Enter Notes"
+              class="form-control cn_input"></textarea>
+            <mat-error class="error_mess d_inline" *ngIf="editAvailabilityForm.get('notes').errors?.['maxlength']">
+              Only 516 characters are allowed
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="cn_popup_footer">
+        <div class="cn_f_acn">
+          <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+          <button type="submit" class="cn_btn">Update</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Success popu -->
+<!-- <div class="inviteDriver_con" *ngIf="data.openPop ==='submitReview'">
+  <div class="text-center" style="margin: 0; padding: 1rem;">
+    <span class="material-icons" style="margin: 0 0 1.5rem;font-size: 48px;color: var(--clGrna);">check_circle</span>
+    <p class="fs_20 fsm_5 txt_b" style="margin: 0 0 2rem;">Congratulations</p>
+    <p class="text-center fsn_4 txt_lb" style="margin: 0 0 2rem; line-height: 24px;">
+      Your review has submitted successfully.
+    </p>
+    <div class="form_action">
+      <button type="submit" class="btn custum_button button_success fs_16 fsm_5"
+        (click)="redirectToReview('writeReview')">Write a Review</button>
+      <button type="submit" class="btn custum_button button_success fs_16 fsm_5"
+        (click)="redirectToReview('manageReview')">Manage Reviews</button>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="inviteDriver_con" *ngIf="data.openPop ==='submitReview'" id="review_popup">
+
+  <div class="cn_popup_box">
+
+    <div class="cn_popup_head">
+
+      <p class="cn_ph_tlt">Congratulations</p>
+      <span class="material-icons cn_close_icn" (click)="onNoClick(); redirectToReview('manageReview')" >close</span>
+    </div>
+
+    <div class="cn_v_scroll">
+      <div class="cn_popup_body">
+        <p class="text-center fsn_4 txt_lb" style="margin: 0 0 2rem; line-height: 24px;">
+          Your review has submitted successfully.
+        </p>
+
+      </div>
+
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn justify-content-between">
+        <button type="submit" class="review_btns" (click)="redirectToReview('writeReview')">Write a Review</button>
+        <button type="submit" class="review_btns" (click)="redirectToReview('manageReview')">Reviews You’ve Written </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Changes Password successfully popu -->
+<div class="inviteDriver_con" *ngIf="data.openPop ==='passwordUpdate'">
+  <div class="text-center" style="margin: 0; padding: 1rem;">
+    <i class="fa-duotone fa-badge-check"></i>
+    <p class="fs_20 fsm_5 txt_b" style="margin: 10px 0 2px; font-size: 18px; color: #00b4fc !important;">Congratulations
+    </p>
+    <p class="text-center fsn_4 txt_lb" style="margin: 0 0 2rem; line-height: 24px;">
+      Your password has been changed successfully.
+    </p>
+    <div class="form_action">
+      <button type="button" class="cn_btn" (click)="onYesClick()" style="padding: 10px 51px;">Ok</button>
+    </div>
+  </div>
+</div>
+
+<!--Update Add a banner image & Add a logo -->
+<div *ngIf="data.openPop ==='profileImage' || data.openPop ==='coverImage'">
+  <div class="cn_popup_box">
+    <form [formGroup]="userProfleImage" (ngSubmit)="uploadProfileImage(userProfleImage)" class="mb-0 cn_field"
+      autocomplete="off">
+      <div class="cn_popup_head">
+        <p class="cn_ph_tlt" *ngIf="data.openPop ==='coverImage'">Add a banner image</p>
+        <p class="cn_ph_tlt" *ngIf="data.openPop ==='profileImage'">Add a logo</p>
+        <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+      </div>
+      <div class="cn_v_scroll">
+        <div class="cn_popup_body" style="max-height: 80vh;">
+          <div class="row">
+            <div class="col-md-12">
+              <p *ngIf="data.openPop ==='coverImage'" class="cn_input_lbl">Add a banner image
+                <span class="txt_d">* </span>
+              </p>
+              <p *ngIf="data.openPop ==='profileImage'" class="cn_input_lbl">Add a logo
+                <span class="txt_d">* </span>
+              </p>
+              <div class="upload_img_fld">
+                <mat-form-field appearance="none" class="custom_matSuffix_iconQW">
+                  <input *ngIf="data.openPop ==='coverImage'" matInput type="text" placeholder="Upload banner image"
+                    class="form-control cn_input upload_logo_input" readonly="readonly">
+                  <input *ngIf="data.openPop ==='profileImage'" matInput type="text" placeholder="Upload logo"
+                    class="form-control cn_input upload_logo_input" readonly="readonly">
+
+                  <mat-icon matSuffix>
+                    <input accept=".png, .jpg, .jpeg" class="inputfile" id="file" name="file" type="file"
+                      (change)="fileChangeEvent($event)" style="display: none;">
+                    <!-- <mat-error *ngIf="submit && data.openPop ==='profileImage' && userProfleImage.get('profileImage').errors?.['required'] " class="error_mess uplod_ree_mess" >Logo is required.</mat-error>
+                    <mat-error *ngIf="submit && data.openPop ==='coverImage' && userProfleImage.get('coverImage').errors?.['required']" class="error_mess uplod_ree_mess">Banner Image is required.</mat-error> -->
+                    <label class="uif_icon" for="file">
+
+                      <mat-icon class="material-symbols-outlined">logout</mat-icon>
+                    </label>
+                  </mat-icon>
+                  <met-hint class="hint_uif" *ngIf="data.openPop ==='profileImage'">Supported logo size (512*512 OR
+                    1:1). Supported logo format png, jpg, jpeg.</met-hint>
+                  <met-hint class="hint_uif" *ngIf="data.openPop ==='coverImage'">Supported banner image size (1600*320
+                    OR 5:1). Supported banner image format png, jpg, jpeg.</met-hint>
+                </mat-form-field>
+              </div>
+              <div class="img_croper_con" *ngIf="onlyCropper">
+                <div *ngIf="data.openPop ==='coverImage'">
+                  <image-cropper *ngIf="showCoverCropper" [imageChangedEvent]="imageChangedEvent"
+                    [maintainAspectRatio]="true" [aspectRatio]="5 / 1" (imageCropped)="imageCropped($event)"
+                    (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+                </div>
+                <div *ngIf="data.openPop ==='profileImage'">
+                  <image-cropper *ngIf="showProfileCropper" [imageChangedEvent]="imageChangedEvent"
+                    [maintainAspectRatio]="true" [aspectRatio]="1 / 1" (imageCropped)="imageCropped($event)"
+                    (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+                </div>
+                <p class="crop_img_name" *ngIf="showImgName">{{imgName}}</p>
+              </div>
+            </div>
+            <div class="col-md-6 mx-auto text-center">
+              <img *ngIf="imgURL" [src]="imgURL" style="width: 100px;height: 100px;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cn_popup_footer">
+        <div class="cn_f_acn">
+          <span class="cn_btn btn_b" (click)="onNoClick()">Cancel</span>
+          <button type="submit" [disabled]="disbu" class="cn_btn">Upload</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Email change otp verify -->
+<div *ngIf="data.openPop ==='verify_otp'" class="cn_popup_box ">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Verify Email</p>
+    <span class="close_popup_Icon" (click)="onNoClick()">
+      <img src="https://staticprod.laneaxis.com/portal/icon/ic_close_white.svg" class="close_Icon">
+    </span>
+  </div>
+  <div class="cn_popup_body">
+    <form [formGroup]="emailOtpVerify" (ngSubmit)="verifyOtpEmail(emailOtpVerify)" class="cn_field">
+      <p class="text-center fsn_4 txt_lb" style="margin: 0 0 2rem;">
+        We've sent a 6-digit verification code to <span class="fsm_5 txt_b">{{this.data.email}}. </span>
+        If you are registered in our system please check your inbox
+        (or possibly spam folder) and enter the code you received below to confirm your email address.
+      </p>
+      <p class="fs_14 fsn_4 txt_lb mb-1">Verification Code</p>
+      <mat-form-field appearance="none">
+        <input matInput placeholder="Enter Verification Code" class="form-control cn_input" formControlName="otp"
+          maxlength="6">
+        <mat-error *ngIf="emailOtpVerify.get('otp').errors?.['pattern']" class="OTP_no_error">Verification code should
+          be number</mat-error>
+      </mat-form-field>
+      <div>
+        <span class="fs_12 fsm_5 txt_d" *ngIf="message">{{message}}</span>
+        <span class="fs_12 fsm_5 txt_s" *ngIf="resendmessage && !message">{{resendmessage}}</span>
+      </div>
+      <div style="margin: 0 0 1.5rem;">
+        <span class="spinner-border spinner_border text-primary me-1" role="status" *ngIf="spinnerLoading">
+          <span class="sr-only">
+            <!-- Loading... -->
+          </span>
+        </span>
+        <span class="txt_p fs_12 fsm_5 pointer" (click)=resendOTP() style="margin: 0 0 2rem;"><i>Resend email
+            verification code.</i></span>
+      </div>
+      <mat-form-field appearance="none" style="display: none !important;">
+        <input matInput type="text" placeholder="Enter Verification Code" formControlName="email" name="email"
+          class="form-control cn_input text-center" />
+      </mat-form-field>
+
+      <div class="text-center">
+        <button type="submit" class="cn_btn very_btn"
+          style="margin: 0 0 1.5rem; height: 40px; border-radius: 30px; box-shadow: none;">verify</button>
+        <span class="fs_16 fsn_4 txt_p pointer  px-4 py-2" (click)="onNoClick()">Cancel</span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- AI-Confirmation popup START-->
+<div class="cn_popup_box" *ngIf="data.openPop=='AIReviewPopUp'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Remove Note</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="cn_input_lbl my-4 text-center">If you want to use this AI feature so you need to fill input feild.</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Ok</button>
+    </div>
+  </div>
+</div>
+<!-- AI-Confirmation popup END-->
+<!-- Carrier search filter start here  -->
+
+<div class="cn_popup_box donload_report_popup" *ngIf="data.openPop=='carrierFilter' && !loading">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Search Carriers By Filter</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+
+  <form [formGroup]="filterForm">
+    <div class="cn_popup_body">
+      <div class="row">
+        <div class="col-md-6">
+          <div>
+            <input matInput formControlName="search" placeholder="Search Carrier by Name" [maxlength]="65" style="width: 100%; padding: 5px 10px; border: 1px solid #cccc; border-radius: 5px;">
+          </div>
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+          <div class="">
+            <label>State</label>
+            <mat-select formControlName="state" style="background-color: rgb(189, 185, 185);max-width: 150px;" 
+            placeholder="Select a state">
+              <mat-option *ngFor="let state of laneRegion" [value]="state.code"
+                (onSelectionChange)="stateChangeDetect(state.id)">{{ state.name ? state.name : '-' }}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label>City</label>
+          <mat-form-field>
+            <input type="text" matInput formControlName="city" [matAutocomplete]="auto" placeholder="Select a city"
+              [maxlength]="65">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let city of filteredOptions | async" [value]="city.name">
+                {{ city.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-error *ngIf="!filterForm.get('state').value && filterForm.get('city').value">
+            Please select a state before selecting a city.
+          </mat-error>
+        </div>
+        <div class="col-md-6">
+          <div class="">
+            <label>Target Job Market</label>
+            <mat-select formControlName="targetJobMarket" placeholder="Select a Target Job Market"
+              style="background-color: rgb(189, 185, 185);max-width: 150px;">
+              <mat-option *ngFor="let jobMarket of targetJobMarketList" [value]="jobMarket.id">{{ jobMarket.name ?
+                jobMarket.name : '-' }}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="">
+            <label>Truck Types / Equipment Types</label>
+            <mat-select multiple formControlName="equipmentType" placeholder="Select a Truck Types"
+              style="background-color: rgb(189, 185, 185);max-width: 150px;">
+              <mat-option *ngFor="let truckEqp of equipmentType" [value]="truckEqp?.id">{{ truckEqp?.name ?
+                truckEqp?.name : '-' }}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+
+
+        <div class="col-md-6">
+          <div>
+            <mat-checkbox formControlName="hmFlag">HM Flag</mat-checkbox>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div>
+            <mat-checkbox formControlName="emailVerified">Email Verified</mat-checkbox>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div>
+            <mat-form-field appearance="fill">
+              <mat-label>Enter a MCS150 date range</mat-label>
+              <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate placeholder="Start date" formControlName="fromMCS150Date">
+                <input matEndDate placeholder="End date" formControlName="toMCS150Date">
+              </mat-date-range-input>
+              <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div>
+            <mat-form-field appearance="fill">
+              <mat-label>Enter a MC MIS date range</mat-label>
+              <mat-date-range-input [rangePicker]="picker2">
+                <input matStartDate placeholder="Start date" formControlName="fromAddDate">
+                <input matEndDate placeholder="End date" formControlName="toAddDate">
+              </mat-date-range-input>
+              <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker2></mat-date-range-picker>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="">
+            <label>Availability</label>
+            <mat-select formControlName="availability" placeholder="Select a Availability" style="background-color: rgb(189, 185, 185);max-width: 150px;">
+              <mat-option *ngFor="let item of availabilityList" [value]="item.id">{{ item.name ? item.name : '-'
+                }}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="">
+            <label>Operation Status</label>
+            <mat-select formControlName="carrierOperation" placeholder="Select a Operation Status"
+              style="background-color: rgb(189, 185, 185);max-width: 150px;">
+              <mat-option *ngFor="let item of operation" [value]="item.id">{{ item.name ? item.name : '-'
+                }}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="">
+            <label>Fuel consumption Types </label>
+            <mat-select multiple formControlName="fuelConsumptionType" placeholder="Select a Fuel consumption Types"
+              style="background-color: rgb(189, 185, 185);max-width: 150px;">
+              <mat-option *ngFor="let fuel of fuelConsumption " [value]="fuel?.id">{{ fuel?.name ? fuel?.name : '-'
+                }}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="">
+            <label>Cargo Type</label>
+            <mat-select multiple formControlName="cargoTypes" placeholder="Select a Cargo Type"
+              style="background-color: rgb(189, 185, 185);max-width: 150px;">
+              <mat-option *ngFor="let cargoItem of cargoTypes" [value]="cargoItem?.id">{{ cargoItem?.name ?
+                cargoItem?.name : '-' }}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+
+
+
+        <div class="col-md-6">
+         <lable class="mb-2 d-block"> Rate Per Mile:</lable><input matInput (input)="inputValue('ratePerMile')" formControlName="ratePerMile"
+              maxlength="4" placeholder="Enter Rate Per Mile" style=" padding: 5px 10px; border: 1px solid #cccc; border-radius: 5px; max-width: 93%;">
+        </div>
+        <div class="col-md-6">
+          <lable class="mb-2 d-block">  DOT Number </lable> <input matInput formControlName="dotNumber" (input)="inputValue('dotNumber')" maxlength="10" placeholder="Enter DOT Number" style=" padding: 5px 10px; border: 1px solid #cccc; border-radius: 5px; max-width: 93%;">
+        
+        </div>
+        <div class="col-md-6">
+          <div class="">
+            <label>Number of Trucks</label>
+            <div class="d-flex justify-content-between">
+              <div class="d-flex align-items-center"><span class="txt_lb me-2">Minimum:</span><input matInput
+                  (input)="inputValue('minTrucksNumbers')" formControlName="minTrucksNumbers" maxlength="5" style="border: 1px solid #ccc;
+                  width: 25%;
+                  padding: 1px 10px;
+                  border-radius: 5px;"></div>
+              <div class="d-flex align-items-center"><span class="txt_lb me-2">Maximum:</span><input matInput
+                  (input)="inputValue('maxTrucksNumbers')" formControlName="maxTrucksNumbers" maxlength="5" style="border: 1px solid #ccc;
+                  width: 25%;
+                  padding: 1px 10px;
+                  border-radius: 5px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="">
+            <label>Number of Drivers</label>
+            <div class="d-flex justify-content-between">
+              <div class="d-flex align-items-center"><span class="txt_lb me-2">Minimum:</span><input matInput
+                  (input)="inputValue('minDriverNumbers')" formControlName="minDriverNumbers" maxlength="5" style="border: 1px solid #ccc;
+                  width: 25%;
+                  padding: 1px 10px;
+                  border-radius: 5px;"></div>
+              <div class="d-flex align-items-center"><span class="txt_lb me-2">Maximum:</span><input matInput
+                  (input)="inputValue('maxDriverNumbers')" formControlName="maxDriverNumbers" maxlength="5" style="border: 1px solid #ccc;
+                  width: 25%;
+                  padding: 1px 10px;
+                  border-radius: 5px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <button class="cn_btn btn_b" (click)="onClearform(this.filterForm)">Clear</button>
+        <button class="cn_btn" (click)="applyFilter()">Apply Filter</button>
+
+      </div>
+    </div>
+  </form>
+
+</div>
+<!-- Carrier search filter end here  -->
+
+<div class="cn_popup_box schedule_report_popup" *ngIf="data.openPop=='scheduleReportForm' && !loading">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Schedule Report</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <form [formGroup]="scheduleForm" (submit)="scheduleFormSubmit()" class="cn_field">
+    <div class="cn_popup_body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="input_field">
+            <label>Report Name <span style="color: red;">*</span></label>
+            <input mat-input formControlName="reportName">
+            <mat-error *ngIf="scheduleForm.get('reportName').errors?.['required'] && submit" style="position: absolute;
+    font-size: 12px;
+    bottom: -19px;
+    left: 0px;">Report is
+              required.</mat-error>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input_field">
+            <label>Email Id <span style="color: red;">*</span></label>
+            <input mat-input formControlName="email" maxlength="129">
+            <mat-error *ngIf="scheduleForm.get('email').errors?.['required']  && submit" style="position: absolute;
+    font-size: 12px;
+    bottom: -19px;
+    left: 0px;">Email Id is
+              required.</mat-error>
+            <mat-error *ngIf="scheduleForm.get('email').errors?.['pattern'] && submit" style="position: absolute;
+    font-size: 12px;
+    bottom: -19px;
+    left: 0px;">Please enter valid email
+              address</mat-error>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <button class="cn_btn btn_b" (click)="onClearform(this.scheduleReportForm)">Clear</button>
+        <button class="cn_btn" type="submit">Submit</button>
+
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="cn_popup_box donload_report_popup" *ngIf="data.openPop=='downloadReportFilter' && !loading">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Search Report By Filter</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <form [formGroup]="downloadReportFilterForm">
+    <div class="cn_popup_body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="">
+            <label>Report Name</label>
+            <input matInput formControlName="reportName" placeholder="Enter Report Name for search" [maxlength]="65">
+          </div>
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+          <div class="">
+            <label>status</label>
+            <mat-select formControlName="status" style="background-color: rgb(189, 185, 185);max-width: 150px;">
+              <mat-option value="scheduled">scheduled</mat-option>
+              <mat-option value="inProgress">In Progress</mat-option>
+              <mat-option value="ready">ready</mat-option>
+              <mat-option value="error">error</mat-option>
+            </mat-select>
+          </div>
+        </div>
+       
+        <div class="col-md-6">
+          <div>
+            <label>Date range</label>
+            <mat-form-field appearance="fill">
+              <mat-label>date range</mat-label>
+              <mat-date-range-input [rangePicker]="Rangepicker">
+                <input matStartDate placeholder="Start date" formControlName="toScheduledDate">
+                <input matEndDate placeholder="End date" formControlName="fromScheduledDate">
+              </mat-date-range-input>
+              <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="Rangepicker"></mat-datepicker-toggle>
+              <mat-date-range-picker #Rangepicker></mat-date-range-picker>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <button class="cn_btn btn_b" (click)="onClearform(this.downloadReportFilterForm)">Clear</button>
+        <span class="cn_btn" (click)="applyDownloadFilter()">Apply Filter</span>
+      </div>
+    </div>
+  </form>
+
+</div>
+
+<!-- 
+<div class="cn_popup_box"  >
+      <div>
+        <label> <span style="color: red;">*</span></label>
+        <input mat-input [(ngModel)]="calculatorName">
+        <mat-error *ngIf="submit && !calculatorName">Calculator Name is required.</mat-error>
+      </div>
+    <button ></button>
+    <button mat-button style="background-color: rgb(238, 47, 18);" (click)="onNoClick()">close</button>
+    <span style="background-color: rgb(31, 159, 229);" class="pointer" >Clear</span>
+</div> -->
+<!-- Calculator popups -->
+<div *ngIf="data.openPop=='calculatorName' && !loading" class="cn_popup_box confire_name_one">
+
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Confirm Calculator Name</p><span class="material-icons cn_close_icn"
+      (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_popup_body">
+    <div class="col-md-6">
+    <p class="cn_input_lbl">Give calculator a name<span class="txt_d"> *</span></p>
+    <div class="cn_field">
+      <input mat-input [(ngModel)]="calculatorName">
+      <mat-error *ngIf="submit && !calculatorName">Calculator Name is required.</mat-error>
+    </div>
+  </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <span class="cn_btn btn_b" (click)="onClearform(this.scheduleReportForm)">Clear</span>
+      <button [disabled]="!calculatorName" type="submit" (click)="submitCalculatorName()"
+        class="cn_btn ">Submit</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- calculator singin popup -->
+<div *ngIf="data.openPop=='beforLoginCalculator' && !loading" class="cn_popup_box confire_name_one">
+
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Login Required</p><span class="material-icons cn_close_icn"
+      (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_popup_body">
+    <div class="col-md-12">
+    <p class="cn_input_lbl text-center">In order to save report, you must be logged in.</p>
+    
+  </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn justify-content-end">
+      <button  type="submit" (click)="redirectSignSignUp()"
+        class="cn_btn ">Sign In</button>
+
+    </div>
+  </div>
+</div>
+
+<div class="cn_popup_box" *ngIf="data.openPop=='deleteCalculator' && !loading">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Warning</p><span class="material-icons cn_close_icn"
+      (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_popup_body">
+    <p class="cn_input_lbl text-center">Do you want to delete this calculator ?</p>
+  </div>
+
+    <div class="cn_popup_footer d-flex justify-content-between">
+    <button (click)="onNoClick()" class="cn_btn btn_bordered" style="width: 40%;">No</button>
+    <button type="submit" (click)="deleteCalculator()" class="cn_btn" style="width: 40%;">Yes</button>
+    </div>
+    
+
+</div>
+
+<!-- <div class="cn_popup_box" *ngIf="data.openPop=='calculatorNameUpdate'" >
+  <div>
+    <label>Confirm Calculator Name<span style="color: red;">*</span></label>
+    <input mat-input [(ngModel)]="calculatorName">
+    <mat-error *ngIf="submit && !calculatorName">Calculator Name is required.</mat-error>
+  </div>
+<button [disabled]="!calculatorName" type="submit" (click)="updateCalculatorName()">Confirm</button>
+<button mat-button style="background-color: rgb(238, 47, 18);" (click)="onNoClick()">close</button>
+<span style="background-color: rgb(31, 159, 229);" class="pointer" (click)="onClearform(this.scheduleReportForm)">Clear</span>
+</div> -->
+
+
+
+<div *ngIf="data.openPop ==='calculatorNameUpdate'" class="cn_popup_box confirm_name">
+
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Confirm Calculator Name</p><span class="material-icons cn_close_icn"
+      (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_popup_body">
+    <p class="cn_input_lbl">Confirm Calculator Name<span class="txt_d"> *</span></p>
+    <div class="cn_field">
+      <mat-form-field appearance="none" class="custom_matSuffix_icon" style="padding-bottom: 0px;">
+        <input matInput type="text" [(ngModel)]="calculatorName" placeholder="Enter Calculator Name" maxlength="64"
+          class="form-control cn_input" />
+        <mat-error *ngIf="submit && !calculatorName" class="error_mess">Calculator Name is required.</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <span class="cn_btn btn_b" (click)="clearCalculatorName()">Clear</span>
+      <button [disabled]="!calculatorName" type="submit" (click)="updateCalculatorName()"
+        class="cn_btn ">Confirm</button>
+
+    </div>
+  </div>
+</div>
+
+<div class="cn_popup_box" *ngIf="data.openPop=='accessDenied'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt" style="color: #dd0000fa;">Opps!</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="cn_input_lbl my-4 text-center">Unauthorized access detected. Redirecting to login page.</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn" style="justify-content: end;">
+      <!-- <button type="button" class="cn_btn btn_b" (click)="onNoClick()"> </button> -->
+      <button type="button" class="cn_btn" (click)="onNoClick()">Sign in</button>
+    </div>
+  </div>
+</div>
+
+
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

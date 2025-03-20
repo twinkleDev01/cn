@@ -1,0 +1,17 @@
+<div *ngIf="data.openPop=='imageconfirmation'">
+  <div class="cn_popup_box cnfrm_popup">
+    <div class="cn_popup_head">
+      <p class="cn_ph_tlt">Remove Media</p>
+      <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+    </div>
+    <div class="cn_popup_body">
+      <p class="tlt_4 my-4 text-center">Do you want remove Media?.</p>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+        <button type="button" class="cn_btn" (click)="successClick()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

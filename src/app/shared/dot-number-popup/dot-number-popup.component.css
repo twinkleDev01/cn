@@ -1,0 +1,11 @@
+.cn_popup_box .cn_input_lbl { font-size: 16px; line-height: 22px; margin: 0 0 8px; }
+
+.add_phn_no .country_code_dropdown {
+    display: flex;
+}
+.add_phn_no .country_code_dropdown .cn_inpt_drop {
+    max-width: 80px;
+    border-right: none;
+}
+.add_phn_no .cn_inpt_drop mat-select { border: none; padding: 0px; background: #f7f7f8; font-weight: 400; font-size: 14px; line-height: 20px; }
+.add_phn_no .cn_inpt_drop mat-select:focus { box-shadow: none; }

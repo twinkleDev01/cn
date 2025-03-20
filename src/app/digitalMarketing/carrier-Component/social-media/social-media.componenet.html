@@ -1,0 +1,106 @@
+<div class="content_box edit_business_info_con">
+  <h3 class="content_tlt">Social Media</h3>
+  <div class="content_body">
+    <p class="content_dis" *ngIf="!skeletonLoader">We love staying connected with our community! Follow us on social media to stay updated with the latest news, events, and exclusive content. Click on the links below to join us on your favorite platforms.</p>
+    <div class="cn_field" *ngIf="!skeletonLoader">
+      <form autocomplete="off" [formGroup]="socialMediaForm" (ngSubmit)="onSubmit(socialMediaForm)">
+        <div class="row">
+            <div class="col-md-6">
+              <p class="cn_input_lbl">Facebook Page URL</p>
+              <mat-form-field appearance="none">
+                <input matInput type="text" maxlength="129" formControlName="facebookPage"
+                   placeholder="Enter Facebook Page URL"
+                  class="form-control cn_input" />
+                <mat-error *ngIf="socialMediaForm.get('facebookPage')?.hasError('pattern')">Facebook url
+                  invalid</mat-error>
+                  <mat-error *ngIf="socialMediaForm.get('facebookPage').errors?.['maxlength']"
+                  class="error_mess">
+                  Only 128 characters are allowed</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <p class="cn_input_lbl">Instagram Page URL
+              </p>
+              <mat-form-field appearance="none">
+                <input matInput type="text" maxlength="129" formControlName="instagramPage"
+                   placeholder="Enter Instagram Page URL"
+                  class="form-control cn_input" />
+                <mat-error *ngIf="socialMediaForm.get('instagramPage')?.hasError('pattern')">Instagram url
+                  invalid</mat-error>
+                  <mat-error *ngIf="socialMediaForm.get('instagramPage').errors?.['maxlength']"
+                  class="error_mess">
+                  Only 128 characters are allowed</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <p class="cn_input_lbl">YouTube Channel URL
+              </p>
+              <mat-form-field appearance="none">
+                <input matInput type="text" maxlength="129" formControlName="youtubePage"
+                   placeholder="Enter YouTube Page URL"
+                  class="form-control cn_input" />
+                <mat-error *ngIf="socialMediaForm.get('youtubePage')?.hasError('pattern')">YouTube url
+                  invalid</mat-error>
+                  <mat-error *ngIf="socialMediaForm.get('youtubePage').errors?.['maxlength']"
+                  class="error_mess">
+                  Only 128 characters are allowed</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <p class="cn_input_lbl">Twitter Page URL
+              </p>
+              <mat-form-field appearance="none">
+                <input matInput type="text" maxlength="129" formControlName="twitterPage"
+                   placeholder="Enter Twitter Page URL"
+                  class="form-control cn_input" />
+                <mat-error *ngIf="socialMediaForm.get('twitterPage')?.hasError('pattern')">Twitter url
+                  invalid</mat-error>
+                  <mat-error *ngIf="socialMediaForm.get('twitterPage').errors?.['maxlength']"
+                  class="error_mess">
+                  Only 128 characters are allowed</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <p class="cn_input_lbl">LinkedIn Page URL
+              </p>
+              <mat-form-field appearance="none">
+                <input matInput type="text" maxlength="129" formControlName="linkedinPage"
+                   placeholder="Enter LinkedIn Page URL"
+                  class="form-control cn_input" />
+                <mat-error *ngIf="socialMediaForm.get('linkedinPage')?.hasError('pattern')">LinkedIn url
+                  invalid</mat-error>
+                  <mat-error *ngIf="socialMediaForm.get('linkedinPage').errors?.['maxlength']"
+                  class="error_mess">
+                  Only 128 characters are allowed</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <p class="cn_input_lbl">TikTok Page URL
+              </p>
+              <mat-form-field appearance="none">
+                <input matInput type="text" maxlength="129" formControlName="tiktokPage"
+                   placeholder="Enter TikTok Page URL"
+                  class="form-control cn_input" />
+                <mat-error *ngIf="socialMediaForm.get('tiktokPage')?.hasError('pattern')">TikTok url invalid</mat-error>
+                <mat-error *ngIf="socialMediaForm.get('tiktokPage').errors?.['maxlength']" class="error_mess">
+                  Only 128 characters are allowed</mat-error>
+              </mat-form-field>
+            </div>
+        </div>
+        <div class="form_action">
+          <button class="cn_btn" type="submit"  [disabled]="!isAnyFieldFilled()">Submit</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="skt_eifr" *ngIf="skeletonLoader">
+      <div *ngFor="let fake of generateFakeSkeleton(8)">
+        <ngx-skeleton-loader count="1"
+          [theme]="{ width: '100%', height: '16px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1"
+          [theme]="{ width: '100%', height: '30px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

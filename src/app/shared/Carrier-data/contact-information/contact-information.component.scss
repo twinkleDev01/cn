@@ -1,0 +1,20 @@
+.detail_title { font-size: 15px; font-weight: 500; color: #000; }
+.detail_value { font-size: 15px; color: #818181; }
+.edit_drop { border: .5px solid #ddd; padding: 0px; rotate: 90deg; width: 30px; height: 45px; padding-top: 0px; margin-right: 19px; border-radius: 5px; }
+.contect_info_box { margin-top: 20px; background: #f0f0f0; border-radius: 10px; }
+.bx_head { padding: 10px; border-radius: 10px 10px 0px 0px;  }
+.contact_details { border: 1px solid #ddd; padding: 10px; border-radius: 10px; background: #fff; }
+.fa-circle-check { font-weight: 500; color: #11d311; }
+.email_data { border-bottom: 1px solid #ddd; }
+.prime_acc { font-size: 10px; background: #ddd; padding: 0px 4px; border-radius: 3px; margin-left: 5px;  }
+.unvery { font-size: 10px; color: red; margin-left: 5px;  }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 25%; }
+.email_data span:first-child { width: 40%; }
+
+@media screen and (max-width: 767px) {
+.email_data { flex-wrap: wrap-reverse; justify-content: end !important; }
+.email_data span:first-child { width: 100%; }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 50%; }
+.carrier_profile h4 { font-size: 16px; }
+    
+}

@@ -1,0 +1,296 @@
+<div class="edit_business_info_con">
+  <div *ngIf="!skeletonLoader">
+    <div class="form_box">
+      <form autocomplete="off" [formGroup]="businessEdit" (ngSubmit)="profileUpdate(businessEdit)" class="cn_field">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="upload_image">
+              <div class="upload_btn_box" (click)="updateProfileImage('coverImage')">
+                <div class="ubb_btn">
+                  <mat-icon class="material-symbols-outlined ubb_icn">add_a_photo</mat-icon>
+                  <span class="ubb_txt">Add a banner image</span>
+                </div>
+              </div>
+              <img *ngIf="getUserData.coverImage" src="{{getUserData.coverImage}}" class="img-fluid uploded_img">
+              <img *ngIf="!getUserData.coverImage" src="https://placehold.co/1600x320" class="img-fluid uploded_img">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="upload_image upload_profile_img">
+              <div class="upload_btn_box" (click)="updateProfileImage('profileImage')">
+                <div class="ubb_btn">
+                  <mat-icon class="material-symbols-outlined ubb_icn">add_a_photo</mat-icon>
+                </div>
+              </div>
+              <img *ngIf="getUserData.profileImage" src="{{getUserData.profileImage}}" class="img-fluid uploded_img">
+              <img *ngIf="!getUserData.profileImage" src="https://placehold.co/512x512" class="img-fluid uploded_img">
+            </div>
+          </div>
+
+          <div class="col-md-12 mt-4">
+            <div class="row">
+              <div class="col-md-3">
+                <p class="cn_input_lbl">Number of Drivers 
+                  <span class="material-icons info_icon" matTooltip="{{information?.numberOfDrivers}}"> info_outline
+                  </span>
+                  <span class="txt_d"> *</span>
+                </p>
+                <mat-form-field appearance="none">
+                  <input matInput type="text" formControlName="driversNumbers" (keypress)="onlyNumberKey($event)"
+                    maxlength="8" placeholder="Enter Number of Drivers" class="form-control cn_input" />
+                  <mat-error class="error_mess d_inline"
+                    *ngIf="businessEdit?.get('driversNumbers').errors?.['required']">Number of Drivers is
+                    required.</mat-error>
+                  <mat-error *ngIf="businessEdit.get('driversNumbers').errors?.['maxlength']"
+                    class="error_mess d_inline">Number of Drivers should be 8 digit.</mat-error>
+                  <mat-error
+                    *ngIf="businessEdit.get('driversNumbers').errors?.['minlength'] && !businessEdit.get('driversNumbers').errors?.['pattern']"
+                    class="error_mess">Number of Drivers should be 8 digit.</mat-error>
+                  <mat-error *ngIf="businessEdit.get('driversNumbers').errors?.['pattern']" class="error_mess">Number of
+                    Drivers should be number.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <p class="cn_input_lbl">Number of Trucks
+                  <span class="material-icons info_icon" matTooltip="{{information?.NumberOfTrucks}}"> info_outline
+                  </span>
+                  <span class="txt_d"> *</span>
+                </p>
+                <mat-form-field appearance="none">
+                  <input matInput type="text" formControlName="trucksNumbers" (keypress)="onlyNumberKey($event)"
+                    maxlength="8" placeholder="Enter Number of Trucks" class="form-control cn_input" />
+                  <mat-error *ngIf="businessEdit.get('trucksNumbers').errors?.['required']" class="error_mess">Number of
+                    Trucks is required.</mat-error>
+                  <mat-error *ngIf="businessEdit.get('trucksNumbers').errors?.['maxlength']" class="error_mess">Number of
+                    Trucks should be 8 digit.</mat-error>
+                  <mat-error *ngIf="businessEdit.get('trucksNumbers').errors?.['pattern']" class="error_mess">Number of
+                    Trucks should be number.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <p class="cn_input_lbl">Electronic Tracking
+                  <span class="material-icons info_icon" matTooltip="{{information?.electronicTracking}}"> info_outline
+                  </span>
+                  <span class="txt_d"> *</span>
+                </p>
+                <mat-form-field appearance="none" class="cn_inpt_drop">
+                  <mat-select formControlName="electronicTracking" class="form-control cn_input"
+                    placeholder="Select Electronic Tracking" (selectionChange)="electronicChange($event)">
+                    <mat-option class="mat_dropdown" [value]="true">Yes</mat-option>
+                    <mat-option class="mat_dropdown" [value]="false">No</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="businessEdit.get('electronicTracking').errors?.['required']"
+                    class="error_mess">Electronic tracking is required.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <div *ngIf="electronicValue==true">
+                  <p class="cn_input_lbl">Provider Details<span class="txt_d"> *</span></p>
+                  <mat-form-field appearance="none">
+                    <input matInput type="text" formControlName="providerDetails" placeholder="Enter Provider Details" maxlength="64" class="form-control cn_input" />
+                    <mat-error *ngIf="businessEdit.get('providerDetails').errors?.['required']" class="error_mess">Provider Detail is required.</mat-error>
+                    <mat-error *ngIf="businessEdit.get('providerDetails').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-9">
+                <p class="cn_input_lbl">Truck Types / Equipment Types
+                  <span class="material-icons info_icon" matTooltip="{{information?.truckTypesAndEquipmentTypes}}">
+                    info_outline </span>
+                  <span class="txt_d"> *</span>
+                </p>
+                <mat-form-field appearance="none" class="cn_mlti_sclt_drop">
+                  <mat-select multiple placeholder="Select Truck Types" formControlName="equipmentType"
+                    (selectionChange)="equipmentTypeSelect($event)">
+                    <mat-option *ngFor="let truckType of equipmentType"
+                      [value]="truckType.id">{{truckType.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="businessEdit.get('equipmentType').errors?.['required']" class="error_mess">Truck Types
+                    / Equipment Types is required.</mat-error>
+                </mat-form-field>
+                <p class="slctd_eqpmt_typ" *ngIf="equipmentTypeName && equipmentTypeName?.length > 0">
+                  <span *ngFor="let equipmentName of equipmentTypeName" class="dful_chip grn_chip">{{ equipmentName
+                    }}</span>
+                </p>
+              </div>
+              <div class="col-md-3 ic_dropdown">
+                <p class="cn_input_lbl">Shipment types
+                  <span class="material-icons info_icon" matTooltip="{{information?.shipmentTypes}}"> info_outline </span>
+                  <span class="txt_d"> *</span>
+                </p>
+                <mat-form-field appearance="none" class="cn_inpt_drop">
+                  <mat-select formControlName="shipmentTypes" class="form-control cn_input"
+                    placeholder="Select Shipment Types">
+                    <mat-option class="mat_dropdown" *ngFor="let shipType of shipmentType"
+                      [value]="shipType.id">{{shipType?.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="businessEdit.get('shipmentTypes').errors?.['required']" class="error_mess">Shipment types is required.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-12">
+                <div [ngClass]="checkPlan ? 'premium_plan_update_field' : 'my_class2'">
+                  <p class="field_title" *ngIf="checkPlan">
+                    Please purchase the premium plan to update this field. 
+                    <span class="txt_p">Check Benefits</span>
+                  </p>
+
+                  <div class="row">
+                    <div class="col-md-6 ic_dropdown" (click)="subsciptionPlanCheck()">
+                      <p class="cn_input_lbl">Target Job Market
+                        <span class="material-icons info_icon" matTooltip="{{information?.targetJobMarket}}"> info_outline
+                        </span>
+                        <span class="txt_d"> *</span>
+                      </p>
+                      <mat-form-field appearance="none" class="cn_inpt_drop">
+                        <mat-select formControlName="targetJobMarket" class="form-control cn_input"
+                          placeholder="Select Target Job Market" [disabled]="checkPlan">
+                          <mat-option class="mat_dropdown" *ngFor="let jobMarket of targetJobMarket"
+                            [value]="jobMarket.id">{{jobMarket?.name}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="businessEdit.get('targetJobMarket').errors?.['required']"
+                          class="error_mess">Target job market is required.</mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-6 ic_dropdown" (click)="subsciptionPlanCheck()">
+                      <p class="cn_input_lbl">Availability
+                        <span class="material-icons info_icon" matTooltip="{{information?.availability}}"> info_outline
+                        </span>
+                        <span class="txt_d"> *</span>
+                      </p>
+                      <mat-form-field appearance="none" class="cn_inpt_drop">
+                        <mat-select formControlName="availability" class="form-control cn_input"
+                          placeholder="Select Availability" [disabled]="checkPlan">
+                          <mat-option class="mat_dropdown" *ngFor="let avail of availability"
+                            [value]="avail.id">{{avail?.name}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="businessEdit.get('availability').errors?.['required']"
+                          class="error_mess">Availability is required.</mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <p class="cn_input_lbl mb-2">Fuel consumption Types
+                      <span class="material-icons info_icon" matTooltip="{{information?.fuelConsumptionTypes}}"> info_outline </span>
+                    </p>
+                    <div class="row fct_chk_box" (click)="subsciptionPlanCheck()">
+                      <div class="col-md-6" *ngFor="let fuelCon of fuelConsump; let i=index;">
+                        <div class="fct_chk_row">
+                          <mat-checkbox [checked]="[fuelCon.Ischecked]" [(ngModel)]="fuelCon.Ischecked"
+                            [ngModelOptions]="{standalone: true}" id="{{fuelCon.fuelId}}"
+                            (change)="fuleComsuption(fuelCon.fuelId,fuelCon.Ischecked)" [disabled]="checkPlan"
+                            class="txt_lb">{{fuelCon.fuelName}}</mat-checkbox>
+                          <mat-form-field appearance="none" class="inpt_before_icn" *ngIf="fuelCon.Ischecked">
+                            <span matPrefix>$</span>
+                            <input matInput type="text" maxlength="8" [(ngModel)]="fuelCon.ratePerMiles"
+                              [value]="fuelCon.ratePerMiles" id="{{fuelCon.id}}" [ngModelOptions]="{standalone: true}"
+                              placeholder="Enter Cost Per Miles" class="form-control cn_input" />
+                          </mat-form-field>
+                          <!-- (keypress)="onlyNumberKey($event)" -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form_actn mt-3">
+            <button type="submit" class="cn_btn">Update Profile</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="non_editable_con mb-4">
+      <div class="nec_head">
+        <p class="nec_tlt">You and we cannot edit below information. Below information is only managed and updated by
+          FMCSA. In case of any discrepancy Please. <a href="https://carriernetwork.ai/contact-us" target="_blank">
+            contact us</a>.</p>
+      </div>
+      <div class="card_con pb-0">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>Hazardous Materials</span>
+                <span class="material-icons info_icon" matTooltip="{{information?.hazardousMaterials}}"> info_outline
+                </span>
+              </p>
+              <p class="lable_vlu">{{getUserData?.hmFlag}}</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>Passenger Carrier </span>
+                <span class="material-icons info_icon" matTooltip="{{information?.passengerCarrier}}"> info_outline
+                </span>
+              </p>
+              <p class="lable_vlu">No</p>
+            </div>
+          </div>
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>MCS-150 Date </span>
+                <span class="material-icons info_icon" matTooltip="{{information?.MCS150Date}}"> info_outline </span>
+              </p>
+              <p class="lable_vlu">{{getUserData?.mcs150Date | date: 'MMM dd, yyyy'}}</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>MCS-150 Mileage </span>
+                <span class="material-icons info_icon" matTooltip="{{information?.MCS150Mileage}}"> info_outline </span>
+              </p>
+              <p class="lable_vlu">{{getUserData?.mcs150Mileage ? getUserData?.mcs150Mileage : '-'}}</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>MCS-150 Mileage Year </span>
+                <span class="material-icons info_icon" matTooltip="{{information?.MCS150MileageYear}}"> info_outline
+                </span>
+              </p>
+              <p class="lable_vlu">{{getUserData?.mcs150MileageYear ? getUserData?.mcs150MileageYear : '-'}}</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>Cargo Types </span>
+                <span class="material-icons info_icon" matTooltip="{{information?.cargoTypes}}"> info_outline </span>
+              </p>
+              <p *ngIf="getUserData.cargoTypeNames == null">-</p>
+              <p class="lable_vlu" *ngFor="let cargotype of getUserData.cargoTypeNames">{{cargotype.cargoTypeName}}</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>Carrier Operation </span>
+                <span class="material-icons info_icon" matTooltip="{{information?.carrierOperation}}"> info_outline
+                </span>
+              </p>
+              <p class="lable_vlu">{{getUserData?.carrierOperation ? getUserData?.carrierOperation.name : '-'}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="skt_eifr" *ngIf="skeletonLoader">
+    <div *ngFor="let fake of generateFakeSkeleton(8)">
+      <ngx-skeleton-loader count="1"
+        [theme]="{ width: '100%', height: '16px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+      <ngx-skeleton-loader count="1"
+        [theme]="{ width: '100%', height: '30px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+    </div>
+  </div>
+</div>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

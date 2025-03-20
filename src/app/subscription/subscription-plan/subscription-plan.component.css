@@ -1,0 +1,111 @@
+.manage_subscription_con { background: #fff; padding: 24px 24px 24px; border-radius: 10px; margin: 24px 0; }
+.manage_subscription_con .edt_pg_tlt { font-weight: 600; font-size: 30px; line-height: 45px; color: #000000; text-align: center; margin: 4px 0 8px; }
+
+.txt_blw_tab { font-weight: 400; font-size: 16px; line-height: 24px; text-align: center; color: #666666; margin: 0 0 30px; }
+.subs_btn { margin: 0 0 1rem; }
+.feature_btn { border: none; margin: 30px auto 0; background: #25D366; color: #fff; border-radius: 5px; padding: 10px 20px; display: block; }
+
+.spic_price { margin: 0 0 18px; }
+.spic_price_t { margin: 0 0 2px; }
+.spic_price_t sup { font-size: 18px; line-height: 20px; font-weight: 600; top: -12px; }
+.spic_price_t span { font-weight: 600; font-size: 36px; line-height: 36px; color: #333333; }
+.spic_price_b { font-weight: 400; font-size: 14px; line-height: 21px; color: #666666; }
+
+.spic_box { display: flex; background: #FFFFFF; border: 1px solid #D9D9D9; margin-bottom: 1px; }
+.spic_box .spic_prz_crd { width: 33.33%; padding-bottom: 20px; border-left: 1px solid #D9D9D9; }
+.spic_box .spic_prz_crd:first-child { border-left: none; }
+.spic_box .spic_prz_crd .spic_tlt { font-weight: 600; font-size: 24px; line-height: 32px; color: #333333; border-bottom: 1px solid #D9D9D9; padding: 16px 20px; height: 70px; display: flex; align-items: center; }
+.spic_box .spic_plan .spic_tlt { font-size: 18px; line-height: 26px; }
+
+.spic_body { padding: 32px 20px; }
+.spic_dis { font-weight: 400; font-size: 16px; line-height: 24px; color: #666666; margin: 0 0 40px; }
+.spic_crd_actn { margin: 0 0 24px; }
+.spic_crd_actn .cn_btn { padding: 8px 40px; border: none; width: 100%; }
+.spic_plan .spic_body { display: flex; width: 100%; height: calc(100% - 50px); align-items: center; }
+
+.spic_p_list_tlt { font-weight: 600; font-size: 16px; line-height: 24px; color: #333333; padding: 18px 20px; background: #D9D9D9; }
+.spic_p_list_info { display: flex; align-items: center; min-height: 50px; border-bottom: 1px solid #D9D9D9; font-weight: 400; font-size: 16px; line-height: 20px; color: #666666; padding: 4px 20px; }
+.spic_p_list_info .spic_info_l,
+.spic_p_list_info .spic_info_c,
+.spic_p_list_info .spic_info_r { width: 25%; }
+.spic_p_list_info .spic_info_c,
+.spic_p_list_info .spic_info_r { display: flex; justify-content: center; }
+.spic_p_list_info .material-icons { font-size: 30px; color: #25D366; }
+
+.carrier_bus_plan { text-align: center; }
+.carrier_bus_plan .spic_ca_img { max-height: 82px; }
+.carrier_bus_plan .spic_ca_tlt { font-weight: 600; font-size: 18px; line-height: 27px; text-align: center; color: #00B4FC; margin: 8px 0 12px; }
+.spic_ca_tlt { font-weight: 600; font-size: 18px; line-height: 27px; text-align: center; color: #00B4FC; margin: 8px 0 12px; }
+
+.spic_b_actn { padding: 20px 0; }
+
+.ca_txt_blw_tab { font-weight: 500; font-size: 18px; line-height: 27px; color: #00B4FC; margin: -20px 0 36px; text-align: center; }
+
+.check_benifits { display: none; }
+.min_h_300 { min-height: 349px; }
+.min_h_160 { min-height: 188px;}
+.width_27{ width: 27% !important; }
+.width_75 { width: 75%; margin: 0 auto !important; padding-bottom: 10px; }
+
+.spic_col_fst, .spic_col_snd, .spic_col_trd, .spic_col_frt { max-width: 25%; width: 100%; }
+.spic_col_snd, .spic_col_trd, .spic_col_trd, .spic_col_frt { text-align: center; }
+
+.spic_b_actn .cntnu_wth { display: none; }
+.spic_b_actn .try_txt { display: inline-block; }
+
+.sticky { position: sticky; top: 79px; z-index: 6; }
+
+.spic_tlt span { background: #00b4fc; border-radius: 40px; color: #fff; display: inline-block; font-size: 11px; line-height: 13px; margin-left: 10px; padding: 2px 10px; text-align: center; }
+.spic_tlt .ai_img { height:36px; margin-left:10px; }
+.tooltp { position: absolute; top: 28px; right: -100px; background: #000; color: #fff; padding: 5px 10px; width: auto; border-radius: 5px; font-size: 12px; width: 200px; text-align: center; z-index: 9; font-style: normal; line-height: 18px; display: none; }
+
+.pr_tool { position: relative; }
+i:hover > .tooltp { display: block !important; }
+
+.fa-xmark { color: red; }
+.pr_tool img { height: 17px; margin-left: 5px; }
+
+.fa-circle-check { font-size: 20px; color: #00B4FC; font-weight: 500; }
+
+@media screen and (max-width: 767px) {
+  .manage_subscription_con { padding: 1rem 0.6rem; margin: 0.5rem 0 2rem; }
+  .spic_p_list_info { padding: 0.5rem 0.5rem; }
+  .manage_subscription_con .edt_pg_tlt { font-size: 18px; line-height: 28px; margin: 8px 0 6px; }
+  .txt_blw_tab { font-size: 12px; line-height: 18px; margin: 0 0 16px; }
+  .ca_txt_blw_tab { font-size: 15px; line-height: 21px; margin: 0px 0 20px; }
+  .spic_free { order: 2; }
+  .spic_box { display: flex; flex-direction: column; border: none; }
+  .spic_box .spic_prz_crd { width: 100%; border: 1px solid #D9D9D9; margin: 0 0 30px; padding: 0; }
+  .msc_mobile .spic_plan { display: none; }
+  .msc_mobile .carrier_bus_plan { order: 0; }
+  .msc_mobile .carrier_free_plan { order: 1; }
+  .check_benifits { display: inline-block; text-align: center; text-decoration-line: underline; margin: 12px 0 0; }
+  .spic_box .spic_prz_crd .spic_tlt { font-size: 18px; line-height: 26px; border-bottom: none; padding: 16px 20px 0; height: auto; justify-content: center; }
+  .spic_body { padding: 14px 20px 0; text-align: center; }
+  .spic_dis { font-size: 12px; line-height: 18px; margin: 0 0 16px; text-align: center; }
+  .carrier_bus_plan .spic_ca_tlt { font-size: 16px; line-height: 24px; text-align: center; }
+  .spic_crd_actn .cn_btn { width: auto; min-width: 80%; }
+
+  .spic_p_list_tlt { font-size: 14px; line-height: 20px; padding: 10px 16px; }
+  .spic_p_list_info .material-icons { font-size: 22px; }
+
+  .spic_col_fst { max-width: 40%; font-size: 14px; line-height: normal; }
+  .spic_col_snd, .spic_col_trd, .spic_col_frt { max-width: 20%; }
+  .spic_b_actn { padding: 1rem 0rem 0; border-bottom: none; }
+
+  .feature_btn { border: none; margin-top: 0px; }
+
+  .spic_b_actn .cn_btn { padding: 10px 12px; min-width: auto; font-size: 14px; line-height: normal; }
+  .min_h_160 { min-height: auto; }
+
+  .spic_b_actn .cntnu_wth { display: inline-block; font-size: 15px; font-weight: 500; color: #000; }
+  .spic_b_actn .try_txt { display: none; }
+  .sticky { top: 55px; }
+}
+
+@media screen and (max-width: 575px) {
+  .spic_col_fst { max-width: 34%; font-size: 13px; }
+  .spic_col_snd, .spic_col_trd, .spic_col_frt { max-width: 22%; }
+  .spic_b_actn .cn_btn { padding: 10px 8px; }
+  .pr_tool img { height: 15px; margin-left: 3px; }
+}

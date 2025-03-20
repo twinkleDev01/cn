@@ -1,0 +1,458 @@
+<div class="container-fluid mt-4">
+  <p class="mb-2">Real-time load availability at Carrier Network is directly shared by Jose J Diaz, providing
+    detailed information about their available loads and shipment frequencies. Jose J Diaz can forecast their
+    load availability. Our platform ensures you stay informed with up-to-date availability from Jose J Diaz,
+    making your logistics planning seamless and efficient.</p>
+  <div class="availiblity_box">No loads are currently available.</div>
+
+
+<div class="find_load_filter showFilter">
+  <div class="filter_btn viewFilterPopup">
+      <span class="filter_icon">
+          <span class="d_none">Filter</span><i class="fa-sharp-duotone fa-solid fa-filter-list ms-2"></i>
+      </span>
+  </div>
+  <div class="filter_box" style="display: none;">
+      <div class="filter_box_inner">
+          <div class="mob_filter_head">
+              <p class="mob_asf_tlt">Advance Search &amp; Filter</p>
+              <i class="fa-solid fa-close close_icon"></i>
+          </div>
+          <div class="row">
+              <div class="col-md-4">
+                  <div class="left_side_card">
+                      <div>
+                          <div class="input_box">
+                              <label class="fw_7">Pickup Location</label>
+                              <select class="origin_location_select form-control select2-hidden-accessible" id="origin_location_select" data-select2-id="select2-data-origin_location_select" tabindex="-1" aria-hidden="true"></select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-1-1rbz" style="width: auto;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-origin_location_select-container" aria-controls="select2-origin_location_select-container"><span class="select2-selection__rendered" id="select2-origin_location_select-container" role="textbox" aria-readonly="true" title="Search State City"><span class="select2-selection__placeholder">Search State City</span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                              <button type="button" id="origin_location_clear_filter" class="origin_location_clear_filter clear_btn" style="display: none">
+                                  Clear</button>
+
+                          </div>
+                          <div class="input_box">
+                              <label class="fw_7">Drop Location</label>
+                              <select class="drop_location_select form-control select2-hidden-accessible" id="drop_location_select" data-select2-id="select2-data-drop_location_select" tabindex="-1" aria-hidden="true"></select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-2-j4i7" style="width: auto;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-drop_location_select-container" aria-controls="select2-drop_location_select-container"><span class="select2-selection__rendered" id="select2-drop_location_select-container" role="textbox" aria-readonly="true" title="Search State City"><span class="select2-selection__placeholder">Search State City</span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                              <button type="button" id="drop_location_clear_filter" class="drop_location_clear_filter clear_btn" style="display: none">
+                                  Clear</button>
+                          </div>
+                          <div class="input_box">
+                              <label class="fw_7">Date Range</label>
+                              <div class="input-group">
+                                  <input type="text" class="form-control date-range" id="date-range" placeholder="Select Date Range" readonly="">
+                                  <i class="fas fa-calendar openCalender"></i> 
+                              </div>
+                              <button type="button" id="date_range_clear_filter" class="date_range_clear_filter clear_btn" style="display: none"> Clear</button>
+                          </div>
+                      </div>
+                      <div class="cc_buttons">
+                          <button type="button" id="" class="pickDropFilter_clear_filter" style="display: none;  margin-right: 42px;">All Clear</button>
+                          <button type="button" class="pickDropFilter" id="pickDropFilter">Apply</button>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="left_side_card">
+                      <div>
+                          <div class="input_box">
+                              <label class="fw_7">Cost Per Mile</label>
+                              <input class="input_box form-control cost_per_miles" id="cost_per_miles" placeholder="Cost per mile" maxlength="10">
+                              <button type="button" id="cost_per_miles_clear_filter" class="cost_per_miles_clear_filter clear_btn" style="display: none">
+                                  Clear</button>
+                          </div>
+                          <div class="input_box">
+                              <label class="fw_7">Equipment</label>
+                              <select class="form-control equipment" id="equipment">
+                                  <option value="">Select Option</option>
+                                                                              <option value="1"> Auto Carrier Trailer</option>
+                                                                              <option value="2"> Box Truck</option>
+                                                                              <option value="3"> Cargo Van</option>
+                                                                              <option value="4"> Car Hauler</option>
+                                                                              <option value="5"> Chassis Trailer</option>
+                                                                              <option value="6"> Conestoga Trailer</option>
+                                                                              <option value="7"> Container Trailer</option>
+                                                                              <option value="8"> Conveyor Truck</option>
+                                                                              <option value="9"> Double Drop Trailer</option>
+                                                                              <option value="10"> Drayage Trailer</option>
+                                                                              <option value="11"> Drop Deck Landoll</option>
+                                                                              <option value="12"> Dry Van</option>
+                                                                              <option value="13"> Dump Trailer</option>
+                                                                              <option value="14"> Flatbed Trailer</option>
+                                                                              <option value="15"> Hopper Bottom Trailer</option>
+                                                                              <option value="16"> Hotshot Trailer</option>
+                                                                              <option value="17"> Intermodal Trailer</option>
+                                                                              <option value="18"> Logistics Van</option>
+                                                                              <option value="19"> Lowboy Trailer</option>
+                                                                              <option value="20"> Power Unit Only</option>
+                                                                              <option value="21"> Refrigerated Trailer</option>
+                                                                              <option value="22"> Refrigerated Box Truck</option>
+                                                                              <option value="23"> Rgn Trailer Stretch</option>
+                                                                              <option value="24"> Sprinter Van</option>
+                                                                              <option value="25"> Step Deck</option>
+                                                                              <option value="26"> Stepdeck Conestoga</option>
+                                                                              <option value="27"> Stretch Rgn Trailer</option>
+                                                                              <option value="28"> Tanker Trailer</option>
+                                                                              <option value="29"> Van Conestoga</option>
+                                                                              <option value="30"> RGN Trailer</option>
+                                                                              <option value="31"> Oversized</option>
+                                                                              <option value="32"> Pneumatic</option>
+                                                                              <option value="33"> Livestock</option>
+                                                                              <option value="34"> Straight Flat</option>
+                                                                              <option value="35"> Straight Van</option>
+                                                                              <option value="36"> Straight Reefer Van</option>
+                                                                      </select>
+                              <button type="button" id="equipment_clear_filter" class="equipment_clear_filter clear_btn" style="display: none"> Clear</button>
+                          </div>
+                      </div>
+                      <div class="cc_buttons">
+                          <button type="button" id="equipmentFilter_clear_filter" class="equipmentFilter_clear_filter" style="display: none; margin-right: 42px;">All
+                              Clear</button>
+                          <button type="button" class="btn btn-primary equipmentFilter btn-sm" id="equipmentFilter">Apply</button>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="bottom_side_card">
+                      <div class="input_box">
+                          <p class="head_lable">Shipment Type</p>
+                                                              <div class="form-check shipment_type">
+                                  <input type="checkbox" name="shipment_type" class="form-check-input shipment_type_1" id="shipment_type_Less Than Truckload (LTL)" value="1">
+                                  <label class="form-check-label" for="shipment_type_1">Less Than Truckload (LTL)</label>
+                              </div>
+                                                              <div class="form-check shipment_type">
+                                  <input type="checkbox" name="shipment_type" class="form-check-input shipment_type_2" id="shipment_type_Full Truckload (FTL)" value="2">
+                                  <label class="form-check-label" for="shipment_type_2">Full Truckload (FTL)</label>
+                              </div>
+                                                              <div class="form-check shipment_type">
+                                  <input type="checkbox" name="shipment_type" class="form-check-input shipment_type_3" id="shipment_type_Partial Shipments" value="3">
+                                  <label class="form-check-label" for="shipment_type_3">Partial Shipments</label>
+                              </div>
+                                                      </div>
+                      <div class="cc_buttons" style="justify-content: space-between;">
+                          <button type="button" id="shipmentFilter_clear_filter" class="shipmentFilter_clear_filter clear_btn" style="display: none; ">Clear</button>
+                          <button type="button" class="shipmentFilter" id="shipmentFilter">Apply</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="btn_src_rltQW row">
+  <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
+    <div class="card_parent">
+      <a href="/load-availability/detail/95" target="_blank">
+        <i class="fa-duotone fa-solid fa-arrow-up-right-from-square"
+          style="display: none; color: #fff; z-index: 2; background: #00b4fc; padding: 4px; border-radius: 5px;"></i>
+      </a>
+      <div class="rows_card">
+        <div class="pic_loc">
+          <i class="fa-duotone fa-solid fa-location-dot card_icon txt_p" data-toggle="tooltip"
+            aria-label="Pickup Location" data-bs-original-title="Pickup Location"></i>
+          <div class="text_b fw_6" data-toggle="tooltip" aria-label="Long Beach 
+                            CA 
+                            12 Dec, 2024" data-bs-original-title="Long Beach 
+                                        CA 
+                                        12 Dec, 2024">
+            <span>Long Beach
+              CA</span>
+            <span>12 Dec, 2024</span>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt_8 row-gap-2 flex-wrap">
+          <div class="drop_loc">
+            <i class="fa-duotone fa-solid fa-location-dot card_icon txt_r" data-toggle="tooltip"
+              aria-label="Dropup Location" data-bs-original-title="Dropup Location"></i>
+
+            <div class="text_b fw_6" data-toggle="tooltip" aria-label="Houston 
+                TX 
+                16 Dec, 2024" data-bs-original-title="Houston 
+                            TX 
+                            16 Dec, 2024">
+              <span>Houston
+                TX</span>
+              <span>16 Dec, 2024</span>
+            </div>
+
+          </div>
+
+          <div class="miles_chip">
+            600.00
+            <span data-toggle="tooltip" aria-label="Miles" data-bs-original-title="Miles" style="font-size:10px;">(mi)
+            </span>
+          </div>
+        </div>
+
+        <div class="card_sep"></div>
+        <div class="truck_type">
+          <i class="fa-sharp-duotone fa-solid fa-truck-fast card_icon" data-toggle="tooltip"
+            aria-label="Equipment Type" data-bs-original-title="Equipment Type"></i>
+          <div class="text_b fw_6">
+            Conestoga Trailer
+          </div>
+        </div>
+
+        <div class="ship_type">
+          <i class="fa-duotone fa-solid fa-box-taped fs_22" data-toggle="tooltip" aria-label="Shipment Types"
+            data-bs-original-title="Shipment Types"></i>
+          <div class="text_b fw_6">
+            Full Truckload (FTL)</div>
+        </div>
+        <div class="time_age">
+        </div>
+        <div class="card_sep"></div>
+
+        <div class="card_profile">
+          <div class="user_pro">
+            <div class="user_pro_img">
+              <img src="https://staticd.carriers.network/carrier/289/profile-image/289_20240826_081103_blob"
+                class="carrier profile" alt="carrier profile">
+            </div>
+
+            <div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="text_b fw_6">Clover Fence</span>
+                <span class="usib_chip blu_chip"><i class="fa-duotone fa-badge-check" data-toggle="tooltip"
+                    style="font-size: 20px; color: #00b4fc;" aria-label="Registered"
+                    data-bs-original-title="Registered"></i></span>
+              </div>
+              <div>Carrier</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="card_footer">
+        <div class="d-flex align-items-center gap-2">
+
+          <div class="text_b fw_6" data-toggle="tooltip"
+            data-bs-original-title="Current value less 30% and greather 30%">
+            $5.00
+          </div>
+          <div class="shade_five" data-toggle="tooltip" aria-label="Cost Per Miles"
+            data-bs-original-title="Cost Per Miles">CPM</div>
+        </div>
+        <div class="view_btn_box">
+          <a href="/load-availability/detail/95" class="tpc_link cn_btn btn-sm"
+            style="background: none; color: #00b4fc; padding: 0px;">
+            More About Load<i class="fa-duotone fa-solid fa-turn-right ms-2"></i>
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
+    <div class="card_parent">
+      <a href="/load-availability/detail/94" target="_blank">
+        <i class="fa-duotone fa-solid fa-arrow-up-right-from-square"
+          style="display: none; color: #fff; z-index: 2; background: #00b4fc; padding: 4px; border-radius: 5px;"></i>
+      </a>
+      <div class="rows_card">
+        <div class="pic_loc">
+          <i class="fa-duotone fa-solid fa-location-dot card_icon txt_p" data-toggle="tooltip"
+            aria-label="Pickup Location" data-bs-original-title="Pickup Location"></i>
+          <div class="text_b fw_6" data-toggle="tooltip" aria-label="Charlotte 
+                            NC 
+                            12 Dec, 2024" data-bs-original-title="Charlotte 
+                                        NC 
+                                        12 Dec, 2024">
+            <span>Charlotte
+              NC</span>
+            <span>12 Dec, 2024</span>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt_8 row-gap-2 flex-wrap">
+          <div class="drop_loc">
+            <i class="fa-duotone fa-solid fa-location-dot card_icon txt_r" data-toggle="tooltip"
+              aria-label="Dropup Location" data-bs-original-title="Dropup Location"></i>
+
+            <div class="text_b fw_6" data-toggle="tooltip" aria-label="Louisville 
+                KY 
+                16 Dec, 2024" data-bs-original-title="Louisville 
+                            KY 
+                            16 Dec, 2024">
+              <span>Louisville
+                KY</span>
+              <span>16 Dec, 2024</span>
+            </div>
+
+          </div>
+
+          <div class="miles_chip">
+            1,000.00
+            <span data-toggle="tooltip" aria-label="Miles" data-bs-original-title="Miles" style="font-size:10px;">(mi)
+            </span>
+          </div>
+        </div>
+
+        <div class="card_sep"></div>
+        <div class="truck_type">
+          <i class="fa-sharp-duotone fa-solid fa-truck-fast card_icon" data-toggle="tooltip"
+            aria-label="Equipment Type" data-bs-original-title="Equipment Type"></i>
+          <div class="text_b fw_6">
+            Box Truck
+          </div>
+        </div>
+
+        <div class="ship_type">
+          <i class="fa-duotone fa-solid fa-box-taped fs_22" data-toggle="tooltip" aria-label="Shipment Types"
+            data-bs-original-title="Shipment Types"></i>
+          <div class="text_b fw_6">
+            Full Truckload (FTL)</div>
+        </div>
+        <div class="time_age">
+        </div>
+        <div class="card_sep"></div>
+
+        <div class="card_profile">
+          <div class="user_pro">
+            <div class="user_pro_img">
+              <img src="https://staticd.carriers.network/carrier/289/profile-image/289_20240826_081103_blob"
+                class="carrier profile" alt="carrier profile">
+            </div>
+
+            <div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="text_b fw_6">Clover Fence</span>
+                <span class="usib_chip blu_chip"><i class="fa-duotone fa-badge-check" data-toggle="tooltip"
+                    style="font-size: 20px; color: #00b4fc;" aria-label="Registered"
+                    data-bs-original-title="Registered"></i></span>
+              </div>
+              <div>Carrier</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="card_footer">
+        <div class="d-flex align-items-center gap-2">
+
+          <div class="text_b fw_6" data-toggle="tooltip"
+            data-bs-original-title="Current value less 30% and greather 30%">
+            $4.00
+          </div>
+          <div class="shade_five" data-toggle="tooltip" aria-label="Cost Per Miles"
+            data-bs-original-title="Cost Per Miles">CPM</div>
+        </div>
+        <div class="view_btn_box">
+          <a href="/load-availability/detail/94" class="tpc_link cn_btn btn-sm"
+            style="background: none; color: #00b4fc; padding: 0px;">
+            More About Load<i class="fa-duotone fa-solid fa-turn-right ms-2"></i>
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
+    <div class="card_parent">
+      <a href="/load-availability/detail/88" target="_blank">
+        <i class="fa-duotone fa-solid fa-arrow-up-right-from-square"
+          style="display: none; color: #fff; z-index: 2; background: #00b4fc; padding: 4px; border-radius: 5px;"></i>
+      </a>
+      <div class="rows_card">
+        <div class="pic_loc">
+          <i class="fa-duotone fa-solid fa-location-dot card_icon txt_p" data-toggle="tooltip"
+            aria-label="Pickup Location" data-bs-original-title="Pickup Location"></i>
+          <div class="text_b fw_6" data-toggle="tooltip" aria-label=" 
+                             
+                            20 Aug, 2024" data-bs-original-title=" 
+                                         
+                                        20 Aug, 2024">
+            <span>
+            </span>
+            <span>20 Aug, 2024</span>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt_8 row-gap-2 flex-wrap">
+          <div class="drop_loc">
+            <i class="fa-duotone fa-solid fa-location-dot card_icon txt_r" data-toggle="tooltip"
+              aria-label="Dropup Location" data-bs-original-title="Dropup Location"></i>
+
+            <div class="text_b fw_6" data-toggle="tooltip" aria-label=" 
+                 
+                30 Aug, 2024" data-bs-original-title=" 
+                             
+                            30 Aug, 2024">
+              <span>
+              </span>
+              <span>30 Aug, 2024</span>
+            </div>
+
+          </div>
+
+          <div class="miles_chip">
+            145,623.00
+            <span data-toggle="tooltip" aria-label="Miles" data-bs-original-title="Miles" style="font-size:10px;">(mi)
+            </span>
+          </div>
+        </div>
+
+        <div class="card_sep"></div>
+        <div class="truck_type">
+          <i class="fa-sharp-duotone fa-solid fa-truck-fast card_icon" data-toggle="tooltip"
+            aria-label="Equipment Type" data-bs-original-title="Equipment Type"></i>
+          <div class="text_b fw_6">
+            Conestoga Trailer
+          </div>
+        </div>
+
+        <div class="ship_type">
+          <i class="fa-duotone fa-solid fa-box-taped fs_22" data-toggle="tooltip" aria-label="Shipment Types"
+            data-bs-original-title="Shipment Types"></i>
+          <div class="text_b fw_6">
+            Full Truckload (FTL)</div>
+        </div>
+        <div class="time_age">
+        </div>
+        <div class="card_sep"></div>
+
+        <div class="card_profile">
+          <div class="user_pro">
+            <div class="user_pro_img">
+              <img src="https://staticd.carriers.network/carrier/289/profile-image/289_20240826_081103_blob"
+                class="carrier profile" alt="carrier profile">
+            </div>
+
+            <div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="text_b fw_6">Clover Fence</span>
+                <span class="usib_chip blu_chip"><i class="fa-duotone fa-badge-check" data-toggle="tooltip"
+                    style="font-size: 20px; color: #00b4fc;" aria-label="Registered"
+                    data-bs-original-title="Registered"></i></span>
+              </div>
+              <div>Carrier</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="card_footer">
+        <div class="d-flex align-items-center gap-2">
+
+          <div class="text_b fw_6" data-toggle="tooltip"
+            data-bs-original-title="Current value less 30% and greather 30%">
+            $45,893.00
+          </div>
+          <div class="shade_five" data-toggle="tooltip" aria-label="Cost Per Miles"
+            data-bs-original-title="Cost Per Miles">CPM</div>
+        </div>
+        <div class="view_btn_box">
+          <a href="/load-availability/detail/88" class="tpc_link cn_btn btn-sm"
+            style="background: none; color: #00b4fc; padding: 0px;">
+            More About Load<i class="fa-duotone fa-solid fa-turn-right ms-2"></i>
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>

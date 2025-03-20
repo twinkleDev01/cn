@@ -1,0 +1,720 @@
+<div class="take_rating_review_box">
+	<div *ngIf="!skeletonLoader">
+		<div class="lable_field">
+			<p class="edt_pg_tlt">Edit a Review for "{{selectCarrierData?.companyName | titleCase | convertEnd}}"</p>
+			<p class="lable_vlu">You may update a review for this carrier <span
+					class="edt_pg_tlt">"{{selectCarrierData.companyName}}"</span> based on his experience with it. Using
+				the information provided below.</p>
+		</div>
+		<form class="cn_field" [formGroup]="editReviewForm" (ngSubmit)="submitReview(editReviewForm)">
+			<div class="trrb_form_box">
+				<div class="cslc_box">
+					<div class="cslc_crd">
+						<div class="cslc_crd_l">
+							<div class="cslc_crd_ll">
+								<div class="cslc_bl_img" *ngIf="selectCarrierData?.profileImage">
+									<img src="{{selectCarrierData?.profileImage}}" class="img-fluid">
+								</div>
+								<div class="cslc_bl_initail" *ngIf="!selectCarrierData?.profileImage">
+									<span class="initail">{{selectCarrierData?.companyName | acronymOfName}} </span>
+								</div>
+							</div>
+							<div class="cslc_crd_lr">
+								<div class="cslc_nm">
+									<span class="txt_ellipsis" matTooltip="{{selectCarrierData.companyName | titleCase | convertEnd}} ">{{selectCarrierData.companyName | titleCase | convertEnd}} </span>
+								</div>
+								<div class="cslc_locatn"
+									*ngIf="selectCarrierData?.phyCity || selectCarrierData?.phyStateCode ">
+									<span>{{selectCarrierData?.phyCity ? (selectCarrierData?.phyCity | titleCase) : '-'}} ,
+										{{selectCarrierData?.phyStateCode ? selectCarrierData?.phyStateCode :
+										'-'}}</span>
+								</div>
+								<div *ngIf="!selectCarrierData?.phyStateCode && !selectCarrierData?.phyCity">
+									<span>-</span>
+								</div>
+								<div class="cslc_dot_active">
+									<p class="cslc_dot">
+										<b>DOT #: </b>
+										<span>{{selectCarrierData.dotNumber ? selectCarrierData.dotNumber : '-'}}</span>
+									</p>
+									<span class="cslc_sapration"> | </span>
+									<p class="cslc_dot">
+										<b>Docket: </b>
+										<span>{{selectCarrierData.dunsNumber ? selectCarrierData.dunsNumber :
+											'-'}}</span>
+									</p>
+									<span class="cslc_sapration"> | </span>
+									<p class="cslc_dot">
+										<b>Fleet Size: </b>
+										<span>{{selectCarrierData?.trucksNumbers ? selectCarrierData?.trucksNumbers :
+											'0'}}</span>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="cslc_crd_r non_carrier_new_edit_rew">
+							<div class="cslc_reviw">
+								<p class="avrg_rtng">{{getReview?.rating ? getReview?.rating : '0'}}.0</p>
+								<app-review-show
+									[averageRating]="getReview?.rating ? getReview?.rating : '0'"></app-review-show>
+								<div class="reviws">
+									<a>{{getReview?.rating ? getReview?.rating : '0'}} <span>out of 5</span> </a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="fld_row fld_row_inpt">
+					<div class="row">
+						<div class="col-md-6">
+							<p class="cn_input_lbl">Title</p>
+							<mat-form-field appearance="none">
+								<input matInput formControlName="title" type="text"
+									placeholder="Summarize your Experience with this Carrier"
+									class="form-control cn_input" maxlength="128" />
+								<mat-error *ngIf="submitted && editReviewForm.get('title').errors?.['required']"
+									class="error_mess">Title is required.</mat-error>
+							</mat-form-field>
+						</div>
+						<div class="col-md-6"></div>
+						<div class="col-md-6">
+							<div class="trrt_rtng add_reviw_ratng">
+								<p class="cn_input_lbl mb-1">Enter Rating</p>
+								<span class="btn_rtng_stars">
+									<app-star-rating [rating]="rating" [starCount]="starCount" [color]="starColor"
+										(ratingUpdated)="onRatingChanged($event)"></app-star-rating>
+									<mat-form-field appearance="none" class="hide_mat_input">
+										<input matInput type="text" maxlength="64" formControlName="rating"
+											placeholder="Enter Rating" class="form-control cn_input" />
+										<mat-error
+											*ngIf="submitted && editReviewForm.get('rating').errors?.['required']"
+											class="error_mess mt-1">Rating is required.</mat-error>
+									</mat-form-field>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="fld_row">
+					<div class="trrt_timline">
+						<p class="cn_input_lbl">Rate For Timeliness</p>
+						<div class="btn_no_rtng">
+							<mat-button-toggle-group name="fontStyle" aria-label="Font Style"
+								formControlName="rateForTimeliness">
+								<mat-button-toggle value="{{selectTimeLines.count}}"
+									*ngFor="let selectTimeLines of timeLinaRating"
+									[checked]="selectTimeLines?.count ==getReview?.rateForTimeliness">{{selectTimeLines.count}}</mat-button-toggle>
+								<mat-error
+									*ngIf="submitted && editReviewForm.get('rateForTimeliness').errors?.['required']"
+									class="error_mess">Rate for timeliness is required</mat-error>
+							</mat-button-toggle-group>
+						</div>
+					</div>
+					<div class="trrt_cleanliness">
+						<p class="cn_input_lbl">Rate For Cleanliness</p>
+						<div class="btn_no_rtng">
+							<mat-button-toggle-group name="fontStyle" aria-label="Font Style"
+								formControlName="rateForCleanliness">
+								<mat-button-toggle value="{{cleanliness.count}}"
+									*ngFor="let cleanliness of timeLinaRating"
+									[checked]="cleanliness?.count == getReview?.rateForCleanliness">{{cleanliness.count}}</mat-button-toggle>
+								<mat-error
+									*ngIf="submitted && editReviewForm.get('rateForCleanliness').errors?.['required']"
+									class="error_mess">Rate for cleanliness is required</mat-error>
+							</mat-button-toggle-group>
+						</div>
+					</div>
+					<div class="trrt_communication">
+						<p class="cn_input_lbl">Rate For Communication</p>
+						<div class="btn_no_rtng">
+							<mat-button-toggle-group name="fontStyle" aria-label="Font Style"
+								formControlName="rateForCommunication">
+								<mat-button-toggle value="{{communication.count}}"
+									*ngFor="let communication of timeLinaRating"
+									[checked]="communication?.count==getReview?.rateForCommunication">{{communication.count}}</mat-button-toggle>
+								<mat-error
+									*ngIf="submitted && editReviewForm.get('rateForCommunication').errors?.['required']"
+									class="error_mess">Rate for communication is required</mat-error>
+							</mat-button-toggle-group>
+						</div>
+					</div>
+				</div>
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">Would you work with this carrier again?</p>
+					<mat-radio-group appearance="none" class="cn_radio_btn" [(ngModel)]="isConsiderNextTime"
+						[ngModelOptions]="{standalone: true}">
+						<mat-radio-button [value]="true"> Yes </mat-radio-button>
+						<mat-radio-button [value]="false"> No </mat-radio-button>
+						<mat-error *ngIf="!isValueSelected('isConsiderNextTime')" class="error_mess">Please select one
+							of these options.</mat-error>
+					</mat-radio-group>
+				</div>
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">What went well?</p>
+					<div class="cn_mlti_selct">
+						<mat-checkbox [checked]="isMatchingWentWell(wentWell?.id)"
+							*ngFor="let wentWell of whatWentWellData"
+							(change)="whatWentWellCheckboxChange($event,wentWell?.id,i)">{{wentWell?.name}}</mat-checkbox>
+						<mat-error *ngIf="submitted && editReviewForm.get('whatWentWell').errors?.['required']"
+							class="error_mess">Please select at least one of these options.</mat-error>
+					</div>
+				</div>
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">What went poorly?</p>
+					<div class="cn_mlti_selct">
+						<mat-checkbox [checked]="isMatchingWhatWentPoorly(wentPoorly?.id)"
+							*ngFor="let wentPoorly of whatWentPoorly"
+							(change)="whatWentPoorlyCheckboxChange($event,wentPoorly?.id,i)">{{wentPoorly?.name}}</mat-checkbox>
+						<mat-error *ngIf="submitted && editReviewForm.get('whatWentPoorly').errors?.['required']"
+							class="error_mess">Please select at least one of these options.</mat-error>
+					</div>
+				</div>
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">Would you like to receive availability updates for this carrier? <span
+							class="txt_lb">(Optional)</span></p>
+					<mat-radio-group appearance="none" class="cn_radio_btn" [(ngModel)]="likeToReceiveUpdate"
+						[ngModelOptions]="{standalone: true}">
+						<mat-radio-button [value]="true"> Yes </mat-radio-button>
+						<mat-radio-button [value]="false"> No </mat-radio-button>
+					</mat-radio-group>
+				</div>
+
+
+
+
+				<!-- <div class="fld_row fld_row_inpt">
+					<p class="cn_input_lbl">Tell us about your overall experience working with this carrier.</p>
+					<mat-form-field appearance="none">
+						<textarea rows="5" cols="60" matInput formControlName="review" type="text" placeholder="Enter Review" class="form-control cn_input" maxlength="500"></textarea>
+						<mat-error *ngIf="submitted && editReviewForm.get('review').errors?.['required']" class="error_mess">Review is required</mat-error>
+					</mat-form-field>
+				</div> -->
+
+
+
+				<div class="fld_row fld_row_inpt">
+					<div class="col-md-5">
+						<p class="cn_input_lbl">When did you last work with this carrier?</p>
+						<mat-form-field appearance="none" class="cn_pfix_icn">
+							<input matInput [matDatepicker]="dp" [max]="maxDate" [min]="minDate" [formControl]="date"
+								class="form-control cn_input">
+							<mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+							<mat-datepicker #dp startView="multi-year" (monthSelected)="setMonthAndYear($event, dp,Input)"
+								panelClass="example-month-picker"></mat-datepicker>
+							<mat-error
+								*ngIf="submitted && editReviewForm.get('lastWorkedWithMonth').errors?.['required']"
+								class="error_mess">Month and Year is required.</mat-error>
+						</mat-form-field>
+					</div>
+				</div>
+
+
+
+
+
+
+				<div class="fld_row fld_row_inpt">
+					<div class="col-md-5">
+						<p class="cn_input_lbl">How did you find this carrier? <span
+								class="txt_lb fw_4">(Optional)</span></p>
+						<mat-form-field appearance="none">
+							<mat-select placeholder="Select" formControlName="carrierDiscovery"
+								(selectionChange)="selectCarrierDiscovery($event)">
+								<mat-option *ngFor="let carrierDiscoveryData of carrierDiscoveryValues;"
+									[value]="carrierDiscoveryData?.id">{{carrierDiscoveryData?.name}}</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">How was the carrier's rate?</p>
+					<mat-radio-group appearance="none" class="cn_radio_btn">
+						<mat-radio-button [value]="considerExpensive?.id" value="true"
+							[checked]="considerExpensive?.id==getReview?.considerExpensiveType?.considerExpensiveTypeId"
+							(change)="onConsiderExpensiveRadioChange($event,considerExpensive?.id,i)"
+							*ngFor="let considerExpensive of considerExpensiveRate;let i=index;">
+							{{considerExpensive?.name}} </mat-radio-button>
+						<mat-error *ngIf="submitted && editReviewForm.get('considerExpensive').errors?.['required']"
+							class="error_mess">Please select one of these options.</mat-error>
+					</mat-radio-group>
+				</div>
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">How often have you worked with this carrier?</p>
+					<mat-radio-group appearance="none" class="cn_radio_btn">
+						<mat-radio-button [value]="howOftenName?.id"
+							[checked]="howOftenName?.id==getReview?.howOftenType?.howOftenTypeId"
+							(change)="onHowOftenRadioChange($event,howOftenName?.id,i)"
+							*ngFor="let howOftenName of howOftens"> {{howOftenName?.name}} </mat-radio-button>
+						<mat-error *ngIf="submitted && editReviewForm.get('howOften').errors?.['required']"
+							class="error_mess">Please select one of these options.</mat-error>
+					</mat-radio-group>
+				</div>
+
+				<div class="fld_row fld_row_inpt">
+					<!-- <p class="cn_input_lbl" *ngIf="getReview?.lane?.length > 1">Add Lane</p> -->
+					<p class="cn_input_lbl">Add Lane</p>
+					<div class="edit_lanes" *ngIf="openLaneFeild || getReview?.lane?.length ==0">
+						<form autocomplete="off" [formGroup]="editLanesForm" (ngSubmit)="laneSubmit(editLanesForm)"
+							class="cn_field">
+							<!-- <p class="cn_input_lbl">Select Lane</p> -->
+							<div class="add_lane_location">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="lane_addrs">
+											<div class="input_field">
+												<p class="cn_input_lbl">Select From State<span class="txt_d"> *</span>
+												</p>
+												<mat-form-field appearance="none">
+													<mat-select class="form-control cn_input" placeholder="Select State"
+														formControlName="fromStateId"
+														(selectionChange)="selectPickLaneRegions($event)">
+														<mat-option *ngFor="let regionsData of laneRegion?.state"
+															[value]="regionsData.id">{{regionsData?.name}}</mat-option>
+													</mat-select>
+													<mat-error
+														*ngIf="submittedLanes && editLanesForm.get('fromStateId').errors?.['required']"
+														class="error_mess">State is required</mat-error>
+												</mat-form-field>
+											</div>
+
+											<div class="input_field">
+												<p class="cn_input_lbl">Select From City<span class="txt_d"> *</span>
+												</p>
+												<mat-form-field class="cn_pfix_icn" appearance="none">
+													<span matSuffix class="material-icons srch_icn">search</span>
+													<input type="text" [matAutocomplete]="auto1"
+														(keyup)="searchUserTypeFrom($event)"
+														placeholder="Select from City" aria-label="Test" matInput
+														formControlName="fromCityId" class="form-control cn_input">
+													<div class="loard_box" *ngIf="loaderSearchFrom">
+														<span class="custom_spinner spinner-border" role="status">
+															<span class="visually-hidden">Loading...</span>
+														</span>
+													</div>
+													<mat-autocomplete #auto1="matAutocomplete">
+														<mat-option *ngFor="let regionsCity of laneCity_one?.city"
+															[value]="regionsCity.name">{{regionsCity?.name}}</mat-option>
+													</mat-autocomplete>
+													<mat-error
+														*ngIf="submittedLanes && editLanesForm.get('fromCityId').errors?.['required']"
+														class="error_mess">City is required.</mat-error>
+												</mat-form-field>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-1">
+										<div class="lane_arrow_img">
+											<span class="material-icons-outlined">arrow_forward_ios</span>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="lane_addrs">
+											<div class="input_field">
+												<p class="cn_input_lbl">Select To State<span class="txt_d"> *</span></p>
+												<mat-form-field appearance="none">
+													<mat-select class="form-control cn_input" placeholder="Select State"
+														formControlName="toStateId"
+														(selectionChange)="selectPickLanes($event)">
+														<mat-option *ngFor="let lanesData of laneRegion?.state"
+															[value]="lanesData.id">{{lanesData?.name}} </mat-option>
+													</mat-select>
+													<mat-error
+														*ngIf="submittedLanes && editLanesForm.get('toStateId').errors?.['required']"
+														class="error_mess">State is required</mat-error>
+													<mat-error class="error_mess"
+														*ngIf="editLanesForm?.get('toStateId').errors?.['mustDiffer']">From
+														State and To State should not be same.</mat-error>
+												</mat-form-field>
+											</div>
+											<div class="input_field">
+												<p class="cn_input_lbl">Select To City<span class="txt_d"> *</span></p>
+												<mat-form-field class="cn_pfix_icn" appearance="none">
+													<span matSuffix class="material-icons srch_icn">search</span>
+													<input type="text" [matAutocomplete]="auto2"
+														(keyup)="searchUserTypeTo($event)" placeholder="Select to City"
+														aria-label="Test" matInput formControlName="toCityId"
+														class="form-control cn_input">
+													<div class="loard_box" *ngIf="loaderSearchTo">
+														<span class="custom_spinner spinner-border" role="status">
+															<span class="visually-hidden">Loading...</span>
+														</span>
+													</div>
+													<mat-autocomplete #auto2="matAutocomplete">
+														<mat-option *ngFor="let toCityName of laneCity_two?.city"
+															[value]="toCityName.name">{{toCityName?.name}} </mat-option>
+													</mat-autocomplete>
+													<mat-error
+														*ngIf="submittedLanes && editLanesForm.get('toCityId').errors?.['required']"
+														class="error_mess">City is required</mat-error>
+												</mat-form-field>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form_action" style="text-align: right;">
+								<button type="submit" class="cn_btn">Add Lane</button>
+							</div>
+						</form>
+					</div>
+
+					<div class="added_lane_box">
+						<!-- <div class="pdt_instn_row" *ngFor="let listData of laneDataShow, let i = index;"> -->
+						<div class="pdt_instn_row"
+							*ngFor="let listData of laneDataShow?.slice(0, showAllLanes ? laneDataShow?.length : 2);let i = index;">
+							<span class="material-icons xmark_icn" (click)="removeAddLane(i,listData)">close</span>
+
+							<span class="instn_picup">{{listData?.toCityName ? listData?.toCityName : '-'}}<span
+									*ngIf="listData?.toCityName?.length >= 0" style="margin-right: 2px;">,</span></span>
+							<span class="instn_picup">{{listData?.toStateCode ? listData?.toStateCode : '-'}}</span>
+
+							<span class="instn_arrow">></span>
+
+							<span class="instn_picup">{{listData?.fromCityName ? listData?.fromCityName : '-'}}<span
+									*ngIf="listData?.fromCityName.length >= 0"
+									style="margin-right: 2px;">,</span></span>
+							<span class="instn_drop">{{listData?.fromStateCode ? listData?.fromStateCode : '-'}}</span>
+						</div>
+						<button (click)="showMoreData('lane')" *ngIf="laneDataShow?.length >2" class="show_hid_btn">{{
+							showAllLanes ? 'Show Less' : 'Show More' }}</button>
+					</div>
+
+					<div class="added_lane_box" *ngIf="getReview?.lane?.length > 0">
+						<!-- <div class="pdt_instn_row" *ngFor="let listData of getReview?.lane, let i = index;"> -->
+						<div class="pdt_instn_row"
+							*ngFor="let listData of getReview?.lane?.slice(0, showReviewLanes ? getReview?.lane?.length : 4);let i = index;">
+							<span class="material-icons xmark_icn" (click)="removeLane(i,listData)">close</span>
+
+							<span class="instn_picup">{{listData?.toCity ? listData?.toCity : '-'}}<span
+									*ngIf="listData?.toCity?.length >= 0" style="margin-right: 2px;">,</span></span>
+							<span class="instn_picup">{{listData?.toStateCode ? listData?.toStateCode : '-'}}</span>
+
+							<span class="instn_arrow">></span>
+
+							<span class="instn_picup">{{listData?.fromCity ? listData?.fromCity : '-'}}<span
+									*ngIf="listData?.fromCity?.length >= 0" style="margin-right: 2px;">,</span></span>
+							<span class="instn_drop">{{listData?.fromStateCode ? listData?.fromStateCode : '-'}}</span>
+						</div>
+						<button (click)="showMoreData('review')" *ngIf="getReview?.lane?.length >3"
+							class="show_hid_btn">{{ showReviewLanes ? 'Show Less' : 'Show More' }}</button>
+					</div>
+
+					<div class="form_action" style="text-align: right;" *ngIf="getReview?.lane?.length">
+						<button type="submit" class="cn_btn b_none" *ngIf="!openLaneFeild"
+							(click)="addAnotherLane()">Add Another Lane</button>
+					</div>
+				</div>
+
+
+
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">What type(s) of freight did you ship?</p>
+					<div class="cn_mlti_selct">
+						<mat-checkbox *ngFor="let cargoName of cargotype;let i=index;"
+							[checked]="isIdMatching(cargoName?.id)"
+							(change)="onCargoTypeCheckboxChange($event,cargoName?.id,i)">{{cargoName?.name}}</mat-checkbox>
+						<mat-error *ngIf="submitted && editReviewForm.get('cargoTypesIds').errors?.['required']"
+							class="error_mess">Please select at least one of these options.</mat-error>
+					</div>
+				</div>
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">What type(s) of truck did you use?</p>
+					<div class="cn_mlti_selct">
+						<mat-checkbox *ngFor="let equipment of equipmemtTypes;let i=index"
+							[checked]="isMatchEquipment(equipment?.id)"
+							(change)="onEquipmentCheckboxChange($event,equipment?.id,i)">{{equipment?.name}}</mat-checkbox>
+						<mat-error *ngIf="submitted && editReviewForm.get('equipmentTypesIds').errors?.['required']"
+							class="error_mess">Please select at least one of these options.</mat-error>
+					</div>
+				</div>
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">What type(s) of shipments did this carrier take?</p>
+					<div class="cn_mlti_selct">
+						<mat-checkbox *ngFor="let shipmentType of shipmentTypes;let i =index;"
+							[checked]="isMatchShipmentType(shipmentType?.id)"
+							(change)="onShipmentTypesChange($event,shipmentType?.id,i)">{{shipmentType?.name}}</mat-checkbox>
+						<mat-error *ngIf="submitted && editReviewForm.get('shipmentTypes').errors?.['required']"
+							class="error_mess">Please select at least one of these options.</mat-error>
+					</div>
+				</div>
+
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">What specialized services did this carrier provide? <span>(Optional)</span>
+					</p>
+					<div class="cn_mlti_selct">
+						<mat-checkbox *ngFor="let specialized of specializedServices;let i =index;"
+							[checked]="isSpecializedServicesType(specialized?.id)"
+							(change)="onSpecializedCheckboxChange($event,specialized?.id,i)">{{specialized?.name}}</mat-checkbox>
+					</div>
+				</div>
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">Did this carrier use electronic tracking?</p>
+					<mat-radio-group appearance="none" class="cn_radio_btn" formControlName="tracking"
+						(change)="electronicTracing($event)">
+						<mat-radio-button [value]="true"> Yes </mat-radio-button>
+						<mat-radio-button [value]="false"> No </mat-radio-button>
+						<mat-error *ngIf="submitted && editReviewForm.get('tracking').errors?.['required']"
+							class="error_mess">Please select one of these options.</mat-error>
+					</mat-radio-group>
+				</div>
+
+				<div class="fld_row">
+					<div *ngIf="electronicValue==true">
+						<p class="cn_input_lbl">Enter Tracking Provider Name <span class="txt_d"> *</span></p>
+						<mat-form-field appearance="none">
+							<input matInput type="text" formControlName="providerDetails"
+								placeholder="Enter Provider Details" maxlength="64" class="form-control cn_input" />
+							<mat-error *ngIf="submitted && editReviewForm.get('providerDetails').errors?.['required']"
+								class="error_mess">Provider Details are required.</mat-error>
+							<mat-error *ngIf="editReviewForm.get('providerDetails').errors?.['maxlength']"
+								class="error_mess">Only 64 characters are allowed.</mat-error>
+						</mat-form-field>
+					</div>
+				</div>
+
+
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">Add a verification screenshot</p>
+					<div class="cn_input_disc">
+						<span>Examples: redacted rate confirmation, TMS, emails, etc.</span>
+						<span>This will expedite the review approval process and will never be shared publicly.</span>
+					</div>
+					<div class="col-md-6">
+						
+						<div class="upload_img_fld">
+							<mat-form-field appearance="none">
+								<input matInput type="text" placeholder="Upload Screenshot"
+									class="form-control custom_input" readonly="readonly">
+								<mat-icon matSuffix>
+									<input type="file" class="form-control input_upload uif_icon"
+										(change)="onFileSelected($event)"
+										accept=".png, .jpg, .jpeg, .JPG, .JPEG, .PNG, application/pdf" />
+									<mat-error
+										*ngIf="submitted && editReviewForm.get('verificationScreenshot').errors?.['required']"
+										class="error_mess"
+										style="position: absolute; left: 0; bottom: -2px;">Verification Screenshot are
+										required.</mat-error>
+									<label class="uif_icon" for="file">
+										<mat-icon class="material-symbols-outlined">logout</mat-icon>
+									</label>
+								</mat-icon>
+								<mat-hint class="uif_nam" *ngIf="profileImageName">{{profileImageName}}</mat-hint>
+							</mat-form-field>
+						</div>
+						<div class="logo_uploded_name" *ngIf="getReview?.verificationScreenshot">
+							<div class="logo_uploded">
+								<img *ngIf="getReview?.verificationScreenshot" [src]="getReview?.verificationScreenshot"
+									class="img-fluid">
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">Is your brokerage related to this carrier in any way?</p>
+					<mat-radio-group class="cn_radio_btn" [(ngModel)]="relatedToCarrier"
+						[ngModelOptions]="{standalone: true}">
+						<mat-radio-button [value]="true"> Yes </mat-radio-button>
+						<mat-radio-button [value]="false"> No </mat-radio-button>
+						<mat-error *ngIf="!isValueSelected('relatedToCarrier')" class="error_mess">Please select one of
+							these options.</mat-error>
+					</mat-radio-group>
+				</div>
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">Are you willing to be a reference for this carrier?</p>
+					<mat-radio-group class="cn_radio_btn" [(ngModel)]="offerReference"
+						[ngModelOptions]="{standalone: true}">
+						<mat-radio-button [value]="true"> Yes </mat-radio-button>
+						<mat-radio-button [value]="false"> No </mat-radio-button>
+						<mat-error *ngIf="!isValueSelected('offerReference')" class="error_mess">Please select one of
+							these options.</mat-error>
+					</mat-radio-group>
+				</div>
+
+				<div class="fld_row">
+					<p class="cn_input_lbl">I would like my review to be anonymous.</p>
+					<mat-radio-group class="cn_radio_btn" [(ngModel)]="anonymous" [ngModelOptions]="{standalone: true}">
+						<mat-radio-button [value]="true"> Yes </mat-radio-button>
+						<mat-radio-button [value]="false"> No </mat-radio-button>
+						<mat-error *ngIf="!isValueSelected('anonymous')" class="error_mess">Please select one of these
+							options.</mat-error>
+					</mat-radio-group>
+				</div>
+
+
+				<div class="mt-4 mb-4">
+					<div class="card_con" id="card_con_new">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="text_area_input_box">
+									<div class="topbar"><span class="fs_13 top_txt">Review :
+										</span><span><i class="fa-solid fa-wand-magic-sparkles"></i> <i
+												class="fa-solid fa-brackets-curly"></i></span></div>
+									<div class="box_header" *ngIf="selectCarrierData.subscriptionPlanType=='3'">
+										<!--*ngIf="selectCarrierData.subscriptionPlanType=='3'"  -->
+										<div class="email_dropdown">
+											<button type="button" class="header_options fs_13"
+												(click)="toggleDropdown()"><span></span><span>Review AI</span></button>
+											<div *ngIf="dropdownOpen" id="dropdown" class="dropdown">
+												<ul>
+													<li><button class="sub_btn" type="button"
+															(click)="sendInformation('AIGenerated-Review')">Let AI write
+															for me</button></li>
+													<li><button class="sub_btn" type="button"
+															(click)="sendInformation('Enter custom prompt')"> Enter
+															custom prompt</button></li>
+													<li class="list_one" [class.disabled]="!enableDisable">
+														<button class="sub_btn" type="button">Improve writing <img
+																src="./assets/images/icons/right-arrow-backup-2-svgrepo-com.svg"
+																class="list_icon">
+															<ul class="option_one child_nesting"
+																[class.disabled]="improvewriting">
+																<li class="child_list"
+																	(click)="sendInformation('Fix spelling and grammar')">
+																	Fix spelling and grammar</li>
+																<li class="child_list"
+																	(click)="sendInformation('Make it longer')">Make it
+																	longer</li>
+																<li class="child_list"
+																	(click)="sendInformation('Make it shorter')">Make it
+																	shorter</li>
+																<li class="child_list"
+																	(click)="sendInformation('Rewrite')">Rewrite</li>
+																<li class="child_list"
+																	(click)="sendInformation('Improve structure')">
+																	Improve structure</li>
+																<li class="child_list"
+																	(click)="sendInformation('Make more persuasive')">
+																	Make more persuasive</li>
+																<li class="child_list"
+																	(click)="sendInformation('Summarize')">Summarize
+																</li>
+															</ul>
+														</button>
+													</li>
+													<li class="list_two" [class.disabled]="!enableDisable"><button
+															class="sub_btn"> Change tone <img
+																src="./assets/images/icons/right-arrow-backup-2-svgrepo-com.svg"
+																class="list_icon">
+															<ul class="option_one child_nesting"
+																[class.disabled]="changeTone">
+																<li class="child_list"
+																	(click)="sendInformation('Professional')">
+																	Professional</li>
+																<li class="child_list"
+																	(click)="sendInformation('Friendly')">Friendly</li>
+																<li class="child_list"
+																	(click)="sendInformation('Informative')">Informative
+																</li>
+																<li class="child_list"
+																	(click)="sendInformation('Helpful')">Helpful</li>
+															</ul>
+														</button></li>
+													<li [class.disabled]="!enableDisable"><button class="sub_btn"
+															(click)="sendInformation('Generate based on summary')">
+															Generate based on summary</button></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div class="filter_banner" id="filter_banner" *ngIf="isSendMessage">
+										<input type="text" class="filter_input" [(ngModel)]="newMessage"
+											(keydown.enter)="$event.preventDefault()"
+											[ngModelOptions]="{standalone: true}"
+											placeholder="Write a detailed instruction of what you'd like to see in your email">
+										<button class="submit_btn" type="button" [disabled]="!newMessage"
+											(click)="generateReview()"><i
+												class="fa-duotone fa-pen-nib txt_p"></i></button>
+									</div>
+									<div class="text_area_new" style="position: relative;">
+										<textarea cols="20" rows="10" (input)="checkTextarea($event)"
+											[ngModelOptions]="{standalone: true}" (clicl)="saveUserGenerated()"
+											[(ngModel)]="description" (keypress)="checkDecription($event)"
+											class="text_area" maxlength="1025"
+											placeholder="Start typing the review here. If your carrier {{selectCarrierData.companyName | titleCase | convertEnd}} has subscribed to the Business Pro plan, you can get help from AI assistance to generate the review.">
+					  </textarea>
+										<div *ngIf="lengthError">
+											<p class="error_mess">Only 1024 characters are allowed</p>
+										</div>
+										<!--  (paste)="onPaste($event)" -->
+										<div style="position: absolute;
+					  top: 40px;">
+											<div class="mb-4 ai_mess_gen">
+												<span *ngFor="let message of messages" class="message"
+													[ngClass]="{'user-message': message.role === 'user', 'ai-message': message.role === 'assistant'}">
+													{{ message.content }}</span>
+											</div>
+											<div class="d-flex align-itmes-center submit_btn_group"
+												*ngIf="showEditAbleButton">
+												<button class="cn_btn save_btn d-block" type="button"
+													(click)="useGeneratedText()">
+													<mat-icon class="fs_20 height_20">check</mat-icon>Use
+												</button>
+												<button class="cn_btn d-block ms-2 other_action" type="button"
+													(click)="tryAgainGeneratedText('tryAgain')">
+													<mat-icon>refresh</mat-icon>Try again
+												</button>
+												<button class="cn_btn d-block ms-2 other_action" type="button"
+													(click)="discardGeneratedText()">
+													<mat-icon class="fs_20 height_20">delete</mat-icon>Discard
+												</button>
+											</div>
+										</div>
+									</div>
+
+
+
+								</div>
+								<!-- <div class="text-end d-flex justify-content-end">
+					<button class="cn_btn d-block mt-4" type="button" (click)="saveUserGenerated()">Save</button>
+				  </div> -->
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="trrb__actn">
+					<button class="cn_btn" type="submit">Submit Review</button>
+				</div>
+				<!-- <div class="trrb__actn">
+				<button class="cn_btn" type="submit"  [disabled]="isButtonDisabled" >Submit Review</button>
+			</div> -->
+			</div>
+		</form>
+
+	</div>
+
+	<div class="skt_eifr" *ngIf="skeletonLoader">
+		<ngx-skeleton-loader count="1"
+			[theme]="{ width: '100%', height: '24px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+		<div class="add_lane_location">
+			<div *ngFor="let fake of generateFakeSkeleton(2)">
+				<ngx-skeleton-loader count="1"
+					[theme]="{ width: '100%', height: '20px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+				<ngx-skeleton-loader count="1"
+					[theme]="{ width: '100%', height: '40px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+			</div>
+		</div>
+		<ngx-skeleton-loader count="4"
+			[theme]="{ width: '100%', height: '24px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+	</div>
+</div>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

@@ -1,0 +1,6 @@
+.btn_action { text-align: right; }
+.skt_eifr { background: #fff; padding: 24px; border-radius: 10px; margin-top: 14px; }
+.loard_box { width: 20px ; height: 20px; position: absolute; }
+.custom_spinner { display: block; top: -20px; position: absolute; right: 5px; }
+
+@media screen and (max-width: 767px) { }

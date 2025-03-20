@@ -1,0 +1,94 @@
+.cnfrm_popup { text-align: center; }
+.cnfrm_popup .cn_popup_body { padding-top: 30px; }
+.cnfrm_popup .crl_hlf_cek { font-size: 60px; }
+.cnfrm_popup .cnfrm_tlt { font-weight: 600; font-size: 30px; line-height: 38px; color: #00B4FC; margin: 0 0 12px; }
+.cnfrm_popup .cnfrm_dis { text-align: center;}
+.cnfrm_popup .cnfrm_dis_text { text-align: center; font-size: 25px;}
+.cnfrm_popup .cn_popup_footer { border: none; padding: 6px 20px 36px; }
+.cnfrm_popup .cn_f_acn { justify-content: center; }
+
+.subs_pln_crd { padding-left: 32px; padding-right: 32px; }
+.subs_pln_crd .spic_box { background: #00B4FC; color: #fff; margin-bottom: 20px; padding: 16px; text-align: left; }
+.subs_pln_crd .plan_info { background: #EFF3F5; text-align: center; margin: 16px 0 22px 0; padding: 10px; }
+.subs_pln_crd .spic_tlt { font-weight: 600; font-size: 24px; line-height: 32px; margin: 0 0 10px; }
+.subs_pln_crd .spic_price { margin: 16px 0px 0px; text-align: left; }
+.subs_pln_crd .spic_price_t { margin: 0px; }
+.subs_pln_crd .spic_price_t sup { font-size: 18px; line-height: 20px; font-weight: 600; top: -12px; }
+.subs_pln_crd .spic_price_t span { font-weight: 600; font-size: 36px; line-height: 36px; }
+.subs_pln_crd .spic_price_b { font-weight: 400; font-size: 14px; line-height: 21px; }
+.subs_pln_crd .cn_btn { width: 100%; background: #fff; color: #00b4fc; margin: 24px 0 14px; }
+.form_actn { display: flex; justify-content: space-between; }
+.subscription_text{ color: #818181; font-size: 18px; font-weight: 400; margin: 0 0 30px; }
+.fs_16 { font-size: 16px; line-height: normal; }
+
+.free_plan_popup { display: flex ; border-radius: 10px; }
+.free_plan_popup .cn_popup_head {bbackground-color: #ffffff; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25'%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' x2='0' y1='0' y2='100%25' gradientTransform='rotate(240)'%3E%3Cstop offset='0' stop-color='%23ffffff'/%3E%3Cstop offset='1' stop-color='%2300B4FC'/%3E%3C/linearGradient%3E%3Cpattern patternUnits='userSpaceOnUse' id='b' width='540' height='450' x='0' y='0' viewBox='0 0 1080 900'%3E%3Cg fill-opacity='0.1'%3E%3Cpolygon fill='%23444' points='90 150 0 300 180 300'/%3E%3Cpolygon points='90 150 180 0 0 0'/%3E%3Cpolygon fill='%23AAA' points='270 150 360 0 180 0'/%3E%3Cpolygon fill='%23DDD' points='450 150 360 300 540 300'/%3E%3Cpolygon fill='%23999' points='450 150 540 0 360 0'/%3E%3Cpolygon points='630 150 540 300 720 300'/%3E%3Cpolygon fill='%23DDD' points='630 150 720 0 540 0'/%3E%3Cpolygon fill='%23444' points='810 150 720 300 900 300'/%3E%3Cpolygon fill='%23FFF' points='810 150 900 0 720 0'/%3E%3Cpolygon fill='%23DDD' points='990 150 900 300 1080 300'/%3E%3Cpolygon fill='%23444' points='990 150 1080 0 900 0'/%3E%3Cpolygon fill='%23DDD' points='90 450 0 600 180 600'/%3E%3Cpolygon points='90 450 180 300 0 300'/%3E%3Cpolygon fill='%23666' points='270 450 180 600 360 600'/%3E%3Cpolygon fill='%23AAA' points='270 450 360 300 180 300'/%3E%3Cpolygon fill='%23DDD' points='450 450 360 600 540 600'/%3E%3Cpolygon fill='%23999' points='450 450 540 300 360 300'/%3E%3Cpolygon fill='%23999' points='630 450 540 600 720 600'/%3E%3Cpolygon fill='%23FFF' points='630 450 720 300 540 300'/%3E%3Cpolygon points='810 450 720 600 900 600'/%3E%3Cpolygon fill='%23DDD' points='810 450 900 300 720 300'/%3E%3Cpolygon fill='%23AAA' points='990 450 900 600 1080 600'/%3E%3Cpolygon fill='%23444' points='990 450 1080 300 900 300'/%3E%3Cpolygon fill='%23222' points='90 750 0 900 180 900'/%3E%3Cpolygon points='270 750 180 900 360 900'/%3E%3Cpolygon fill='%23DDD' points='270 750 360 600 180 600'/%3E%3Cpolygon points='450 750 540 600 360 600'/%3E%3Cpolygon points='630 750 540 900 720 900'/%3E%3Cpolygon fill='%23444' points='630 750 720 600 540 600'/%3E%3Cpolygon fill='%23AAA' points='810 750 720 900 900 900'/%3E%3Cpolygon fill='%23666' points='810 750 900 600 720 600'/%3E%3Cpolygon fill='%23999' points='990 750 900 900 1080 900'/%3E%3Cpolygon fill='%23999' points='180 0 90 150 270 150'/%3E%3Cpolygon fill='%23444' points='360 0 270 150 450 150'/%3E%3Cpolygon fill='%23FFF' points='540 0 450 150 630 150'/%3E%3Cpolygon points='900 0 810 150 990 150'/%3E%3Cpolygon fill='%23222' points='0 300 -90 450 90 450'/%3E%3Cpolygon fill='%23FFF' points='0 300 90 150 -90 150'/%3E%3Cpolygon fill='%23FFF' points='180 300 90 450 270 450'/%3E%3Cpolygon fill='%23666' points='180 300 270 150 90 150'/%3E%3Cpolygon fill='%23222' points='360 300 270 450 450 450'/%3E%3Cpolygon fill='%23FFF' points='360 300 450 150 270 150'/%3E%3Cpolygon fill='%23444' points='540 300 450 450 630 450'/%3E%3Cpolygon fill='%23222' points='540 300 630 150 450 150'/%3E%3Cpolygon fill='%23AAA' points='720 300 630 450 810 450'/%3E%3Cpolygon fill='%23666' points='720 300 810 150 630 150'/%3E%3Cpolygon fill='%23FFF' points='900 300 810 450 990 450'/%3E%3Cpolygon fill='%23999' points='900 300 990 150 810 150'/%3E%3Cpolygon points='0 600 -90 750 90 750'/%3E%3Cpolygon fill='%23666' points='0 600 90 450 -90 450'/%3E%3Cpolygon fill='%23AAA' points='180 600 90 750 270 750'/%3E%3Cpolygon fill='%23444' points='180 600 270 450 90 450'/%3E%3Cpolygon fill='%23444' points='360 600 270 750 450 750'/%3E%3Cpolygon fill='%23999' points='360 600 450 450 270 450'/%3E%3Cpolygon fill='%23666' points='540 600 630 450 450 450'/%3E%3Cpolygon fill='%23222' points='720 600 630 750 810 750'/%3E%3Cpolygon fill='%23FFF' points='900 600 810 750 990 750'/%3E%3Cpolygon fill='%23222' points='900 600 990 450 810 450'/%3E%3Cpolygon fill='%23DDD' points='0 900 90 750 -90 750'/%3E%3Cpolygon fill='%23444' points='180 900 270 750 90 750'/%3E%3Cpolygon fill='%23FFF' points='360 900 450 750 270 750'/%3E%3Cpolygon fill='%23AAA' points='540 900 630 750 450 750'/%3E%3Cpolygon fill='%23FFF' points='720 900 810 750 630 750'/%3E%3Cpolygon fill='%23222' points='900 900 990 750 810 750'/%3E%3Cpolygon fill='%23222' points='1080 300 990 450 1170 450'/%3E%3Cpolygon fill='%23FFF' points='1080 300 1170 150 990 150'/%3E%3Cpolygon points='1080 600 990 750 1170 750'/%3E%3Cpolygon fill='%23666' points='1080 600 1170 450 990 450'/%3E%3Cpolygon fill='%23DDD' points='1080 900 1170 750 990 750'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect x='0' y='0' fill='url(%23a)' width='100%25' height='100%25'/%3E%3Crect x='0' y='0' fill='url(%23b)' width='100%25' height='100%25'/%3E%3C/svg%3E"); background-attachment: fixed; background-size: cover; position: relative; width: 40%; }
+.free_plan_popup .cn_popup_box .cn_close_icn { color: #fff; cursor: pointer; width: 50px; height: 50px; background: #000; display: flex ; align-items: center; justify-content: center; border-radius: 100%; /* position: absolute; right: -13px; top: 0px;  */ }
+.free_plan_popup  .cn_v_scroll { width: 60%; }
+.free_plan_popup .cn_close_icn { width: 50px; height: 50px; border-radius: 100%; background: #818181; display: flex; align-items: center; justify-content: center; position: absolute; margin-top: -46px;} 
+.free_plan_popup .cn_close_icn:hover { background-color: #000; }
+.free_plan_popup .cn_ph_tlt { font-size: 24px; line-height: 26px; color: #040804; }
+.free_plan_popup .cn_popup_head { justify-content: center; flex-direction: column;  }
+.free_plan_popup .spic_tlt { text-align: left; font-size: 30px; line-height: 36px; }
+.benifit_llist { padding: 0px; }
+.benifit_llist li { list-style: none; text-align: left; display: flex; align-items: center; gap: 20px; height: 85px; position: relative; }
+.benifit_llist li::before { content: ""; width: 10px; height: 10px; background: #00B4FC; box-shadow: 0px 0px 7px 1px #00b4fc8a; margin-top: -21px; } 
+.benifit_llist li:nth-child(2):before { background: #fc7800; box-shadow: 0px 0px 7px 1px #fc78007a; }
+.benifit_llist li:nth-child(3):before { background: #818181ab; box-shadow: 0px 0px 7px 1px #818181a1; }
+.benifit_llist li::after {content: ""; border-left: .5px solid #d9d9d9; position: absolute; height: 48px; top: 54px; left: 4px; }
+.free_plan_popup .plan_title { font-size: 20px; line-height: normal; font-weight: 500;  }
+.plan_des { font-size: 15px; line-height: normal; color: #818181; font-weight: 300; }
+.benifit_llist li:last-child::after { border: none; }
+.plan_badge{ font-size: 11px; position: absolute; right: -98px; top: -5px; background: #00b4fc; color: #fff; border-radius: 40px; padding: 0px 5px;}
+
+.left_heading { font-size: 39px; font-weight: 600; color: #000; padding: 40px; display: flex ; align-items: center; justify-content: center; border-radius: 30px;  }
+.plans_box { display: flex; align-items: center; justify-content: space-between; }
+.plan_bx { text-align: left; width: 48%; border: 1px solid #ddd; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 4px 4px #0000000a; background: none; }
+.plan_bx:hover { cursor: pointer; box-shadow: 0px 0px 5px 5px #00b4fc21; }
+p.plan_name { font-size: 23px; font-weight: 600; position: relative; margin-bottom: 15px; display: inline-block; text-transform: uppercase; }
+.plan_price { font-size: 18px; color: #000; font-weight: 600; display: flex ; align-items: center; gap: 2px;  }
+.plan_price sup { top: -4px; font-size: 10px; } 
+.prim_badge { background: #000; color: #fff; }
+.upgrade_button { background: #00b4fc; border-radius: 5px; padding: 10px; font-size: 15px; font-weight: 500; text-align: center; margin-top: 20px; color: #fff;  }
+.prim_button { background-image: url(https://image01.realme.net/general/20241108/1731063814482.jpg?width=1040&height=140); background-size: contain; color: #000;  }
+
+/* Shine */
+.shine-button { position: relative; overflow: hidden; }
+.shine-button:after { content:''; top:0; transform:translateX(100%); width:100%; height:220px; position: absolute; z-index:1; animation: slide 3s infinite;
+    background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(128,186,232,0) 99%, rgba(125,185,232,0) 100%); /* FF3.6+ */ background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(50%,rgba(255,255,255,0.8)), color-stop(99%,rgba(128,186,232,0)), color-stop(100%,rgba(125,185,232,0))); /* Chrome,Safari4+ */ background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%); /* Chrome10+,Safari5.1+ */ background: -o-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%); /* Opera 11.10+ */ background: -ms-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%); /* IE10+ */ background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%); /* W3C */ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#007db9e8',GradientType=1 ); /* IE6-9 */
+  }
+  
+  /* shine animation */
+  @keyframes slide {
+      0% {transform:translateX(-100%);}
+      100% {transform:translateX(100%);}
+  }
+
+
+  @media screen and (max-width: 1024px) {
+    .cn_popup_head { display: none; }
+    .free_plan_popup .cn_v_scroll { width: 100%; }
+  }
+
+  @media screen and (max-width: 767px) {
+   
+    .plans_box { flex-direction: column-reverse; gap: 15px; }
+    .plan_bx { width: 100%; }
+    .free_plan_popup .subs_pln_crd { padding-left: 15px; padding-right: 15px; } 
+    .free_plan_popup .cn_close_icn { margin-top: -28px; margin-left: -23px; width: 45px; height: 45px; }
+    .free_plan_popup .spic_tlt {  font-size: 24px; line-height: 36px; }
+    .free_plan_popup .txt_2 { font-size: 14px; line-height: 18px; }
+    .free_plan_popup .plan_title { font-size: 16px; }
+    .benifit_llist li { height: 55px; }
+    .plan_des { font-size: 12px; }
+    .benifit_llist li::after { height: 26px; top: 34px; left: 4px;}
+    .benifit_llist li::before { content: ""; width: 7px; height: 7px; margin-top: -15px; }
+    p.plan_name { font-size: 18px; } 
+      .upgrade_button { padding: 7px; font-size: 12px; margin-top: 12px; }
+        .plan_badge { font-size: 9px; right: -82px; } 
+        .cnfrm_popup .cn_popup_body { padding-top: 12px; }
+      
+  }
+
+
+  

@@ -1,0 +1,36 @@
+.buy_subscription_con { margin: 14px 0; }
+.bsc_crd_tlt { margin: 0 0 12px; }
+/*.bsc_box { background: #FFF; border: 1px solid #D9D9D9; box-shadow: 0px 4px 4px #00000040; margin: 0 0 36px; padding: 16px 20px; }*/
+.bsc_box { background: #f0f0f091; border: 1px solid #f0f0f0; margin: 0 0 36px; padding: 16px 20px; border-top: 0px; }
+.bsc_box .bsc_crd_name { margin: 0 0 12px; }
+.bsc_box .bsc_tlt { margin: 0 0 10px; }
+.bsc_box .bsc_dis { margin: 0 0 24px; }
+/*.buy_subscription_con .edt_pg_tlt { margin: 20px 0px; }*/
+.bsc_box .spic_price { margin: 0 0 10px; }
+.bsc_box .spic_price sup { font-size: 18px; line-height: 20px; font-weight: 600; top: -12px; color: #333;}
+.bsc_box .spic_price span { font-weight: 600; font-size: 36px; line-height: 36px; color: #333; }
+.bsc_box .spic_price_text { font-weight: 400; font-size: 14px; line-height: 21px; color: #666; }
+
+.bsc_actn { display: flex; justify-content: right; margin: 20px 0 0px; }
+
+/* payment */
+.bill_info { border: 1px solid #D8D8D8; border-radius: 4px; margin: 0 0 1rem; }
+.bill_info_head { padding: 1rem 1rem 0; }
+.bill_info_footer { padding: 0 1rem .7rem; }
+.payment_cardAdded { border: 1px solid #D8D8D8; border-radius: 4px; margin: 0 0 20px; position: relative; background: #fff; }
+.card_container { padding: 16px 16px 16px 16px; max-width: 100%; }
+.remove_card { position: absolute; right: 8px; top: 8px; z-index: 3; cursor: pointer; color: var(--clBlkb); }
+.remove_card:hover { color: var(--clBlka); }
+.add_bill_info { display: flex; align-items: center; flex-direction: column; min-height: 140px; justify-content: center; border: 1px solid #D8D8D8; border-radius: 4px; background: #fff; }
+
+.card_imgIcon { height: 40px; }
+
+.paycark_skelaton { height: 140px; border: 1px solid #D8D8D8; border-radius: 4px; margin: 0 0 30px; padding: 16px; background: #fff; }
+
+.active_card_child { /*box-shadow: 0 0px 1px 2px var(--clBlua);*/ border: 1px solid var(--clBlua); }
+
+.order_smry_box { background: #dddddd70; text-align: center; padding: 18px 12px; border-radius: 8px 8px 0px 0px; margin: 0px; }
+.order_smry_box .subscription_select_plan { margin-bottom: 0px; }
+
+
+.line_through { text-decoration: line-through; opacity: 0.5; }

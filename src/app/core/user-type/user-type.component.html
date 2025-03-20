@@ -1,0 +1,66 @@
+<div class="user_type_slection_box" *ngIf="!afterLoginNoContant">
+  <form class="cn_field" name="user_type" [formGroup]="userTypeForm" (ngSubmit)="userFormSubmit(userTypeForm)">
+    <div class="utsb_con">
+      <div class="utsb_l">
+        <p class="utsb_tlt">Please Let Us Know Who Are You?</p>
+        <div class="selected_user">
+          <mat-radio-group name="flavors" formControlName="userType" (change)="radioChange($event)">
+            <mat-radio-button checked  value="BROKER">BROKER</mat-radio-button>
+            <mat-radio-button value="CARRIER">CARRIER</mat-radio-button>
+            <mat-radio-button value="SHIPPER">SHIPPER</mat-radio-button>
+            <mat-radio-button value="DISPATCHER">DISPATCHER</mat-radio-button>
+            <mat-radio-button value="SELLER">SELLER</mat-radio-button>
+            <mat-error *ngIf="submitted &&userTypeForm.get('userType').errors?.['required']" class="error_mess"> User type is required.</mat-error>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div class="utsb_r">
+        <div class="broker_box" *ngIf="checkUserType==='BROKER'">
+          <div>
+            <p class="utsb_tlt">Are you broker?</p>
+            <p class="utsb_dis">Are you bridging the gap between shippers seeking transportation services and carriers with available capacity.<br>
+              You should be expertly facilitate connections, adeptly negotiating rates and managing essential paperwork.<br>
+              brokers are collaborating closely with carriers to guarantee punctual delivery.</p>
+          </div>
+        </div>
+        <div class="carrier_box" *ngIf="checkUserType==='CARRIER'">
+          <div>
+            <p class="utsb_tlt">Are you carrier?</p>
+            <p class="utsb_dis">Are you company or individual responsible for transporting goods via trucks.<br>
+              You own and operate the trucks, employing drivers to haul freight managing logistics, scheduling, maintenance, and compliance with regulations.<br>
+              If Yes, Let's move forward. We have a lots of supercies for you.</p>
+          </div>
+        </div>
+        <div class="shipper_box" *ngIf="checkUserType==='SHIPPER'">
+          <div>
+            <p class="utsb_tlt">Are you shipper?</p>
+            <p class="utsb_dis">Are you a business or individual who need goods transported or manufacturers, retailers, wholesalers, or any organization requiring transportation services.<br>
+              Are you looking for a carriers or shippers to manage your daily/ weekly/ monthly loads requirment!</p>
+          </div>
+        </div>
+        <div class="dispatcher_box" *ngIf="checkUserType==='DISPATCHER'">
+          <div>
+            <p class="utsb_tlt">Are you dispatcher?</p>
+            <p class="utsb_dis">Are you an individual ot personnel responsible for coordinating the movement of trucks and drivers within a transportation company.<br> Ensuring efficient operations by assigning drivers to specific routes, scheduling pickups and deliveries, and managing communication with drivers and shippers & Brokers.
+            </p>
+          </div>
+        </div>
+        <div class="seller_box" *ngIf="checkUserType==='SELLER'">
+          <div>
+            <p class="utsb_tlt">Are you seller?</p>
+            <p class="utsb_dis">Are you an individuals or businesses that are selling goods or products that need to be transported via trucks.<br>
+              Are you work directly with carriers, brokers, or logistics companies to coordinate the shipment of their products.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="utsb_actn">
+      <button type="submit" class="cn_btn">
+        <span>Next</span>
+        <span class="custom_spinner spinner-border w_spinner" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </span>
+      </button>
+    </div>
+  </form>
+</div>

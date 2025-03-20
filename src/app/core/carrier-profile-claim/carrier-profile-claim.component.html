@@ -1,0 +1,121 @@
+<div class="take_rating_review_box" *ngIf="!skeletonLoader">
+
+	<div class="lable_field" >
+		<!-- <p class="edt_pg_tlt">Claim your profile</p> -->
+		<p class="edt_pg_tlt">For benefits and connections, claim your profile.</p>
+		<!-- <p class="lable_vlu">Your company is already listed on CarrierSource. <br> Claim your free page to connect with new brokers and shippers and ultimately grow your business.</p> -->
+		<p class="lable_vlu">Your company is currently featured on CarrierNetwork, a platform that connects businesses with brokers and shippers. By claiming your free page, you can enhance your visibility and build new relationships that will help grow your business. It's an opportunity to expand your network and reach potential partners more effectively..</p>
+	</div>
+
+	<form class="cn_field">
+		<div class="write_review_con">
+			<div class="wrc_box">
+				<p class="cn_input_lbl">Search to select the carrier</p>
+				<mat-form-field class="cn_pfix_sfix" appearance="none">
+					<!-- <span matSuffix class="material-icons srch_icn">search</span> -->
+					<div style="display: flex;">
+						<input matInput type="text" (keyup)="searchUserType($event)" placeholder="Search Carriers by Company Name & USDOT #" aria-label="Test" class="form-control cn_input" maxlength="9">
+						<small *ngIf="errorMesage" class="small_error">{{errorMesage}}</small>
+						<div class="loard_box" *ngIf="userSearchRecord?.length== 0 && spinnerLoader">
+							<span class="custom_spinner spinner-border" >
+							  <span class="visually-hidden">Loading...</span>
+							</span>
+						</div>
+					</div>
+				</mat-form-field>
+			</div>
+		</div>
+
+		<div class="carrier_sch_list_con" *ngIf="userSearchRecord?.length > 0 && !spinnerLoader">
+			<p class="srch_rslt_conts" *ngIf="userSearchRecord?.length > 0">Search Results: <span class="fw_5"> {{userSearchRecord?.length}}</span></p>
+			<div class="cslc_box" *ngFor="let carrierData of userSearchRecord">
+				<!-- <a class="cslc_crd" *ngFor="let carrierData of reviewData?.carrierData" href="{{'./carrier/'+carrierData.companyName+'/add-review'}}"> -->
+				<a class="cslc_crd">
+					<div class="cslc_crd_l" (click)="carrierSignUp(carrierData?.dotNumber)">
+						<div class="cslc_crd_ll">
+							<div class="cslc_bl_img" *ngIf="carrierData?.profileImage">
+								<img src="{{carrierData?.profileImage}}" class="img-fluid">
+							</div>
+							<div class="cslc_bl_initail" *ngIf="!carrierData?.profileImage">
+								<span class="initail">{{carrierData?.companyName | acronymOfName}} </span>
+								<div class="src_cr_dotno">DOT #: {{carrierData.dotNumber ? carrierData.dotNumber : '-'}}</div>
+							</div>
+						</div>
+						<div class="cslc_crd_lr">
+							<div class="cslc_nm">
+								<span class="txt_ellipsis" matTooltip="{{carrierData.companyName ? (carrierData.companyName | titleCase | convertEnd) : '-'}} ">{{carrierData.companyName ? (carrierData.companyName |titleCase | convertEnd) : '-'}} </span>
+								<i *ngIf="carrierData?.userId" class="material-icons">verified</i>
+							</div>
+							<div class="cslc_locatn">
+								<span *ngIf="carrierData.phyCity && carrierData.phyStateCode">{{carrierData.phyCity ? carrierData.phyCity : '-'}}, {{carrierData.phyStateCode ? carrierData.phyStateCode : '-'}}</span>
+								<span *ngIf="!carrierData.phyCity || !carrierData.phyStateCode">-</span>
+							</div>
+							<div class="cslc_dot_active">
+								<p class="cslc_dot">
+									<b>DOT Number: </b>
+									<span>{{carrierData.dotNumber ? carrierData.dotNumber : '-'}}</span>
+								</p>
+								<span class="cslc_sapration"> | </span>
+								<p class="cslc_dot">
+									<b>Docket: </b>
+									<span>{{carrierData.dunsNumber ? carrierData.dunsNumber : '-'}}</span>
+								</p>
+								<span class="cslc_sapration"> | </span>
+								<p class="cslc_dot">
+									<b>Fleet Size: </b>
+									<span>{{carrierData.trucksNumbers ? carrierData.trucksNumbers : '-'}}</span>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="cslc_crd_r">
+						<div class="cslc_reviw">
+							<p class="avrg_rtng">{{carrierData.averageRating?.toFixed(1)}}</p>
+							<app-review-show [averageRating]="carrierData?.averageRating"></app-review-show>
+							<span class="reviws">
+								<a href="#">{{carrierData?.totalReview ? carrierData?.totalReview : '0'}} Reviews</a>
+							</span>
+							<!-- <span class="reviws">
+								<span>{{carrierData.averageRating.toFixed(1)}}</span> out of <span>5</span>
+							</span> -->
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		<!-- <div class="col-md-12" *ngIf="userSearchRecord?.length== 0 && skeletonLoader">
+			<div class="rpvc_skt" *ngFor="let fake of generateFakeSkeleton(3)">
+				<div class="rpvc_skt_bx pb-0">
+					<div class="rpvc_skt_l">
+						<ngx-skeleton-loader count="1" [theme]="{ 'border-radius': '0', width: '100px', height: '100px' }"></ngx-skeleton-loader>
+					</div>
+					<div class="rpvc_skt_r">
+						<ngx-skeleton-loader count="1" [theme]="{ 'border-radius': '0', width: '100%', height: '28px', margin: '0 0 8px' }"></ngx-skeleton-loader>
+						<ngx-skeleton-loader count="2" [theme]="{ 'border-radius': '0', width: '100%', height: '20px', margin: '0 0 6px' }"></ngx-skeleton-loader>
+					</div>
+				</div>
+			</div>
+		</div> -->
+
+		<div class="col-md-9" *ngIf="userSearchRecord?.length==0 && !spinnerLoader && userNotFound">
+			<div class="no_fund_data">
+				<p class="txt_2 fw_4 txt_lb mb-4">Sorry we are not able to find your DOT number/company name in our database. <br> Please share your Email and DOT number by clicking below request to add DOT number.</p>
+				<div class="form_action">
+					<button class="cn_btn" type="submit" (click)="requestAddDotNumber(userSearchRecord)">Request to Add DOT Number</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="skt_eifr" *ngIf="skeletonLoader">
+			<ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '24px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+			<div class="add_lane_location">
+				<div *ngFor="let fake of generateFakeSkeleton(2)">
+					<ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '20px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+					<ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '40px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+				</div>
+			</div>
+			
+		</div>	
+	</form>
+</div>
+

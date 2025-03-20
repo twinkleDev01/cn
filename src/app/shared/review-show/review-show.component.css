@@ -1,0 +1,3 @@
+.star-rating { display: inline-block; font-size: 20px; }
+  .back-stars { display: flex; color: #B7B7B7; position: relative; margin: 2px 0; }
+  .front-stars { display: flex; color: #F1C644; overflow: hidden; position: absolute; top: 0; transition: all .5s }

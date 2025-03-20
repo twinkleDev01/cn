@@ -1,0 +1,16 @@
+.detail_title { font-size: 17px; font-weight: 500; color: #000; margin-bottom: 5px; }
+.detail_value { font-size: 15px; color: #818181; font-weight: 500; }
+.user_details_bx .row { row-gap: 15px; }
+.pdt_points_sngl .row { border-bottom: 1px solid #f0f0f0; margin-bottom: 23px; padding: calc(var(--bs-gutter-x)* 1.5) 0;  }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 25%; }
+.email_data span:first-child { width: 40%; }
+.sngl_pont { display: inline-flex ; flex-direction: column; }
+.pdt_points_sngl .row { border-bottom: 1px solid #ddd; padding: 20px 0px; margin-bottom: 23px; }
+.items { list-style: circle; margin-bottom: 0px; }
+.looking_load { background: #E8F8E8; color: #2D6A4F; padding: 2px 6px; border-radius: 5px;  }
+.flt_status { background: antiquewhite; color: #c90303; padding: 2px 5px; font-size: 12px; font-weight: 700; border-radius: 5px;  }
+@media screen and (max-width: 767px) {
+.email_data span:first-child { width: 100%; }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 50%; }
+}
+

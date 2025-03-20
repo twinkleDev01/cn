@@ -1,0 +1,35 @@
+.added_add_box .lable_field { padding: 0 0 8px; }
+.aab_action { text-align: right; margin: 8px 0 0; }
+
+.aab_action .edt_btn { background: transparent; box-shadow: none; margin-right: 20px; color: #00b4fc; border: 1px solid #00b4fc; border-radius: 10px; }
+.aab_action .dlt_btn { background: transparent; color: #DF0C0C; border: 1px solid #DF0C0C; box-shadow: none; border-radius: 10px; }
+.aab_action .edt_btn:hover { background: #00b4fc; color: #fff; }
+.aab_action .dlt_btn:hover { background: #DF0C0C; color: #fff; }
+.add_more_ctn { font-weight: 400; font-size: 16px; line-height: 24px; color: #00B4FC; text-align: right; margin-top: 18px; }
+.add_more_ctn  u { cursor: pointer; }
+
+.empty_box { background: #ebf7fc; padding: 1rem 1.5rem 1.1rem; margin: 0rem 0 0.5rem; border: 1px solid #b3e9ff; text-align: center; }
+.empty_box .empty_dis { font-size: 16px; line-height: 22px; font-weight: 400; color: #666; }
+.empty_box .add_more_ctn { text-align: center; margin: 20px 0 0; }
+
+.skt_eifr .cic_kkt_rw { margin-bottom: 42px; }
+.lable_vlu .bi-whatsapp { margin-left: 5px; color: #25D366; width: 22px; height: 16px; }
+
+.edit_business_info_con .card_con { margin-bottom: 20px; }
+
+.skt_eifr { background: #fff; padding: 24px; border-radius: 10px; margin-top: 14px; }
+.disabled { opacity: 0.5; pointer-events: none; }
+
+.added_add_box .lable_field .lable_vlu { display: flex; align-items: center; }
+.added_add_box .lable_field .lable_vlu img { max-height: 14px; margin: 0 8px 0 0; }
+
+.added_add_con { padding: 1rem 1rem 0.5rem; border: 1px solid #ddd; position: relative; }
+.added_add_box { border-bottom: 1px solid #ddddddbf; margin: 0 0 16px; padding: 0 0 16px; }
+
+.added_add_con .added_add_box:last-child { border-bottom: none; margin: 0px; padding: 0px; }
+
+.Primary_tag { font-size: 12px; line-height: 12px; font-weight: 500; color: #fff; padding: 4px 10px; background: #25D366; border-radius: 18px; margin: 0 0 0 8px; }
+
+.form_tlt { padding: 0.7rem 1rem; font-size: 1.4rem; background: #e5e5e5; margin: 0; }
+
+.noMore_record { text-align: center; background: #fff; padding: 12px 16px; margin: 1rem 0; }

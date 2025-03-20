@@ -1,0 +1,61 @@
+/* upload box */
+.m_upload_box { padding: 33px 13px; background: #FFFFFF; border: 1px dashed #818181; margin: 0 0 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: #818181; }
+.m_upload_box:hover { color: #575757; border: 1px dashed #575757; }
+.m_upload_box .material-icons { font-size: 40px; margin: 0 0 6px; }
+.m_upload_box input { opacity: 0; position: absolute; z-index: 2; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer; }
+.m_upload_box .mub_tlt { font-weight: 600; font-size: 22px; line-height: 34px; color: #666; margin: 0 0 2px; }
+.m_upload_box .mub_or { font-weight: 400; font-size: 18px; line-height: 28px; color: #333; margin: 0 0 8px; }
+.m_upload_box .cn_btn { color: #00b4fc; background: #fff; padding: 7px 22px; border: 1px solid #00b4fc; }
+.m_upload_box .error_mess { position: absolute; left: 0px; bottom: -20px; font-size: 11px; font-weight: 500; }
+
+/* common */
+.muc_tlt { font-weight: 500; font-size: 18px; line-height: 28px; color: #333333; margin: 0 0 15px; }
+/*.uploded_file_box { position: relative; height: 150px; width: 100%; border: 1px solid #d5d5d5; margin: 0 0 20px; border-bottom: none; }*/
+.uploded_file_box { position: relative; }
+.uploded_file_box .file_info { position: absolute; bottom: 0; width: 100%; background: #00000080; color: #fff; display: flex; justify-content: space-between; padding: 10px 10px; }
+.uploded_file_box .fi_name { font-size: 12px; line-height: 18px; color: #FFFFFF; width: calc(100% - 65px); }
+.uploded_file_box .fi_size { max-width: 65px; width: 100%; font-size: 11px; text-align: right; color: #ddd; }
+.uploded_file_box .xmark_icn { position: absolute; top: 8px; right: 8px; cursor: pointer; font-size: 18px; font-weight: 600; padding: 2px 4px; color: #DF0C0C; display: none; background: #ffffff; border-radius: 4px 4px 4px 4px; }
+.uploded_file_box:hover .xmark_icn { display: block; }
+.uploded_file_box .opn_new_tab { position: absolute; top: 8px; right: 42px; cursor: pointer; padding: 2px 4px; display: none; background: #ffffff; border-radius: 4px 4px 4px 4px; text-decoration: none; }
+.uploded_file_box .opn_new_tab .ont_icn { font-size: 18px; color: #00b4fc; }
+.uploded_file_box:hover .opn_new_tab { display: flex; }
+.fi_file { margin: 0; overflow: hidden; width: 100%; border: 1px solid #ddd; background: #f7f7f8; aspect-ratio: 3 / 2; }
+.fi_file img { height: 100%; }
+.uploded_file_box .fi_dis { background: #ebebeb; padding: 0.5rem 1rem; }
+/*.image_uploded .fi_file { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; background: #ddd; max-height: 150px; }*/
+
+
+.ufb_skt .uploded_file_box { border: 1px solid #d5d5d5; padding: 18px; }
+/*.pdf_upld_box a { display: block; width: 100%; text-decoration: none; }*/
+.pdf_upld_box .pdf_icon { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.pdf_upld_box .pdf_icon img { max-width: 50px; }
+.pdf_upld_box .pdf_icon .pdf_fle_nam { font-size: 14px; line-height: 16px; font-weight: 500; margin: 14px 0 0; color: #666666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 82%; }
+
+.fi_file.pdf_upld_box { aspect-ratio: inherit; padding: 28px 0; }
+/*.fi_file.pdf_upld_box a { padding: 28px 0; }*/
+.pdf_up_box { padding: 33px 13px; margin: 0 0 22px; gap: 6px; }
+.vdo_uploded .fi_file { aspect-ratio: inherit; display: flex; }
+/*.media_upload_con .row { width: 100%; margin: 0 auto; }*/
+.media_upload_con .container { width: 100%; max-width: 100%; }
+.m_upload_box i,
+.pdf_icon i {
+    font-size: 2.5rem;
+    color: #414242;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

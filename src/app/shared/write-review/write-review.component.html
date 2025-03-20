@@ -1,0 +1,44 @@
+<div class="take_rating_review_box" *ngIf="!skeletonLoader">
+	<div class="lable_field">
+		<p class="edt_pg_tlt">Write a Review</p>
+		<p class="lable_vlu">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</p>
+	</div>
+
+	<div class="lable_field pb-3">
+		<p class="lable_lbl fw_6">Edit Review</p>
+	</div>
+	<form class="cn_field" [formGroup]="addReviewForm" (ngSubmit)="submitReview(addReviewForm)">
+		<div class="trrb_form_box">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="cr_src_rviw">
+						<p class="cn_input_lbl">Search to select the carrier</p>
+						<mat-form-field class="cn_pfix_sfix" appearance="none">
+							<!-- <span matPrefix class="material-icons truck_icn">local_shipping</span>
+							<span matSuffix class="material-icons srch_icn">search</span> -->
+							<input type="text" (keyup)="searchUserType($event)" placeholder="Search and Select the Carrier" aria-label="Test" matInput [formControl]="myControl" [matAutocomplete]="auto" class="form-control cn_input">
+							<mat-autocomplete #auto="matAutocomplete">
+								<mat-option *ngFor="let carrierData of reviewData?.carrierData" [value]="carrierData?.companyName" (click)="redirectPageCity(carrierData)">{{carrierData?.companyName}}</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					</div>
+				</div>		  
+			 
+	    </div>
+	  <div class="trrb__actn">
+	  	<button class="cn_btn">Submit Review</button>
+	  </div>
+        </div>
+  </form>
+</div>
+<div class="skt_eifr" *ngIf="skeletonLoader">
+    <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '24px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+		<div class="add_lane_location">
+      <div *ngFor="let fake of generateFakeSkeleton(2)">
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '20px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '40px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+      </div>
+		</div>
+    <ngx-skeleton-loader count="4" [theme]="{ width: '100%', height: '24px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+	</div>
+

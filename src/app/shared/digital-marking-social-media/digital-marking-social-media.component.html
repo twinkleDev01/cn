@@ -1,0 +1,18 @@
+<div class="container mt-3">
+  <div class="image_preview_card">
+  <div class="image-preview" *ngIf="imageData">
+    <img *ngIf="imageData" src="{{imageData}}" class="img-fluid uploded_img">
+    <img *ngIf="!imageData" src="https://placehold.co/512x512" class="img-fluid uploded_img">
+  </div>
+
+  <div class="card_content">
+    <p class="card_title">{{ title }}</p>
+      <p class="card_description">{{ description }}</p>
+      <P class="card_url">
+        <a href="{{profilUrl}}" class="trrb_nm pointer" target="_blank">
+        <u>{{profilUrl}}</u>
+      </a>
+      </P>
+  </div>
+</div>
+</div>

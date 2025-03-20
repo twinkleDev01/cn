@@ -1,0 +1,249 @@
+<div class="edit_lanes">
+  <div *ngIf="!skeletonLoader">
+    <div class="form_box">
+        <h3 class="form_tlt">Edit Lanes</h3>
+      <form autocomplete="off" [formGroup]="lanesForm" (ngSubmit)="laneSubmit(lanesForm)" class="cn_field">
+        <p class="txt_lb">Welcome to Lanes! Here, you can easily handle, add, or remove lanes as needed.
+          Shippers and brokers often prefer carriers that operate on specific lanes, which builds trust about load
+          movement.<br> We recommend adding all the lanes you operate on for better visibility. Our research, based on
+          direct communication with shippers and brokers, shows that lanes are a key factor in decision-making.</p>
+        <div class="add_lane_location mt-3">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="lane_addrs">
+                <div class="input_field">
+                  <p class="cn_input_lbl">Search From State<span class="txt_d"> *</span></p>
+                  <mat-form-field class="cn_pfix_icn" appearance="none">
+                    <span matSuffix class="material-icons srch_icn">search</span>
+                    <input type="text" [matAutocomplete]="autolen" (keyup)="searchUserFromState($event)"
+                      placeholder="Search From State" aria-label="Test" matInput formControlName="fromStateId"
+                      class="form-control cn_input">
+                    <div class="loard_box" *ngIf="loaderSearchState">
+                      <span class="custom_spinner spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </span>
+                    </div>
+                    <mat-autocomplete #autolen="matAutocomplete">
+                      <mat-option *ngFor="let regionsCity of laneStateCountry"
+                        [value]="regionsCity.name + ', ' + regionsCity.countryCode ">
+                        <img src="https://carriernetwork.ai/images/country/{{ regionsCity.countryCode }}.avif"
+                          alt="{{ regionsCity.name }}" width="25" height="15" style="margin-right: 8px;" />
+                        {{regionsCity?.name}}, {{regionsCity?.countryCode}}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="submitted && lanesForm.get('fromStateId').errors?.['required']"
+                      class="error_mess">From state is required</mat-error>
+                    <mat-error *ngIf="submitted && fromStateDropdownerror" class="error_mess"
+                      style="font-size: 10px; line-height: 12px; position: absolute; bottom: 0px;">Please select the
+                      From State from the search dropdown.</mat-error>
+                  </mat-form-field>
+
+                </div>
+                <div class="input_field">
+                  <p class="cn_input_lbl">Search From City<span class="txt_d"> *</span></p>
+                  <mat-form-field class="cn_pfix_icn" appearance="none">
+                    <span matSuffix class="material-icons srch_icn">search</span>
+                    <input type="text" [matAutocomplete]="auto1" (keyup)="searchUserType($event)"
+                      placeholder="Search From City" aria-label="Test" matInput formControlName="fromCityId"
+                      class="form-control cn_input">
+                    <div class="loard_box" *ngIf="loaderSearch">
+                      <span class="custom_spinner spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </span>
+                    </div>
+                    <mat-autocomplete #auto1="matAutocomplete">
+                      <mat-option *ngFor="let regionsCity of laneCity_one?.city"
+                        [value]="regionsCity.name">{{regionsCity?.name}} </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="submitted && lanesForm.get('fromCityId').errors?.['required']"
+                      class="error_mess">From City is required</mat-error>
+                  </mat-form-field>
+                  <mat-error *ngIf="submitted && fromCityDropdownerror && !lanesForm.get('fromCityId').errors" class="error_mess" style="font-size: 10px; line-height: 12px; position: absolute; bottom: 0px;">Please select the From City from the search dropdown.</mat-error>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-1">
+              <div class="lane_arrow_img">
+                <span class="material-icons-outlined">arrow_forward_ios</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="lane_addrs">
+                <div class="input_field">
+                  <p class="cn_input_lbl">Search To State<span class="txt_d"> *</span></p>
+                  <mat-form-field class="cn_pfix_icn" appearance="none">
+                    <span matSuffix class="material-icons srch_icn">search</span>
+                    <input type="text" [matAutocomplete]="autolaneTo" (keyup)="searchUserToState($event)"
+                      placeholder="Search To State" aria-label="Test" matInput formControlName="toStateId"
+                      class="form-control cn_input">
+                    <div class="loard_box" *ngIf="loaderSearchStateTo">
+                      <span class="custom_spinner spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </span>
+                    </div>
+                    <mat-autocomplete #autolaneTo="matAutocomplete">
+                      <mat-option *ngFor="let regionsCity of laneStateCountryTo"
+                        [value]="regionsCity.name + ', ' + regionsCity.countryCode ">
+                        <img src="https://carriernetwork.ai/images/country/{{ regionsCity.countryCode }}.avif"
+                          alt="{{ regionsCity.name }}" width="25" height="15" style="margin-right: 8px;" />
+                        {{regionsCity?.name}}, {{regionsCity?.countryCode}}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="submitted && lanesForm.get('toStateId').errors?.['required']"
+                      class="error_mess">To State is required</mat-error>
+                    <mat-error class="error_mess" *ngIf="lanesForm?.get('toStateId').errors?.['mustDiffer']"
+                      style="font-size: 10px; line-height: 12px;">From State and To State should not be
+                      same.</mat-error>
+                    <mat-error *ngIf="submitted && fromStateDropdownerror && !lanesForm.get('toStateId').errors" class="error_mess" style="font-size: 10px; line-height: 12px; position: absolute; bottom: 0px;">Please select the From State from the search dropdown.</mat-error>
+                  </mat-form-field>
+
+
+                </div>
+                <div class="input_field">
+                  <p class="cn_input_lbl">Search To City<span class="txt_d"> *</span></p>
+                  <mat-form-field class="cn_pfix_icn" appearance="none">
+                    <span matSuffix class="material-icons srch_icn">search</span>
+                    <input type="text" [matAutocomplete]="auto2" (keyup)="searchUserTypeTo($event)"
+                      placeholder="Search To City" aria-label="Test" matInput formControlName="toCityId"
+                      class="form-control cn_input">
+                    <div class="loard_box" *ngIf="loaderSearchTo">
+                      <span class="custom_spinner spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </span>
+                    </div>
+                    <mat-autocomplete #auto2="matAutocomplete">
+                      <mat-option *ngFor="let toCityName of laneCity_two?.city"
+                        [value]="toCityName.name">{{toCityName?.name}} </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="submitted && lanesForm.get('toCityId').errors?.['required']" class="error_mess">To
+                      City is required</mat-error>
+                  </mat-form-field>
+                  <mat-error *ngIf="submitted && toCityDropdownerror && !lanesForm.get('toCityId').errors" class="error_mess" style="font-size: 10px; line-height: 12px; position: absolute; bottom: 0px;">Please select the TO City from the search dropdown.</mat-error>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p *ngIf="message && !submitted && !lanesForm.get('toCityId').errors && !submitted && !lanesForm.get('toCityId').errors && !lanesForm?.get('toStateId').errors"
+            class="error_mess">{{message}}</p>
+        </div>
+        <div class="form_action">
+          <button type="submit" class="cn_btn">Add Lane</button>
+        </div>
+      </form>
+      <div class="added_lane_box">
+        <!-- <div class="pdt_instn_row" *ngFor="let listData of laneListData, let i = index;" -->
+        <div class="pdt_instn_row"
+          *ngFor="let listData of laneListData?.slice(0, showAllLanes ? laneListData?.length : 5);let i = index;">
+          <span class="material-icons xmark_icn" (click)="removeLane(i,listData)">close</span>
+          <span class="instn_picup"> <img
+              src="https://carriernetwork.ai/images/country/{{listData.fromCountryCode}}.avif" alt="US" width="15"
+              height="10" style="margin-right: 8px;" />
+            {{listData?.fromCity ? listData?.fromCity : '-'}}<span *ngIf="listData?.fromCity.length >= 0"
+              style="margin-right: 2px;">,</span> </span>
+          <span class="instn_picup">{{listData?.fromStateCode ? listData?.fromStateCode : '-'}}</span>
+          <span class="instn_arrow">></span>
+          <span class="instn_picup"><img src="https://carriernetwork.ai/images/country/{{listData.toCountryCode}}.avif"
+              alt="US" width="15" height="10" style="margin-right: 8px;" />{{listData?.toCity ? listData?.toCity :
+            '-'}}<span *ngIf="listData?.toCity.length >= 0" style="margin-right: 2px;">,</span> </span>
+          <span class="instn_drop">{{listData?.toStateCode ? listData?.toStateCode : '-'}}</span>
+        </div>
+        <a href="#" (click)="showMoreData('Lane') ; $event.preventDefault();" *ngIf="laneListData?.length > 5"
+          class="show_hid_btn">{{showAllLanes ?
+          'Show Less' : 'Show More'}}</a>
+      </div>
+    </div>
+
+    <div class="form_box">
+      <h3 class="form_tlt">Prefrered Regions & Headquarter</h3>
+      <form class="cn_field" [formGroup]="selectRegionForm" (ngSubmit)="regionFormSubmit(selectRegionForm)">
+        <p class="txt_lb">Welcome to Regions and Headquarters! Here, you can easily manage your zones. Use checkboxes to add or delete regions. Our headquarters oversees strategic planning, management, and communication to ensure seamless operations in all sectors. Enjoy simpler organizing and upkeep!</p>
+        <div class="row mt-3">
+          <div class="col-md-8">
+            <div class="input_field">
+              <p class="cn_input_lbl">Search State<span class="txt_d"> *</span></p>
+              <mat-form-field class="cn_pfix_icn" appearance="none">
+                <span matSuffix class="material-icons srch_icn">search</span>
+                <input type="text" [matAutocomplete]="autoRegion" (keyup)="laneRegionSelect($event)"
+                  placeholder="Search and select regions" matInput formControlName="preferredRegions"
+                  class="form-control cn_input" />
+
+                <mat-autocomplete #autoRegion="matAutocomplete" (optionSelected)="selectRegion($event)">
+                  <mat-option *ngFor="let regionsState of preferredRegionsState" [value]="regionsState">
+                    <img
+                      src="https://carriernetwork.ai/images/country/{{regionsState.regionCA || regionsState.regionMX || regionsState.region}}.avif"
+                      alt="{{ regionsState.state }}" width="25" height="15" style="margin-right: 8px;" />
+                    {{ regionsState.state }}, {{ regionsState.regionCA || regionsState.regionMX || regionsState.region }}
+                  </mat-option>
+                </mat-autocomplete>
+
+                <mat-error *ngIf="selectRegionForm.get('preferredRegions').errors?.['required']" class="error_mess">
+                  State is required
+                </mat-error>
+              </mat-form-field>
+              <p class="slctd_eqpmt_typ" *ngIf="selecteRegion.length > 0">
+                <span *ngFor="let region of selecteRegion" class="dful_chip">
+                  <img src="https://carriernetwork.ai/images/country/{{region.region}}.avif" alt="US" width="15"
+                    height="10" style="margin-right: 8px;" /> {{ region.state }}
+                  <span class="material-icons xmark_icn" (click)="removeState(region.id)">close</span>
+                  <!-- <a  (click)="removeState(region.id)" class="remove-btn">x</a> -->
+                </span>
+              </p>
+              <div class="chip-container">
+                <mat-chip-list #chipList aria-label="Selected Regions">
+                  <mat-chip *ngFor="let region of selectedRegions" [removable]="true" (removed)="removeRegion(region)">
+                    {{ region.state }}, {{ region.region }}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="lable_field">
+              <p class="lable_lbl">
+                <span>Headquarter </span>
+                <span class="material-icons info_icon" matTooltip="This field is not editable"> info_outline </span>
+              </p>
+
+              <p class="lable_vlu" *ngIf="selectedHead">{{selectedHead?.headQuarter?.cityName ?(selectedHead?.headQuarter?.cityName |titleCase) :'' }}, {{selectedHead?.headQuarter?.stateSortname ? (selectedHead?.headQuarter?.stateSortname | titleCase) : ''}}</p>
+              <p class="lable_vlu" *ngIf="!selectedHead">-</p>
+            </div>
+          </div>
+        </div>
+        <div class="form_action">
+          <button [disabled]="selectedRegions.length === 0" type="submit" class="cn_btn">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="skeletonLoader">
+    <div class="skt_eifr">
+      <ngx-skeleton-loader count="1"
+        [theme]="{ width: '100%', height: '18px', margin: '0px 0 16px' }"></ngx-skeleton-loader>
+      <div class="add_lane_location">
+        <div *ngFor="let fake of generateFakeSkeleton(2)">
+          <ngx-skeleton-loader count="1"
+            [theme]="{ width: '100%', height: '16px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1"
+            [theme]="{ width: '100%', height: '30px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+        </div>
+      </div>
+      <div style="margin-top: 32px;">
+        <ngx-skeleton-loader count="3"
+          [theme]="{ width: '100%', height: '24px', margin: '0px 0 15px' }"></ngx-skeleton-loader>
+      </div>
+    </div>
+    <div class="skt_eifr my_24">
+      <ngx-skeleton-loader count="1"
+        [theme]="{ width: '100%', height: '18px', margin: '0px 0 6px' }"></ngx-skeleton-loader>
+      <div style="margin-top: 18px;">
+        <ngx-skeleton-loader count="1"
+          [theme]="{ width: '100%', height: '16px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1"
+          [theme]="{ width: '100%', height: '30px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

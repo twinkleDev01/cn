@@ -1,0 +1,125 @@
+<div class="media_upload_con mt-4">
+	<div class="container">
+		<div *ngIf="!skeletonLoader">
+			<div class="row">
+				<div class="col-md-3">
+					<div class="m_upload_box" *ngIf="currentTab=='imageTab'" (click)="multiImageUpload($event,'medialUpload')">
+						<span class="material-icons">add_photo_alternate</span>
+						<!-- <i class="fa-sharp-duotone fa-regular fa-image"></i> -->
+						<span class="txt_2 fw_5">Upload Image</span>
+					</div>
+
+					<div class="m_upload_box pdf_up_box" *ngIf="currentTab=='pdfTab'" (click)="multiImageUpload($event,'pdfUpload')">
+										<i class="fa-sharp-duotone fa-regular fa-file-arrow-up"></i>
+						<!-- <span class="material-icons">upload_file</span> -->
+						<span class="txt_2 fw_5">Upload PDF</span>
+					</div>
+
+					<div class="m_upload_box" *ngIf="currentTab=='videoTab'" (click)="multiImageUpload($event,'videoUpload')">
+						<!-- <span class="material-icons">video_call</span> -->
+						<i class="fa-sharp-duotone fa-solid fa-video-plus"></i>
+						<span class="txt_2 fw_5">Upload Video</span>
+					</div>
+					<p class="fs_14 fsn_4 txt_d text-center" *ngIf="multiUploadErrorMsg">The total size of Image(s)/Document(s) cannot be greater than 10 MB.</p>
+					<span *ngIf="imagmessage" class="fs_11 txt_d fsm_5 ps-1">{{imagmessage}}</span>
+				</div>
+
+				<div class="col-md-3" *ngFor='let url of MultiFileArray; let i = index'>
+					<p class="my-0 text_truncate">{{url.name}} ({{getSize(url.size)}})</p>
+					<span *ngIf="MultiFileArray?.length > 0" class="material-icons xmark_icn" (click)="removeSelectedFile(i)">close</span>
+				</div>
+				
+				<div class="col-md-12" *ngIf="mediaData?.imageArray?.length > 0 && currentTab=='imageTab'">
+					<div class="row">
+						<div class="col-md-3" *ngFor="let mediaUrlData of mediaData?.imageArray?.slice(0, showAllImage ? mediaData?.imageArray?.length : 6);let i = index;">
+							<div *ngIf="currentTab=='imageTab'">
+								<div class="uploded_file_box image_uploded">
+									<div class="fi_file">
+										<img [src]="mediaUrlData.mediaUrl" class="img-fluid">
+									</div>
+									<div class="fi_dis">
+										<span>{{mediaUrlData?.mediaName ? mediaUrlData?.mediaName : '-'}}</span>
+									</div>
+									<a href="{{mediaUrlData.mediaUrl}}" target="_blank" class="opn_new_tab">
+										<span class="material-icons ont_icn">open_in_new</span>
+									</a>
+									<span class="material-icons xmark_icn" (click)="confirmationPopup(mediaUrlData)">close</span>
+								</div>
+							</div>
+						</div>
+						<button (click)="showAllMedia('image')" *ngIf="mediaData?.imageArray?.length > 6" class="show_hid_btn">{{showAllImage ? 'Show Less' : 'Show More'}}</button>
+					</div>
+				</div>
+
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-3" *ngFor="let mediaUrlData of mediaData?.pdfArray?.slice(0, showAllPdf ? mediaData?.pdfArray?.length : 6);let i = index;">
+							<div *ngIf="currentTab=='pdfTab'">
+								<div class="uploded_file_box pdf_uploded">
+									<div class="fi_file pdf_upld_box">
+										<div class="pdf_icon">
+											<i class="fa-sharp-duotone fa-regular fa-file-pdf"></i>
+		                  <!-- <img src="{{imageCheck(mediaUrlData?.mediaUrl)}}" class="img-fluid"> -->
+		                  <div class="pdf_fle_nam">
+		                    <span>{{mediaUrlData?.mediaName}}</span>
+		                  </div>
+		                </div>
+										<a href="{{mediaUrlData?.mediaUrl}}" target="_blank" class="opn_new_tab">
+											<span class="material-icons ont_icn">open_in_new</span>
+										</a>
+									</div>
+									<span class="material-icons xmark_icn" (click)="confirmationPopup(mediaUrlData)">close</span>
+								</div>
+							</div>
+						</div>
+						<button (click)="showAllMedia('pdf')" *ngIf="mediaData?.pdfArray?.length > 6 && currentTab=='pdfTab'" class="show_hid_btn">{{showAllPdf ? 'Show Less' : 'Show More'}}</button>
+					</div>
+				</div>
+
+				<div class="col-md-3" *ngFor="let mediaUrlData of mediaData?.videoArray?.slice(0, showAllVideo ? mediaData?.videoArray?.length : 6);let i = index;">
+					<div *ngIf="currentTab=='videoTab'">
+						<div class="uploded_file_box vdo_uploded">
+							<div class="fi_file">
+								<video width="100%" controls>
+								  <source src="{{mediaUrlData?.mediaUrl}}" type="video/mp4">
+								</video>
+							</div>
+							<div class="pdf_fle_nam">
+								<span >{{mediaUrlData?.mediaName ? mediaUrlData?.mediaName :'-'}}</span>
+							  </div>
+							<a href="{{mediaUrlData?.mediaUrl}}" target="_blank" class="opn_new_tab">
+								<span class="material-icons ont_icn">open_in_new</span>
+							</a>
+							<span class="material-icons xmark_icn" (click)="confirmationPopup(mediaUrlData)">close</span>
+						</div>
+					</div>
+				</div>
+				<button (click)="showAllMedia('video')" *ngIf="mediaData?.videoArray?.length > 6 && currentTab=='videoTab'" class="show_hid_btn">{{showAllVideo ? 'Show Less' : 'Show More'}}</button>
+
+				<div class="col-md-12">
+					<div *ngIf="currentTab=='imageTab'">
+						<p class="uplod_info_mess" *ngIf="mediaData?.imageArray?.length==0">There is no images uploaded here.</p>
+					</div>
+					<div *ngIf="currentTab=='pdfTab'">
+						<p class="uplod_info_mess" *ngIf="mediaData?.pdfArray?.length==0">There is no PDF uploaded here.</p>
+					</div>
+					<div *ngIf="currentTab=='videoTab'">
+						<p class="uplod_info_mess" *ngIf="mediaData?.videoArray?.length==0">There is no video uploaded here.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="skt_eifr" *ngIf="skeletonLoader">
+			<ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '24px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+			<div class="add_lane_location">
+				<div *ngFor="let fake of generateFakeSkeleton(2)">
+					<ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '20px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+					<ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '40px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+				</div>
+			</div>
+			<ngx-skeleton-loader count="4" [theme]="{ width: '100%', height: '24px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+		</div>
+	</div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

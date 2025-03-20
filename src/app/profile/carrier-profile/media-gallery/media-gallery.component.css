@@ -1,0 +1,38 @@
+/*.page_heading:after { width: calc(100% - 71%); }*/
+/*.media_file_con { background: #fff; padding: 24px; border-radius: 10px; margin: 14px 0 24px; }*/
+/*.media_file_con .edt_pg_tlt { margin: 0 0 20px; }*/
+.media_file_con {
+	.mdia_box { background: #fff; border: 1px solid #ededed; margin: 0 0 1.5rem; padding: 0 1rem 1rem; }
+  .bx_tlt { padding: 0.7rem 1rem; font-size: 1.4rem; background: #e5e5e5; margin: 0; }
+
+
+
+	.tab_tlt { font-weight: 500; font-size: 18px; line-height: 27px; color: #333333; margin: 32px 0 14px; }
+	.tab_dis { font-weight: 400; font-size: 14px; line-height: 22px; color: #6f6f6f; margin: 22px 0 0px; }
+
+	.img_media_points ul { padding-left: 22px; margin: 10px 0 4px; display: inline-block; list-style: square; }
+
+	.img_media_points ul li { float: left; margin: 0 0 4px; font-weight: 400; font-size: 15px; line-height: 21px; color: #818181; width: 33%; }
+	.img_media_points ul li::marker { color: #00b4fc; font-size: 20px; }
+	.fuub_crd { margin: 32px 0 16px; }
+	.fuub_crd .spic_box { color: #333333;
+        background: #ebf7fc;
+        padding: 1rem 1.5rem 0.5rem;
+        margin: 1rem 0 0;
+        border: 1px solid #b3e9ff; }
+	.fuub_crd .plan_info { background: #EFF3F5; text-align: center; margin: 16px 0 22px 0; padding: 10px; }
+	.fuub_crd .spic_tlt { font-weight: 600; font-size: 24px; line-height: 32px; margin: 0 0 10px; }
+	.fuub_crd .spic_price { margin: 16px 0px 0px; text-align: left; }
+	.fuub_crd .spic_price_t { margin: 0px; }
+	.fuub_crd .spic_price_t sup { font-size: 18px; line-height: 20px; font-weight: 600; top: -12px; }
+	.fuub_crd .spic_price_t span { font-weight: 600; font-size: 36px; line-height: 36px; }
+	.fuub_crd .spic_price_b { font-weight: 400; font-size: 14px; line-height: 21px; }
+	.fuub_crd .cn_btn { margin: 24px 0 14px; }
+}
+
+
+
+
+
+
+

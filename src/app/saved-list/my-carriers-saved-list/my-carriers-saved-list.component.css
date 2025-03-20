@@ -1,0 +1,126 @@
+/*.saved_carrier_list_con { background: #fff; padding: 24px; border-radius: 10px; margin: 14px 0; }*/
+.saved_carrier_list_con {
+    .content_tlt { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 1rem; }
+    .content_tlt .cn_btn { padding: 8px 14px; }
+}
+
+
+
+  .scl_date_box { display: inline-flex; gap: 1.2rem; }
+  .scl_date { display: flex; align-items: center; color: #4b4b4b; gap: 0.4rem; }
+  .scl_date i { font-size: 1.1rem; }
+
+  @media ( max-width: 767px ) {
+    .scl_date_box { gap: 0.8rem; }
+    .scl_date { font-size: 12px; line-height: 16px; }
+    .scl_date i { font-size: 1rem; }
+}
+
+.lable_field .edt_pg_tlt { display: flex; align-items: center; justify-content: space-between; margin: 0; }
+
+
+.scl_row { display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #D9D9D9;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+    padding: 0.7rem;
+    margin: 0 0 1.1rem;
+}
+.scl_row:hover { cursor: pointer; }
+.scl_row .scl_rl { max-width: calc(100% - 140px); }
+/*.scl_row .scl_name_rw { display: flex; align-items: center; }*/
+/*.scl_row .scl_name_count { min-width: 120px; margin-left: 4px; }*/
+.scl_row .scl_name { font-weight: 600; color: #333; }
+.scl_row .scl_time_txt { font-weight:500; color: #818181; }
+.scl_row .scl_rr { display: inline-flex; align-items: center; min-width: 45px; }
+.scl_row .scl_date { font-weight: 500; margin: 0 6px 0 0; }
+.scl_row .actn_icn i { font-size: 22px; cursor: pointer; border-radius: 50%; padding: 10px; margin: 0 6px; opacity: 0.7; }
+.scl_row .actn_icn i:hover { opacity: 1; }
+.scl_row .actn_icn i.edt_icn { color: #00b4fc; border: 1px solid #00b4fc; background: rgb(0 180 252 / 5%); height: 44px; width: 44px; display: flex; align-items: center; }
+.scl_row .actn_icn i.dtl_icn { color: #DF0C0C; border: 1px solid #DF0C0C; background: rgb(223 12 12 / 5%);  display: flex; align-items: center; }
+.actn_icn { display: flex; align-items: center; justify-content: center; }
+
+
+.sav_ca_row { background: #fff; padding: 18px; border-radius: 10px; margin: 4px 0 16px; }
+.sav_ca_box { display: flex; align-items: normal; justify-content: space-between; padding: 0 0 18px; border-bottom: 1px solid #e5e5e5; }
+.sav_ca_box .sav_ca_saprate_rating { border: 1px solid #dddddd; /* border-radius: 5px 5px 0px 0px;*/ border-radius: 5px; padding: 9px 12px; min-width: 195px; background: #f7f7f7; }
+.sav_ca_box .sav_ca_saprate_rating .sav_ca_sr { font-size: 14px; line-height: 20px; font-weight: 500; color: #a5a5a5; text-align: right; margin: 4px 0 0; }
+.sav_ca_box .sav_ca_saprate_rating .sav_ca_sr b { font-weight: 600; color: #333; }
+.sav_ca_box .sav_ca_time { font-size: 12px; line-height: 18px; font-weight: 400; color: #6e6e6e; text-align: center; margin: 0px 0 0; background: #f0f0f0; padding: 3px 0; border-radius: 0px 0px 4px 4px; border: 1px solid #ddd; border-top: none; }
+
+.sav_ca_box .sav_ca_time b { font-weight: 500; color: #242424; }
+.sav_ca_box .sav_ca_l { display: flex; width: 100%; position: relative; max-width: calc(100% - 120px); }
+.sav_ca_box .sav_ca_r { min-width: 120px; }
+.sav_ca_box .sav_ca_ll { background: #FFFFFF; border: 1px solid #D9D9D9; border-radius: 4px; width: 100px; height: 100px; display: flex; margin: 0px 16px 0 0px; }
+
+.sav_ca_box .sav_ca_ll .sav_ca_ll_img { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.sav_ca_box .sav_ca_ll .sav_ca_ll_initail { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #00b4fc; color: #fff; width: 100%; height: 100%; border-radius: 4px; }
+.sav_ca_box .sav_ca_ll .sav_ca_ll_initail .initail { font-size: 44px; line-height: 38px; font-weight: 700; }
+.sav_ca_box .sav_ca_ll .sav_ca_ll_initail span { font-size: 9px; line-height: 12px; font-weight: 500; }
+.sav_ca_box .sav_ca_nm { font-weight: 600; font-size: 20px; line-height: 24px; color: #333333; margin: 0 0 4px; display: flex; align-items: center; }
+.sav_ca_box .sav_ca_nm .txt_ellipsis { max-width: calc(100% - 130px); display: inline-block; text-transform: capitalize; }
+.sav_ca_box .sav_ca_nm i { color: #00B4FC; display: inline-block; cursor: pointer; }
+.sav_ca_box .sav_ca_dot_active { display: flex; align-items: center; font-weight: 400; font-size: 16px; line-height: 20px; color: #333333; }
+.sav_ca_box .sav_ca_dot_active b { font-weight: 500; }
+.sav_ca_box .sav_ca_sapration { margin: 0 15px; color: #c7c7c7; font-weight: 400; }
+.sav_ca_box .active_point span { font-size: 20px; margin: 0 2px 0 0; color: #2CE90E; }
+.sav_ca_box .sav_ca_br { max-width: calc(100% - 120px); width: 100%; }
+.sav_ca_box .sav_ca_reviw { font-weight: 400; font-size: 16px; line-height: 20px; color: #333333; margin: 0 0 4px; display: flex; align-items: center; }
+.sav_ca_box .sav_ca_reviw app-review-show { display: inline-flex; }
+.sav_ca_box .rtng_stars { margin: 0 8px 0 0; display: inline-flex; }
+.sav_ca_box .rtng_stars span { color: #F1C644; margin: 0 2px; font-size: 24px; }
+.sav_ca_box .reviws { margin: 0 0 0 10px; }
+.sav_ca_box .reviws_lnk { color: #00b4fc; margin: 0 4px 0 0; }
+
+.sav_ca_box .sav_ca_b .xmark_icn { position: absolute; top: -12px; right: -12px; color: #DF0C0C; cursor: pointer; display: none; }
+.sav_ca_box .sav_ca_b:hover .xmark_icn { display: block; }
+/*.sav_ca_box .sav_ca_nm .sav_ca_tages .sc_tag { background: #cdcdcd; color: #333; border: 1px solid #a8a8a8; }*/
+
+.sav_ca_btns { text-align: right; }
+.sav_ca_btns button { display: inline-flex; align-items: center; justify-content: center; border: 1px solid #ddd0; border-radius: 6px; padding: 5px 12px; min-width: 100px; font-size: 14px; line-height: 18px; font-weight: 500; opacity: 0.7; }
+.sav_ca_btns button:hover { opacity: 1; }
+.sav_ca_btns button.ad_edit_btn { border: 1px solid #00b4fc; background: #ebf9ffb3; color: #00b4fc; margin: 0 0 16px; }
+/*.sav_ca_btns button.ad_edit_btn:hover { color: #fff; background: #00b4fc; }*/
+.sav_ca_btns button.ed_dtl_btn { border: 1px solid #DF0C0C; background: hsl(0deg 76% 95% / 50%); color: #DF0C0C; }
+/*.sav_ca_btns button.ed_dtl_btn:hover { color: #fff; background: #DF0C0C; }*/
+.sav_ca_tages { display: inline-flex; margin: 0 0 0 6px; }
+.sav_ca_tages .sc_tag { display: inline-flex; align-items: center; justify-content: center; background: #f0f0f0; border-radius: 20px; border: 1px solid #a8a8a8; margin: 0 10px 0px 0; padding: 3px 10px; font-size: 12px; line-height: 14px; font-weight: 600; color: #333; }
+.sav_ca_tages .sc_tag::last-child { margin: 0px; }
+.sav_ca_tages .sc_tag svg { width: 16px; margin: 0 4px 0 0; }
+
+.sc_tag.unclaimed { cursor: pointer; }
+
+.sav_ca_locatn { font-weight: 500; font-size: 16px; line-height: 20px; color: #333333; margin: 0 0 4px; margin: 0 0 4px; }
+
+.sav_ca_b { margin: 16px 0 0; }
+
+.sav_ca_othrs { font-size: 15px; line-height: 22px; font-weight: 400; color: #818181; margin: 0 42px 8px 0; display: inline-block; }
+.sav_ca_othrs .txt_b { font-weight: 500; }
+.active_time { display: inline-flex; align-items: center; color: #2ce90e; margin: 0 12px 0 0; }
+
+.back_txt { display: inline-flex; align-items: center; font-size: 18px; line-height: 20px; font-weight: 600; margin: 14px 0 0; }
+.back_txt .material-icons { margin: 0 8px 0 0; cursor: pointer; font-size: 28px; }
+
+.sav_ca_load_more { text-align: center; margin: 0 0 14px; }
+
+.sco_chip { display: inline-block; background: #00b4fc12; font-size: 13px; line-height: 16px; font-weight: 500; padding: 3px 9px; border-radius: 24px; border: 1px solid #00b4fc; margin: 6px 10px 8px 0px; }
+
+
+.noMore_record { text-align: center; background: #f1f1f1; padding: 12px 16px; border-radius: 4px; margin-top: 30px; }
+
+
+@media (max-width: 767px) {
+    .edt_pg_tlt {  flex-direction: column; align-items: start !important; }
+    .scl_row .scl_rl { max-width: 100%; width: 100%; }
+    .scl_row .scl_rr { display: inline-flex; align-items: center; min-width: 100%; width: 100%; }
+    .scl_row { flex-direction: column; }
+/*    .saved_carrier_list_con { padding: 15px; }*/
+
+    .scl_row .actn_icn i.edt_icn { height: 30px; width: 30px; font-size: 14px !important; justify-content: center;  }
+    .scl_row .actn_icn i { width: 30px; height: 30px; justify-content: center; }
+     
+    
+}

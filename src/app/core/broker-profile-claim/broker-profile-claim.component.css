@@ -1,0 +1,78 @@
+.take_rating_review_box { background: #fff; padding: 24px 24px 16px; border-radius: 10px; margin-top: 14px; margin-bottom: 14px; }
+.wrc_box .truck_icn { color: #818181; }
+
+.cslc_box { margin: 0 0 0px; }
+.cslc_box .cslc_crd { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 12px; border: 1px solid #e5e5e5; margin: 0 0 16px; border-radius: 4px; text-decoration: none; }
+.cslc_box .cslc_crd:hover { background: #ecf8fd; cursor: pointer; border: 1px solid #89dbfc; }
+
+.cslc_box .cslc_crd_l { display: flex; max-width: calc(100% - 160px); width: 100%; }
+.cslc_box .cslc_crd_ll { background: #FFFFFF; border: 1px solid #D9D9D9; border-radius: 4px; overflow: hidden; min-width: 90px; max-width: 90px; width: 90px; height: 90px; display: flex; margin: 0px 16px 0 0px; }
+.cslc_box .cslc_crd_ll .cslc_bl_img { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.cslc_box .cslc_crd_ll .cslc_bl_initail { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #00b4fc; color: #fff; width: 100%; height: 100%; }
+.cslc_box .cslc_crd_ll .cslc_bl_initail .initail { font-size: 48px; line-height: 50px; font-weight: 600; }
+.cslc_box .cslc_crd_ll .cslc_bl_initail .src_cr_dotno { font-size: 9px; line-height: 10px; font-weight: 500; }
+.cslc_box .cslc_nm { font-weight: 600; font-size: 24px; line-height: 30px; color: #333333; margin: 0 0 4px; display: flex; align-items: center; text-transform: capitalize; }
+.cslc_box .cslc_nm .txt_ellipsis { max-width: calc(100% - 54px); display: inline-block; }
+.cslc_box .cslc_nm i { color: #00B4FC; margin: 2px 0 0 4px; display: inline-block; }
+.cslc_box .cslc_dot_active { display: flex; font-weight: 500; font-size: 16px; line-height: 22px; color: #333333; margin: 4px 0 0px; }
+.cslc_box .cslc_locatn { font-weight: 400; font-size: 16px; line-height: 22px; color: #5d5d5d; }
+.cslc_box .cslc_dot_active b { font-weight: 400; color: #818181; }
+.cslc_box .cslc_sapration { margin: 0 14px; color: #c7c7c7; font-weight: 400; }
+.cslc_box .active_point span { font-size: 20px; margin: 0 2px 0 0; color: #2CE90E; }
+.cslc_box .cslc_crd_r { max-width: 160px; width: 100%; }
+.cslc_box .cslc_reviw { display: flex; flex-direction: column; align-items: center; border-left: 1px solid #dfdfdf85; padding: 0 0 0 14px; }
+.cslc_box .rtng_stars { margin: 0 8px 0 0; display: inline-flex; }
+.cslc_box .rtng_stars span { color: #F1C644; margin: 0 2px; font-size: 24px; }
+.cslc_box .reviws_lnk { color: #00b4fc; margin: 0 4px 0 0; }
+
+.cslc_box .cslc_crd .xmark_icn { position: absolute; top: -12px; right: -12px; color: #DF0C0C; cursor: pointer; display: none; }
+.cslc_box .cslc_crd:hover .xmark_icn { display: block; }
+.avrg_rtng { font-size: 22px; line-height: 24px; font-weight: 500; color: #333; }
+.reviws { font-size: 12px; line-height: 14px; font-weight: 500; color: #818181; }
+.reviws a { color: #818181; }
+.cslc_box .cslc_reviw app-review-show { line-height: 1; margin: 2px 0 0px; }
+.cslc_crd_lr { width: 100%; max-width: calc(100% - 120px); }
+
+.spinner-border { display: inline-block; width: 21px; height: 21px; vertical-align: -0.125em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: 0.75s linear infinite spinner-border; margin: 2px 0 0 6px; }
+.write_review_con .loard_box { display: flex; align-items: center; justify-content: end; }
+.write_review_con .custom_spinner { border-width: 2px; border-color: #00b4fc; border-right-color: transparent; margin: 0; }
+.write_review_con .wrc_box { background: #dedede8a; padding: 25px 26px 34px; border-radius: 6px 6px 6px 6px; margin: 20px 0 16px; }
+.write_review_con .cn_input_lbl { font-weight: 500; font-size: 24px; line-height: 30px; color: #333; margin: 0 0 14px; }
+
+
+.srch_rslt_conts { text-align: right; font-size: 14px; line-height: 18px; color: #818181; margin: 0 0 2px; }
+.srch_rslt_conts span { color: #333; }
+.small_error { position: absolute; color: red; bottom: -23px;  left: 0px; }
+
+/*skt*/
+.rpvc_skt_bx { display: flex; justify-content: space-between; padding: 12px; border: 1px solid #D9D9D9; margin: 0 0 16px; }
+.rpvc_skt_l { width: 116px; }
+.rpvc_skt_r { display: inline-block; float: right; width: calc(100% - 116px); }
+
+
+.spinner-border { display: inline-block; width: 14px; height: 14px; vertical-align: -0.125em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: 0.75s linear infinite spinner-border; margin: 2px 0 0 6px; }
+.loard_box { width: 20px; }
+.custom_spinner { width: 18px; height: 18px; border-width: 2px; border-color: #00b4fc; border-right-color: transparent; }
+
+@media screen and (max-width: 760px) {
+
+    .write_review_con .wrc_box { padding: 15px; }
+    .take_rating_review_box { padding: 15px; }
+    .write_review_con .cn_input { font-size: 12px; }
+    .write_review_con .cn_input_lbl { font-size: 21px; }
+    .cn_field .mat-form-field-infix { padding: 3px 0px; }
+    .small_error { color: red; bottom: -13px; left: 0px; font-size: 10px; }
+    .cslc_box .cslc_crd_ll .cslc_bl_initail .initail { font-size: 17px; line-height: 24px; font-weight: 600; padding: 0px; }
+    .cslc_box .cslc_crd_ll { min-width: 50px; max-width: 50px; width: 50px; height: 50px; }
+    .cslc_box .cslc_crd_ll .cslc_bl_initail .src_cr_dotno { text-align: center; }
+    .cslc_box .cslc_crd_l { max-width: 100%; width: 100%; }
+    .cslc_crd_lr { max-width: 80%; }
+    .cslc_dot_active { flex-direction: column; }
+    .cslc_sapration { display: none; }
+    .cslc_box .cslc_crd_r { position: absolute; right: 11px; bottom: 13px; max-width: max-content; }
+    .cslc_box .cslc_reviw { border-left: 0px; }
+    .cslc_box .cslc_crd { position: relative; }
+    .carrier_sch_list_con .rtng_stars .material-icons { font-size: 12px !important; }
+    .avrg_rtng { font-size: 18px; line-height: 17px; }
+    .cslc_box .cslc_dot_active b { font-size: 14px; line-height: 18px; }
+ }

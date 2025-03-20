@@ -1,0 +1,330 @@
+<div class="cn_popup_box cnfrm_popup free_plan_popup" *ngIf="data.openPop=='freePlan'">
+  
+  <div class="cn_popup_head">
+    <div class="left_heading">
+      <img src="./assets/images/LTO.png" width="300px">
+      <!-- <video autoplay src="./assets/images/lto.mp4" width="395px"></video> -->
+     
+    </div>
+  </div>
+  <div class="cn_v_scroll" style="max-height: 80vh;">
+    <div class="cn_popup_body subs_pln_crd">
+      <p class="spic_tlt">Upgrade Plan</p>
+      <p class="txt_2 fw_4 txt_666 cnfrm_dis mt-2 " style="text-align: left;">Upgrade to business plan with just $19.99
+        and get millions business</p>
+      <ul class="benifit_llist">
+        <li>
+          <div>
+            <p class="plan_title">Start you plan today</p>
+            <div class="plan_des">Write a description here</div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <p class="plan_title">Start you plan today</p>
+            <div class="plan_des">Write a description here</div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <p class="plan_title">get more carriers</p>
+            <div class="plan_des"> Write a description here</div>
+          </div>
+        </li>
+      </ul>
+      <!-- <div class="plan_info">
+        <p class="txt_4 fw_4 txt_p">Build your network strong and get more people attention on your profile. </p>
+      </div> -->
+      <div class="plans_box">
+        <button class="plan_bx">
+
+          <p class="plan_name">Starter <span class="plan_badge">Most Popular </span></p>
+          <div class="plan_price"><sup>$</sup>15<sup>/Yearly</sup></div>
+          <div class="upgrade_button">Buy Starter</div>
+        </button>
+        <button class="plan_bx">
+          <p class="plan_name">Business <span class="plan_badge prim_badge">AI Generated</span></p>
+          <div class="plan_price"><sup>$</sup>19<sup>/Yearly</sup></div>
+          <div class="upgrade_button prim_button shine-button">Buy Business</div>
+          <div></div>
+        </button>
+      </div>
+      <!-- <div class="spic_box">
+       
+        <p class="spic_price_b">For Carriers looking to SUPER BOOST their online visibility. Driver new calls on your
+          Phone/SMS/WhatsApp/Email so you can drive more and earn more.</p>
+        <div class="spic_price">
+          <div class="spic_price_t">
+            <sup>$</sup>
+            <span *ngIf="userType=='CARRIER'">{{information?.carrierBusinessPrice}}</span>
+            <span *ngIf="userType !=='CARRIER' && data.payTypePrice==1">50</span>
+            <span *ngIf="userType !=='CARRIER' && data.payTypePrice==3">120</span>
+            <span *ngIf="userType !=='CARRIER' && data.payTypePrice==6">180</span>
+            <sup>USD</sup>
+          </div>
+          <button class="cn_btn" type="button" (click)="upgradeBusinessPlan()">Upgrade to Business Plan</button>
+        </div>
+      </div> -->
+    </div>
+  </div>
+  <div class="close_buttons">
+    <span *ngIf="data.type=='checkPremium'" class="material-icons cn_close_icn" (click)="close()">close</span>
+    <span *ngIf="!data.type" class="material-icons cn_close_icn" (click)="closePopup()">close</span>
+  </div>
+</div>
+
+<!-- Carrier bussess plan -->
+<!-- <div class="cn_popup_body subs_pln_crd" style="background: #efefef;">
+      <div class="spc_img">
+        <img src="/assets/images/ca_busness_plan.png" alt="">
+      </div>
+      <div class="plan_info">
+        <p class="txt_4 fw_4 txt_p">Build your network strong and get more people attention on your profile. Upgrade to business plan with just $19.99 and get millions business</p>
+      </div>
+      <div class="spic_box">
+        <p class="spic_tlt">Business</p>
+        <p class="spic_price_b">For Carriers looking to SUPER BOOST their online visibility. Driver new calls on your Phone/SMS/WhatsApp/Email so you can drive more and earn more.</p>
+        <div class="spic_price">
+          <div class="spic_price_t">
+            <sup>$</sup>
+            <span>19.99</span>
+            <sup>USD</sup>
+          </div>
+          <p class="spic_price_b">Valid For Life Time</p>
+          <button class="cn_btn" (click)="upgradeBusinessPlan()">Upgrade to Business Plan</button>
+        </div>
+      </div>
+    </div> -->
+
+<!-- Plan Activated Successfully / Payment success -->
+<div *ngIf="data.openPop=='businessPlan'">
+  <div class="cn_popup_box cnfrm_popup">
+    <div class="cn_popup_head">
+      <p class="cn_ph_tlt" *ngIf="data.openPop=='businessPlan'">Business Plan Activated</p>
+      <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+    </div>
+    <div class="cn_popup_body">
+      <span class="material-icons crl_hlf_cek txt_s">task_alt</span>
+      <p class="cnfrm_tlt">Congratulations!</p>
+      <p class="cnfrm_dis" *ngIf="userType=='CARRIER'">Business Plan Successfully Activated.</p>
+      <p class="cnfrm_dis" *ngIf="userType !=='CARRIER'">Business Plan Successfully Activated Into your Account For 3
+        Month.</p>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <button *ngIf="data.manageSection==false" type="button" class="cn_btn" (click)="goToDashboard()">Go to
+          Dashboard</button>
+        <button *ngIf="data.manageSection==true" type="button" class="cn_btn" (click)="subManage()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Payment failed -->
+<div *ngIf="data.openPop=='paymentFailed'">
+  <div class="cn_popup_box cnfrm_popup">
+    <div class="cn_popup_head">
+      <p class="cn_ph_tlt" *ngIf="data.openPop=='paymentFailed'">Payment Failed</p>
+      <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+    </div>
+    <div class="cn_popup_body">
+      <span class="material-icons crl_hlf_cek txt_d">highlight_off</span>
+      <p class="cnfrm_tlt txt_d">Oops!</p>
+      <p class="cnfrm_dis">Your booking has been Declined. <br> Kindly Please check email</p>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <button type="button" class="cn_btn" (click)="businessPlan()">Retry</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="data.openPop=='paymentSuccess'">
+  <div class="cn_popup_box cnfrm_popup">
+    <div class="cn_popup_head">
+      <p class="cn_ph_tlt">Payment Success</p>
+      <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+    </div>
+    <div class="cn_popup_body">
+      <span class="material-icons crl_hlf_cek txt_s">task_alt</span>
+      <p class="cnfrm_tlt">Success heading</p>
+      <p class="cnfrm_dis">Your booking has been completed. Kindly Please check email</p>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <button type="button" class="cn_btn" (click)="onNoClick()">Okay</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="cn_popup_box" *ngIf="data.openPop=='paymentConfirmation'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Payment Confirmation</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="fs_16 my-4 text-center">Do you want confirm payment.</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn" (click)="paymentConfirm()">Ok</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- downgrade popup -->
+<div *ngIf="data.openPop=='downgrade' || data.openPop=='upgrade'">
+  <div class="cn_popup_box cnfrm_popup">
+    <div class="cn_popup_head">
+      <p class="cn_ph_tlt" *ngIf="data.openPop=='downgrade'">Downgrade Plan</p>
+      <p class="cn_ph_tlt" *ngIf="data.openPop=='upgrade'">Up Grade Plan</p>
+      <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+    </div>
+    <div class="cn_v_scroll">
+
+      <div class="cn_popup_body">
+        <div class="row">
+          <div class="col-md-3">
+            <p class="txt_b fw-bold">Status</p>
+            <p>{{data.subscriptionStatus ? data.subscriptionStatus : '-'}}</p>
+          </div>
+
+          <div class="col-md-3">
+            <p class="txt_b fw-bold">Start Date</p>
+            <p>{{data.subscriptionStartDate ? (UTCDate(data.subscriptionStartDate) | date: 'MMM dd, yyyy') : '-'}}</p>
+          </div>
+          <div class="col-md-3">
+            <p class="txt_b fw-bold">End Date</p>
+            <p>{{data.subscriptionEndDate ? (UTCDate(data.subscriptionEndDate) | date: 'MMM dd, yyyy') : '-'}}</p>
+
+          </div>
+          <div class="col-md-3">
+            <p class="txt_b fw-bold">Remaining Days</p>
+            <p>{{data.remaingDays ? data.remaingDays : '-'}}</p>
+          </div>
+
+
+
+        </div>
+        <p class="fs_16 my-4 text-center" *ngIf="data.openPop=='downgrade' && data.planType == 'free'">You have
+          <b>{{data.remaingDays}}</b> left on your <b>{{data.planName=='2' ? 'Starter' : 'Business'}}</b> subscription.
+          If you still wish to downgrade to the free plan, we will turn OFF your auto-renewal. Your account will be
+          downgraded to the free plan by <b>{{(UTCDate(data.subscriptionEndDate) | date: 'MMM dd, yyyy')}}</b>. Enjoy
+          the benefits of your subscription!</p>
+
+        <p class="fs_16 my-4 text-center"
+          *ngIf="(data.openPop=='upgrade' || data.openPop=='downgrade') && data.planType !== 'free'">You've already
+          enjoyed the benefits of our <b>{{data.planName=='2' ? 'Starter' : 'Business'}}</b> Plan, and you still have
+          <b>{{data.remaingDays}}</b> remaining. Just click the "Contact me" button at the bottom of this popup, and
+          we'll reach out to you with our best offers.</p>
+      </div>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <div class="form_actn mt-3">
+          <!-- <mat-slide-toggle (change)="onToggleChange($event)">Slide me!</mat-slide-toggle> -->
+          <!-- <button type="button" class="cn_btn" (click)="onNoClick()">Okay</button> -->
+          <button type="button" class="cn_btn" (click)="onNoClick()" style="background-color: red;"
+            *ngIf="data.openPop=='downgrade' && data.planType == 'free'">Cancel</button>
+          <button type="button" class="cn_btn" *ngIf="data.openPop=='downgrade' && data.planType == 'free'"
+            (click)="autoRenewPlan()">Downgrade</button>
+          <button type="button" class="cn_btn"
+            *ngIf="(data.openPop=='upgrade' || data.openPop=='downgrade') && data.planType !== 'free'"
+            (click)="upgradeSubscriptionPlan()">Contact Me</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div *ngIf="data.openPop=='autoRenew' && data.value == true ">
+  <div class="cn_popup_box cnfrm_popup">
+    <div class="cn_popup_head">
+      <p class="cn_ph_tlt">Auto Renew </p>
+      <!-- <span>{{ data.autoRenewStatus ? 'OFF' : 'ON' }}</span> -->
+      <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+    </div>
+    <div class="cn_popup_body">
+      <!-- <p class="subscription_text" *ngIf="data.openPop=='autoRenew' && data.planType !=='free'">If you auto-renew <span> {{ data.autoRenewStatus ? 'OFF' : 'ON' }}</span> your subscription, you will be downgraded to free plan on <span>{{data.subscriptionEndDate ? (UTCDate(data.subscriptionEndDate) | date: 'MMM dd, yyyy') : '-'}}</span></p> not uncomment this code untill my permission @lalit yadav-->
+      <p class="subscription_text" *ngIf="data.openPop=='autoRenew' && data.planType !=='free'">This is a greate
+        decision. Lets enjoy the benefits of <b>{{data.planName == '2' ? 'starter' : 'business'}}</b> plan.</p>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <button type="button" class="cn_btn" (click)="onNoClick()" style="background-color: red;"
+          *ngIf="data.openPop=='autoRenew' ">Cancel</button>
+        <button type="button" class="cn_btn" (click)="autoRenewPlan()">ON</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="data.openPop=='autoRenew' && data.value == false ">
+  <div class="cn_popup_box cnfrm_popup">
+    <div class="cn_popup_head">
+      <p class="cn_ph_tlt" *ngIf="data.openPop=='autoRenew'">Auto Renew</p>
+      <!-- <p class="cn_ph_tlt" *ngIf="data.openPop=='downgrade'">Down Grade Plan</p> 
+      <p class="cn_ph_tlt" *ngIf="data.openPop=='upgrade'">Up Grade Plan</p>  -->
+      <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+    </div>
+    <div class="cn_v_scroll">
+
+      <div class="cn_popup_body">
+        <div class="row">
+          <div class="col-md-3">
+            <p class="txt_b fw-bold">Status</p>
+            <p>{{data.subscriptionStatus ? data.subscriptionStatus : '-'}}</p>
+          </div>
+
+          <div class="col-md-3">
+            <p class="txt_b fw-bold">Start Date</p>
+            <p>{{data.subscriptionStartDate ? (UTCDate(data.subscriptionStartDate) | date: 'MMM dd, yyyy') : '-'}}</p>
+          </div>
+          <div class="col-md-3">
+            <p class="txt_b fw-bold">End Date</p>
+            <p>{{data.subscriptionEndDate ? (UTCDate(data.subscriptionEndDate) | date: 'MMM dd, yyyy') : '-'}}</p>
+
+          </div>
+          <div class="col-md-3">
+            <p class="txt_b fw-bold">Remaining Days</p>
+            <p>{{data.remaingDays ? data.remaingDays : '-'}}</p>
+          </div>
+
+
+
+        </div>
+        <p class="fs_16 my-4 text-center" *ngIf="data.openPop=='autoRenew' ">You have <b>{{data.remaingDays}}</b> left
+          on your <b>{{data.planName=='2' ? 'Starter' : 'Business'}}</b> subscription. If you turn OFF your
+          auto-renewal. Your account will be downgraded to the free plan by <b>{{(UTCDate(data.subscriptionEndDate) |
+            date: 'MMM dd, yyyy')}}</b>. Enjoy the benefits of your subscription!</p>
+        <!-- <p class="fs_14 my-4 text-center" *ngIf="(data.openPop=='upgrade' || data.openPop=='autoRenew') && data.planType !== 'free'">You've already enjoyed the benefits of our {{data.planName=='2' ? 'Starter' : 'Business'}} Plan for {{data.purchaseDays}}, and you still have {{data.remaingDays}} remaining. Just click the "Contact me" button at the bottom of this popup, and we'll reach out to you with our best offers.</p> -->
+      </div>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <div class="form_actn mt-3">
+          <!-- <mat-slide-toggle (change)="onToggleChange($event)">Slide me!</mat-slide-toggle> -->
+          <!-- <button type="button" class="cn_btn" (click)="onNoClick()">Okay</button> -->
+          <button type="button" class="cn_btn" (click)="onNoClick()" style="background-color: red;"
+            *ngIf="data.openPop=='autoRenew' ">Cancel</button>
+          <button type="button" class="cn_btn" *ngIf="data.openPop=='autoRenew' " (click)="autoRenewPlan()">OFF</button>
+          <button type="button" class="cn_btn"
+            *ngIf="(data.openPop=='upgrade' || data.openPop=='downgrade') && data.planType !== 'free'"
+            (click)="upgradeSubscriptionPlan()">Contact Me</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

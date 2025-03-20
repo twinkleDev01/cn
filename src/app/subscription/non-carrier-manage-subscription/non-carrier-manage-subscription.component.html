@@ -1,0 +1,18 @@
+
+<div class="manage_subscription_con">
+  <p class="edt_pg_tlt">Manage Subscription </p>
+  <div class="manage_subscription_con"  *ngIf="!sketeloader">
+
+
+
+<div class="skt_bsc" *ngIf="sketeloader">
+  <ngx-skeleton-loader count="1"
+    [theme]="{ width: '100%', height: '24px', margin: '0px 0 18px' }"></ngx-skeleton-loader>
+  <ngx-skeleton-loader count="1"
+    [theme]="{ width: '100%', height: '20px', margin: '0px 0 10px' }"></ngx-skeleton-loader>
+  <div class="bsc_box">
+    <ngx-skeleton-loader count="5"
+      [theme]="{ width: '100%', height: '22px', margin: '0px 0 6px' }"></ngx-skeleton-loader>
+  </div>
+</div>
+</div>

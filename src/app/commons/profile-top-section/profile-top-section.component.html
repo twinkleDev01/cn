@@ -1,0 +1,24 @@
+<div class="dashboard_header">
+	<div class="dh_box">
+		<div class="dhb_l">
+			<div class="dhb_l_img">
+				<img src="https://carriernetwork.ai/images/tst_profile_img.png" class="img-fluid">
+			</div>
+			<div class="dhb_l_txt">
+				<p class="dhb_l_tlt">Hello! Carrier Name</p>
+				<p class="dhb_l_dis">Welcome to your Carrier Network Dashboard</p>
+			</div>
+		</div>
+		<div class="dhb_r">
+			<div class="dhb_r_t">
+				<span class="dhb_rt_lbl">Complete Your Profile</span>
+				<span class="dhb_rt_dis" *ngIf="totalStrenth">{{ showStrength(totalStrenth) }} %</span>
+			</div>
+			<div class="custom_slid" *ngIf="totalStrenth">
+				<mat-slider [disabled]="strengthdisabled" [max]="100" [min]="0" [(ngModel)]="totalStrenth">
+					<input matSliderThumb>
+				</mat-slider>
+			</div>
+		</div>
+	</div>
+</div> 

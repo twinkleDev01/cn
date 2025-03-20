@@ -1,0 +1,337 @@
+<div class="manage_review_con mb-4">
+	<div class="mrc_list_box">
+		<div class="mrc_box" *ngIf="!skeletonLoader">
+			<div class="lable_field">
+				<p class="edt_pg_tlt mb-2">
+					<span>Reviews You’ve Written ({{totalRecords ? totalRecords : '0'}})</span>
+				</p>
+				<p class="lable_vlu">You have control over your review for these carriers. If you want to edit the review, simply click on the edit icons and modify it based on his needs and experience with these carriers. If you wish to delete the review you left for these carriers, please click the delete icon. We have included all of the review choices here. </p>
+			</div>
+			<div *ngFor="let reviewData of reviewList, let i=index;">
+			<div class="review_mess_box" *ngIf="reviewData?.carrier" >
+				<!-- <div class="rmb_img_inicial">
+					<img *ngIf="reviewData?.carrier?.profileImage" src="{{reviewData?.carrier?.profileImage}}" class="img-fluid">
+					<span class="initail" *ngIf="reviewData?.carrier?.companyName && !reviewData?.carrier?.profileImage">{{reviewData?.carrier?.companyName | acronymOfName}}</span>
+				</div> -->
+				<div class="rmb_body">
+					<div class="rmb_body_t">
+						<div class="trrb_box">
+							<div class="trrb_b">
+								<div class="trrb_bl">
+									<div class="trrb_bl_img" *ngIf="reviewData?.carrier?.profileImage">
+										<img src="{{reviewData?.carrier.profileImage}}" class="img-fluid">
+									</div>
+									<div class="trrb_bl_initail" *ngIf="!reviewData?.carrier?.profileImage">
+										<span class="initail">{{reviewData?.carrier.companyName | acronymOfName}} </span>
+										<span class="src_cr_dotno">
+											<span>DOT #: </span>
+											<span class="dot_no">{{reviewData?.carrier.dotNumber ? reviewData?.carrier.dotNumber : '-'}}</span>
+										</span>
+									</div>
+								</div>
+								<div class="trrb_br">
+									<a href="https://carriernetwork.ai/carrier-profile/{{reviewData?.carrier.dotNumber}}/{{reviewData?.carrier.companyName}}/#review" class="trrb_nm pointer" target="_blank" (click)="redirectPageCarrier(reviewData.carrier.dotNumber,reviewData?.carrier.companyName)">
+										<!-- <span class="txt_ellipsis">California Cal Transportation</span> -->
+										<span class="txt_ellipsis" matTooltip="{{reviewData.carrier.companyName | titleCase | convertEnd}}">{{reviewData.carrier.companyName | titleCase | convertEnd}} </span>
+										
+									</a>
+									<div class="trrb_reviw">
+										<app-review-show [averageRating]="reviewData?.rating"></app-review-show>
+										<span class="reviws">
+											<!-- <a href="https://carriernetwork.ai/carrier-profile/{{reviewData?.carrier.dotNumber}}/{{reviewData?.carrier.companyName}}/#review" target="_blank" (click)="redirectPageCarrier(reviewData.carrier.dotNumber,reviewData?.carrier.companyName)" class="reviws_lnk">({{reviewData.carrier.totalReview ? reviewData.carrier.totalReview : '0' }} <span>review<span *ngIf="reviewData.carrier.totalReview > 1">s</span></span>)</a> -->
+											<span class="txt_lb">{{getRating(reviewData?.rating)}} out of 5,</span>
+											<span class="txt_3 txt_lb"> &nbsp; Reviewed at {{reviewData?.createdAt | date: 'MMM dd, yyyy'}}</span>
+										</span>
+									</div>
+									<div class="trrb_dot_active">
+										<p class="trrb_dot">
+											<span class="txt_lb">DOT Number:</span>
+											<b class="txt_b"> {{reviewData.carrier.dotNumber ? reviewData.carrier.dotNumber : '-'}}</b>
+										</p>
+										<!-- <div *ngIf="reviewData?.dunsNumber"> -->
+											<span class="trrb_sapration"> | </span>
+											<p class="trrb_dot">
+												<span class="txt_lb">Docket:</span>
+												<b class="txt_b"> {{reviewData.carrier.dunsNumber ? reviewData.carrier.dunsNumber : '-'}}</b>
+											</p>
+										<!-- </div> -->
+									</div>
+								</div>
+								
+							</div>
+							<div class="trrb_r">
+								<div class="trrb_saprate_rating">
+									<p class="trrb_sr">Timeliness &nbsp; <b>{{reviewData.rateForTimeliness}}</b>/10</p>
+									<p class="trrb_sr">Cleanliness &nbsp; <b>{{reviewData.rateForCleanliness}}</b>/10</p>
+									<p class="trrb_sr">Communication &nbsp; <b>{{reviewData.rateForCommunication}}</b>/10</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="rmb_body_b">
+						<div class="rmb_head_tQW">
+							<div class="rmb_hltr_txt">
+								<p class="rmb_slogan">"{{reviewData?.title ? reviewData?.title : '-'}}"</p>
+								<p class="rmb_mess">{{reviewData?.review ? reviewData?.review : '-'}}</p>
+							</div>
+						</div>
+						<div class="sh_box" *ngIf="showSummeryInfo[i]">
+							<div class="other_info">
+								<div class="pdt_instn_box m-0">
+									<div class="pdt_instn_boxl">
+										<span class="instn_lbl">Lanes:</span>
+										<span class="instn_lbl" *ngIf="reviewData?.lane?.length == 0">-</span>
+									</div>
+									<div class="pdt_instn_boxr" *ngIf="reviewData?.lane?.length > 0">
+										<div class="pdt_instn_row" *ngFor="let laneData of reviewData?.lane?.slice(0, showAll[i] ? reviewData?.lane?.length : 3)">
+											<span class="instn_picup">{{laneData.fromCity}}, {{laneData?.fromStateCode}}</span>
+											<span class="instn_arrow">></span>
+											<span class="instn_picup">{{laneData.toCity}}, {{laneData?.toStateCode}}</span>
+										</div>
+										<button (click)="toggleShowAll(i)" *ngIf="reviewData?.lane?.length > 3" class="show_hid_btn">{{ showAll[i] ? 'Show Less' : 'Show More' }}</button>
+									</div>
+									<div class="pdt_instn_boxr" *ngIf="reviewData?.lane?.length===0">Lane not added</div>
+								</div>
+								<div class="load_more_con">
+					      </div>
+							</div>
+							<div class="other_info">
+								<div class="pdt_instn_box m-0">
+									<div class="pdt_instn_boxl">
+										<span class="instn_lbl">What went well</span>
+									<span class="instn_lbl" *ngIf="reviewData?.whatWentWellType?.length == 0"> -</span>
+
+									</div>
+									<div class="pdt_instn_boxr" *ngIf="reviewData?.whatWentWellType?.length > 0">
+										<div class="dful_chip grn_chip" *ngFor="let whatWentData of reviewData?.whatWentWellType;">
+											<span class="instn_picup">{{whatWentData.whatWentWelTypeName ? whatWentData.whatWentWelTypeName : '-' }}</span>
+										</div>
+									</div>
+									<div class="pdt_instn_boxr" *ngIf="reviewData?.whatWentWellType?.length===0">What went well is  not added</div>
+								</div>
+							</div>
+							<div class="other_info">
+								<div class="pdt_instn_box m-0">
+									<div class="pdt_instn_boxl">
+										<span class="instn_lbl"> What went poorly?</span>
+									<span class="instn_lbl" *ngIf="reviewData?.whatWentPoorlyType?.length == 0"> -</span>
+
+									</div>
+									<div class="pdt_instn_boxr" *ngIf="reviewData?.whatWentPoorlyType?.length > 0">
+										<div class="dful_chip gry_chip" *ngFor="let whatWentPoorlyData of reviewData?.whatWentPoorlyType;">
+											<span class="instn_picup">{{whatWentPoorlyData.whatWentPoorlyTypeName ? whatWentPoorlyData.whatWentPoorlyTypeName : '-' }}</span>
+										</div>
+									</div>
+									<div class="pdt_instn_boxr" *ngIf="reviewData?.whatWentPoorlyType?.length===0">What went poorly is not added</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="sh_actn">
+							<span class="view_full_review" (click)="showSummery('showSummery',i)" *ngIf="!showSummeryInfo[i]">
+								<span>Show Summary</span>
+								<span class="material-icons">keyboard_arrow_down</span>
+							</span>
+							<span class="view_full_review mt-3" (click)="showSummery('hideSummery',i)" *ngIf="showSummeryInfo[i]">
+								<span>Hide Summary</span>
+								<span class="material-icons">keyboard_arrow_up</span>
+							</span>
+						</div>
+						<div class="other_info" *ngIf="reviewData?.carrierResponse">
+							<div class="pdt_instn_box m-0">
+								<div class="pdt_instn_boxl">
+									<span class="instn_lbl">Carrier Reply</span>
+								</div>
+								<div class="pdt_instn_boxr">
+									<div class="dful_chip gry_chip">
+										<span class="instn_picup">{{reviewData?.carrierResponse}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="ed_del_buttons">
+							<button class="ed_edit_btn" (click)="editReview(reviewData,reviewData?.id)" matTooltip="Edit">
+								<span class="material-icons-outlined c_green">edit</span>
+								<span class="ml_8">Edit</span>
+							</button>
+							<button class="ed_dtl_btn" (click)="deleteReview(reviewData,i)" matTooltip="Delete">
+								<span class="material-icons-outlined c_red">delete</span>
+								<span class="ml_8">Delete</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- for broker  -->
+			<div class="review_mess_box" *ngIf="reviewData?.broker">
+				<!-- <div class="rmb_img_inicial">
+					<img *ngIf="reviewData?.carrier?.profileImage" src="{{reviewData?.carrier?.profileImage}}" class="img-fluid">
+					<span class="initail" *ngIf="reviewData?.carrier?.companyName && !reviewData?.carrier?.profileImage">{{reviewData?.carrier?.companyName | acronymOfName}}</span>
+				</div> -->
+				<div class="rmb_body">
+					<div class="rmb_body_t">
+						<div class="trrb_box">
+							<div class="trrb_b">
+								<div class="trrb_bl">
+									<div class="trrb_bl_img" *ngIf="reviewData?.broker?.profileImage">
+										<img src="{{reviewData?.broker.profileImage}}" class="img-fluid">
+									</div>
+									<div class="trrb_bl_initail" *ngIf="!reviewData?.broker?.profileImage">
+										<span class="initail">{{reviewData?.broker.companyName | acronymOfName}} </span>
+										<span class="src_cr_dotno">
+											<span>DOT #: </span>
+											<span class="dot_no">{{reviewData?.broker.dotNumber ? reviewData?.broker.dotNumber : '-'}}</span>
+										</span>
+									</div>
+								</div>
+								<div class="trrb_br">
+									<a href="https://carriernetwork.ai/freight-brokerage/{{reviewData?.broker.dotNumber}}/{{reviewData?.broker.companyName}}/#review" class="trrb_nm pointer" target="_blank" (click)="redirectPageCarrier(reviewData?.broker.dotNumber,reviewData?.broker.companyName)">
+										<!-- <span class="txt_ellipsis">California Cal Transportation</span> -->
+										<span class="txt_ellipsis" matTooltip="{{reviewData?.broker.companyName | titleCase | convertEnd}}">{{reviewData?.broker.companyName | titleCase | convertEnd}} </span>
+										
+									</a>
+									<div class="trrb_reviw">
+										<app-review-show [averageRating]="reviewData?.rating"></app-review-show>
+										<span class="reviws">
+											<!-- <a href="https://carriernetwork.ai/carrier-profile/{{reviewData?.carrier.dotNumber}}/{{reviewData?.carrier.companyName}}/#review" target="_blank" (click)="redirectPageCarrier(reviewData?.broker.dotNumber,reviewData?.carrier.companyName)" class="reviws_lnk">({{reviewData?.broker.totalReview ? reviewData?.broker.totalReview : '0' }} <span>review<span *ngIf="reviewData?.broker.totalReview > 1">s</span></span>)</a> -->
+											<span class="txt_lb">{{getRating(reviewData?.rating)}} out of 5,</span>
+											<span class="txt_3 txt_lb"> &nbsp; Reviewed at {{reviewData?.createdAt | date: 'MMM dd, yyyy'}}</span>
+										</span>
+									</div>
+									<div class="trrb_dot_active">
+										<p class="trrb_dot">
+											<span class="txt_lb">DOT Number:</span>
+											<b class="txt_b"> {{reviewData?.broker.dotNumber ? reviewData?.broker.dotNumber : '-'}}</b>
+										</p>
+										<!-- <div *ngIf="reviewData?.dunsNumber"> -->
+											<span class="trrb_sapration"> | </span>
+											<p class="trrb_dot">
+												<span class="txt_lb">Docket:</span>
+												<b class="txt_b"> {{reviewData?.broker.dunsNumber ? reviewData?.broker.dunsNumber : '-'}}</b>
+											</p>
+										<!-- </div> -->
+									</div>
+								</div>
+								
+							</div>
+							<div class="trrb_r">
+								<div class="trrb_saprate_rating">
+								
+									<p class="trrb_sr">Communication &nbsp; <b>{{reviewData.rateForCommunication}}</b>/10</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="rmb_body_b">
+						<div class="rmb_head_tQW">
+							<div class="rmb_hltr_txt">
+								<p class="rmb_slogan">"{{reviewData?.title ? reviewData?.title : '-'}}"</p>
+								<p class="rmb_mess">{{reviewData?.review ? reviewData?.review : '-'}}</p>
+							</div>
+						</div>
+						<div class="sh_box" *ngIf="showSummeryInfo[i]">
+							<div class="other_info">
+								<div class="pdt_instn_box m-0">
+									<div class="pdt_instn_boxl">
+										<span class="instn_lbl">Lanes:</span>
+										<span class="instn_lbl" *ngIf="reviewData?.lane?.length == 0">-</span>
+									</div>
+									<div class="pdt_instn_boxr" *ngIf="reviewData?.lane?.length > 0">
+										<div class="pdt_instn_row" *ngFor="let laneData of reviewData?.lane?.slice(0, showAll[i] ? reviewData?.lane?.length : 3)">
+											<span class="instn_picup">{{laneData.fromCity}}, {{laneData?.fromStateCode}}</span>
+											<span class="instn_arrow">></span>
+											<span class="instn_picup">{{laneData.toCity}}, {{laneData?.toStateCode}}</span>
+										</div>
+										<button (click)="toggleShowAll(i)" *ngIf="reviewData?.lane?.length > 3" class="show_hid_btn">{{ showAll[i] ? 'Show Less' : 'Show More' }}</button>
+									</div>
+									<div class="pdt_instn_boxr" *ngIf="reviewData?.lane?.length===0">Lane not added</div>
+								</div>
+								<div class="load_more_con">
+					      </div>
+							</div>
+							
+							
+						</div>
+
+						<div class="sh_actn">
+							<span class="view_full_review" (click)="showSummery('showSummery',i)" *ngIf="!showSummeryInfo[i]">
+								<span>Show Summary</span>
+								<span class="material-icons">keyboard_arrow_down</span>
+							</span>
+							<span class="view_full_review mt-3" (click)="showSummery('hideSummery',i)" *ngIf="showSummeryInfo[i]">
+								<span>Hide Summary</span>
+								<span class="material-icons">keyboard_arrow_up</span>
+							</span>
+						</div>
+						<div class="other_info" *ngIf="reviewData?.brokerResponse">
+							<div class="pdt_instn_box m-0">
+								<div class="pdt_instn_boxl">
+									<span class="instn_lbl">Broker Reply</span>
+								</div>
+								<div class="pdt_instn_boxr">
+									<div class="dful_chip gry_chip">
+										<span class="instn_picup">{{reviewData?.brokerResponse}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="ed_del_buttons">
+							<button class="ed_edit_btn" (click)="editReviewForBroker(reviewData,reviewData?.id)" matTooltip="Edit">
+								<span class="material-icons-outlined c_green">edit</span>
+								<span class="ml_8">Edit</span>
+							</button>
+							<button class="ed_dtl_btn" (click)="deleteBrokerReview(reviewData,i)" matTooltip="Delete">
+								<span class="material-icons-outlined c_red">delete</span>
+								<span class="ml_8">Delete</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+		<div class="skeletonloader" *ngIf="reviewList?.length==0 && !skeletonLoader">
+			<div class="empty-state">
+				<div class="empty-state__content">
+					<div class="empty-state__icon">
+						<img src="https://img.freepik.com/free-vector/upload-concept-illustration_114360-1343.jpg?size=626&ext=jpg"
+							alt="">
+					</div>
+					<div class="empty-state__message">Manage Review</div>
+					<p class="empty-state__help">This is no Review available</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="text-center" *ngIf="reviewList?.length > 0 && spinnerLoader">
+			<span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+		</div>
+	</div>
+	
+	<div *ngIf="reviewList?.length > 0 && dataNotFound" class="noMore_record">
+		<span>There are no more records to show.</span>
+	</div>
+
+	<div class="skeletonloader" *ngIf="skeletonLoader">
+		<div class="rpvc_skt" *ngFor="let fake of generateFakeSkeleton(2)">
+			<ngx-skeleton-loader count="1"
+				[theme]="{ 'border-radius': '0', width: '100%', height: '36px', margin: '0 0 24px' }"></ngx-skeleton-loader>
+			<div class="rpvc_skt_bx">
+				<div class="rpvc_skt_l">
+					<ngx-skeleton-loader count="1"
+						[theme]="{ 'border-radius': '50%', width: '56px', height: '56px' }"></ngx-skeleton-loader>
+				</div>
+				<div class="rpvc_skt_r">
+					<ngx-skeleton-loader count="4"
+						[theme]="{ 'border-radius': '0', width: '100%', height: '16px', margin: '0 0 8px' }"></ngx-skeleton-loader>
+					<ngx-skeleton-loader count="2"
+						[theme]="{ 'border-radius': '0', width: '70%', height: '26px', margin: '0 0 10px' }"></ngx-skeleton-loader>
+					<ngx-skeleton-loader count="3"
+						[theme]="{ 'border-radius': '0', width: '70%', height: '18px', margin: '0 0 6px' }"></ngx-skeleton-loader>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

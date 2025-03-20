@@ -1,0 +1,172 @@
+<div class="sav_ca_row">
+	<div *ngIf="!skeletonLoader">
+		<div class="back_txt mb-4">
+			<span [routerLink]="['/my-saved-carriers']" class="pointer my_list">My list name :-</span>
+			<span style="text-transform: capitalize;"><span *ngIf="carrierSaveListName" >  {{carrierSaveListName ? carrierSaveListName : '-'}}</span> <span *ngIf="carrierSaveListName"> ({{totalRecords ? totalRecords :	'0'}})</span></span>
+		</div>
+		<div class="carrier_list_box" *ngFor="let showCarrier of carrierListData; let i =index">
+			<div class="sav_ca_t">
+				<div class="sav_ca_box">
+					<div class="sav_ca_l">
+						<div class="sav_ca_ll">
+							<div class="sav_ca_ll_img" *ngIf="showCarrier?.profileImage">
+								<img src="{{showCarrier?.profileImage}}" class="img-fluid">
+							</div>
+							<div class="sav_ca_ll_initail" *ngIf="!showCarrier?.profileImage">
+								<span class="initail">{{showCarrier?.companyName | acronymOfName}} </span>
+								<span class="src_cr_dotno">
+									<span>DOT #: </span>
+									<span class="dot_no">{{showCarrier.dotNumber ? showCarrier.dotNumber : '-'}}</span>
+								</span>
+							</div>
+						</div>
+						<div class="sav_ca_br">
+							<div class="sav_ca_nm">
+								<span class="txt_ellipsis" matTooltip="{{showCarrier?.companyName | titleCase | convertEnd}}">{{showCarrier?.companyName | titleCase | convertEnd}} </span>
+								
+									<span class=" unclaimed"
+										matTooltip="This profile is currently unclaimed by Mcneece Bros Oil Co Inc. All information listed is provided by the FMCSA and CarriersNetwork. Do you work for Mcneece Bros Oil Co Inc? Claim your profile to add additional information and start getting reviews from your customers."
+										*ngIf="!showCarrier?.id">
+									<i class="fa-duotone fa-solid fa-badge-check" style="color: #818181"></i></span>
+									
+									<span class="" *ngIf="showCarrier?.id" matTooltip="Register"> <i class="fa-duotone fa-solid fa-badge-check"></i></span>
+									<div class="sav_ca_tages">
+									<b class="sc_tag" *ngIf="carrierOperationName"> {{carrierOperationName ? carrierOperationName : '-'}}</b>
+								</div>
+							</div>
+							<div class="sav_ca_reviw">
+								<app-review-show [averageRating]="showCarrier?.averageRating"></app-review-show>
+								<span class="reviws">
+									<a href="https://carriernetwork.ai/carrier-profile/{{showCarrier.dotNumber}}/{{showCarrier.companyName}}/#review"
+										target="_blank"
+										(click)="redirectPageCarrier(showCarrier.dotNumber,showCarrier.companyName)"
+										class="reviws_lnk">(
+										
+									
+										{{showCarrier?.totalReview ? showCarrier?.totalReview : '0'}} Review<span *ngIf="showCarrier?.totalReview > 1">s</span>)</a>
+									<span class="txt_lb">{{showCarrier?.averageRating}} out of 5</span>
+									<!-- <span class="txt_3 txt_lb"> &nbsp; Reviewed at {{showCarrier?.createdAt | date: 'MMM dd, yyyy'}}</span> -->
+								</span>
+							</div>
+							<div class="sav_ca_locatn">
+								<span class="d-flex align-items-center"  *ngIf="showCarrier?.phyCity && showCarrier?.phyStateCode && showCarrier?.phyZipShort">
+									<mat-icon class="material-icon">location_on</mat-icon>
+									<span>{{getFormattedAddress(showCarrier?.phyCity,showCarrier?.phyStateCode, showCarrier?.phyZipShort,null)}}
+									</span>
+								</span>
+								
+								<span *ngIf="!showCarrier?.phyCity && !showCarrier?.phyStateCode && !showCarrier?.phyZipShort">-</span>
+							</div>
+							<div class="sav_ca_dot_active">
+								<p class="sav_ca_dot">
+									<span class="txt_lb">DOT Number:</span>
+									<b class="txt_b"> {{showCarrier?.dotNumber ? showCarrier?.dotNumber : '-'}}</b>
+								</p>
+								<span class="sav_ca_sapration"> | </span>
+								<p class="sav_ca_dot">
+									<span class="txt_lb">Docket:</span>
+									<b class="txt_b"> {{showCarrier?.dunsNumber ? showCarrier?.dunsNumber : '-'}}</b>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="sav_ca_r">
+						<div class="sav_ca_btns">
+							
+							<button class="ed_dtl_btn"
+								(click)="confirmItem(showCarrier,showCarrie?.saveListId,showCarrier?.saveListId,i)" matTooltip="delete">
+								<!-- <span class="material-icons-outlined c_red">delete</span> -->
+								<span class="ml_8">Delete</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="sav_ca_b">
+				<div class="row">
+					<div class="row">
+						<div class="sav_ca_othrs">
+							<span class="txt_b">Freight ({{showCarrier?.cargoTypeNames?.length}}):</span>
+							<span class="txt_b" *ngIf="showCarrier?.cargoTypeNames?.length==0">-</span>
+							<div *ngFor="let freighType of showCarrier?.cargoTypeNames">
+								<span class="sco_chip"> {{freighType?.cargoTypeName ? freighType?.cargoTypeName : '-'}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="sav_ca_othrs">
+							<span class="txt_b">Truck Types ({{showCarrier?.carrierEquipmentNames?.length}}):</span>
+							<span class="txt_b" *ngIf="showCarrier?.carrierEquipmentNames?.length==0">-</span>
+							<div *ngFor="let equipmentType of showCarrier?.carrierEquipmentNames">
+								<span class="sco_chip"> {{equipmentType?.equipmentTypeName ?
+									equipmentType?.equipmentTypeName : '-'}} </span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+						<div class="sav_ca_othrs">
+							<span class="txt_b">Fleet Size:</span>
+							<span> {{showCarrier?.trucksNumbers ? showCarrier?.trucksNumbers : '0'}} </span>
+						</div>				
+					</div>
+					<div class="col-md-4">
+						<div class="sav_ca_othrs">
+							<span class="txt_b">Safety Rating:</span>
+							<span> Satisfactory </span>
+						</div>
+					</div>
+					</div>
+					<div class="row" *ngFor="let insuranceValue of showCarrier?.insurance">
+						<div class="col-md-4">
+						<div class="sav_ca_othrs">
+							<span class="txt_b">Insurance Limit:</span>
+							<span> {{insuranceValue?.policyLimit | currency:'USD'}}</span>
+						</div>
+					</div>
+					<div class="col-md-4">						
+					<div class="sav_ca_othrs">
+						<span class="txt_b">Insurance Type:</span>
+						<span> {{getInsuranceName(insuranceValue?.insuranceType)}}</span>
+					</div>
+				</div>	
+				</div>
+
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+
+	<div class="text-center" *ngIf="carrierListData?.length > 0 && spinnerLoader">
+		<span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+	</div>
+
+	<div class="saved_carrier_list_con" class="skeletonloader" *ngIf="carrierListData?.length==0 && !skeletonLoader">
+		<div class="empty-state">
+			<div class="empty-state__content">
+				<div class="empty-state__icon">
+					<img src="./assets/images/no_data_found_img.jpg" alt="">
+				</div>
+				<div class="empty-state__message">Saved Carrier</div>
+				<p class="empty-state__help">This is no Saved Carrier</p>
+			</div>
+		</div>
+	</div>
+	<div *ngIf="carrierListData?.length > 0 && dataNotFound && !skeletonLoader" class="noMore_record">
+		<span>There are no more records to show.</span>
+	</div>
+	<div class="saved_carrier_list_con" class="skt_eifr" *ngIf="skeletonLoader">
+		<div class="mb-3">
+			<ngx-skeleton-loader count="1"
+				[theme]="{ width: '100%', height: '24px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+		</div>
+		<div class="scl_row pt-3 px-3" *ngFor="let fake of generateFakeSkeleton(5)" style="display: block;">
+			<ngx-skeleton-loader count="1"
+				[theme]="{ width: '100%', height: '32px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+		</div>
+	</div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

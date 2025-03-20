@@ -1,0 +1,115 @@
+<div class="insurance_pg_con">
+  <div class="card_con">
+    <div class="uploadEmptyTxt">
+      <div class="d-flex align-items-center justify-content-between">
+      <h4 class="page_heading">Add Insurence Certificate</h4>
+      <div class="iub_r">
+        <div class="cn_btn iub_btn" (click)="userPopup('certifcateInsurence')">
+          <!-- <span class="material-symbols-outlined me-2">upload</span> -->
+          <span>Add Insurence Certificate</span>
+        </div>
+      </div>
+    </div>
+      <div class="insu_uplod_box mt-5">
+        <div class="iub_l">
+          <p class="fs_14 fsn_4 txt_lb">Trucking companies are legally required to carry specific types and amounts of insurance coverage to operate on public roads. This includes liability insurance to cover damages in case of accidents, cargo insurance to protect the goods being transported, and other types of coverage depending on the nature of the business.<br>
+            Here, you can upload your Insurence Certificate to let shippers/carriers know that you are 100% eligible for their requirements. Please note that all data, images, and documents updated here will be publicly available.<br><br>
+            Keep your insurance info updated to avoid expiration. Accurate info ensures proper coverage.</p>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="" *ngIf="!skeletonLoader && insurenceList">
+      <div class="inc_data_updt" [ngClass]="isPastDate(insuranceData?.expiryDate) ? 'expired_insurance' : ''" *ngFor="let insuranceData of insurenceList;let i=index">
+        <div class="inc_head">
+          <div class="inc_head_l">
+            <div class="">
+              <span class="compny_nm">{{insuranceData?.insuranceCompanyName ? insuranceData?.insuranceCompanyName : '-'}}</span>
+              <span class="chip_crd inc_type" matTooltip="Insurance Type">{{insuranceData?.insuranceTypeIdName?.howOftenTypeName ? insuranceData?.insuranceTypeIdName?.howOftenTypeName : '-'}}</span>
+            </div>
+            <div class="inc_locatn">
+              <mat-icon class="material-icon">location_on</mat-icon>
+              <span> {{insuranceData?.address ? insuranceData?.address : '-'}} </span>
+            </div>
+          </div>
+          <div class="inc_head_r">
+            <span class="chip_crd compny_status" matTooltip="Insurance Status" *ngIf="!isPastDate(insuranceData?.expiryDate)">Active</span>
+            <span class="chip_crd compny_status" matTooltip="Insurance Status" *ngIf="isPastDate(insuranceData?.expiryDate)">Expired</span>
+          </div>
+        </div>
+        <div class="inc_cntr">
+          <div class="inc_row phone_no">
+            <span *ngIf="insuranceData?.phone" class="ctry_flag">
+              <img [src]="countryFlag" name="cla">
+            </span>
+            <a href="tel: {{'+' +  showCountryCode}}{{insuranceData?.phone}}"> {{insuranceData?.phone | phoneNumber}} </a>
+          </div>
+          <div class="inc_row polcy_no">
+            <span class="txt_lb">Policy Number </span>
+            <span> {{insuranceData?.policyNumber ? insuranceData?.policyNumber : '-'}} </span>
+          </div>
+          <!-- <div class="inc_row inc_type">
+            <span class="txt_lb">Insurance Type </span>
+            <span> {{insuranceData?.insuranceTypeIdName?.howOftenTypeName ? insuranceData?.insuranceTypeIdName?.howOftenTypeName : '-'}} </span>
+          </div> -->
+          <div class="inc_row polcy_amount">
+            <span class="txt_lb">Policy Limit </span>
+            <span>{{insuranceData?.policyLimit | currency:'USD'}} </span>
+          </div>
+        </div>
+
+        <div class="inc_fotr">
+          <div class="inc_fotr_l">
+            <div class="inc_date_box">
+              <div class="inc_date">
+                <mat-icon class="material-icon">calendar_month</mat-icon>
+                <span>
+                  <span class="txt_lb">Effective from</span> {{insuranceData?.effectiveDate | date: 'MMM dd, yyyy'}}
+                </span>
+              </div>
+              <!-- <span class="px-2">-</span> -->
+              <div class="inc_date">
+                <mat-icon class="material-icon">calendar_month</mat-icon>
+                <span>
+                  <span class="txt_lb">Expiry at</span> {{insuranceData?.expiryDate | date: 'MMM dd, yyyy'}}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="inc_fotr_r">
+            <div class="ed_del_buttons">
+              <button class="ed_edit_btn" (click)="editInsurence(insuranceData,'editInsurence')" matTooltip="Edit">
+                <span class="material-icons-outlined c_green">edit</span>
+              </button>
+              <button class="ed_dtl_btn" (click)="deleteInsurence(insuranceData?.id,'removeInsurence',i)" matTooltip="Delete">
+                <span class="material-icons-outlined c_red">delete</span>
+              </button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="empty-state" *ngIf="insurenceList?.length ==0 && !skeletonLoader">
+      <div class="empty-state__content">
+        <div class="empty-state__icon">
+          <img src="https://img.freepik.com/free-vector/upload-concept-illustration_114360-1343.jpg?size=626&ext=jpg" alt="">
+        </div>
+        <div class="empty-state__message">Insurence</div>
+      	<p class="empty-state__help">This is no insurence</p>
+      </div>
+    </div>
+
+    
+  </div>
+  <div class="saved_carrier_list_con"class="skt_eifr" *ngIf="skeletonLoader">
+    <div class="mb-3">
+      <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '24px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+    </div>
+    <div class="scl_row pt-3 px-3" *ngFor="let fake of generateFakeSkeleton(5)" style="display: block;">
+      <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '32px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+    </div>
+  </div>
+</div>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

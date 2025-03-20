@@ -1,0 +1,242 @@
+<div class="edit_invite_for_review">
+    <div class="review_box" *ngIf="!skeletonLoader">
+        <h4 class="page_heading">Invite</h4>
+
+        <p class="eifr_dis"><span *ngIf="reviewCount == 0">You don't have any reviews
+                yet.</span>
+            Now's the perfect to gather reviews for your company because every review counts.<br>
+            Simply click the button below to invite your customers to leave a review for you.<br>
+            Once they receive the email with instructions, they can quickly share their feedback, helping you receive
+            amazing reviews!
+        </p>
+        <div>
+            <form [formGroup]="inviteReviewForm" (ngSubmit)="inviteReviewFormSubmit(inviteReviewForm)"
+                class="mb-0 cn_field" autocomplete="off">
+                <div class="cn_v_scroll" style="max-height: 75vh;">
+                    <div class="cn_popup_body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="cn_input_lbl">Email Address
+                                    <span class="material-icons info_icon" matTooltip="{{information?.email}}">
+                                        info_outline </span>
+                                    <span class="txt_d"> *</span>
+                                </p>
+                                <mat-form-field appearance="none" class="">
+                                    <input matInput formControlName="email" type="text"
+                                        placeholder="Enter Email Address" class="form-control cn_input" maxlength="128">
+                                    <mat-error class="error_mess"
+                                        *ngIf="inviteReviewForm.get('email').errors?.['required']">Email is
+                                        required.</mat-error>
+                                    <mat-error class="error_mess"
+                                        *ngIf="inviteReviewForm.get('email').errors?.['pattern']">Please enter valid
+                                        email address.</mat-error>
+                                    <mat-error class="error_mess"
+                                        *ngIf="inviteReviewForm.get('email').errors?.['maxlength']">Only 128 characters
+                                        are allowed.</mat-error>
+                                    <p *ngIf="errorMessage && !inviteReviewForm.get('email').errors" class="p_error">
+                                        Email is {{errorMessage}}</p>
+                                </mat-form-field>
+
+
+                            </div>
+                            <div class="col-sm-6"></div>
+                            <div class="col-sm-6">
+                                <p class="cn_input_lbl">First Name
+                                    <span class="material-icons info_icon" matTooltip="{{information?.firstName}}">
+                                        info_outline </span>
+                                    <span class="txt_d"> *</span>
+                                </p>
+                                <mat-form-field appearance="none" class="">
+                                    <input matInput formControlName="firstName" type="text"
+                                        placeholder="Enter First Name" class="form-control cn_input" maxlength="64">
+                                    <mat-error class="error_mess"
+                                        *ngIf="inviteReviewForm.get('firstName').errors?.['required']">First name is
+                                        required.</mat-error>
+                                    <mat-error class="error_mess"
+                                        *ngIf="inviteReviewForm.get('firstName').errors?.['maxlength']">Only 64
+                                        characters are allowed.</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="cn_input_lbl">Last Name
+                                    <span class="material-icons info_icon" matTooltip="{{information?.lastName}}">
+                                        info_outline </span>
+                                    <span class="txt_d"> *</span>
+                                </p>
+                                <mat-form-field appearance="none" class="">
+                                    <input matInput formControlName="lastName" type="text" placeholder="Enter Last Name"
+                                        class="form-control cn_input" maxlength="64">
+                                    <mat-error class="error_mess"
+                                        *ngIf="inviteReviewForm.get('lastName').errors?.['required']">Last name is
+                                        required.</mat-error>
+                                    <mat-error class="error_mess"
+                                        *ngIf="inviteReviewForm.get('lastName').errors?.['maxlength']">Only 64
+                                        characters are allowed.</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 col-sm-12">
+                    <div class="" id="card_con_new">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="text_area_input_box">
+                                    <div class="topbar"><span class="fs_13 top_txt">Invite :
+                                        </span><span><i class="fa-solid fa-wand-magic-sparkles"></i> <i
+                                                class="fa-solid fa-brackets-curly"></i></span></div>
+                                    <div class="box_header">
+                                        <div class="email_dropdown">
+                                            <button type="button" class="header_options fs_13"
+                                                (click)="toggleDropdown()">
+                                                <span class="ai_btn"><i
+                                                        class="fa-duotone fa-microchip-ai me-2"></i>Invite
+                                                    AI</span></button>
+                                            <div *ngIf="dropdownOpen" id="dropdown" class="dropdown">
+                                                <ul id="invite_div">
+                                                    <li><button class="sub_btn" type="button"
+                                                            (click)="sendInformation('AIGenerated-Review')">Let AI write
+                                                            for me</button></li>
+                                                    <li><button class="sub_btn" type="button"
+                                                            (click)="sendInformation('Enter custom prompt')"> Enter
+                                                            custom prompt</button></li>
+                                                    <li class="list_one" [class.disabled]="!enableDisable">
+                                                        <button class="sub_btn" type="button">Improve writing <i
+                                                                class="fa-duotone fa-pen-swirl"></i>
+                                                            <ul class="option_one child_nesting"
+                                                                [class.disabled]="improvewriting">
+                                                                <li class="child_list"
+                                                                    (click)="sendInformation('Fix spelling and grammar')">
+                                                                    Fix spelling and grammar</li>
+                                                                <li class="child_list"
+                                                                    (click)="sendInformation('Make it longer')">Make it
+                                                                    longer</li>
+                                                                <li class="child_list"
+                                                                    (click)="sendInformation('Make it shorter')">Make it
+                                                                    shorter</li>
+                                                                <li class="child_list"
+                                                                    (click)="sendInformation('Rewrite')">Rewrite</li>
+                                                                <li class="child_list"
+                                                                    (click)="sendInformation('Improve structure')">
+                                                                    Improve structure</li>
+                                                                <li class="child_list"
+                                                                    (click)="sendInformation('Make more persuasive')">
+                                                                    Make more persuasive</li>
+                                                                <li class="child_list"
+                                                                    (click)="sendInformation('Summarize')">Summarize
+                                                                </li>
+                                                            </ul>
+                                                        </button>
+                                                    </li>
+                                                    <li class="list_two" [class.disabled]="!enableDisable"><button
+                                                            class="sub_btn"> Change tone<i
+                                                                class="fa-brands fa-cotton-bureau"></i>
+                                                            <ul class="option_one child_nesting"
+                                                                [class.disabled]="changeTone">
+                                                                <li class="child_list"
+                                                                    (click)="sendInformation('Professional')">
+                                                                    Professional</li>
+                                                                <li class="child_list"
+                                                                    (click)="sendInformation('Friendly')">Friendly</li>
+                                                                <li class="child_list"
+                                                                    (click)="sendInformation('Informative')">Informative
+                                                                </li>
+                                                                <li class="child_list"
+                                                                    (click)="sendInformation('Helpful')">Helpful</li>
+                                                            </ul>
+                                                        </button></li>
+                                                    <li [class.disabled]="!enableDisable"><button class="sub_btn"
+                                                            (click)="sendInformation('Generate based on summary')">
+                                                            Generate based on summary</button></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="filter_banner" id="filter_banner" *ngIf="isSendMessage">
+                                        <input type="text" class="filter_input" [(ngModel)]="newMessage"
+                                            (keydown.enter)="$event.preventDefault()"
+                                            [ngModelOptions]="{standalone: true}"
+                                            placeholder="Write a detailed instruction of what you'd like to see in your email">
+                                        <button class="submit_btn" type="button" id="invite_div"
+                                            [disabled]="!newMessage" (click)="generateReview()"><i
+                                                class="fa-duotone fa-pen-nib txt_p"></i></button>
+                                    </div>
+                                    <div class="text_area_new" style="position: relative;">
+                                        <textarea cols="20" rows="10" (input)="checkTextarea($event)"
+                                            [ngModelOptions]="{standalone: true}" (click)="saveUserGenerated()"
+                                            [(ngModel)]="description" (keypress)="checkDecription($event)"
+                                            class="text_area" maxlength="1024"
+                                            placeholder="Start typing the invitation message here. Business Pro users can get help from AI assistance to generate a personalized invitation message"> <!-- (paste)="onPaste($event)" -->
+                </textarea>
+                                        <div style="position: absolute;
+                top: 40px;">
+                                            <div class="mb-4 ai_mess_gen">
+                                                <span *ngFor="let message of messages" class="message"
+                                                    [ngClass]="{'user-message': message.role === 'user', 'ai-message': message.role === 'assistant'}">
+                                                    {{ message.content }}</span>
+                                            </div>
+                                            <div class="d-flex align-itmes-center submit_btn_group"
+                                                *ngIf="showEditAbleButton">
+                                                <button class="cn_btn save_btn d-block" type="button"
+                                                    (click)="useGeneratedText()">
+                                                    <mat-icon class="fs_20 height_20">check</mat-icon>Use
+                                                </button>
+                                                <button class="cn_btn d-block ms-2 other_action" type="button"
+                                                    (click)="tryAgainGeneratedText('tryAgain')">
+                                                    <mat-icon>refresh</mat-icon>Try again
+                                                </button>
+                                                <button class="cn_btn d-block ms-2 other_action" type="button"
+                                                    (click)="discardGeneratedText()">
+                                                    <mat-icon class="fs_20 height_20">delete</mat-icon>Discard
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cn_f_acn btn_b d-flex align-items-center justify-content-between mt-4">
+                    <button type="submit" style="background: #575757;" class="cn_btn btn_b"
+                        (click)="backToInviteReview()">Back</button>
+                    <button type="submit" [disabled]="!inviteReviewForm.valid " class="cn_btn">Invite for
+                        review</button>
+                </div>
+                <!-- <div class="btn_action mt-1 mb-2"></div> -->
+            </form>
+        </div>
+    </div>
+
+    <div class="skt_eifr" *ngIf="skeletonLoader">
+        <div class="reviews_overview">
+            <div class="ro_l">
+                <ngx-skeleton-loader count="1"
+                    [theme]="{ width: '70%', height: '16px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+                <ngx-skeleton-loader count="1"
+                    [theme]="{ width: '70%', height: '30px', margin: '16px 0 6px' }"></ngx-skeleton-loader>
+                <ngx-skeleton-loader count="1"
+                    [theme]="{ width: '70%', height: '14px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+            </div>
+            <div class="ro_c">
+                <ngx-skeleton-loader count="1"
+                    [theme]="{ width: '70%', height: '16px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+                <ngx-skeleton-loader count="1"
+                    [theme]="{ width: '70%', height: '30px', margin: '16px 0 6px' }"></ngx-skeleton-loader>
+                <ngx-skeleton-loader count="1"
+                    [theme]="{ width: '70%', height: '14px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+            </div>
+
+            <div class="ro_r">
+                <ngx-skeleton-loader count="1" [theme]="{ width: '70%', height: '18px', margin: '0px 0 10px' }"
+                    *ngFor="let fake of generateFakeSkeleton(5)"></ngx-skeleton-loader>
+            </div>
+
+        </div>
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '16px', margin: '0px 0 6px' }"
+            *ngFor="let fake of generateFakeSkeleton(5)"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '16px', margin: '0px 0 6px' }"
+            *ngFor="let fake of generateFakeSkeleton(5)"></ngx-skeleton-loader>
+    </div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

@@ -1,0 +1,11 @@
+.detail_title { font-size: 18px; font-weight: 500; color: #000; margin-bottom: 10px; }
+.detail_value { font-size: 16px; color: #333; }
+.table { border: 1px solid #ddd; }
+.pdt_hlp_col { width: 20%;  }
+.pdt_highlit_points .pdt_hlp_col:first-child { width: 12%; }
+.pdt_highlit_points .pdt_hlp_col:nth-child(2) { width: 12%; }
+.pdt_highlit_points .pdt_hlp_col:nth-child(3) { width: 12%; }
+
+@media screen and (max-width: 767px) {
+.carrier_profile h4 { font-size: 16px; }   
+}

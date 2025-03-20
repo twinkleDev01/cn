@@ -1,0 +1,1112 @@
+<div class="content_box manage_subscription_con" *ngIf="getSubscriptionData && !skeletonLoader">
+  <div class="content_head">
+    <div class="content_tlt">Subscription History</div>
+    <div class="content_actn">
+      <div id="slid_toggle">
+        <mat-slide-toggle [disabled]="getSubscriptionData.subscriptionPlanType == '1'" [checked]="getSubscriptionData.autoRenew" (change)="autoRenewPlan($event)">
+          Auto Renew <span>{{ getSubscriptionData.autoRenew ? 'On' : 'Off' }}</span>
+        </mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+  <div class="content_body">
+    <div class="subscription_history_table">
+      <div class="row">
+        <div class="col-md-3 border_right">
+          <p>Status</p>
+          <p>{{getSubscriptionData?.subscriptionStatus ? getSubscriptionData?.subscriptionStatus : '-'}}</p>
+        </div>
+  
+        <div class="col-md-3 border_right">
+          <p>Start Date</p>
+          <p>{{subscriptionStartDate ? (UTCDate(subscriptionStartDate) | date: 'MMM dd, yyyy') : '-'}}</p>
+        </div>
+        <div class="col-md-3 border_right">
+          <p>End Date</p>
+          <p>{{subscriptionEndDate ? (UTCDate(subscriptionEndDate) | date: 'MMM dd, yyyy') : '-'}}</p>
+  
+        </div>
+        <div class="col-md-3 border_right">
+          <p>Remaining Days</p>
+          <p>{{remaingDays ? remaingDays : '-'}}</p>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="skeletonloader card_con mt-3" *ngIf="skeletonLoader">
+  <div class="rpvc_skt" *ngFor="let fake of generateFakeSkeleton(2)">
+    <ngx-skeleton-loader count="1"
+      [theme]="{ 'border-radius': '0', width: '100%', height: '36px', margin: '0 0 24px' }"></ngx-skeleton-loader>
+    <div class="rpvc_skt_bx">
+      <div class="rpvc_skt_r">
+        <ngx-skeleton-loader count="4"
+          [theme]="{ 'border-radius': '0', width: '100%', height: '16px', margin: '0 0 8px' }"></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content_box" *ngIf="!skeletonLoader">
+  <div class="content_tlt">Manage Subscription</div>
+  <div class="content_body">
+    <div class="content_dis">
+      <p class="mb-1">Trucking companies are legally required to carry specific types and amounts of
+        insurance coverage to operate on public roads. This includes liability insurance to cover damages in case of
+        accidents, cargo insurance to protect the goods being transported, and other types of coverage depending on
+        the nature of the business.
+      </p>
+      <p class="mb-1">
+        Here, you can upload your Insurence Certificate to let shippers/carriers know that you are 100% eligible for
+        their requirements. Please note that all data, images, and documents updated here will be publicly
+        available.</p>
+        <p>
+        Keep your insurance info updated to avoid expiration. Accurate info ensures proper coverage.</p>
+    </div>
+    <div class="">
+      <div *ngIf="!sketeloader">
+        <div class="subscription_plan_info_con mt-3">
+          <div class="spic_box">
+            <div class="spic_prz_crd spic_free" *ngIf="userType !=='CARRIER'">
+              <p class="spic_tlt">Free</p>
+              <div class="spic_body">
+                <div class="min_h_160">
+                  <p class="spic_dis">
+                    <span *ngIf="payType == 1">For those wanting basic search and carrier organization capabilities</span>
+                    <span *ngIf="payType == 3  || payType == 6">For carriers wanting to ensure brokers and shippers can find their information when they need it</span>
+                  </p>
+                  <div class="spic_price">
+                    <div class="spic_price_t">
+                      <sup>$</sup>
+                      <span>0</span>
+                      <sup>/Year</sup>
+                    </div>
+                  </div>
+                </div>
+                <div class="spic_crd_actn">
+                  <button type="button" class="cn_btn" id="plan_btn" #planButton
+                    (click)="purchaseSubscriptionPlan(planButton,'free')" [ngClass]="{'current_plan': subscriptionPlanType === '1',
+              'downgrade_plan': subscriptionPlanType === '2' || subscriptionPlanType === '3' }">
+                    {{ subscriptionPlanType === '1' ? 'Current Plan' : subscriptionPlanType === '3' ? 'Downgrade Plan' :
+                    subscriptionPlanType === '2' ? 'Downgrade Plan': '' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="spic_prz_crd spic_busns" *ngIf="userType !=='CARRIER'">
+              <p class="spic_tlt">Starter</p>
+              <div class="spic_body">
+                <div class="min_h_160">
+                  <p class="spic_dis">For those wanting advanced filtering and download capabilities</p>
+                  <div class="spic_price">
+                    <div class="spic_price_t">
+                      <sup>$</sup>
+                      <span>{{information?.NonCarrierStarterPrice}}</span>
+                      <sup>/Year</sup>
+                    </div>
+                  </div>
+                </div>
+                <div class="spic_crd_actn">
+                  <button type="button" class="cn_btn" id="plan_btn" #planButton
+                    (click)="purchaseSubscriptionPlan(planButton,'starter')" [ngClass]="{'current_plan': subscriptionPlanType === '2', 'downgrade_plan': subscriptionPlanType === '3', 'upgrade_plan': subscriptionPlanType === '1'}">
+                    {{ subscriptionPlanType === '2' ? 'Current Plan' : subscriptionPlanType === '3' ? 'Downgrade Plan' :
+                    subscriptionPlanType === '1' ? 'Upgrade Plan': '' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="spic_prz_crd spic_busns" *ngIf="userType !=='CARRIER'">
+              <p class="spic_tlt">Business</p>
+              <div class="spic_body">
+                <div class="min_h_160">
+                  <p class="spic_dis">For those wanting advanced filtering and download capabilities</p>
+                  <div class="spic_price">
+                    <div class="spic_price_t">
+                      <sup>$</sup>
+                      <span>{{information?.NonCarrierBusinessPrice}}</span>
+                      <sup>/Year</sup>
+                    </div>
+                  </div>
+                </div>
+                <div class="spic_crd_actn">
+                  <button type="button" class="cn_btn" id="plan_btn" #planButton
+                    (click)="purchaseSubscriptionPlan(planButton,'business')" [ngClass]="{'current_plan': subscriptionPlanType === '3', 'upgrade_plan': subscriptionPlanType === '2' || subscriptionPlanType === '1'}">
+                    {{ subscriptionPlanType === '3' ? 'Current Plan' : subscriptionPlanType === '2' ? 'Upgrade Plan' :
+                    subscriptionPlanType === '1' ? 'Upgrade Plan': '' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="spic_prz_crd carrier_free_plan" *ngIf="userType=='CARRIER'">
+              <p class="spic_tlt">Free</p>
+              <div class="spic_body">
+                <div class="min_h_160">
+                  <p class="spic_dis"></p>
+                  <div class="spic_price">
+                    <div class="spic_price_t">
+                      <sup>$</sup>
+                      <span>0</span>
+                      <sup>/Year</sup>
+                    </div>
+                  </div>
+                </div>
+                <div class="spic_crd_actn">
+                  <button type="button" id="plan_btn" class="cn_btn" #planButton (click)="purchaseSubscriptionPlan(planButton,'free')" [ngClass]="{'current_plan': subscriptionPlanType === '1', 'downgrade_plan': subscriptionPlanType === '2' || subscriptionPlanType === '3' }">
+                    {{ subscriptionPlanType === '1' ? 'Current Plan' : subscriptionPlanType === '3' ? 'Downgrade Plan' :
+                    subscriptionPlanType === '2' ? 'Downgrade Plan': '' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="spic_prz_crd carrier_bus_plan" *ngIf="userType=='CARRIER'">
+              <p class="spic_tlt">Starter
+                <span class="spic_tlt_tag bg_p txt_w">Most Popular</span>
+              </p>
+              <div class="spic_body">
+                <div class="min_h_160">
+                  <!-- <p class=" spic_ca_tlt width_75">Pay it once and enjoy Premium Benefits Lifetime</p> -->
+                  <p class="spic_dis">For Carriers looking to SUPER BOOST their online visibility. Driver new calls on your Phone/SMS/WhatsApp/Email so you can drive more and earn more.</p>
+                  <div class="spic_price">
+                    <div class="spic_price_t">
+                      <sup>$</sup>
+                      <span>{{information?.carrierStarterPrice}}</span>
+                      <sup>/Year</sup>
+                    </div>
+                    <!-- <p class="spic_price_b">/month, billed annually</p> -->
+                  </div>
+                </div>
+                <div class="spic_crd_actn">
+                  <button type="button" class="cn_btn" id="plan_btn" #planButton
+                    (click)="purchaseSubscriptionPlan(planButton, 'starter')" [ngClass]="{'current_plan': subscriptionPlanType === '2', 'downgrade_plan': subscriptionPlanType === '3', 'upgrade_plan': subscriptionPlanType === '1'}">
+                    {{ subscriptionPlanType === '2' ? 'Current Plan' : subscriptionPlanType === '3' ? 'Downgrade Plan' :
+                    subscriptionPlanType === '1' ? 'Upgrade Plan': '' }}
+                  </button>
+                  <span class="txt_3 fw_5 txt_p check_benifits" style="margin-right: 20px;">Check Benefits</span>
+                </div>
+              </div>
+            </div>
+            <div class="spic_prz_crd carrier_bus_plan" *ngIf="userType=='CARRIER'">
+              <p class="spic_tlt">Business
+                <span class="txt_4">
+                  <span class="spic_tlt_tag ai_tag bg_b txt_w">AI Generated</span> 
+                  <img src="/assets/images/ai-gif.gif" class="img-fluid ai_gen_image">
+                </span>
+              </p>
+              <!-- <div class="spic_tlt">
+                <div>
+                  <span>Business</span>
+                  <span class="spic_tlt_tag_b">AI Generated</span> 
+                </div>
+                <span>
+                  <img src="/assets/images/ai-gif.gif" class="ai_gen_image">
+                </span>
+              </div> -->
+              <div class="spic_body">
+                <div class="min_h_160">
+                  <!-- <p class=" spic_ca_tlt width_75">Pay it once and enjoy Premium Benefits Lifetime</p> -->
+                  <p class="spic_dis">For Carriers looking to SUPER BOOST their online visibility. Driver new calls on your Phone/SMS/WhatsApp/Email so you can drive more and earn more.</p>
+                  <div class="spic_price">
+                    <div class="spic_price_t">
+                      <sup>$</sup>
+                      <span>{{information?.carrierBusinessPrice}}</span>
+                      <sup>/Year</sup>
+                    </div>
+                  </div>
+                </div>
+                <div class="spic_crd_actn">
+                  <button type="button" class="cn_btn" #planButton (click)="purchaseSubscriptionPlan(planButton,'business')" [ngClass]="{'current_plan': subscriptionPlanType === '3', 'upgrade_plan': subscriptionPlanType === '2' || subscriptionPlanType === '1'}">
+                    {{ subscriptionPlanType === '3' ? 'Current Plan' : subscriptionPlanType === '2' ? 'Upgrade Plan' :
+                    subscriptionPlanType === '1' ? 'Upgrade Plan': '' }}
+                  </button>
+                  <span class="txt_3 fw_5 txt_p check_benifits" style="margin-right: 20px;">Check Benefits</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button (click)="showFeatures()" *ngIf="!showAllFeatures" class="feature_btn">Show Features</button>
+          <div *ngIf="userType !=='CARRIER' && showAllFeatures" class="spic_points_con">
+            <div class="plan-heading sticky">
+              <div class="spic_p_list">
+                <div class="spic_p_list_info spic_p_list_tlt" style="background: #252525; color: #fff;">
+                  <span class="spic_col spic_info">Benefits</span>
+                  <span class="spic_col">
+                    <span>Free</span>
+                  </span>
+                  <span class="spic_col">
+                    <span>Starter</span>
+                  </span>
+                  <span class="spic_col">
+                    <span>Business</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="spic_points_box">
+              <div class="spic_p_list">
+                <p class="spic_p_list_tlt">Carrier Search</p>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Search by <strong>Company Name</strong> and <strong>DOT#</strong><i class="pr_tool"><img src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Search carriers and brokers by company name and DOT number to find the perfect freight partners. Quickly locate trusted partners and streamline your freight matching process.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Search by Location<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Search carriers and brokers by location (city and state) to view available carriers with all their business attributes. Easily find the right carriers to meet your specific needs.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Search by Fleet Size<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Fleet size plays a critical role in identifying the best-matching carriers, ensuring you find the right capacity, available drivers, and the resources needed for your shipments.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info"><i class="pr_tool">Search by Insurance <img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Search by insurance to make informed decisions before booking a load. We also offer a free insurance validator tool to deeply analyze insurance data, ensuring you choose the right carrier with confidence.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Search by Authority <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Search by Authority to ensure you're booking loads with active, compliant carriers and brokers. We provide up-to-date FMCSA data on authority status, including on-road inspections and violations, so you can make informed, reliable choices.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Search by Lane <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Search by lane to find experienced carriers and brokers with proven expertise. Access valid rates and verified data, ensuring you get reliable and accurate freight solutions for your shipments.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Truck Types / Equipment Types<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Search by truck types or equipment types to find carriers with the specific vehicles you need. Whether it's flatbeds, reefers, or dry vans, quickly match with the right equipment for your shipments.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Search by Shipment Type <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Search by shipment type to find carriers specializing in your specific needs, whether it's LTL, FTL, oversized, or temperature-sensitive freight. Quickly match with the right carrier for efficient delivery.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Target Job Market <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Target the job market by searching for spot loads, long-term contracts, or open positions. Find the right opportunities tailored to your business needs, whether it's short-term or ongoing work.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Availability <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Search by availability to find carriers who are open for new loads or not currently accepting new shipments. Easily match with partners based on their availability to meet your needs.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Rate Per Miles <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Search by rate per mile to find carriers offering competitive pricing. Quickly compare rates and choose the best-fit partner for your budget and shipping needs.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Number of Drivers <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Search by number of drivers to ensure carriers have the team capacity to manage extra loads and ensure timely delivery, even in case of unforeseen circumstances or delays.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Hazardous Materials <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">If your shipment involves hazardous materials, search for carriers with the proper certifications and expertise to handle these sensitive loads safely and in compliance with regulations.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+
+                <!-- Carrier Search END -->
+
+
+                <!-- Organize START -->
+                <p class="spic_p_list_tlt">Organize</p>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Create private lists of carriers <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Create private lists of carriers to organize your searches and store records for easy access. Save unlimited carriers and create as many lists as needed, tailored to your specific requirements.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Keep personal notes on carriers <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Keep personal, private notes on carriers to track important details and insights. With access to 3M carriers across the USA, Canada, and Mexico, you can manage your lists and make informed decisions whenever needed.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+
+                <!-- Organize ENDs -->
+
+
+                <!-- Feedback START -->
+                <p class="spic_p_list_tlt">Feedback</p>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Review carriers you have worked with <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Review carriers you've worked with to share your experience and help others in the industry. Read reviews from other users to make more informed decisions when selecting the right carrier for your needs.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <!-- Feedback END -->
+
+                <!-- View Carrier Info START -->
+                <p class="spic_p_list_tlt">View Carrier Info</p>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Read reviews <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Read reviews from other users to gain insights and make informed decisions when choosing carriers. Learn about their performance, reliability, and service quality to ensure the best match for your needs.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">View contact info <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">View contact info to quickly reach out for rates, availability, and any required authorities. Easily connect with carriers to streamline your decision-making process and secure the best service.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">View truck types <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">View truck types to find the specific equipment you need for your shipment. Whether it's flatbeds, reefers, or dry vans, easily match with the right carrier for your freight.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">View shipment types <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">View shipment types to find carriers specialized in the specific freight you need, whether it's LTL, FTL, oversized, or temperature-sensitive shipments. Match with the right carrier for efficient delivery.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">View safety & insurance information <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">View safety and insurance information to ensure carriers meet compliance standards. Verify coverage and safety ratings, helping you make confident, risk-free decisions when selecting the right partner for your shipment.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <!-- View Carrier Info START -->
+
+                <!-- Data Exports START -->
+                <p class="spic_p_list_tlt">Data Exports</p>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Download CSV from search results (up to 1,000 carriers/month)<i
+                      class="pr_tool"><img src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Download CSV files from search results (up to 1,000 carriers/month) to easily manage and organize carrier data for your business needs, streamlining your workflow and decision-making process.</span></i> </span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Download CSV from search results (up to 2,500 carriers/month)<i
+                      class="pr_tool"><img src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Download CSV files from search results (up to 2,500 carriers/month) to efficiently manage and organize carrier data, helping streamline your operations and make informed decisions.</span></i> </span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <!-- Data Exports END -->
+
+                <div class="spic_b_actn" *ngIf="userType !== 'CARRIER'">
+                  <div class="spic_p_list_info">
+                    <div class="spic_col"></div>
+                    <div class="spic_col">
+                      <button type="button" class="cn_btn" #planButton (click)="purchaseSubscriptionPlan(planButton,'free')" [ngClass]="{'current_plan': subscriptionPlanType === '1', 'downgrade_plan': subscriptionPlanType === '2' || subscriptionPlanType === '3' }">{{ subscriptionPlanType === '1' ? 'Current Plan' : subscriptionPlanType === '3' ? 'Downgrade Plan' : subscriptionPlanType === '2' ? 'Downgrade Plan': '' }}</button>
+                    </div>
+                    <div class="spic_col">
+                      <button type="button" class="cn_btn" #planButtonStarter (click)="purchaseSubscriptionPlan(planButtonStarter ,'starter')" [ngClass]="{'current_plan': subscriptionPlanType === '2', 'downgrade_plan': subscriptionPlanType === '3', 'upgrade_plan': planType === '1'}">{{ subscriptionPlanType === '2' ? 'Current Plan' : subscriptionPlanType === '3' ? 'Downgrade Plan' : subscriptionPlanType === '1' ? 'Upgrade Plan': '' }}</button>
+                    </div>
+                    <div class="spic_col">
+                      <button type="button" class="cn_btn" #planButtonBusiness (click)="purchaseSubscriptionPlan(planButtonBusiness ,'business')" [ngClass]="{'current_plan': subscriptionPlanType === '3', 'upgrade_plan': subscriptionPlanType === '2' || subscriptionPlanType === '1'}">{{ subscriptionPlanType === '3' ? 'Current Plan' : subscriptionPlanType === '2' ? 'Upgrade Plan' : subscriptionPlanType === '1' ? 'Upgrade Plan': '' }}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- for carrier -->
+          <div *ngIf="userType =='CARRIER' && showAllFeatures" class="spic_points_con">
+            <div class="plan-heading sticky">
+              <div class="spic_p_list">
+                <div class="spic_p_list_info spic_p_list_tlt" style="background:  #252525; color: #fff;">
+                  <span class="spic_col spic_info">Benefits</span>
+                  <span class="spic_col">
+                    <span>Free</span>
+                  </span>
+                  <span class="spic_col">
+                    <span>Starter</span>
+                  </span>
+                  <span class="spic_col">
+                    <span>Business</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="spic_points_box">
+              <div class="spic_p_list">
+                <!-- Personalize Profile START-->
+                <p class="spic_p_list_tlt">Personalize Profile</p>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add your equipment types 
+                    <i class="pr_tool">
+                      <img src="./assets/images/i-circle-icon (1).png">
+                      <span class="tooltp">Adding your equipment type increases visibility, searchability, and credibility. Our system better matches you with shippers and 3PLs, improving your overall ranking and helping you attract more business.</span>
+                    </i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add your shipment types<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Adding your shipment type increases visibility, searchability, and credibility. Our system better matches you with shippers and 3PLs, improving your ranking and attracting more business.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add preferred lanes and operating areas<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Shippers and 3PLs often search for carriers with experience in specific lanes. Highlighting your lane expertise ensures timely, safe deliveries and helps you attract more business.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add terminals & region<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Highlighting terminals & regions helps shippers and 3PLs find carriers with relevant geographic coverage. It increases visibility, builds trust, and ensures your services match customers' needs, leading to more business opportunities and efficient route planning.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add additional contact information<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Highlighting contact information makes it easy for shippers and 3PLs to reach you quickly, improving communication, building trust, and increasing your chances of securing business by providing a direct and reliable point of contact.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add Availability<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Sharing your business availability on your trucking page shows professionalism by indicating when you're open for new loads. It helps you manage inquiries effectively, ensuring you only receive calls when you're ready to deliver quality service and take on more work.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add Fuel consumption<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Sharing fuel consumption highlights your efficiency, attracts cost-conscious clients, and demonstrates your commitment to sustainability and operational performance.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <!-- Personalize Profile END-->
+
+                <!-- Optimize Profile START -->
+                <p class="spic_p_list_tlt">Optimize Profile</p>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add a logo<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Highlighting your Company logo enhances brand recognition, builds trust, and makes your business easily identifiable, helping you stand out and attract more shipers and 3PLs.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add about Company <i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Highlighting About Company builds trust, showcases your expertise, and provides potential clients with a clear understanding of your services and values, boosting credibility.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add description USING-AI<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Our exclusive AI feature analyzes carrier data to automatically generate a compelling About Company section. Available only to subscribed members, this AI-generated content boosts attraction, engagement, and conversion, helping you stand out and attract more clients.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add a banner image<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Sharing a banner image enhances branding, allowing carriers to showcase LinkedIn, Facebook, or key data graphics. This increases traffic, builds visibility, and grabs the attention of shippers and 3PLs, helping you stand out among carriers.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add images<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Sharing images of your trucks, trailers, equipment, drivers, and team helps you stand out to shippers and brokers, building trust and increasing business opportunities.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add Videos<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Sharing videos of your trucks, trailers, equipment, drivers, and team helps you stand out to shippers and brokers, building trust, boosting engagement, and increasing load opportunities.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Add documents<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Sharing essential documents like your operating authority, insurance certificates, safety ratings, DOT compliance, and driver qualifications helps build trust and credibility, making it easier for shippers and brokers to make informed decisions, leading to more business and load opportunities.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">We design your logo<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">We'll design a custom logo that attracts shippers and brokers, strengthening your brand identity and helping you stand out, ultimately driving more business and opportunities.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">We write your company description<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">We'll craft a compelling About company section based on your data, designed to attract shippers and brokers, strengthen your brand, and drive more business opportunities.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">We design your banner image<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">We'll design a custom banner that showcases your brand, attracts attention from shippers and brokers, and boosts your visibility, helping you stand out in the industry.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <!-- Optimize Profile END -->
+
+                <!-- Reviews START -->
+
+                <p class="spic_p_list_tlt">Reviews</p>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Dedicated page to collect reviews<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Reviews build trust and credibility for your trucking company. Use our dedicated page to collect reviews for free, attracting more leads, business, and loads.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Dedicated page to collect reviews USING-AI<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Our AI-powered feature simplifies the review collection process, helping you gather hassle-free feedback from brokers and shippers. With 30% more reviews, it boosts trust, leads, and business opportunities (available for subscribed members).</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Respond to your reviews<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Respond to your reviews for free, increase engagement, and boost transparency. Engaging with feedback helps build trust, encourages more reviews, and attracts more business opportunities.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Respond to your reviews USING-AI<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Not sure how to respond to reviews? Use our AI tools (available for subscribed members) to handle responses effortlessly. Let AI manage the details while you focus on growing your business.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Feature your favorite review<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Some reviews are special, deeply reflecting the effort you put into your work. We help carriers feature these reviews at the top of their profile to highlight your best feedback, ensuring they stand out. Available exclusively for paid plans.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">We run your review companigns<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Some reviews are special, reflecting the true effort you put into your work. We help carriers feature these reviews at the top of their profile to stand out. Additionally, we run review campaigns to track conversions and attract attention. Available exclusively for paid plans.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <!-- Reviews END -->
+
+                <!-- Advertising/Marketing START -->
+
+                <p class="spic_p_list_tlt">Advertising/Marketing</p>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Advertise on all other carrier profiles<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Advertising is key to success. We not only help you rank on Google but also promote your profile across matching carrier profiles. With thousands of searches daily, your business will gain more visibility, leading to more leads and opportunities.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Advertise in search results<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Advertise in search results to boost your visibility. We’ll help promote your profile across matching carrier listings, increasing leads and exposure through thousands of daily searches.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Remove other carrier advertisements from your profile<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Remove other carrier advertisements from your profile to ensure your business stands out. Focus solely on promoting your services, increasing visibility, and attracting more leads.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Share your weekly capacity with our broker audience<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Share your weekly capacity with brokers, shippers, sellers, and dispatchers to enhance visibility, connect with the right clients, and increase your load opportunities.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div><div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Share your live Load Availability on your profile<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Share your live load availability on your profile to optimize round trips, reduce empty miles, and increase profitability, helping you minimize losses and maximize business opportunities.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Get highlighted on CarriersNetwork social channels<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Get highlighted on CarrierNetwork's social channels to boost your visibility, attract more leads, and expand your reach to a broader audience of brokers, shippers.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Request Quote<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Request quotes directly from brokerages, shippers, sellers, and dispatchers—no middleman. Discuss terms, earn directly, and build the business that matters most to you.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Dedicated Blog<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">We'll create a dedicated blog to showcase your expertise and establish a strong presence on our website. This blog will highlight all of your knowledge and insights, helping to amplify your professional reach.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <!-- Advertising/Marketing END -->
+
+
+
+                <!-- Analytics START -->
+                <p class="spic_p_list_tlt">Analytics</p>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Access detailed analytics on your profile traffic<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Access detailed analytics on your profile traffic to track engagement, understand your audience, and make data-driven decisions to improve visibility and attract more business.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">See the brokerages viewing your profile and contact information<i
+                      class="pr_tool"><img src="./assets/images/i-circle-icon (1).png"><span class="tooltp">See which brokerages, direct shippers, sellers, and dispatchers are viewing your profile and contact information, giving you valuable insights to follow up and secure more business opportunities.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <div class="spic_p_list_info">
+                  <span class="spic_col spic_info">Receive a monthly analytics report<i class="pr_tool"><img
+                        src="./assets/images/i-circle-icon (1).png"><span class="tooltp">Receive a monthly analytics report to track your profile's performance, understand engagement, and make informed decisions to optimize your business and attract more leads.</span></i></span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-solid fa-xmark txt_d tlt_5"></i>
+                  </span>
+                  <span class="spic_col">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </span>
+                </div>
+                <!-- Analytics END -->
+
+                <div class="spic_b_actn" *ngIf="userType=='CARRIER'">
+                  <div class="spic_p_list_info">
+                    <div class="spic_col"></div>
+                    <div class="spic_col">
+                      <button type="button" class="cn_btn" #planButton (click)="purchaseSubscriptionPlan(planButton,'free')" [ngClass]="{'current_plan': subscriptionPlanType === '1', 'downgrade_plan': subscriptionPlanType === '2' || subscriptionPlanType === '3' }">{{ subscriptionPlanType === '1' ? 'Current Plan' : subscriptionPlanType === '3' ? 'Downgrade Plan' : subscriptionPlanType === '2' ? 'Downgrade Plan': '' }}</button>
+                    </div>
+                    <div class="spic_col">
+                      <button type="button" class="cn_btn" #planButtonStarter (click)="purchaseSubscriptionPlan(planButtonStarter, 'starter')" [ngClass]="{'current_plan': subscriptionPlanType === '2', 'downgrade_plan': subscriptionPlanType === '3', 'upgrade_plan': planType === '1'}">{{ subscriptionPlanType === '2' ? 'Current Plan' : subscriptionPlanType === '3' ? 'Downgrade Plan' : subscriptionPlanType === '1' ? 'Upgrade Plan': '' }}</button>
+                    </div>
+                    <div class="spic_col">
+                      <button type="button" class="cn_btn" #planButtonBusiness (click)="purchaseSubscriptionPlan(planButtonBusiness, 'business')" [ngClass]="{'current_plan': subscriptionPlanType === '3', 'upgrade_plan': subscriptionPlanType === '2' || subscriptionPlanType === '1'}">{{subscriptionPlanType === '3' ? 'Current Plan' : subscriptionPlanType === '2' ? 'Upgrade Plan' : subscriptionPlanType === '1' ? 'Upgrade Plan': '' }}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skt_bsc" *ngIf="sketeloader">
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '24px', margin: '0px 0 18px' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '20px', margin: '0px 0 10px' }"></ngx-skeleton-loader>
+        <div class="bsc_box">
+          <ngx-skeleton-loader count="5" [theme]="{ width: '100%', height: '22px', margin: '0px 0 6px' }"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

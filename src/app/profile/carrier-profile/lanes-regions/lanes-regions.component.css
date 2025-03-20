@@ -1,0 +1,11 @@
+.skt_eifr { background: #fff; padding: 24px; margin-bottom: 24px; }
+.form_action { text-align: right; }
+.terminal_lane .col-md-6 { max-width: 50%; }
+.loard_box { width: 20px ; height: 20px; position: absolute; }
+.custom_spinner { display: block; top: -20px; position: absolute; right: 5px; }
+
+@media screen and (max-width: 760px) {
+	.spinner-border { display: inline-block; width: 14px; height: 14px; vertical-align: -0.125em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: 0.75s linear infinite spinner-border; margin: 2px 0 0 6px; }
+	.loard_box { width: 20px; }
+	.custom_spinner { width: 18px; height: 18px; border-width: 2px; border-color: #00b4fc; border-right-color: transparent; }
+}

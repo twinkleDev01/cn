@@ -1,0 +1,12 @@
+.detail_title { font-size: 17px; font-weight: 600; color: #000; }
+.detail_value { font-size: 16px; color: #333; }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 25%; }
+.email_data span:first-child { width: 40%; }
+.Headquarter { background: #f38a033b; color: #f38a03; padding: 2px 5px; font-weight: 600; display: flex; align-items: center; border-radius: 5px; }
+.Lanes { background: #00800047; color: green; padding: 2px 5px; font-weight: 600; display: flex; align-items: center; border-radius: 5px; }
+
+@media screen and (max-width: 767px) {
+.email_data span:first-child { width: 100%; }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 50%; }
+    
+}

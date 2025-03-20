@@ -1,0 +1,88 @@
+<div class="chng_pass_con">
+  <h4 class="page_heading">Change Password</h4>
+  <p class="fs_14 txt_lb fsn_4 mb-3 mt-3">Choose a password that will be hard for others to guess. Password must be at least 6 characters.</p>
+  <form [formGroup]="registerForm" (ngSubmit)="changNewPassword(registerForm)" autocomplete="off" class="cn_field">
+    <div class="row">
+      <div class="col-md-6">
+        <p class="cn_input_lbl">Current Password <span class="txt_d"> *</span></p>
+        <mat-form-field appearance="none" class="cn_pfix_icn">
+          <input matInput placeholder="Enter Current Password" class="form-control cn_input" formControlName="oldPassword" name="oldPassword" [type]="hide ? 'password' : 'text'" minlength="6" maxlength="17" />
+          <mat-icon matSuffix class="txt_lb password_icn" (click)="currentPassword(hide);">{{ hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error class="error_mess" *ngIf="submitted && registerForm?.get('oldPassword').errors?.['required']">Password is required.</mat-error>
+          <mat-error class="error_mess" *ngIf="registerForm?.get('oldPassword').errors?.['minlength']">Password min length must be 6 character.</mat-error>
+          <mat-error *ngIf="(registerForm?.get('oldPassword').errors?.['pattern']) && !(registerForm?.get('oldPassword').errors?.['minlength'])" class="error_mess">Please enter valid information.</mat-error>
+          <mat-error class="error_mess" *ngIf="registerForm?.get('oldPassword').errors?.['maxlength']">Only 16 characters are allowed.</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6"></div>
+      <div class="col-md-6">
+        <p class="cn_input_lbl">New Password<span class="txt_d"> *</span></p>
+        <mat-form-field appearance="none" class="cn_pfix_icn">
+          <input matInput placeholder="Enter New Password" class="form-control cn_input" formControlName="newPassword" name="newPassword" [type]="hide1 ? 'password' : 'text'" minlength="6" maxlength="17" />
+          <mat-icon matSuffix class="txt_lb password_icn" (click)="newPassword(hide1);">{{ hide1 ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error class="error_mess" *ngIf="submitted && registerForm?.get('newPassword').errors?.['required']">Password is required.</mat-error>
+          <mat-error class="error_mess" *ngIf="registerForm?.get('newPassword').errors?.['minlength']">Password min lengh must be 6 character.</mat-error>
+          <mat-error class="error_mess" *ngIf="registerForm?.get('newPassword').errors?.['maxlength']">Only 16 characters are allowed.</mat-error>
+          <mat-error *ngIf="(registerForm?.get('newPassword').errors?.['pattern']) && !(registerForm?.get('newPassword').errors?.['minlength'])" class="error_mess">Password accepts !@#$%^&* symbols only.</mat-error>
+          <mat-error class="error_mess" *ngIf="registerForm?.get('newPassword').errors?.['mustDiffer']">Current password and new password should not be same.</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <p class="cn_input_lbl">Confirm New Password <span class="txt_d"> *</span></p>
+        <mat-form-field appearance="none" class="cn_pfix_icn">
+          <input matInput type="text" placeholder="Re-enter Password" class="form-control cn_input" formControlName="confirmPassword" name="confirmPassword" [type]="hide2 ? 'password' : 'text'" minlength="6" maxlength="17" />
+          <mat-icon matSuffix class="txt_lb password_icn" (click)="reEnterPassword(hide2)">{{ hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error class="error_mess" *ngIf="submitted && registerForm?.get('confirmPassword').errors?.['required']">Confirm password is required.</mat-error>
+          <mat-error class="error_mess" *ngIf="registerForm?.get('confirmPassword').errors?.['mustMatch']"> Password do not match.</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="btn_action mt-1 mb-2">
+      <button class="cn_btn" type="submit">Save</button>
+    </div>
+  </form>
+</div>
+<div class="chng_pass_con">
+  <div class="tabLabels">
+    <div class="update_profile_con">
+      <form [formGroup]="emailChangeForm" (ngSubmit)="emailChange(emailChangeForm)" autocomplete="off"
+      class="cn_field">
+        <p class="edt_pg_tlt">Change
+          Email Address</p>
+
+        <p class="fs_14 txt_lb fsn_4 mb-3">Change and verify your email
+          address</p>
+        <div class="lableWith_txt">
+          <p class="fs_14 txt_lb fsn_4 mb-3">Current Email Address</p>
+          <p class="fs_14 txt_b fsm_5 mb-0" *ngIf="carrierDetails?.email">{{carrierDetails?.email}}</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <p class="cn_input_lbl" style="margin: .5rem 0
+              .5rem;">New Email Address <span class="txt_d">
+                *</span></p>
+            <mat-form-field appearance="none" class="cn_pfix_icn">
+              <input matInput formControlName="email" placeholder="Enter New Email" maxlength="129" class="form-control cn_input" />
+              <mat-error *ngIf="submitted && emailChangeForm.get('email').errors?.['required']" class="error_mess">Email is required.</mat-error>
+              <mat-error *ngIf="emailChangeForm.get('email').errors?.['pattern']" class="error_mess">Please enter valid email address.</mat-error>
+              <mat-error *ngIf="emailChangeForm.get('email').errors?.['maxlength'] && !emailChangeForm?.get('email').errors?.['pattern']" class="error_mess">Email must not exceed 128 characters.</mat-error>
+              <span class="error_mess class">{{emailMessage}}</span>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="">
+          <p class="fs_12 fsn_4 txt_lb" style="margin: -6px 0 0;">We will use this email address for future communication. Save & Verify
+          </p>
+        </div>
+        <div class="btn_action mt-1 mb-2">
+          <button class="cn_btn" type="submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<ngx-loading *ngIf="loading" [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>
+
+
+<ngx-loading *ngIf="loading" [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

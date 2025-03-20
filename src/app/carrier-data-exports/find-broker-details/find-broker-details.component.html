@@ -1,0 +1,57 @@
+<div class="carrier_details_pg_con">
+    <div class="card_con">
+      <app-user-profile></app-user-profile>
+      <mat-tab-group class="mt-5" animationDuration="500ms">
+        
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">dashboard</mat-icon>
+            Overview
+          </ng-template>
+          <app-broker-overview></app-broker-overview>
+        </mat-tab>
+        
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">business_center</mat-icon>
+            Business Information
+          </ng-template>
+          <app-broker-business-info></app-broker-business-info>
+        </mat-tab>
+        
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">local_shipping</mat-icon>
+            Compliance
+          </ng-template>
+          <app-compliance></app-compliance>
+        </mat-tab>
+        
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">verified_user</mat-icon>
+            Insurance
+          </ng-template>
+          <app-broker-insurance></app-broker-insurance>
+        </mat-tab>
+        
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">explore</mat-icon>
+            Lanes & Regions
+          </ng-template>
+          <app-broker-lanes-regions></app-broker-lanes-regions>
+        </mat-tab>
+        
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">reviews</mat-icon>
+            Reviews
+          </ng-template>
+          <app-broker-reviews></app-broker-reviews>
+        </mat-tab>
+        
+      </mat-tab-group>
+    </div>
+  </div>
+  

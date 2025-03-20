@@ -1,0 +1,45 @@
+.fa-xmark { color: rgba(209, 10, 10, 0.836);}
+.errorMessage {color: rgb(209, 10, 10); font-size: 12px; position: absolute; bottom: 15px }
+.Primery_btn { background-color: transparent; border: none;  }
+.Primery_btn:focus { outline: none; border: none; box-shadow: none; }
+.common_cart { max-width: 600px; margin: 0 auto; }
+.cn_input_lbl { display: inline-flex; align-items: center; }
+.col-md-3 p { font-family: 'Poppins'; }
+.page_heading:before { width: calc(100% - 80%);  }
+.page_heading:after { width: calc(100% - -2%); }
+
+.pie_chart_list li { list-style: none; position: relative; padding-left: 30px; padding-bottom: 10px; }
+.pie_chart_list li:after { background-color: #9966ff; width: 20px; height: 20px; display: flex; position: absolute; content: ""; left: 0px; top: 3px; border-radius: 5px; }
+.pie_chart_list .office::after { background-color: rgba(255, 99, 132); }
+.pie_chart_list .truck::after { background-color: rgba(255, 159, 64); }
+.pie_chart_list .trailer::after { background-color: rgba(255, 205, 86); }
+.pie_chart_list .driver::after { background-color: rgba(75, 192, 192); }
+.pie_chart_list .onroad::after { background-color: rgba(54, 162, 235); }
+.pie_chart_list .miscellaneous::after { background-color: rgba(153, 102, 255); }
+.overall-estimation {text-align: end; padding: 20px; background: #fff; margin-top: 18px; border-radius: 5px; margin-bottom: 20px; border: 2px dashed #d9d9d9; width: 100%; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px; }
+.calculation_box { background: #fff; padding: 20px; margin-top: 16px; margin-bottom: 18px; border-radius: 10px; position: sticky; top: 8%; z-index: 6; box-shadow: 0px 0px 3px 1px #0000002b; }
+// .calculation_box .page_heading::before { width: calc(100% - 93%); left: 46%; }
+// .calculation_box .page_heading::after { content: none; }
+
+#calculator_box { margin-bottom: 50px;}
+.cn_field button { color: #fff; background: #00b4fc; border: none; border-radius: 5px; padding: 6px 20px; } 
+.cn_input_lbl input { padding: 10px;}
+.col-md-6:has(.cn_input_lbl) { width: 46%; }
+ ngx-skeleton-loader { width: 600px; display: flex; margin: 17px 0; }
+ mat-card .errorMessage { position: absolute; bottom: -21px; left: 0px; }
+ .remove_expenses { position: absolute; top: 5px; font-size: 22px; text-align: end; }
+ 
+ .calculation_box h4, h5 { margin-bottom: 0px; }
+ .calculation_box .fa-left-right { margin: 0 20px; font-size: 34px; }
+ .calculation_box .fa-left-right::after { color: #00b4fcc7; opacity: 1; }
+ .skt_eifr { background-color: #fff; padding: 20px; }
+
+
+
+ @media screen and (max-width: 767px) {
+    
+
+    #calculator_inputs.row.mt-5 .col-md-3 { width: 50% ; }
+    .calculation_box { top: -3%; }
+    #calculator_inputs { margin-top: 2rem !important; }
+ }

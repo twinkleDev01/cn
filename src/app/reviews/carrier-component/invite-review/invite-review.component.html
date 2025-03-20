@@ -1,0 +1,81 @@
+<div class="edit_invite_for_review">
+  <div class="review_box" *ngIf="!skeletonLoader">
+    <!-- <p class="edt_pg_tlt">Invite For Review</p> -->
+    <div class="reviews_overview">
+      <div class="ro_l">
+        <p class="ro_tlt">Total Review<span *ngIf="getReview?.total_count > 1 ">s</span></p>
+        <p class="ro_totl_rew">{{getReview?.total_count ? getReview?.total_count : '0'}}</p>
+        <p class="ro_totl_rew_txt">Growth in reviews on this year</p>
+      </div>
+      <div class="ro_c">
+        <p class="ro_tlt">Average Rating<span *ngIf="getReview?.averageRatings > 1">s</span></p>
+        <p class="ro_avrg_rtgn">
+          <span class="ro_avrg_no">{{getReview?.averageRatings ? getReview?.averageRatings : '0'}}</span>
+          <span class="ro_avrg_str">
+            <span class="rtng_stars">
+              <span class="txt_lb" *ngFor="let star of rating">
+                <span class="material-icons txt_y">star</span>
+              </span>
+              <span class="txt_lb" *ngIf="isRatingHalf">
+                <span class="material-icons txt_y">star_half</span>
+              </span>
+              <span class="txt_lb" *ngFor="let star of ratingEmpty">
+                <span class="txt_lb"><span class="material-icons">star_border</span></span>
+              </span>
+            </span>
+          </span>
+        </p>
+        <p class="ro_avrg_txt">Averages ratings on this year</p>
+      </div>
+      <div class="ro_r">
+        <p class="ro_timlin_rtng">
+          <span class="ro_rtng_txt">Timeliness <span>{{getReview?.averageTimeliness ? getReview?.averageTimeliness : '0'}}/10</span></span>
+          <span class="ro_rtng_line">
+            <span class="arting_line" [style.width]="(getReview?.averageTimeliness * 10 + '%')"></span>
+          </span>
+        </p>
+        <p class="ro_clean_rtng">
+          <span class="ro_rtng_txt">Cleanliness <span>{{getReview?.averageCleanliness ? getReview?.averageCleanliness : '0'}}/10</span></span>
+          <span class="ro_rtng_line">
+            <span class="arting_line" [style.width]="(getReview?.averageCleanliness * 10 + '%')"></span>
+          </span>
+        </p>
+        <p class="ro_comunictn_rtng">
+          <span class="ro_rtng_txt">Communication <span>{{getReview?.averageCommunication ? getReview?.averageCommunication : '0'}}/10</span></span>
+          <span class="ro_rtng_line">
+            <span class="arting_line" [style.width]="(getReview?.averageCommunication * 10+ '%')"></span>
+          </span>
+        </p>
+      </div>
+    </div>
+    <p class="eifr_dis"><span *ngIf="!this.getReview || getReview?.total_count == 0">You don't have any reviews yet.</span>
+    Now's the perfect moment to gather reviews for your company because every  review counts.<br>
+     Simply click the button below to invite your customers to leave a review for you.<br>
+     Once they receive the email with instructions, they can quickly share their feedback, helping you receive amazing reviews!
+      </p>
+    <div class="form_action">
+      <button type="button" class="cn_btn" (click)="inviteReview(getReview?.total_count)">Invite for Review</button>
+    </div>
+  </div>
+
+  <div class="skt_eifr" *ngIf="!getReview  && skeletonLoader">
+  
+    <div class="reviews_overview">
+      <div class="ro_l">
+        <ngx-skeleton-loader count="1" [theme]="{ width: '70%', height: '16px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" [theme]="{ width: '70%', height: '30px', margin: '16px 0 6px' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" [theme]="{ width: '70%', height: '14px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+      </div>
+      <div class="ro_c">
+        <ngx-skeleton-loader count="1" [theme]="{ width: '70%', height: '16px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" [theme]="{ width: '70%', height: '30px', margin: '16px 0 6px' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" [theme]="{ width: '70%', height: '14px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+      </div>
+      <div class="ro_r">
+        <ngx-skeleton-loader count="1" [theme]="{ width: '70%', height: '18px', margin: '0px 0 10px' }" *ngFor="let fake of generateFakeSkeleton(3)"></ngx-skeleton-loader>
+      </div>
+    </div>
+    <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '16px', margin: '0px 0 6px' }" *ngFor="let fake of generateFakeSkeleton(2)"></ngx-skeleton-loader>
+  </div>
+</div>
+

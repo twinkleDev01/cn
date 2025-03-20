@@ -1,0 +1,11 @@
+.detail_title { font-size: 15px; font-weight: 500; color: #000; }
+.detail_value { font-size: 15px; color: #818181; }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 25%; }
+.email_data span:first-child { width: 40%; }
+
+@media screen and (max-width: 767px) {
+.email_data span:first-child { width: 100%; }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 50%; }
+    
+}
+

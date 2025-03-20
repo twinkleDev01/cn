@@ -1,0 +1,70 @@
+<div class="buy_subscription_con card_con" *ngIf="!skeletonLoader">
+    <p class="edt_pg_tlt">Buy Subscription</p>
+    <div class="order_smry_box">
+      <p class="txt_1 fw_6 txt_333 bsc_crd_tlt">Order Summary</p>
+      <div class="subscription_select_plan" *ngIf="userType !=='CARRIER'">
+        <mat-radio-group aria-label="Select an option" [(ngModel)]="payType" (change)="radioChange($event)">
+          <mat-radio-button class="ms-0" value="1">1 month</mat-radio-button>
+          <mat-radio-button value="3">
+            3 months <span class="actv_rdio_txt">(Save 20%)</span>
+          </mat-radio-button>
+          <mat-radio-button value="6">
+            6 months <span class="actv_rdio_txt">(Save 40%)</span>
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+    <div class="bsc_box">
+      <p class="txt_2 fw_4 txt_333 bsc_crd_name">Buy Business Plan</p>
+      <p class="tlt_3 fw_6 txt_333 bsc_tlt" *ngIf="userType !=='CARRIER' && payType=='1'">Business (1 Monthly)</p>
+      <p class="tlt_3 fw_6 txt_333 bsc_tlt" *ngIf="userType !=='CARRIER' && payType=='3'">Business (3 Monthly)</p>
+      <p class="tlt_3 fw_6 txt_333 bsc_tlt" *ngIf="userType !=='CARRIER' && payType=='6'">Business (6 Monthly)</p>
+      <p class="txt_2 fw_4 txt_666 bsc_dis">For carriers wanting to optimize their profile & proactively drive new business across all brokers and shippers</p>
+      <div class="spic_price" *ngIf="userType=='CARRIER'">
+        <sup>$</sup>
+        <span >19.99</span>
+        <sup>USD</sup>
+        <p class="mt-1 spic_price_text">/month, billed annually</p>
+      </div>
+      <div class="spic_price" *ngIf="userType !=='CARRIER'">
+        <div class="spic_price_t">
+          <sup>$</sup>
+          <span *ngIf="payType == 1">50</span>
+          <span *ngIf="payType == 3">120</span>
+          <span *ngIf="payType == 6">180</span>
+          <sup>USD</sup>
+        </div>
+        <p class="spic_price_b" *ngIf="payType == 3">billed at 
+          <span class="line_through">$150</span> 
+          $120/Every 3 Months
+        </p>
+        <p class="spic_price_b" *ngIf="payType == 6" style="">billed at 
+          <span class="line_through">$300</span> 
+          $180/Every 6 Months
+        </p>
+      </div>
+    </div>
+
+    <div class="skt_bsc" *ngIf="skeletonLoader">
+      <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '24px', margin: '0px 0 18px' }"></ngx-skeleton-loader>
+      <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '20px', margin: '0px 0 10px' }"></ngx-skeleton-loader>
+      <div class="bsc_box">
+        <ngx-skeleton-loader count="5" [theme]="{ width: '100%', height: '22px', margin: '0px 0 6px' }"></ngx-skeleton-loader>
+      </div>
+    </div>
+    <form [formGroup]="paymentForm" (ngSubmit)="paymentSubmit(paymentForm)" class="mb-0 custum_input_css" #paymentFormChid="ngForm">
+    <div class="buy_subscription_card_box_out">
+      <app-card-list [currentCardActive]="currentCardActive" (selectPaymentCard)="selectCard($event)" class="buy_subscription_card_box"></app-card-list>    
+      <mat-form-field appearance="outline" class="hide_mat_input">
+        <input matInput placeholder="paymentId" formControlName="paymentId">
+        <mat-error *ngIf="paymentSumitted && paymentForm.get('paymentId').errors?.['required']" class="error_mess">Card is required.</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="bsc_actn">
+      <button *ngIf="!manageSection" class="cn_btn btn_bordered me-4" (click)="backToPlanList()">Back</button>
+      <button class="cn_btn" type="submit">Pay Now</button>
+    </div>
+    </form>
+  </div>
+  
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

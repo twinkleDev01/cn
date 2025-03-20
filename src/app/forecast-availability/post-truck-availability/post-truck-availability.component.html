@@ -1,0 +1,227 @@
+<div class="edit_business_info_con">
+    <div *ngIf="!skeletonLoader">
+      <div class="form_box">
+        <div class="contnt_hed">
+          <div class="ch_l">
+            <h3 class="ch_tlt">Add Post Truck Availability</h3>
+          </div>
+          <div class="ch_rl">
+            <a class="cn_btn" href="/my-truck-availability">My Truck Availability List</a>
+          </div>
+        </div>
+        <form autocomplete="off" [formGroup]="addAvailabilityForm" (ngSubmit)="addFormSubmit(addAvailabilityForm)" class="cn_field">
+          <p class="txt_lb mb-3">Welcome to the Load Submission Page! Here, you can quickly and easily add a new load to our system. Simply fill out the necessary details such as origin, destination, Shipment Type, Truck Types, Miles, Cost Per Mile and any special requirements. Once submitted, our team will match your load with the best available carriers to ensure timely and efficient delivery. Thank you for choosing our service to handle your transportation needs!</p>
+
+          <div class="add_lane_location mt-4">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="lane_addrs">
+                  <div class="input_field">
+                    <p class="cn_input_lbl">Location<span class="txt_d"> *</span></p>
+                    <mat-form-field appearance="none" style="position: relative;">
+                      <input matInput type="text" formControlName="sourceLocation" maxlength="65" [value]="sourceLoc?.location" placeholder="Type Source Location" (keyup)="searchUserType($event)" (blur)="onBlur('source')" class="form-control cn_input" />
+                      <mat-error class="error_mess d_inline" *ngIf="!errorSource && submitted && addAvailabilityForm?.get('sourceLocation').errors?.['required']">Source Location is required.</mat-error>
+                      <mat-error *ngIf="addAvailabilityForm.get('sourceLocation').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed.</mat-error>
+                      <mat-error *ngIf="errorSource" class="error_mess">Please select from the dropdown list.</mat-error>
+                      <div class="src_cty_list" *ngIf="sourceCityData?.length > 0 && sourceLocSearch && !destinationSearch">
+                        <div class="input_dropdown">
+                          <p *ngFor="let cityRecord of sourceCityData; let i=index;" (click)="getSourceLoc(cityRecord)" class="input_option">{{cityRecord?.city}}, {{cityRecord?.state}}</p>
+                        </div>
+                      </div>
+                    </mat-form-field>
+                    <div class="loard_box" *ngIf="loaderSearch">
+                      <span class="custom_spinner spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="input_field">
+                    <p class="cn_input_lbl">Date<span class="txt_d"> *</span></p>
+                    <mat-form-field appearance="none" class="cn_pfix_icn">
+                      <input matInput formControlName="sourceDate" (dateChange)="updateMinNextDate($event.value)" [matDatepicker]="pickupDatePicker" [matDatepicker]="dp2" placeholder="Select  Source Date" [min]="minDate" [readonly]="true" class="form-control cn_input" >
+                      <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+                      <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+                      <mat-error *ngIf="submitted && addAvailabilityForm.get('sourceDate').errors?.['required']" class="error_mess">Source Date is  required.</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-1">
+                <div class="lane_arrow_img">
+                  <span class="material-icons-outlined">arrow_forward_ios</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="lane_addrs">
+                  <div class="input_field">
+                    <p class="cn_input_lbl">Location<span class="txt_d"> *</span></p>
+                    <mat-form-field appearance="none" style="position: relative;">
+                      <input matInput type="text" formControlName="destinationLocation"  maxlength="65" placeholder="Enter Destination Location" class="form-control cn_input" [value]="destinyLoc?.location" (blur)="onBlur('destination')" (keyup)="searchUserTypeForDestination($event)"/>
+                      <mat-error class="error_mess d_inline" *ngIf="!errorDestination && submitted && addAvailabilityForm?.get('destinationLocation').errors?.['required']">Destination Location is required.</mat-error>
+                      <mat-error *ngIf="addAvailabilityForm.get('destinationLocation').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed</mat-error>
+                      <mat-error *ngIf="errorDestination" class="error_mess">Please select from the dropdown list.</mat-error>
+                      <div class="src_cty_list" *ngIf="destinationCityData?.length > 0 && destinationSearch && !sourceLocSearch">
+                        <div class="input_dropdown">
+                          <p *ngFor="let cityRecord of destinationCityData; let i=index;" (click)="getDestinyLoc(cityRecord)"  class="input_option">{{cityRecord.city}}, {{cityRecord.state}}</p>
+                        </div>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="input_field">
+                    <p class="cn_input_lbl">Date<span class="txt_d"> *</span></p>
+                    <mat-form-field appearance="none" class="cn_pfix_icn">
+                      <input matInput formControlName="destinationDate" [matDatepicker]="dropDatePicker" [matDatepicker]="dp1" placeholder="Select Destination Date"  [min]="minNextDate" [readonly]="true" class="form-control cn_input">
+                      <mat-datepicker-toggle matSuffix [for]="dp1" [disabled]="dropTimedisabled"></mat-datepicker-toggle>
+                      <mat-datepicker #dp1 disabled="false"></mat-datepicker>
+                      <mat-error *ngIf="submitted && addAvailabilityForm.get('destinationDate').errors?.['required']" class="error_mess">Destination Date is required.</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3 ic_dropdown">
+              <p class="cn_input_lbl">Shipment Type
+                <span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none" class="cn_inpt_drop">
+                <mat-select formControlName="shipmentTypes" class="form-control cn_input" placeholder="Select Shipment Types" >
+                  <mat-option class="mat_dropdown" *ngFor="let shipType of shipmentType" [value]="shipType.id" >{{shipType?.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && addAvailabilityForm.get('shipmentTypes').errors?.['required']" class="error_mess">Shipment types is required.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3">
+              <p class="cn_input_lbl">Truck Types / Equipment Types
+                <span class="material-icons info_icon" matTooltip="{{information?.truckTypesAndEquipmentTypes}}"> info_outline </span>
+                <span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none" class="cn_inpt_drop">
+                <mat-select placeholder="Select Truck Types" formControlName="equipmentType">
+                  <mat-option  class="mat_dropdown" *ngFor="let truckType of equipmentType" [value]="truckType.id">{{truckType.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && addAvailabilityForm.get('equipmentType').errors?.['required']" class="error_mess">Truck Types / Equipment Types is required.</mat-error>
+              </mat-form-field> 
+            </div>
+            <div class="col-md-3">
+              <p class="cn_input_lbl">Miles<span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none">
+                <input matInput type="text" formControlName="miles" (keypress)="onlyNumberKey($event)" maxlength="8" placeholder="Enter Miles" class="form-control cn_input" />
+                <mat-error class="error_mess d_inline" *ngIf="submitted && addAvailabilityForm?.get('miles').errors?.['required']">Miles is required.</mat-error>
+                <mat-error class="error_mess d_inline" *ngIf="submitted && addAvailabilityForm?.get('miles').errors?.['pattern']">Please enter a valid number.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3">
+              <p class="cn_input_lbl">Cost Per Mile<span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none">
+                <input matInput type="text" formControlName="costPerMile" (keypress)="onlyNumberKey($event)" maxlength="8" placeholder="Enter Cost Per Mile" class="form-control cn_input" />
+                <mat-error class="error_mess d_inline" *ngIf="submitted && addAvailabilityForm?.get('costPerMile').errors?.['required']">Cost Per Mile is required.</mat-error>
+                <mat-error class="error_mess d_inline" *ngIf="submitted && addAvailabilityForm?.get('costPerMile').errors?.['pattern']">Please enter a valid number.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-12">
+              <p class="cn_input_lbl">Notes</p>
+              <mat-form-field appearance="none">
+                <textarea matInput type="text" formControlName="notes" maxlength="517" placeholder="Enter Notes" class="form-control cn_input"></textarea>
+                <mat-error class="error_mess d_inline" *ngIf="addAvailabilityForm.get('notes').errors?.['maxlength']">
+                  Only 516 characters are allowed
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="form_action">
+            <button type="submit" [disabled]="errorDestination||errorSource" class="cn_btn">Add Availability</button>
+          </div>
+
+
+          <!-- Old Dynamic code -->
+          <div class="row" style="display: none;">
+            <div class="col-md-12 mt-5">
+              <div class="row">
+                <div class="col-md-12">
+                  <h5>Source</h5>
+                </div>
+                <div class="col-md-6">
+                  <p class="cn_input_lbl">Location<span class="txt_d"> *</span></p>
+                  <mat-form-field appearance="none" style="position: relative;">
+                    <input matInput type="text" formControlName="sourceLocation" maxlength="65" [value]="sourceLoc?.location" placeholder="Type Source Location" (keyup)="searchUserType($event)" (blur)="onBlur('source')" class="form-control cn_input" />
+                    <mat-error class="error_mess d_inline" *ngIf="!errorSource && submitted && addAvailabilityForm?.get('sourceLocation').errors?.['required']">Source Location is required.</mat-error>
+                    <mat-error *ngIf="addAvailabilityForm.get('sourceLocation').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed.</mat-error>
+                    <mat-error *ngIf="errorSource" class="error_mess">Please select from the dropdown list.</mat-error>
+                    <div class="src_cty_list" *ngIf="sourceCityData?.length > 0 && sourceLocSearch && !destinationSearch">
+                    <div class="input_dropdown">
+                      <p *ngFor="let cityRecord of sourceCityData; let i=index;" (click)="getSourceLoc(cityRecord)" class="input_option">{{cityRecord?.city}}, {{cityRecord?.state}}</p>
+                    </div>
+                    </div>
+                  </mat-form-field>
+                  <div class="loard_box" *ngIf="loaderSearch">
+                    <span class="custom_spinner spinner-border" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </span>
+                  </div>
+                  
+                </div>
+                <div class="col-md-6">
+                  <p class="cn_input_lbl">Date
+                    <span class="txt_d"> *</span></p>
+                  <mat-form-field appearance="none" class="cn_pfix_icn">
+                    <input matInput formControlName="sourceDate" (dateChange)="updateMinNextDate($event.value)" [matDatepicker]="pickupDatePicker" [matDatepicker]="dp2" placeholder="Select  Source Date" [min]="minDate" [readonly]="true" class="form-control cn_input" >
+                    <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+                    <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+                    <mat-error *ngIf="submitted && addAvailabilityForm.get('sourceDate').errors?.['required']" class="error_mess">Source Date is  required.</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-12">
+                  <h5>Destination</h5>
+                </div>
+                <div class="col-md-6">
+                  <p class="cn_input_lbl">Location
+                    <span class="txt_d"> *</span></p>
+                    <mat-form-field appearance="none" style="position: relative;">
+                      <input matInput type="text" formControlName="destinationLocation"  maxlength="65" placeholder="Enter Destination Location" class="form-control cn_input" [value]="destinyLoc?.location" (blur)="onBlur('destination')" (keyup)="searchUserTypeForDestination($event)"/>
+                      <mat-error class="error_mess d_inline" *ngIf="!errorDestination && submitted && addAvailabilityForm?.get('destinationLocation').errors?.['required']">Destination Location is required.</mat-error>
+                      <mat-error *ngIf="addAvailabilityForm.get('destinationLocation').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed</mat-error>
+                      <mat-error *ngIf="errorDestination" class="error_mess">Please select from the dropdown list.</mat-error>
+                        <div class="src_cty_list" *ngIf="destinationCityData?.length > 0 && destinationSearch && !sourceLocSearch">
+                          <div class="input_dropdown">
+                          <p *ngFor="let cityRecord of destinationCityData; let i=index;" (click)="getDestinyLoc(cityRecord)"  class="input_option">{{cityRecord.city}}, {{cityRecord.state}}</p>
+                        </div>
+                        </div>
+                    </mat-form-field>
+                  
+
+                </div>
+              
+                <div class="col-md-6">
+                  <div>
+                    <p class="cn_input_lbl">Date<span class="txt_d"> *</span></p>
+                    <mat-form-field appearance="none" class="cn_pfix_icn">
+                      <input matInput formControlName="destinationDate" [matDatepicker]="dropDatePicker" [matDatepicker]="dp1" placeholder="Select Destination Date"  [min]="minNextDate" [readonly]="true" class="form-control cn_input">
+                      <mat-datepicker-toggle matSuffix [for]="dp1" [disabled]="dropTimedisabled"></mat-datepicker-toggle>
+                      <mat-datepicker #dp1 disabled="false"></mat-datepicker>
+                      <mat-error *ngIf="submitted && addAvailabilityForm.get('destinationDate').errors?.['required']" class="error_mess">Destination Date is required.</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div> 
+                <div class="col-md-12">
+                  <h5>Other</h5>
+                </div>            
+              </div>
+            </div>
+            <div class="form_action">
+              <button type="submit" [disabled]="errorDestination||errorSource" class="cn_btn" >Add Availability</button>
+              <!-- style="background: #575757;" -->
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="skt_eifr" *ngIf="skeletonLoader">
+      <div *ngFor="let fake of generateFakeSkeleton(8)">
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '16px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '30px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+  
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

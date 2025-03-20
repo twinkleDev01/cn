@@ -1,0 +1,10 @@
+.skt_eifr { background: #fff; padding: 24px; border-radius: 10px; margin-top: 14px; }
+.form_actn { text-align: right; }
+
+.upload_profile_img { margin: 0px !important;}
+.edit_business_info_con textarea { border: none; font-size: 14px; line-height: 18px; height: 140px; }
+.edit_business_info_con textarea:focus { outline: none; border: none;}
+
+@media (max-width: 767px ) {
+  .cn_input_lbl { margin-top: 20px; } 
+}

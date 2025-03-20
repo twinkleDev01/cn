@@ -1,0 +1,115 @@
+<div class="content_box edit_business_info_con">
+  <h3 class="content_tlt">SEO</h3>
+  <div class="content_body">
+    <div *ngIf="!skeletonLoader">
+      <p class="content_dis">SEO is leveraged to enhance visibility, helping users find the best transport options. By optimizing search rankings, your network makes it easier for shippers and businesses to locate reliable services, ensuring a strong online presence and increased engagement within the transportation industry.</p>
+      <div class="cn_field" *ngIf="!skeletonLoader">
+        <form autocomplete="off" [formGroup]="seoForm" (ngSubmit)="ngSubmit(seoForm)">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="upload_image upload_profile_img">
+                <div class="upload_btn_box" (click)="updateProfileImage('profileImage')">
+                  <div class="ubb_btn">
+                    <mat-icon class="material-symbols-outlined ubb_icn">add_a_photo</mat-icon>
+                  </div>
+                </div>
+                <img *ngIf="getUserData?.profileImage" src="{{getUserData?.profileImage}}"
+                class="img-fluid uploded_img">
+                <img *ngIf="!getUserData?.profileImage" src="https://placehold.co/512x512"
+                class="img-fluid uploded_img">
+              </div>
+            </div>
+            <div class="col-md-9">
+              <div class="col-md-12">
+                <p class="cn_input_lbl">Title
+                  <span class="txt_d"> *</span>
+                </p>
+                <mat-form-field appearance="none">
+                  <input matInput type="text" formControlName="title" maxlength="65"
+                  placeholder="Enter Title" class="form-control cn_input" />
+                  <mat-error class="error_mess d_inline" *ngIf="seoForm?.get('title').errors?.['required']">
+                    Title is required.
+                  </mat-error>
+                  <mat-error *ngIf="seoForm.get('title').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-12">
+                <p class="cn_input_lbl">Description
+                  <span class="txt_d"> *</span>
+                </p>
+                <mat-form-field appearance="none" id="text_area_input">
+                  <textarea matInput class="" formControlName="descriptions" placeholder="Enter Description"></textarea>
+                  <mat-error class="error_mess d_inline" *ngIf="seoForm?.get('descriptions').errors?.['required']">
+                    Description is required.
+                  </mat-error>
+                  <mat-error *ngIf="seoForm.get('descriptions').errors?.['maxlength']" class="error_mess"> Only 1024 characters are allowed</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="form_actn mt-3">
+              <button type="submit" class="cn_btn">Update</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- social media-tab-group -->
+        <div class="media_file_con cn_cus_tab mt-4">
+          <div>
+            <mat-tab-group animationDuration="600ms" [selectedIndex]="selectedIndex" (selectedIndexChange)="onTabChanged($event)">
+              <mat-tab label="Google">
+                <ng-template matTabContent>
+                  <app-digital-marking-social-media [title]="title" [description]="description" [profilUrl]="profilUrl"></app-digital-marking-social-media>
+                </ng-template>
+              </mat-tab>
+              <mat-tab label="Facebook">
+                <ng-template matTabContent>
+
+                  <app-digital-marking-social-media [title]="title" [description]="description" [imageData]="imageData" [profilUrl]="profilUrl"></app-digital-marking-social-media>
+                </ng-template>
+              </mat-tab>
+              <mat-tab label="LinkedIn">
+                <ng-template matTabContent>
+                  <app-digital-marking-social-media [title]="title" [description]="description" [imageData]="imageData" [profilUrl]="profilUrl"></app-digital-marking-social-media>
+                </ng-template>
+              </mat-tab>
+              <mat-tab label="YouTube">
+                <ng-template matTabContent>
+                  <app-digital-marking-social-media [title]="title" [description]="description" [imageData]="imageData" [profilUrl]="profilUrl"></app-digital-marking-social-media>
+                </ng-template>
+              </mat-tab>
+              <mat-tab label="Instagram">
+                <ng-template matTabContent>
+                  <app-digital-marking-social-media [title]="title" [description]="description" [imageData]="imageData" [profilUrl]="profilUrl"></app-digital-marking-social-media>
+                </ng-template>
+              </mat-tab>
+              <mat-tab label="Twitter">
+                <ng-template matTabContent>
+                  <app-digital-marking-social-media [title]="title" [description]="description" [imageData]="imageData" [profilUrl]="profilUrl"></app-digital-marking-social-media>
+                </ng-template>
+              </mat-tab>
+              <mat-tab label="TikTok">
+                <ng-template matTabContent>
+                  <app-digital-marking-social-media [title]="title" [description]="description" [imageData]="imageData" [profilUrl]="profilUrl"></app-digital-marking-social-media>
+                </ng-template>
+              </mat-tab>
+            </mat-tab-group>
+            <div class="free_usr_upgrd_box">
+              <div class="fuub_crd">
+                <div class="spic_box"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="skt_eifr" *ngIf="skeletonLoader">
+      <div *ngFor="let fake of generateFakeSkeleton(8)">
+        <ngx-skeleton-loader count="1"
+        [theme]="{ width: '100%', height: '16px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1"
+        [theme]="{ width: '100%', height: '30px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

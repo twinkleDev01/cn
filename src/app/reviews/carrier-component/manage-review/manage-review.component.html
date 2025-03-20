@@ -1,0 +1,203 @@
+<div class="manage_review_con">
+	<div>
+		<div class="d-flex align-items-center justify-content-between">	
+			<p class="edt_pg_tlt mb-2">
+				Review'<span *ngIf="totalRecords > 1">s</span> About You <span> ({{totalRecords ? totalRecords : '0'}}) </span>
+			</p>
+			<div class="select_sorting">
+				<p class="fs_16 fsn_4 txt_lb f_clash">Sort by</p>
+				<mat-select placeholder="sortingValue" [(ngModel)]="sortingValue" [ngModelOptions]="{standalone: true}" class="form-control cn_input">
+					<mat-option [ngClass]="noData ? 'disabled': ''" (click)="sorting('ratingHighToLow')"
+					value="ratingHighToLow" class="f_clash">Rating -- High to Low</mat-option>
+					<mat-option [ngClass]="noData ? 'disabled': ''" (click)="sorting('ratingLowToHigh')"
+					value="ratingLowToHigh" class="f_clash">Rating -- Low to High</mat-option>
+					<mat-option [ngClass]="noData ? 'disabled': ''" (click)="sorting('newest')" value="newest"
+					class="f_clash">Newest First</mat-option>
+					<mat-option [ngClass]="noData ? 'disabled': ''" (click)="sorting('oldest')" value="oldest"
+					class="f_clash">Oldest Last</mat-option>
+				</mat-select>
+			</div>
+		</div>
+		
+		<div class="mrc_head_box" >
+			<p class="lable_vlu">Here, you can view a list of all the reviews left by your customers. It's a great way to enhance your service by listening to and acting upon feedback from your actual customers.</p>
+		</div>
+
+		<div *ngIf="!skeletonLoader">
+			<div  class="review_mess_box" *ngFor="let reviewData of reviewList, let i=index;" >
+				<div class="rmb_img_inicial">
+					<img *ngIf="reviewData?.user?.profileImage" src="{{reviewData?.user?.profileImage}}" class="img-fluid">
+					<span class="initail" *ngIf="!reviewData?.user?.profileImage && reviewData?.user?.companyName">{{(reviewData?.user?.companyName) | acronymOfName}}</span>
+					<span class="initail" *ngIf="!reviewData?.user?.profileImage && !reviewData?.user?.companyName && reviewData?.user?.firstName && reviewData?.user?.lastName">{{getFullName(reviewData?.user?.firstName, reviewData?.user?.lastName) | acronymOfName}}</span>
+				</div>
+				<div class="rmb_body">
+					<div class="rmb_head_t">
+						<div class="rmb_hltr_txt">
+							<div class="d-flex align-items-center justify-content-between">
+								<p class="rmb_slogan">"{{reviewData?.title ? reviewData?.title : '-'}}"</p>
+							</div>
+							<div class="rmb_name_verify">
+								<mat-icon class="material-symbols-outlined">verified_user</mat-icon>
+								<div class="rmb_name">
+									<span class="txt_lb fw_4"> Verified by </span>
+									<span class="txt_p"> {{reviewData?.user?.firstName}} {{reviewData?.user?.lastName}}
+									</span>
+									<span class=""> {{reviewData?.user?.userType}} </span>
+									<span class="txt_lb fw_4"> from </span>
+									
+									<span *ngIf="reviewData?.user?.city || reviewData?.user?.state"> {{reviewData?.user?.city ? reviewData?.user?.city : '-'}}, {{reviewData?.user?.state ? reviewData?.user?.state : '-'}}, {{reviewData?.user?.country ? reviewData?.user?.country : '-'}} </span>
+									<span *ngIf="!reviewData?.user?.city && !reviewData?.user?.state">-</span>
+								</div>
+							</div>
+							<div class="rmb_rating">
+								<p class="ratng_no" *ngIf="reviewData?.rating">{{reviewData?.rating}}.0</p>
+								<app-review-show [averageRating]="reviewData?.rating"></app-review-show>
+								<p class="rmb_rtng_date">{{reviewData?.createdAt | date: 'MMM dd, yyyy'}}</p>
+							</div>
+							<div class="rmb_mess">
+								<!-- <span class="quote_sign qs_start">❞</span> -->
+								<div class="quote_mess">
+									<span class="quote_dis">{{reviewData?.review}}</span>
+									<!-- <span class="quote_sign qs_end">❠</span> -->
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="sh_con">
+						<div class="sh_box" *ngIf="showSummeryInfo[i]">
+							<div class="other_info">
+								<div class="pdt_instn_box">
+									<div class="pdt_instn_boxl">
+										<span class="instn_lbl">Lanes:</span>
+										<span class="instn_lbl" *ngIf="reviewData?.lane.length == 0">-</span>
+									</div>
+									<div class="pdt_instn_boxr" *ngIf="reviewData?.lane.length > 0">
+										<div class="pdt_instn_row"
+											*ngFor="let laneData of reviewData?.lane.slice(0, showAll[i] ? reviewData?.lane?.length : 3)">
+											<span class="instn_picup">{{laneData.fromCity}},
+												{{laneData?.fromStateCode}}</span>
+											<span class="instn_arrow">></span>
+											<span class="instn_picup">{{laneData.toCity}}, {{laneData?.toStateCode}}</span>
+										</div>
+										<button (click)="toggleShowAll(i)" *ngIf="reviewData?.lane?.length > 3"
+											class="show_hid_btn">{{ showAll[i] ? 'Show Less' : 'Show More' }}</button>
+									</div>
+									<div class="pdt_instn_boxr" *ngIf="reviewData?.lane.length===0">Lane not added</div>
+								</div>
+
+								<p class="sngl_pont">
+									<span class="sngl_pont_lbl">Freight Details:</span>
+									<span class="sngl_pont_vlu" *ngIf="reviewData?.cargoType?.length ==0">-</span>
+									<span class="sngl_pont_vlu"
+										*ngFor="let cargoData of reviewData?.cargoType; let j=index">
+										{{cargoData?.cargoTypeName ? cargoData?.cargoTypeName : '-'}}<span
+											*ngIf="j+1 < reviewData?.cargoType?.length">, </span> </span>
+								</p>
+								<p class="sngl_pont mb-0">
+									<span class="sngl_pont_lbl">Tracking:</span>
+									<span class="sngl_pont_vlu">
+										<span *ngIf="reviewData?.tracking"> Offers electronic tracking,
+											<span>{{reviewData?.providerDetails ? reviewData?.providerDetails : '-'}}</span>
+										</span>
+										<span *ngIf="!reviewData?.tracking"> {{reviewData?.tracking}}</span>
+									</span>
+								</p>
+							</div>
+						</div>
+						<div class="sh_actn">
+							<span class="view_full_review" (click)="showSummery('showSummery',i)" *ngIf="!showSummeryInfo[i]">
+								<span>Show Summary</span>
+								<span class="material-icons">keyboard_arrow_down</span>
+							</span>
+							<span class="view_full_review" (click)="showSummery('hideSummery',i)" *ngIf="showSummeryInfo[i]">
+								<span>Hide Summary</span>
+								<span class="material-icons">keyboard_arrow_up</span>
+							</span>
+						</div>
+					</div>
+					<div class="replyed_box" *ngIf="reviewData?.carrierResponse">
+						<span class="instn_lbl d-block">Your Reply</span>
+						<div class="dful_chipQWgry_chip rep_mess">{{reviewData?.carrierResponse}}</div>
+					</div>
+					<!-- for broker  -->
+					<div class="replyed_box" *ngIf="reviewData?.brokerResponse">
+						<div class="pdt_instn_box m-0">
+							<div class="pdt_instn_boxl">
+								<span class="instn_lbl">Your Reply</span>
+							</div>
+							<div class="pdt_instn_boxr">
+								<div class="dful_chip gry_chip">
+									<span class="instn_picup">{{reviewData?.brokerResponse}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="featured_box">
+						<div class="text-center">
+							<button (click)="addToFavoritesPopup('addToFavorites',reviewData?.id,'true')"
+								*ngIf="!reviewData?.isFeatured" class="trophy_btn">
+								<!-- <i class="fa-regular fa-heart"></i> -->
+								<!-- <i class="fa-regular fa-trophy-star"></i> -->
+								<i class="fa-thin fa-trophy-star"></i>
+								<span class="feature_re">Feature Review</span>
+							</button>
+							<button (click)="addToFavoritesPopup('removeToFromFavorites',reviewData?.id,'false')"
+								*ngIf="reviewData?.isFeatured" class="trophy_btn">
+								<!-- <i class="fa-solid fa-heart"></i> -->
+								<!-- <i class="fa-duotone fa-trophy-star"></i> -->
+								<i class="fa-duotone fa-trophy-star"></i>
+								<span class="feature_re">Featured Review</span>
+							</button>
+						</div>
+						<div class="btn_action">
+							<button class="cn_btn" (click)="respondReview(reviewData)" *ngIf="reviewData?.carrierResponse ?!reviewData?.carrierResponse :!reviewData?.brokerResponse ">Respond</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="skeletonloader" *ngIf="reviewList?.length==0 && !skeletonLoader">
+		<div class="empty-state">
+			<div class="empty-state__content">
+				<div class="empty-state__icon">
+					<img src="./assets/images/no_data_found_img.jpg" alt="">
+				</div>
+				<div class="empty-state__message">Invite For Review</div>
+				<p class="empty-state__help">This is no Review available</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="text-center" *ngIf="reviewList?.length > 0 && spinnerLoader">
+		<span class="spinner-border" role="status" style="color: #00b4fc;"></span>
+	</div>
+
+	<div *ngIf="reviewList?.length > 0 && dataNotFound && !skeletonLoader" class="noMore_record">
+		<span>There are no more records to show.</span>
+	</div>
+
+	<div class="skeletonloader" *ngIf="skeletonLoader">
+		<div class="rpvc_skt" *ngFor="let fake of generateFakeSkeleton(2)">
+			<ngx-skeleton-loader count="1"
+				[theme]="{ 'border-radius': '0', width: '100%', height: '36px', margin: '0 0 24px' }"></ngx-skeleton-loader>
+			<div class="rpvc_skt_bx">
+				<div class="rpvc_skt_l">
+					<ngx-skeleton-loader count="1"
+						[theme]="{ 'border-radius': '50%', width: '56px', height: '56px' }"></ngx-skeleton-loader>
+				</div>
+				<div class="rpvc_skt_r">
+					<ngx-skeleton-loader count="4"
+						[theme]="{ 'border-radius': '0', width: '100%', height: '16px', margin: '0 0 8px' }"></ngx-skeleton-loader>
+					<ngx-skeleton-loader count="2"
+						[theme]="{ 'border-radius': '0', width: '70%', height: '26px', margin: '0 0 10px' }"></ngx-skeleton-loader>
+					<ngx-skeleton-loader count="3"
+						[theme]="{ 'border-radius': '0', width: '70%', height: '18px', margin: '0 0 6px' }"></ngx-skeleton-loader>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

@@ -1,0 +1,52 @@
+.dashboard_chat_overview { background: #fff; border: 1px solid #ededed; margin: 0 0 1.5rem; }
+.dco_head { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 1rem; background: #e5e5e5; margin: 0 0 0.7rem; }
+.dco_h_tlt { font-size: 1.4rem; font-weight: 500; }
+.dco_box { padding: 1rem; }
+.dco_bar { margin: 0 0 1.2rem; font-size: 1rem; }
+.bar_hed { display: flex; justify-content: space-between; margin: 0 0 0.3rem; }
+.bar_vlu { font-size: 1.1rem; font-weight: 600; }
+.cb_circle { max-width: 260px; margin: 0 auto; }
+.chart_info p.cif_lbl { font-weight: 600; margin: 0 0 0.5rem; }
+.chart_info_box { max-width: 70%; margin: 0 auto; }
+.filtr_con { padding-top: 1rem; margin-top: 1rem; border-top: 1px solid #ededed; }
+.comn_fltr { display: flex; height: 100%; align-items: center; }
+@media screen and (max-width: 1640px) { 
+    .chart_info_box { max-width: 100%; }
+}
+
+@media screen and (max-width: 1400px) {
+    .tlt_4 { font-size: 20px; line-height: 26px; }
+    .dco_bar { margin: 0 0 1rem; font-size: 0.9rem; }
+    .bar_vlu { font-size: 1rem; }
+}
+
+@media screen and (max-width: 1240px) { 
+    .bar_crt_box .row { flex-direction: column-reverse; }
+    .bar_crt_box .col-md-8 { width: 100%; }
+    .bar_crt_box .col-md-4 { width: 100%; margin: 1rem 0 0; }
+    .pie_crt_box { width: 55%; }
+    .bar_crt_box { width: 45%; }
+}
+
+@media screen and (max-width: 1023px) {
+    .pie_crt_box, .bar_crt_box { width: 100%; }
+    .pie_crt_box {
+        .col-md-5, .col-md-7 { width: 50%; }
+    }
+    .bar_crt_box .row { flex-direction: row-reverse; }
+    .bar_crt_box .col-md-8 { width: 60%; margin: 1rem 0 0; }
+    .bar_crt_box .col-md-4 { width: 40%; margin: 1.5rem 0 0; }
+}
+
+@media screen and (max-width: 576px) {
+    .dco_bar { margin: 0 0 0.7rem; font-size: 0.9rem; }
+    .bar_vlu { font-size: 0.9rem; }
+    .dco_h_tlt { font-size: 1.1rem; }
+    .pie_crt_box {
+        .col-md-5, .col-md-7 { width: 100%; }
+    }
+    .cb_circle { max-width: 100%; }
+    .bar_crt_box .row { flex-direction: column-reverse; margin: 1.5rem 0 0; }
+    .bar_crt_box .col-md-8 { width: 100%; margin: 1rem 0 0; }
+    .bar_crt_box .col-md-4 { width: 100%; margin: 0; }
+}

@@ -1,0 +1,50 @@
+<div class="payment_cards" id="card-info">
+  <!-- <p class="pay_info">Payment Information</p> -->
+  <div class="row" *ngIf="skeletonLoaderCard">
+    <div class="col-md-3 cus_md5" *ngFor="let cardRecord of cardListing" (click)="selectCard(cardRecord?.id)">
+      <div class="added_payment_card pointer " [ngClass]="currentCardActive === cardRecord?.id ? 'select_card' : ''">
+        <span  *ngIf="cardListing.length >1"><i class="material-icons close_mark" (click)="removeCard(cardRecord?.id )">close</i></span>
+        <div class="card_container pointer">
+          <div class="card_imgIcon">
+            <img class="img-fluid notifications" id="{{cardRecord?.card?.brand}}1x" src="assets/images/visa_crd_img.png">
+            <span  *ngIf="currentCardActive === cardRecord?.id" class="material-icons-outlined">
+              check_circle_outline
+              </span>
+          </div>
+          <span class="mb-2 fs_16 fsb_6 txt_b f_clash v_name">Visa ending in 4242</span>
+          <p class="v_thru">Valid thru {{cardRecord?.card?.exp_month ? cardRecord?.card?.exp_month : "-"}} / {{cardRecord?.card?.exp_year ? cardRecord?.card?.exp_year : "-"}} <span class="txt_d fsm_5">{{cardRecord?.expiry ? '(Expired)': ''}}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 cus_md5 buy_sub_act" *ngIf="!checkSUb">
+      <div class="add_bill_info mb-3" (click)="addPaymentCard()">
+        <span class="material-icons fs_30 txt_blue">control_point</span>
+        <span class="txt_blue f_clash">Add Card</span>
+      </div>
+    </div>
+    <div class="col-md-2 cus_md5 for_other_sub_act" *ngIf="checkSUb">
+      <div class="add_bill_info mb-3" (click)="addPaymentCard()">
+        <span class="material-icons fs_30 txt_blue mb-1">control_point</span>
+        <p class=" mb-0 fs_12 fsb_6 txt_blue f_clash">Add Card</p>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="skeletonLoaderCard" class="text-center">
+    <u *ngIf="has_more && cardListing.length" class="fs_16 fsm_5 txt_p pointer f_clash" (click)="MoreCards()">View More</u>
+    <!-- <p *ngIf="!has_more && cardListing.length" class="fs_16 fsm_5 txt_lb f_clash">No More Cards</p> -->
+  </div>
+ <div class="pay_crd_skt" *ngIf="!skeletonLoaderCard">
+  <div class="row">
+    <div class="col-md-4" *ngFor="let fake of generateFakeSkeleton(3)" style="width: 21%;">
+      <div class="added_payment_card">
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '22px', margin: '0px 0 0' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '18px', margin: '10px 0 6px' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '16px', margin: '0px 0 3px' }" *ngFor="let fake of generateFakeSkeleton(2)"></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

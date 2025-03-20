@@ -1,0 +1,30 @@
+.utsb_con { background: #FFFFFF; border: 1px solid #D9D9D9; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25); padding: 24px 32px; margin: 50px 42px; display: flex; border-radius: 10px; }
+.utsb_l { width: 38%; }
+.utsb_r { width: 62%; display: flex; align-items: center; }
+.utsb_tlt { font-weight: 500; font-size: 20px; line-height: 30px; color: #333333; margin: 0 0 24px; }
+.selected_user mat-radio-button { font-weight: 400; font-size: 18px; line-height: 36px; color: #333333; display: block; width: 35%; margin: 0 0 4px; }
+.utsb_dis { font-weight: 400; font-size: 16px; line-height: 24px; color: #818181; margin: 0 0 20px; }
+
+.utsb_actn { margin: 0 0 60px; text-align: center; }
+
+.broker_box,
+.carrier_box,
+.shipper_box,
+.dispatcher_box,
+.seller_box { display: flex; width: 100%; border-left: 6px solid #00b4fc; padding: 22px 16px 0px 22px; background: #f0f0f08a; border-radius: 0px 6px 6px 0px; }
+.utsb_r .utsb_tlt { margin: 0 0 10px; }
+
+
+
+@media (max-width: 767px) {
+
+    .utsb_con { flex-direction: column; margin: 0px; padding: 15px; }
+    .utsb_r { width: 100%; }
+    .utsb_l { width: 100%; }
+    .utsb_tlt { margin-bottom: 5px; }
+    .broker_box, .carrier_box, .shipper_box, .dispatcher_box, .seller_box { display: flex; width: 100%; border-top: 6px solid #00b4fc; padding: 15px 15px 0px; background: #f0f0f08a; border-radius: 5px; margin-top: 20px; border-left: 0px; }
+    .utsb_actn { margin: 40px 0 40px; text-align: right; }
+    .utsb_tlt { font-size: 19px; }
+    
+    
+}

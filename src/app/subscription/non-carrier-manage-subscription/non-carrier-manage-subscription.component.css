@@ -1,0 +1,96 @@
+.spc_box { background: #FFFFFF; border: 1px solid #D9D9D9; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); margin: 18px 0px 32px 0px; }
+.spc__head { background: #00B4FC; padding: 16px 20px; }
+.spc_crd_nam { font-weight: 400; font-size: 16px; line-height: 24px; color: #FFFFFF; display: inline-block; margin: 0 0 6px; }
+.spc_crd_typ { font-weight: 600; font-size: 24px; line-height: 36px; color: #FFFFFF; margin: 0px; }
+.spc_body { padding: 16px 20px; }
+.spc_crd_dis { font-weight: 400; font-size: 16px; line-height: 24px; color: #666666; margin: 0 0 20px; }
+.spc_price { margin: 0 0 18px; }
+.spc_price_t { margin: 0 0 2px; }
+.spc_price_t sup { font-size: 18px; line-height: 20px; font-weight: 600; top: -12px; }
+.spc_price_t span { font-weight: 600; font-size: 36px; line-height: 36px; color: #333333; }
+.spc_price_b { font-weight: 400; font-size: 14px; line-height: 21px; color: #666666; }
+.spc_tasks { font-weight: 500; font-size: 16px; line-height: 24px; color: #333333; display: inline-block; padding: 7px 24px; background: #FFFFFF; border: 1px solid #D9D9D9; margin: 0 0 32px; }
+.spc_crd_actn { margin: 0 0 24px; }
+.spc_crd_actn .cn_btn { padding: 8px 40px; border: none; }
+.spc_benifit_tlt { font-weight: 600; font-size: 16px; line-height: 24px; color: #333333; margin: 0 0 14px; }
+.spc_benifits ul { padding: 0; margin: 0; list-style: none; }
+.spc_benifits ul li { font-weight: 400; font-size: 16px; line-height: 24px; color: #666666; margin: 0 0 14px; position: relative; padding: 0 0 0 26px; }
+.spc_benifits ul li i { position: absolute; top: 2px; left: 0; color: #25D366; font-size: 18px; }
+
+.ms_select_plan mat-radio-button { font-weight: 400; font-size: 21px; line-height: 32px; color: #333333; }
+
+
+.current_plan .spc__head { background: #EFF3F5; }
+.current_plan .spc_crd_nam { color: #333; }
+.current_plan .spc_crd_typ { color: #333; }
+.current_plan .cp_row { margin: 16px 0; }
+.current_plan .cp_row_lbl { font-weight: 500; font-size: 16px; line-height: 24px; color: #333333; margin: 0 0 4px; }
+.current_plan .cp_row_vlu { font-weight: 400; font-size: 14px; line-height: 21px; color: #333333; margin: 0; }
+
+
+
+
+
+.spc_skt .current_plan .spc__head { background: #f3f3f3; }
+.spc_box { background: #FFFFFF; border: 1px solid #D9D9D9; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); margin: 18px 0px 32px 0px; }
+.spc__head { background: #00B4FC; padding: 16px 20px; }
+.spc_crd_nam { font-weight: 400; font-size: 16px; line-height: 24px; color: #FFFFFF; display: inline-block; margin: 0 0 6px; }
+.spc_crd_typ { font-weight: 600; font-size: 24px; line-height: 36px; color: #FFFFFF; margin: 0px; }
+.spc_body { padding: 16px 20px; }
+.spc_crd_dis { font-weight: 400; font-size: 16px; line-height: 24px; color: #666666; margin: 0 0 20px; }
+.spc_price { margin: 0 0 18px; }
+.spc_price_t { margin: 0 0 2px; }
+.spc_price_t sup { font-size: 18px; line-height: 20px; font-weight: 600; top: -12px; }
+.spc_price_t span { font-weight: 600; font-size: 36px; line-height: 36px; color: #333333; }
+.spc_price_b { font-weight: 400; font-size: 14px; line-height: 21px; color: #666666; }
+.spc_tasks { font-weight: 500; font-size: 16px; line-height: 24px; color: #333333; display: inline-block; padding: 7px 24px; background: #FFFFFF; border: 1px solid #D9D9D9; margin: 0 0 32px; }
+.spc_crd_actn { margin: 0 0 24px; }
+.spc_crd_actn .cn_btn { padding: 8px 40px; border: none; }
+.spc_benifit_tlt { font-weight: 600; font-size: 16px; line-height: 24px; color: #333333; margin: 0 0 14px; }
+.spc_benifits ul { padding: 0; margin: 0; list-style: none; }
+.spc_benifits ul li { font-weight: 400; font-size: 16px; line-height: 24px; color: #666666; margin: 0 0 14px; position: relative; padding: 0 0 0 26px; }
+.spc_benifits ul li i { position: absolute; top: 2px; left: 0; color: #25D366; font-size: 18px; }
+
+/* subscription_history_table */
+.sht_box { background: #FFFFFF; border: 1px solid #D9D9D9; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); margin: 0 0 32px; padding: 30px 20px; }
+.sht_tlt { font-weight: 600; font-size: 24px; line-height: 36px; color: #333333; }
+.sht_tlt span:nth-child(2) { margin-left: 15px; }
+.c_plan { font-size: 16px; line-height: 24px; font-weight: 400; color: #000;}
+.sht_box table thead tr { background: #EFF3F5; }
+.sht_box table thead tr th { font-weight: 500; font-size: 16px; line-height: 24px; color: #333333; padding: 14px 20px; }
+.sht_box table tbody tr td { font-weight: 400; font-size: 14px; line-height: 21px; color: #333333; padding: 14px 20px; }
+.sht_tbl_actn { font-weight: 400; font-size: 14px; line-height: 21px; color: #00B4FC; border: 1px solid #00B4FC; padding: 4px 24px; margin-right: -250px; }
+.sht_tbl_actn:hover { cursor: pointer; background: #00B4FC; color: #fff; }
+
+.blank_payment_card { background: #FFFFFF; border: 1px solid #D9D9D9; padding: 24px 20px; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 0 24px; font-size: 18px; line-height: 26px; font-weight: 500;  color: #00B4FC; cursor: pointer; }
+.blank_payment_card i { font-size: 20px; line-height: 28px; }
+
+.added_payment_card { background: #FFFFFF; border: 1px solid #D9D9D9; padding: 18px 20px 18px; min-height: 140px; margin: 0 0 24px; cursor: pointer; position: relative; }
+
+.close_mark { display: none; position: absolute; top: 10px; right: 10px; font-size: 18px; }
+.added_payment_card:hover .close_mark { display: block; opacity: 0.7; }
+.added_payment_card .close_mark:hover { opacity: 1; }
+
+.apc_img { margin: 0 0 8px; }
+.apc_img img { max-height: 20px; }
+.apc_name { font-weight: 400; font-size: 18px; line-height: 24px; color: #000000; margin: 0 0 6px; }
+.apc_no { font-weight: 400; font-size: 18px; line-height: 24px; color: #000000; margin: 0 0 2px; }
+.apc_valid_date { font-weight: 400; font-size: 16px; line-height: 22px; color: #818181; margin: 0; }
+
+.select_card { border: 1px solid #00b4fc; }
+.ms_select_plan mat-radio-button { font-weight: 400; font-size: 21px; line-height: 32px; color: #333333; }
+
+
+.current_plan .spc__head { background: #EFF3F5; }
+.current_plan .spc_crd_nam { color: #333; }
+.current_plan .spc_crd_typ { color: #333; }
+.current_plan .cp_row { margin: 16px 0; }
+.current_plan .cp_row_lbl { font-weight: 500; font-size: 16px; line-height: 24px; color: #333333; margin: 0 0 4px; }
+.current_plan .cp_row_vlu { font-weight: 400; font-size: 14px; line-height: 21px; color: #333333; margin: 0; }
+
+/*skt*/
+.mht_skt .sht_box table tbody tr td { padding: 18px 20px 4px; }
+
+.sht_tlt span:first-child{ margin-right: 5px; }
+.change_btn { display: flex; justify-content: right; margin-top: 35px; }
+.change_btn .sht_tbl_actn {margin-right: 0px; }

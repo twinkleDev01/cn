@@ -1,0 +1,131 @@
+<div class="edit_business_info_con">
+  <div *ngIf="!skeletonLoader">
+    <div class="form_box">
+      <form autocomplete="off" [formGroup]="businessEdit" (ngSubmit)="profileUpdate(businessEdit)" class="cn_field">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="upload_image">
+              <div class="upload_btn_box" (click)="updateProfileImage('coverImage')">
+                <div class="ubb_btn">
+                  <mat-icon class="material-symbols-outlined ubb_icn">add_a_photo</mat-icon>
+                  <span class="ubb_txt">Upload banner Image</span>
+                </div>
+              </div>
+              <img *ngIf="getUserData.coverImage" src="{{getUserData.coverImage}}" class="img-fluid uploded_img">
+              <img *ngIf="!getUserData.coverImage" src="https://placehold.co/1600x320" class="img-fluid uploded_img">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="upload_image upload_profile_img">
+              <div class="upload_btn_box" (click)="updateProfileImage('profileImage')">
+                <div class="ubb_btn">
+                  <mat-icon class="material-symbols-outlined ubb_icn">add_a_photo</mat-icon>
+                </div>
+              </div>
+              <img *ngIf="getUserData.profileImage" src="{{getUserData.profileImage}}" class="img-fluid uploded_img">
+              <img *ngIf="!getUserData.profileImage" src="https://placehold.co/512x512" class="img-fluid uploded_img">
+            </div>
+          </div>
+
+          <div class="col-md-12 mt-4">
+            <div class="row">
+              <div class="col-md-6">
+                <p class="cn_input_lbl">Do you have Electronic Tracking of Load
+                  <span class="material-icons info_icon" matTooltip="{{information?.electronicTracking}}"> info_outline </span>
+                   <span class="txt_d"> *</span></p>
+                <mat-form-field appearance="none" class="cn_inpt_drop">
+                  <mat-select formControlName="electronicTracking" class="form-control cn_input" placeholder="Select Electronic Tracking" (selectionChange)="electronicChange($event)">
+                    <mat-option class="mat_dropdown" [value]="true">Yes</mat-option>
+                    <mat-option class="mat_dropdown" [value]="false">No</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="businessEdit.get('electronicTracking').errors?.['required']" class="error_mess">Electronic tracking is required.</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <div *ngIf="electronicValue==true">
+                  <p class="cn_input_lbl">Enter Tracking Provider Name <span class="txt_d"> *</span></p>
+                  <mat-form-field appearance="none">
+                    <input matInput type="text" formControlName="providerDetails" placeholder="Enter Provider Details" maxlength="65" class="form-control cn_input" />
+                    <mat-error *ngIf="businessEdit.get('providerDetails').errors?.['required']" class="error_mess">Provider Detail is required.</mat-error>
+                    <mat-error *ngIf="businessEdit.get('providerDetails').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              
+              <div class="col-md-12">
+                <div [ngClass]="checkPlan ? 'premium_plan_update_field' : 'my_class2'">
+                  <p class="field_title" *ngIf="checkPlan">Please purchase the premium plan to update this field. <span class="txt_p">Check Benefits</span></p>
+                  <div class="row">
+                    <div class="col-md-4" (click)="subsciptionPlanCheck()" >
+                      <p class="cn_input_lbl">Availability
+                        <span class="material-icons info_icon" matTooltip="{{information?.availability}}"> info_outline </span>
+                         <span class="txt_d"> *</span></p>
+                      <mat-form-field appearance="none" class="cn_inpt_drop">
+                        <mat-select formControlName="availability" class="form-control cn_input" [disabled]="checkPlan" placeholder="Select Availability">
+                          <mat-option class="mat_dropdown" *ngFor="let avail of availability" [value]="avail.id">{{avail?.name}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="businessEdit.get('availability').errors?.['required']" class="error_mess">Availability is required.</mat-error>
+                      </mat-form-field> 
+                    </div>
+                    
+                    <div class="col-md-4" (click)="subsciptionPlanCheck()">
+                      <p class="cn_input_lbl">Target Job Market
+                        <span class="material-icons info_icon" matTooltip="{{information?.targetJobMarket}}"> info_outline </span>
+                         <span class="txt_d"> *</span></p>
+                      <mat-form-field appearance="none" class="cn_inpt_drop">
+                        <mat-select formControlName="targetJobMarket" class="form-control cn_input" [disabled]="checkPlan" placeholder="Select Target Job Market">
+                          <mat-option class="mat_dropdown" *ngFor="let jobMarket of targetJobMarket" [value]="jobMarket.id">{{jobMarket?.name}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="businessEdit.get('targetJobMarket').errors?.['required']" class="error_mess">Target job market is required.</mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4" (click)="subsciptionPlanCheck()">
+                      <p class="cn_input_lbl">Shipment types 
+                        <span class="material-icons info_icon" matTooltip="{{information?.shipmentTypes}}"> info_outline </span>
+                         <span class="txt_d"> *</span></p>
+                      <mat-form-field appearance="none" class="cn_inpt_drop">
+                        <mat-select formControlName="shipmentTypes" class="form-control cn_input" [disabled]="checkPlan" placeholder="Select Shipment Types">
+                          <mat-option class="mat_dropdown" *ngFor="let shipType of shipmentType" [value]="shipType.id">{{shipType?.name}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="businessEdit.get('shipmentTypes').errors?.['required']" class="error_mess">Shipment types is required.</mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-12" (click)="subsciptionPlanCheck()">
+                      <p class="cn_input_lbl">Truck Types / Equipment Types
+                        <span class="material-icons info_icon" matTooltip="{{information?.truckTypesAndEquipmentTypes}}"> info_outline </span>
+                        <span class="txt_d"> *</span></p>
+                      <mat-form-field appearance="none" class="cn_mlti_sclt_drop">
+                        <mat-select multiple placeholder="Select Truck Types" [disabled]="checkPlan" formControlName="equipmentType" (selectionChange)="equipmentTypeSelect($event)">
+                          <mat-option *ngFor="let truckType of equipmentType" [value]="truckType.id">{{truckType.name}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="businessEdit.get('equipmentType').errors?.['required']" class="error_mess">Truck Types / Equipment Types is required.</mat-error>
+                      </mat-form-field>
+                      <p >
+                        <span class="slctd_eqpmt_typ" *ngIf="equipmentTypeName && equipmentTypeName?.length > 0">
+                          <span class="dful_chip grn_chip"  *ngFor="let equipmentName of equipmentTypeName">{{ equipmentName }}</span>
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+           <div class="form_actn mt-3">
+            <button type="submit" class="cn_btn">Update Profile</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="skt_eifr" *ngIf="skeletonLoader">
+    <div *ngFor="let fake of generateFakeSkeleton(5)">
+      <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '16px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+      <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '30px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+    </div>
+  </div>
+</div>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

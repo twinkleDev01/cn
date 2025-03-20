@@ -1,0 +1,125 @@
+
+    <div class="insurance_pg_con">
+      <div class="card_con mb-5">
+        <div class="uploadEmptyTxt">
+          <div class="d-flex align-items-center justify-content-between">
+            <h4 class="page_heading">Calculator for Cost Per Month</h4>
+            <span class="iub_btn">
+              <button [routerLink]="'/calculator/monthly-cost'" class="cn_btn">Add Calculator</button>
+            </span>
+          </div>
+          <div class="insu_uplod_box mt-5">
+            <div class="iub_l">
+              <p class="fs_14 fsn_4 txt_lb">Trucking companies usually have so many expenses which makes complex the
+                analysis of profit or loss. Calculator makes it easy to fetch the rate per mile and based on this
+                calculation owner can estimate his bid/price on that trip.<br>
+                Here You will get the list of calculator (pre-filled) which will you rate per mile along with rate per trip
+                and various other analytical features like Bar chart and Pie chart which will help you to find best price
+                and plan for you business. </p>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+    
+      <div class="" *ngIf="calculatorData?.length">
+        <div class="inc_data_updt mt-4 mb-5" *ngFor="let item of calculatorData">
+          <div class="inc_head">
+            <div class="inc_head_l">
+              <div class="">
+                <span class="compny_nm">{{item.expenses.calculatorName}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="inc_cntr mt-3">
+            <table>
+              <tr>
+                <th>Revenue: <i class="fa-solid fa-chart-simple" style=""></i></th>
+                <th>Total Miles: <i class="fa-solid fa-tornado"></i></th>
+                <th>Total Days: <i class="fa-regular fa-calendar-clock"></i></th>
+                <th>Truck Average: <i class="fa-duotone fa-truck-fast"></i></th>
+    
+              </tr>
+              <tr>
+                <td>{{item?.revenueUsd}}</td>
+                <td>{{item?.miles}}</td>
+                <td>{{item?.days}}</td>
+                <td>{{item?.truckMileage}}</td>
+    
+              </tr>
+               <button class="ed_edit_btn" matTooltip="Edit">
+                <span class="material-icons-outlined c_green" (click)="navigateToEditPage(item.id)"  >edit</span>
+              </button>
+            </table>
+            <table>
+              <tr>
+                <th>Company & Office expenses:<i class="fa-duotone fa-wallet"></i></th>
+                <th>Truck Expenses:<i class="fa-duotone fa-wallet"></i></th>
+                <th>Trailer Expenses:<i class="fa-duotone fa-wallet"></i></th>
+                <th>Drive Expenses:<i class="fa-duotone fa-wallet"></i></th>
+                <th>On Road Expenses:<i class="fa-duotone fa-wallet"></i></th>
+                <th>Miscellaneous and Other:<i class="fa-duotone fa-wallet"></i></th>
+    
+              </tr>
+              <tr>
+                <td>{{item?.expenses.total.companyOfficeTotal| currency:'USD':'symbol':'1.2-2'}}</td>
+                <td>{{item?.expenses.total.truckExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</td>
+                <td>{{item?.expenses.total.trailerExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</td>
+                <td>{{item?.expenses.total.driverExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</td>
+                <td>{{item?.expenses.total.onRoadExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</td>
+                <td>{{item?.expenses.total.miscellaneousTotal| currency:'USD':'symbol':'1.2-2'}}</td>
+              </tr>
+              <button class="ed_edit_btn" matTooltip="Edit">
+                <span class="material-icons-outlined c_green" (click)="navigateToEditPage(item.id)">edit</span>
+              </button>
+            </table>
+           
+          </div> 
+          <div class="inc_fotr_r">
+            <span *ngIf="compareIdArray.length==1 && compareIdArray[0]==item.id" style="margin-right: 10px;">select one more to compare </span><button *ngIf="compareIdArray.length>1 && compareIdArray.includes(item.id)"  (click)="navigateToCompare()"class="com_edt" style="margin-right: 10px;">Compare</button><input  type="checkbox" (change)="addCompareId(item.id, $event)">
+            <div class="">
+             
+              <button class="ed_dtl_btn ed_del_buttons" matTooltip="Delete">
+                <i class="fa-solid fa-xmark" (click)="deletePopup(item.id)"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+    
+        <div class="empty-state" *ngIf="false">
+          <div class="empty-state__content">
+            <div class="empty-state__icon">
+              <img src="https://img.freepik.com/free-vector/upload-concept-illustration_114360-1343.jpg?size=626&ext=jpg"
+                alt="">
+            </div>
+            <div class="empty-state__message">Insurence</div>
+            <p class="empty-state__help">This is no insurence</p>
+          </div>
+        </div>
+      </div>
+
+    <div class="data_box  mt-4 emptyBox" *ngIf="calculatorData?.length == 0 && !skeletonLoader">
+      <p style="padding-top: 20px;">There is no saved calculator yet !</p>
+</div>
+
+
+
+<div class="saved_carrier_list_con" class="skt_eifr" *ngIf="skeletonLoader">
+  <div class="mb-3">
+      <ngx-skeleton-loader count="1"
+          [theme]="{ width: '100%', height: '24px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+  </div>
+  <div class="scl_row pt-3 px-3" *ngFor="let fake of generateFakeSkeleton(5)" style="display: block;">
+      <ngx-skeleton-loader count="1"
+          [theme]="{ width: '100%', height: '32px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+  </div>
+</div>
+
+<div class="text-center" *ngIf="calculatorData?.length > 0 && spinnerLoader">
+<span class="spinner-border" role="status" style="color: #00b4fc;"></span>
+</div>
+<!--  -->
+<div *ngIf="calculatorData?.length > 0 && dataNotFound && !skeletonLoader && !spinnerLoader" class="noMore_record">
+<span>There are no more records to show.</span>
+</div>
+</div>

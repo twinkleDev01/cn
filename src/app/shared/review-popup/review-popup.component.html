@@ -1,0 +1,47 @@
+<div class="cn_popup_box" *ngIf="data.openPop =='inviteReview'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Invite for Review</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <form [formGroup]="reviewForm" (ngSubmit)="reviewFormSubmit(reviewForm)" class="mb-0 cn_field" autocomplete="off">
+    <div class="cn_v_scroll" style="max-height: 75vh;">
+      <div class="cn_popup_body">
+        <p class="cn_pb_dis">Yeah! Finally we're happy that you're going to collect amazing Reviews with us. Please share information so we'll send an email to them on the behalf of you.</p>
+        <div class="row">
+          <div class="col-sm-12">
+            <p class="cn_input_lbl">Email Address<span class="txt_d"> *</span></p>
+            <mat-form-field appearance="none" class="">
+              <input matInput formControlName="email" type="text" placeholder="Enter Email Address" class="form-control cn_input" maxlength="128">
+              <mat-error class="error_mess" *ngIf="reviewForm.get('email').errors?.['required']">Email is required.</mat-error>
+              <mat-error class="error_mess" *ngIf="reviewForm.get('email').errors?.['pattern']">Please enter valid email address.</mat-error>
+              <mat-error class="error_mess" *ngIf="reviewForm.get('email').errors?.['maxlength']">Only 128 characters are allowed.</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-12">
+            <p class="cn_input_lbl">First Name<span class="txt_d"> *</span></p>
+            <mat-form-field appearance="none" class="">
+              <input matInput formControlName="firstName" type="text" placeholder="Enter First Name" class="form-control cn_input" maxlength="64">
+              <mat-error class="error_mess" *ngIf="reviewForm.get('firstName').errors?.['required']">First name is required.</mat-error>
+              <mat-error class="error_mess" *ngIf="reviewForm.get('firstName').errors?.['maxlength']">Only 64 characters are allowed.</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-12">
+            <p class="cn_input_lbl">Last Name<span class="txt_d"> *</span></p>
+            <mat-form-field appearance="none" class="">
+              <input matInput formControlName="lastName" type="text" placeholder="Enter Last Name" class="form-control cn_input" maxlength="64">
+              <mat-error class="error_mess" *ngIf="reviewForm.get('lastName').errors?.['required']">Last name is required.</mat-error>
+              <mat-error class="error_mess" *ngIf="reviewForm.get('lastName').errors?.['maxlength']">Only 64 characters are allowed.</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <button type="submit" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+        <button type="submit" class="cn_btn">Invite for review</button>
+      </div>
+    </div>
+  </form>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

@@ -1,0 +1,87 @@
+
+<div *ngIf="data.openPop=='requestDot'">
+  <div class="cn_popup_box">
+    <form [formGroup]="requestDotForm" (ngSubmit)="requestDotFormSubmit(requestDotForm)" class="mb-0 cn_field">
+      <div class="cn_popup_head">
+        <p class="cn_ph_tlt">Request to Add Dot Number</p>
+        <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+      </div>
+      <div class="cn_v_scroll">
+        <div class="cn_popup_body">
+          <p class="cn_input_lbl">Dot Number
+            <span class="txt_d"> *</span>
+          </p>
+          <mat-form-field appearance="none">
+            <input matInput type="text" formControlName="dotNumber" (keypress)="onlyNumberKey($event)" readonly placeholder="Enter Dot Number" maxlength="9" class="form-control cn_input" />
+            <mat-error *ngIf="requestDotForm.get('dotNumber').errors?.['required']" class="error_mess">Dot number is required</mat-error>
+            <mat-error class="error_mess" *ngIf="requestDotForm.get('dotNumber').errors?.['maxlength']">Only 9 characters are allowed.</mat-error>
+          </mat-form-field>
+          <p class="cn_input_lbl">Company Name 
+            <span class="txt_d"> *</span>
+          </p>      
+          <mat-form-field appearance="none">
+            <input *ngIf="!getUserData?.companyName"  matInput type="text" formControlName="companyName" placeholder="Enter Company Name" class="form-control cn_input" maxlength="64"/>
+            <mat-error *ngIf="requestDotForm.get('companyName').errors?.['required']" class="error_mess">Company name is required.</mat-error>
+            <mat-error *ngIf="requestDotForm.get('companyName').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed..</mat-error>
+          </mat-form-field>
+          <p class="cn_input_lbl">Email Address
+            <span class="txt_d"> *</span>
+          </p>
+          
+          <mat-form-field appearance="none">
+            <input matInput type="text" formControlName="email" maxlength="128" placeholder="Email Address" class="form-control cn_input" />
+            <mat-error *ngIf="requestDotForm.get('email').errors?.['required']" class="error_mess">Email is required</mat-error>
+            <mat-error *ngIf="requestDotForm.get('email').errors?.['pattern']" class="error_mess"> Please enter valid email address</mat-error>
+            <mat-error class="error_mess" *ngIf="requestDotForm.get('email').errors?.['maxlength']">Only 128 characters are allowed.</mat-error>
+          </mat-form-field>
+          
+            <p class="cn_input_lbl">Contact Number
+              <img *ngIf="defualtCountryFlag" [src]="defualtCountryFlag" class="flag_img">
+              <img *ngIf="!defualtCountryFlag" src="https://carriernetwork.ai/images/country/US.png" width="20px">
+              <span class="txt_d"> *</span>
+            </p>
+            <div class="country_code_dropdown">
+              <mat-form-field appearance="none" class="cn_inpt_drop">
+                <div class="country_code_fld">
+                  <mat-select formControlName="countryCode" (selectionChange)="selectCountryCode($event.value)"
+                    placeholder="Select Country Code" class="form-control custom_input">
+                    <mat-option *ngFor="let cou of countryList" [value]="cou.code">
+                      <img [src]="cou.flag" name="cla" class="flag_img">
+                      <span style="margin-left: 5px;">+{{cou.countryCode}}</span>
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </mat-form-field>
+              <mat-form-field appearance="none">
+                <input matInput type="text" formControlName="phone" maxlength="10" placeholder="Enter Contact Number" class="form-control cn_input" maxlength="10" (keypress)="onlyNumberKey($event)" />
+                <mat-error *ngIf="requestDotForm.get('phone').errors?.['required']" class="error_mess">Contact number is required.</mat-error>
+                <mat-error *ngIf="requestDotForm.get('phone').errors?.['maxlength']" class="error_mess">Contact number should be 10 digit.</mat-error>
+                <mat-error *ngIf="requestDotForm.get('phone').errors?.['pattern']" class="error_mess">Contact number should be number.</mat-error>
+                <mat-error *ngIf="requestDotForm.get('phone').errors?.['minlength'] && !requestDotForm.get('phone').errors?.['pattern']" class="error_mess">Contact Number should be 10 digit.</mat-error>  
+              </mat-form-field>
+
+            </div>
+            <span class="txt_d" style="font-size:12px;">{{ this.showMessage}}</span>
+          
+        </div>
+        
+      </div>
+      <div class="cn_popup_footer">
+        <div class="cn_f_acn">
+          <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+          <button type="submit" class="cn_btn">Send Request</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>
+
+
+
+
+
+
+
+

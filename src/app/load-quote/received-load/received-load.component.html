@@ -1,0 +1,505 @@
+<div class="dashboard_chat_overview">
+  <div class="dco_head">
+    <div class="dcoh_l">
+      <p class="dco_h_tlt">Received Leads & Quotes Performance</p>
+    </div>
+    <div class="dcoh_r cn_field">
+      <!-- <mat-form-field class="date_range_filter">
+        <mat-label>Accessed At</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Start date">
+          <input matEndDate placeholder="End date">
+        </mat-date-range-input>
+        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field> -->
+    </div>
+  </div>
+  
+  <div class="dco_box">
+    <div class="row">
+      <div class="col-md-6 pie_crt_box">
+        <div class="row">
+          <div class="col-md-5">
+            <div class="d-flex align-items-center h-100">
+              <div class="lbl_1 w-100">
+                <div class="dco_bar">
+                  <div class="bar_hed">
+                    <span class="bar_txt">Total Quotes</span> <span class="bar_vlu">{{totalRecoads ? totalRecoads : 0}}</span>
+                  </div>
+                  <mat-progress-bar mode="determinate" [value]="totalQuotes"></mat-progress-bar>
+                </div>
+                <div class="dco_bar">
+                  <div class="bar_hed">
+                    <span class="bar_txt">Total Miles Covered </span> <span class="bar_vlu"> 20,286</span>
+                  </div>
+                  <mat-progress-bar mode="determinate" [value]="totalMilesCovered"></mat-progress-bar>
+                </div>
+                <!-- <div class="dco_bar">
+                  <div class="bar_hed">
+                    <span class="bar_txt">Repeat Visitors </span> <span class="bar_vlu"> {{repeatVisitors}}</span>
+                  </div>
+                  <mat-progress-bar mode="determinate" [value]="repeatVisitorsPercentage"></mat-progress-bar>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-md-7">
+            <div class="chart_box">
+              <div class="cb_circle">
+                <canvas id="recShipmentTypeBreakdown"></canvas>
+              </div>
+              <p class="chart_txt text-center">Shipment Type Breakdown</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 bar_crt_box">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="country_chart" [ngClass]="{'d-none': selectedChart !== 'topEquipment'}">
+              <canvas id="recTopEquipmentShipmentsChart"></canvas>
+            </div>
+            <div class="city_chart" [ngClass]="{'d-none': selectedChart !== 'shipments'}">
+              <canvas id="recBrokeredCarrierShipmentsChart"></canvas>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="chart_info_box">
+              <div class="cn_field">
+                <div class="ic_dropdown">
+                  <mat-form-field appearance="none" class="cn_inpt_drop">
+                    <mat-select [(ngModel)]="selectedChart" name="chartType">
+                      <mat-option value="topEquipment">Top Equipment</mat-option>
+                      <mat-option value="shipments">Shipments</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="chart_info" [ngClass]="{'d-none': selectedChart !== 'topEquipment'}">
+                <p class="cif_lbl">Top Equipment Used:</p>
+                <ul>
+                  <li>
+                    <span class="chart_txt">Auto Carrier Trailer: 3 quotes</span>
+                  </li>
+                  <li>
+                    <span class="chart_txt">Drayage Trailer: 1 quote</span>
+                  </li>
+                  <li>
+                    <span class="chart_txt">Drop Deck Landoll: 1 quote</span>
+                  </li>
+                  <li>
+                    <span class="chart_txt">Box Truck: 1 quote</span>
+                  </li>
+                  <li>
+                    <span class="chart_txt">Dry Van: 1 quote</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="chart_info" [ngClass]="{'d-none': selectedChart !== 'shipments'}">
+                <p class="cif_lbl">Brokered vs Carrier Shipments:</p>
+                <ul>
+                  <li>
+                    <span class="chart_txt">Brokered Loads: 4</span>
+                  </li>
+                  <li>
+                    <span class="chart_txt">Carrier Loads: 3</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="table_data_con" style="display: QWnone;">
+  <div class="table_actions">
+    <form class="cn_field">
+      <div class="btns_box">
+        <div class="row align-items-center">
+          <div class="col-md-5">
+            <p class="txt_1 fw_6" [ngClass]="{'d-none': !showAdvancedFilter}">Advanced Filter</p>
+            <div class="comn_fltr" [ngClass]="{'d-none': showAdvancedFilter}">
+              <mat-form-field appearance="none">
+                <mat-label>Table Search</mat-label>
+                <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
+                <input type="text" matInput placeholder="Search" class="form-control cn_input ms-2">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-7">
+            <div class="btn_r">
+              <span class="cn_btn txt_btn">
+                <i class="fa-solid fa-plus me-2"></i>
+                <span>View All</span>
+              </span>
+              <span class="cn_btn txt_btn">
+                <i class="fa-solid fa-plus me-2"></i>
+                <span>Add</span>
+              </span>
+              <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
+                <i class="fa-sharp fa-solid fa-filter"></i>
+              </span>
+              <span class="cn_btn icn_btn">
+                <i class="fa-duotone fa-solid fa-rotate-right"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="filter_box" [ngClass]="{'d-none': !showAdvancedFilter}">
+          <div class="filtr_con">
+              <div class="row">
+                <div class="col-md-3">
+                  <mat-form-field>
+                    <mat-label>Frequency</mat-label>
+                    <mat-select>
+                      <mat-option value="">Every Day</mat-option>
+                      <mat-option value="">Every Week</mat-option>
+                      <mat-option value="">Every Month</mat-option>
+                      <mat-option value="">Only One time</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3"> 
+                  <mat-form-field>
+                    <mat-label>Equipment Type</mat-label>
+                    <mat-select>
+                      <mat-option value="option_1">Option 1</mat-option>
+                      <mat-option value="option_2">Option 2</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field>
+                    <mat-label>Weight (lbs)</mat-label>
+                    <input type="text" matInput placeholder="Search">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field>
+                    <mat-label>Length (ft)</mat-label>
+                    <input type="text" matInput placeholder="Search">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field>
+                    <mat-label>Carrier Information</mat-label>
+                    <input type="text" matInput placeholder="Search">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-12"></div>
+                <div class="col-md-3">
+                  <p class="cn_input_lbl">Checkbox</p>
+                  <mat-checkbox class="me-3">Checked</mat-checkbox>
+                  <mat-checkbox class="">Indeterminate</mat-checkbox>
+                </div>
+                <div class="col-md-3">
+                  <p class="cn_input_lbl">Toggle</p>
+                  <mat-button-toggle-group class="toggle_switch" name="fontStyle" aria-label="Font Style">
+                    <mat-button-toggle value="yes">Yes</mat-button-toggle>
+                    <mat-button-toggle value="no">NO</mat-button-toggle>
+                  </mat-button-toggle-group>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field class="date_range_filter">
+                    <mat-label>Accessed At</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-12">
+                  <div class="fltr_actn">
+                    <button class="cn_btn btn_bordered">Clear</button>
+                    <button class="cn_btn">Apply</button>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="table_data" tabindex="0">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="loadId" sticky>
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="sticky_boder">Load ID</div>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="user_dtl sticky_boder">{{element.loadId}}</div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="requestedBy">
+        <th mat-header-cell *matHeaderCellDef>Requested By</th>
+        <td mat-cell *matCellDef="let element" class="min_w_200">
+          <div class="user_dtl">
+            <div class="ud_l">
+              <i class="fa-duotone fa-solid fa-circle-user user_icon"></i>
+              <span class="user_Type">Carrier</span>
+            </div>
+            <div class="ud_r">
+              <div class="name_icn">
+                <a href="#" class="u_name">User Name {{element.name}}</a>
+                <!-- <i class="fa-duotone fa-badge-check verify_icon" matTooltip="Account not Verified"></i> -->
+              </div>
+              <div class="loca_rtng">
+                <!-- <span class="user_rtng" matTooltip="Total 10 Reviews">4.5 <i class="fa-solid fa-star"></i> </span> -->
+                <span class="u_loca">Jacksonville, FL</span>
+              </div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="pickup">
+        <th mat-header-cell *matHeaderCellDef>Pickup</th>
+        <td mat-cell *matCellDef="let element" class="min_w_200" matTooltip="{{element.frequency}}">
+          <div class="loca_col">
+            <div class="loca_txt">
+              <!-- <img src="/assets/country/us.png" class="flaf_icn"> -->{{element.pickup}}
+            </div>
+            <div class="frncy_txt {{formatFrequency(element.frequency)}}">
+              <i class="fa-duotone fa-solid" [ngClass]="{
+                'fa-calendar-days': element.frequency === 'Every Day',
+                'fa-calendar-week': element.frequency === 'Every Week',
+                'fa-calendar-lines': element.frequency === 'Every Month',
+                'fa-calendar-clock': element.frequency === 'Only One time'
+              }"></i>
+              {{element.frequencyPicTime}}
+            </div>
+          </div>
+          
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="dropOff">
+        <th mat-header-cell *matHeaderCellDef>DropOff</th>
+        <td mat-cell *matCellDef="let element" class="min_w_200" matTooltip="{{element.frequency}}">
+          <div class="loca_col">
+            <div class="loca_txt">{{element.dropOff}}</div>
+            <div class="frncy_txt {{formatFrequency(element.frequency)}}">
+              <i class="fa-duotone fa-solid" [ngClass]="{
+                'fa-calendar-days': element.frequency === 'Every Day',
+                'fa-calendar-week': element.frequency === 'Every Week',
+                'fa-calendar-lines': element.frequency === 'Every Month',
+                'fa-calendar-clock': element.frequency === 'Only One time'
+              }"></i>
+              {{element.frequencyDropTime}}
+            </div>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="distance">
+        <th mat-header-cell *matHeaderCellDef>Distance</th>
+        <td mat-cell *matCellDef="let element">{{element.distance}} Miles</td>
+      </ng-container>
+      <ng-container matColumnDef="equipmentType">
+        <th mat-header-cell *matHeaderCellDef>Equipment Type</th>
+        <td mat-cell *matCellDef="let element">{{element.equipmentType}}</td>
+      </ng-container>
+      <ng-container matColumnDef="shipmentType">
+        <th mat-header-cell *matHeaderCellDef>Shipment Type</th>
+        <td mat-cell *matCellDef="let element" matTooltip="{{element.shipmentTypeInfo}}">{{element.shipmentType}}</td>
+      </ng-container>
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef>Weight (lbs)</th>
+        <td mat-cell *matCellDef="let element">{{element.weight}}</td>
+      </ng-container>
+      <ng-container matColumnDef="length">
+        <th mat-header-cell *matHeaderCellDef>Length (ft)</th>
+        <td mat-cell *matCellDef="let element">{{element.length}}</td>
+      </ng-container>
+      <ng-container matColumnDef="notes">
+        <th mat-header-cell *matHeaderCellDef>Notes</th>
+        <td mat-cell *matCellDef="let element" class="min_w_200">{{element.notes}}</td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef class="text-center">Action</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="row_actn">
+            <span class="cn_btn edt_btn btnActive" matTooltip="Edit Availability">
+              <i class="fa-sharp-duotone fa-solid fa-pen-to-square txt_p"></i>
+            </span>
+            <span class="cn_btn comnt_btn btnUnActive" matTooltip="Delete Availability">
+              <i class="fa-duotone fa-solid fa-trash txt_d"></i>
+            </span>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+      <div class="noMore_record">
+      <span>There are no more records to show.</span>
+    </div>
+  </div>
+</div>
+
+<div class="content_box" style="display: QWnone;">
+  <div class="content_tlt">Requested Leads & Quotes</div>
+  <div class="content_body">
+    <div class="content_dis">Requested Leads refer to inquiries from shippers or brokers seeking carriers for specific loads, while Quotes are the price estimates or proposals provided by carriers in response, detailing the costs and terms for transporting the requested freight.</div>
+    <div class="skeletonloader">
+      <!-- <div class="skeletonloader" *ngIf="nonCarrierUser?.length==0 && !skeletonLoader"> -->
+      <div class="empty-state">
+        <div class="empty-state__content">
+          <div class="empty-state__icon">
+            <img src="./assets/images/no_data_found_img.jpg" alt="">
+          </div>
+          <div class="empty-state__message">Leads & Quotetion</div>
+          <p class="empty-state__help">This is no Leads & Quotetion</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<div class="uploadEmptyTxt">
+  <div class="carrier_user_list_page">
+    <div class="carrier_user_list_head">
+      <h4 class="page_heading">Received Leads & Quotes <span>({{totalRecoads ? totalRecoads:0}})</span></h4>
+      <div class="insu_uplod_box">
+        <div class="iub_l">
+          <p class="fs_14 fsn_4 txt_lb mt-5">Received Leads are inquiries received by carriers from shippers or brokers interested in transport services, while Quotes are the carrier's price estimates or service proposals in response, specifying terms for the requested freight transport.</p>
+        </div>
+        <div class="iub_r">
+        </div>
+      </div>
+    </div>
+
+    <div class="" *ngIf="!skeletonLoader">
+      <div class="avalability_cards mt-5" *ngFor="let loadData of carrierUser;let i=index">
+        <div class="inc_data_updt">
+          <div class="row">
+            <div class="col-md-3 sepre_line">
+              <div class="inc_locatn">
+                <span class="txt_lb me-2">Source Location</span>
+                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
+                <span class="text_truncate pointer"
+                  matTooltip="{{(loadData?.sourceLocationCity | titleCase) + ', '+ loadData?.sourceLocationState + ', '+ loadData?.sourceLocationCountry}}"><i
+                    class="fa-duotone fa-location-dot txt_p me-2"></i> {{(loadData?.sourceLocationCity | titleCase) + ', '+
+                  loadData?.sourceLocationState + ', '+ loadData?.sourceLocationCountry}} </span>
+                <span class=""><i class="fa-duotone fa-calendar-week txt_p me-2"></i> {{loadData?.sourceDate ?
+                  (loadData?.sourceDate |
+                  date: 'MMM dd, yyyy') : '-'}} </span>
+              </div>
+            </div>
+            <div class="col-md-3 sepre_line">
+              <div class="inc_locatn">
+                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
+                <span class="txt_lb me-2">Destination Location</span>
+                <span class="text_truncate pointer"
+                  matTooltip="{{(loadData?.destinationLocationCity|titleCase) + ', '+ loadData?.destinationLocationState + ', '+ loadData?.destinationLocationCountry}}">
+                  <i class="fa-duotone fa-location-dot txt_p me-2"></i>
+                  {{(loadData?.destinationLocationCity|titleCase)+ ', '+ loadData?.destinationLocationState + ', '+ loadData?.destinationLocationCountry}} </span>
+                <span><i class="fa-duotone fa-calendar-week txt_p me-2"></i>
+                  {{loadData?.destinationDate ? (loadData?.destinationDate | date:
+                  'MMM dd, yyyy') : '-'}}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-3 sepre_line">
+              <div class="inc_locatn">
+                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
+                <span class="txt_lb me-2">Shipment Type</span>
+                <span class=""> {{loadData?.shipmentTypesLabel ? loadData?.shipmentTypesLabel : '-'}} </span>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="inc_locatn">
+                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
+                <span class="txt_lb me-2">Truck Types / Equipment Types</span>
+                <span class=""> {{loadData?.equipmentType[0]?.equipmentTypeName ?
+                  loadData?.equipmentType[0]?.equipmentTypeName : '-'}} </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="inc_data_updt mb-0">
+          <div class="row">
+            <div class="col-md-4 sepre_line">
+              <div class="inc_locatn">
+                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
+                <span class="txt_lb me-2">Miles </span>
+                <span class=""> {{loadData?.miles ? (loadData?.miles | numberFormat) : '-'}} </span>
+              </div>
+            </div>
+           
+            <div class="col-md-4 sepre_line" >
+              <div class="inc_locatn">
+                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
+                <span class="txt_lb me-2">Company Name </span>
+                <span class=""> {{loadData?.inviterDetails?.companyName ? (loadData?.inviterDetails?.companyName |titleCase | convertEnd) : '-'}}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-4 ">
+              <div class="inc_locatn">
+                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
+                <span class="txt_lb me-2">Notes </span>
+                <span class=""> {{loadData?.notes ? loadData?.notes : '-'}} </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="skeletonloader" *ngIf="carrierUser?.length==0 && !skeletonLoader">
+    <div class="empty-state">
+      <div class="empty-state__content">
+        <div class="empty-state__icon">
+          <img src="./assets/images/no_data_found_img.jpg" alt="">
+        </div>
+        <div class="empty-state__message">Leads & Quotetion</div>
+        <p class="empty-state__help">This is no Leads & Quotetion</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center" *ngIf="carrierUser?.length > 0 && spinnerLoader">
+  <span class="spinner-border" role="status" style="color: #00b4fc;"></span>
+</div>
+
+  <div *ngIf="carrierUser?.length > 0 && dataNotFound && !skeletonLoader" class="noMore_record">
+    <span>There are no more records to show.</span>
+  </div>
+
+  <div class="skeletonloader" *ngIf="skeletonLoader">
+    <div class="rpvc_skt" *ngFor="let fake of generateFakeSkeleton(8)">
+      <ngx-skeleton-loader count="1"
+        [theme]="{ 'border-radius': '0', width: '100%', height: '36px', margin: '0 0 24px' }"></ngx-skeleton-loader>
+      <div class="rpvc_skt_bx">
+        <div class="rpvc_skt_l">
+          <ngx-skeleton-loader count="1"
+            [theme]="{ 'border-radius': '50%', width: '56px', height: '56px' }"></ngx-skeleton-loader>
+        </div>
+        <div class="rpvc_skt_r">
+          <ngx-skeleton-loader count="4"
+            [theme]="{ 'border-radius': '0', width: '100%', height: '16px', margin: '0 0 8px' }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="2"
+            [theme]="{ 'border-radius': '0', width: '70%', height: '26px', margin: '0 0 10px' }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="3"
+            [theme]="{ 'border-radius': '0', width: '70%', height: '18px', margin: '0 0 6px' }"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading> -->

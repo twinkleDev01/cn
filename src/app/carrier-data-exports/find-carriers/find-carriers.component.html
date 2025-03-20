@@ -1,0 +1,198 @@
+<div class="insurance_pg_con">
+  <div class="card_con">
+    <div class="uploadEmptyTxt">
+      <div class="d-flex align-items-center justify-content-between">
+        <h4 class="page_heading">Carrier List</h4>
+        <div class="iub_r">
+          <div class="cn_btn iub_btn" (click)="filterPopup()">
+            <span>Filters</span>
+          </div>
+          <div matTooltip="The Schedule Report allows a maximum of 1000 records." class="ms-3">
+            <button class="cn_btn iub_btn"  [disabled]="scheduleRecord" (click)="scheduleReport()">Schedule
+              Report</button>
+          </div>
+        </div>
+      </div>
+      <div class="insu_uplod_box mt-5">
+        <div class="iub_l">
+          <p class="fs_14 fsn_4 txt_lb">Finding the right carrier for your needs has never been easier. Our
+            comprehensive search and filter options allow you to pinpoint the perfect carrier based on various features
+            such as state, equipment type, and more. Whether you’re looking for specialized equipment or a carrier in a
+            specific region, our user-friendly platform is designed to make your search quick and efficient.
+            Start your search now and discover carriers that meet your specific requirements. With Carrier Network,
+            finding the right carrier is just a few clicks away!</p>
+        </div>
+
+      </div>
+    </div>
+    <!-- <table class="find_carier_table" *ngIf="!loader && carrierList.length">
+      <tr>
+        <th>Address</th>
+        <th>DOT Number</th>
+        <th>Drivers Numbers</th>
+        <th>Trucks Numbers</th>
+        <th>Carrier Fuel Mappings</th>
+        <th>Carrier Cargo Types Mappings</th>
+        <th>Equipment Type</th>
+        <th>Carrier Operation</th>
+        <th>Email</th>
+        <th>Email Verified</th>
+        <th>Phone</th>
+        <th>HM Flag</th>
+      </tr>
+      <tr *ngFor="let carrier of carrierList;let i=index">
+        <td>{{carrier?.phyAddrLine1 ? carrier?.phyAddrLine1 : '-'}}, {{carrier?.phyCity ? carrier?.phyCity : '-'}},
+          {{carrier?.phyStateCode ? carrier?.phyStateCode : '-'}}</td>
+        <td>{{carrier?.dotNumber ? carrier?.dotNumber :'-'}}</td>
+        <td>{{carrier?.driversNumbers ? carrier?.driversNumbers :'-'}}</td>
+        <td>{{carrier?.trucksNumbers ? carrier?.trucksNumbers :'-'}}</td>
+        <td>{{carrier?.CarrierFuelMappings ? carrier?.CarrierFuelMappings :'-'}}</td>
+        <td>{{carrier?.CarrierCargoTypesMappings ? carrier?.CarrierCargoTypesMappings :'-'}}</td>
+        <td>{{carrier?.equipmentType ? carrier?.equipmentType :'-'}}</td>
+        <td>{{carrier?.carrierOperation ? carrier?.carrierOperation :'-'}}</td>
+        <td style="word-wrap: break-word;">{{carrier?.email ? carrier?.email :'-'}}{{'verified:
+          '+!!carrier?.emailVerified}}</td>
+        <td>{{!!carrier?.emailVerified}}</td>
+        <td>{{carrier?.phone ? carrier?.phone :'-'}}</td>
+        <td>{{carrier?.hmFlag ? carrier?.hmFlag :'-'}}</td>
+      </tr>
+
+    </table> -->
+
+    <div class="" *ngIf="!loader && carrierList && carrierList?.length > 0">
+   
+      <p *ngIf="isQueryParamNull  && totalRecords">Found <b>{{totalRecords}}</b> carriers based on selected filters</p> <br>
+      <div class="inc_data_updt" *ngFor="let carrier of carrierList;let i=index">
+        <div class="inc_head">
+          <div class="inc_head_l">
+            <!-- <div class="">
+              <img class="compny_nm" src="{{carrier?.profileImage}}">
+              <span class="chip_crd inc_type" matTooltip="Company Name">{{carrier?.companyName ? carrier?.companyName :
+                '-'}}</span>
+            </div> -->
+            <div class="row">
+              <div class="col-md-12">
+            <div class="inc_locatn">
+              <h4 class="mb-0 txt_b" [routerlink]="['/find-carrier-details']">{{carrier?.companyName ?( carrier?.companyName | titleCase | convertEnd) :'-'}}</h4>
+              <span class="blue_chip" *ngIf="carrier?.carrierOperation">{{carrier?.carrierOperation ? carrier?.carrierOperation :'-'}}</span>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="inc_locatn">
+              <i class="fa-duotone fa-location-dot" style=" color: #00b4fc;"></i>
+              <span *ngIf="carrier?.phyCity && carrier?.phyStateCode"> {{carrier?.phyAddrLine1 ? (carrier?.phyAddrLine1 |titleCase) : '-'}}, {{carrier?.phyCity ? (carrier?.phyCity | titleCase) :
+                '-'}}, {{carrier?.phyStateCode ? carrier?.phyStateCode : '-'}}</span>
+                <span *ngIf="!carrier?.phyCity && !carrier?.phyStateCode">-</span>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="inc_locatn">
+              <label>HM Flag :</label>
+              <span>{{carrier?.hmFlag ? carrier?.hmFlag :'-'}}</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="inc_locatn">
+              <label>Phone :</label>
+              <span>{{carrier?.phone ? (carrier?.phone | phoneNumber) : '-'}}</span>
+            </div>
+          </div>
+        
+          <div class="border_bottom"></div>
+          
+          <div class="col-md-4">
+            <div class="inc_locatn">
+              <span>DOT Number :</span>
+              <span>{{carrier?.dotNumber ? carrier?.dotNumber :'-'}}</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="inc_locatn">
+          <label>Drivers Numbers :</label>
+          <span>{{carrier?.driversNumbers ? carrier?.driversNumbers :'-'}}</span>
+        </div>
+      </div>
+            <div class="col-md-4">
+            <div class="inc_locatn">
+              <label>Trucks Numbers :</label>
+              <span>{{carrier?.trucksNumbers ? carrier?.trucksNumbers :'-'}}</span>
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <div class="inc_locatn">
+              <label>Email :</label>
+              <span style="word-wrap: break-word;">{{carrier?.email ? carrier?.email :'-'}}</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="inc_locatn">
+              <label>Email Verified :</label>
+              <span *ngIf="carrier?.emailVerified">Yes</span>
+              <span *ngIf="!carrier?.emailVerified">No</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="inc_locatn">
+              <label>Equipment Type :</label>
+              <span  *ngIf="carrier.equipmentType.length > 0" style="display: flex; align-items: center; white-space: nowrap; flex-wrap: wrap; column-gap: 10px;"><span *ngFor="let equipmentType of carrier.equipmentType" class="d-flex align-items-center"><i class="fa-sharp fa-regular fa-circle me-1 " style="font-size: 5px; color: #000; font-weight: 600;"></i>{{equipmentType.equipmentName?equipmentType.equipmentName:'-'}} </span></span>
+              <span  *ngIf="carrier.equipmentType.length <= 0">-</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="inc_locatn">
+              <label>Carrier Fuel Mappings :</label>
+              <span>{{carrier?.CarrierFuelMappings ? carrier?.CarrierFuelMappings :'-'}}</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="inc_locatn">
+              <label>Carrier Cargo Types Mappings :</label>
+              <span>{{carrier?.CarrierCargoTypesMappings ? carrier?.CarrierCargoTypesMappings :'-'}}</span>
+            </div>
+          </div>
+       
+          
+         
+          </div>
+          </div>
+        </div>
+      </div>
+      <button *ngIf="scrolled" class="back-to-top" (click)="scrollToTop()">Back to Top</button>
+    </div>
+
+    <div class="loard_box" *ngIf="spinner && !loader">
+      <span class="custom_spinner spinner-border">
+        <span class="visually-hidden">Loading...</span>
+      </span>
+    </div>
+
+
+
+    <div class="empty-state" *ngIf=" carrierList && carrierList?.length == 0 && !loader">
+      <div class="empty-state__content">
+        <div class="empty-state__icon">
+          <img src="https://img.freepik.com/free-vector/upload-concept-illustration_114360-1343.jpg?size=626&ext=jpg"
+            alt="">
+        </div>
+        <div class="empty-state__message">Oops!</div>
+          <p class="empty-state__help">There is no Carrier</p>
+      </div>
+    </div>
+    <div *ngIf="carrierList?.length > 0 && dataNotFound && !loader && !spinner" class="noMore_record">
+      <span>There are no more records to show.</span>
+    </div>
+    <div class="saved_carrier_list_con" class="skt_eifr" *ngIf="loader">
+      <div class="mb-3">
+        <ngx-skeleton-loader count="1"
+          [theme]="{ width: '100%', height: '24px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+      </div>
+      <div class="scl_row pt-3 px-3" *ngFor="let fake of generateFakeSkeleton(5)" style="display: block;">
+        <ngx-skeleton-loader count="1"
+          [theme]="{ width: '100%', height: '32px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+
+  <!-- <ngx-loading [show]="loader" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading> -->

@@ -1,0 +1,124 @@
+.contnt_hed { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 1rem; background: #e5e5e5; margin: 0 0 1rem; }
+.ch_tlt { font-size: 1.4rem; margin: 0 0 0rem; }
+.ch_dis { color: #818181; margin: 0 0 1rem; }
+
+.filtr_con { padding-top: 1rem; margin-top: 1rem; border-top: 1px solid #ededed; }
+.comn_fltr { display: flex; height: 100%; align-items: center; }
+
+.table_data_con {
+    .user_dtl { min-width: auto; }
+    .loca_txt {
+        font-weight: 500;
+    }
+    .loca_txt .flaf_icn {
+        margin-top: -3px;
+        max-width: 14px;
+        max-height: 14px;
+    }
+    .frncy_txt {
+        color: #00b4fc;
+    }
+    .frncy_txt i {
+        padding: 0 5px 0 0px;
+    }
+    .every_day { color: #00b007; }
+    .every_week { color: #00b4fc; }
+    .every_month { color: #F1C644; }
+    .only_one_time { color: #DF0C0C; }
+
+    .truck_nam { font-weight: 500; }
+    .chip_crd {
+        color: #4d4d4d;
+    }
+    .chip_crd i {
+        margin: 0 6px 0 0;
+    }
+    .cc_wth { margin: 0 12px 0 0; }
+    .cost_vlu {
+        font-weight: 500;
+    }
+    .cost_prefix {
+        font-weight: 400;
+    }
+    .cost_prefix {
+        font-weight: 500;
+        font-size: 75%;
+        color: #606060;
+        padding: 0 0 0 2px;
+    }
+    .cost_sufix {
+        font-size: 90%;
+        color: #606060;
+        padding: 0 1px 0 0px;
+    }
+}
+
+
+.page_heading:after { width: calc(100% - 71%);}
+.saved_carrier_list_con { background: #fff; padding: 24px; border-radius: 10px; margin: 14px 0; }
+.ed_del_buttons button { color: #333333; display: inline-flex; align-items: center; justify-content: center; border-radius: 5px; width: 50px; height: 50px;}
+.ed_del_buttons button.ed_edit_btn { border: 1px solid #00b4fc; background: #eaf9ff; }
+.ed_del_buttons button.ed_edit_btn:hover { color: #fff; background: #00b4fc; }
+.ed_del_buttons button.ed_dtl_btn { border: 1px solid #DF0C0C; margin-left: 14px; background: #fce9e9; }
+.ed_del_buttons button.ed_dtl_btn:hover { color: #fff; background: #DF0C0C; }
+.ed_del_buttons .material-icons-outlined { font-size: 20px; }
+.manage_availability_head { background: #fff; padding: 24px; margin: 15px 0px; border-radius: 10px; }
+.text_truncate { text-overflow: ellipsis; overflow: hidden; max-width: calc(100% - 18px); white-space: nowrap; }
+
+.inc_data_updt { border-radius: 10px; padding: 16px 18px; margin: 0 0 32px; position: relative; background: #F0F3FF; }
+.inc_data_updt:last-child { margin: 0px; }
+.inc_data_updt .compny_nm { font-size: 20px; line-height: 26px; font-weight: 500; }
+.inc_data_updt .inc_cntr { display: flex; align-items: center; margin: 7px 0 8px; }
+.inc_data_updt .inc_row { font-size: 14px; line-height: 20px; font-weight: 500; position: relative; margin-right: 14px; padding-right: 14px; }
+.inc_data_updt .inc_row .txt_lb { font-weight: 400; margin-right: 2px; }
+.inc_data_updt .inc_row:after { position: absolute; content: '|'; font-size: 14px; font-weight: 200; right: 0; color: #c9c9c9; }
+.inc_data_updt .inc_row:last-child:after { display: none; }
+.inc_data_updt .chip_crd { font-size: 13px; line-height: 14px; font-weight: 500; border-radius: 20px; padding: 4px 12px; margin: 0 0 0 16px; display: inline-flex; align-items: center;  cursor: pointer; }
+.inc_data_updt .inc_type { border: 1px solid #00B4FC; color: #00B4FC; }
+.inc_data_updt .compny_status { color: #fff; background: #25D366; font-size: 14px; line-height: 16px; padding: 9px 24px; margin: 0; }
+.inc_data_updt .phone_no { display: flex; align-items: center; }
+.inc_data_updt .phone_no a { text-decoration: none; color: #00b4fc; }
+.inc_data_updt .inc_date { display: flex; align-items: center; font-size: 14px; line-height: 20px; margin: 0 20px 0px 0; color: #454545; font-weight: 500; }
+.inc_data_updt .inc_date .txt_lb { font-weight: 400; }
+.inc_data_updt .inc_date:last-child { margin-right: 6px; }
+.inc_data_updt .inc_date .mat-icon { font-size: 20px; line-height: 22px; color: #00b4fc; }
+.inc_data_updt .inc_locatn { display: flex; flex-direction: column; text-align: center; font-size: 14px; line-height: 20px; color: #454545; font-weight: 500; margin: -2px 0 0 -4px; }
+.inc_data_updt .inc_locatn .mat-icon { font-size: 20px; line-height: 22px; color: #00b4fc; width: auto; height: auto; margin: 0 2px 0 0; }
+.inc_locatn> .txt_lb  { font-size: 12px; }
+.inc_head_l .col-md-4 { margin: 13px 0px; }
+
+.sepre_line { position: relative; }
+.sepre_line::after { width: 1px; height: 38px; background-position: center; background-size: contain; display: flex; position: absolute; right: 0px; top: 9px; background-repeat: no-repeat; content: ""; border-right: 2px solid #d9d9d9; }
+.sepre_line2::after { width: 74px; height: 27px; background-position: center; background-size: contain; display: flex; position: absolute; right: 315px; top: 11px; background-repeat: no-repeat; content: ""; border-right: 2px solid #d9d9d9; }
+.sepre_line3::after { width: 74px; height: 27px; background-position: center; background-size: contain; display: flex; position: absolute; right: 139px; top: 11px; background-repeat: no-repeat; content: ""; border-right: 2px solid #d9d9d9; }
+.btn_data { display: flex; align-items: center; justify-content: space-between; }
+.inc_fotr { display: flex; justify-content: end; align-items: flex-end; }
+.ed_del_buttons { display: flex; align-items: center; justify-content: space-around; }
+.ed_del_buttons i { font-size: 16px !important;}
+
+
+.inc_data_updt.mb-0 { width: 47%; padding: 6px 18px; }
+.inc_locatn p { font-weight: 600; }
+
+.avalability_cards { background: #fff; padding: 24px; border-radius: 10px; box-shadow: 0px 0px 5px 2px #00000014; }
+
+.notes_over { max-width: calc(100% - 0px); text-overflow: ellipsis; overflow: hidden; white-space: nowrap; padding: 0 30px; cursor: pointer; }
+.total_record { margin-bottom: -30px; margin-top: 40px; }
+.skeleton_body { background: #fff; padding: 12px 16px; border-radius: 4px; }
+
+.noMore_record { text-align: center; background: #f1f1f1; padding: 12px 16px; border-radius: 4px; }
+
+
+@media (max-width: 767px) {
+
+    .sepre_line { position: relative; }
+.sepre_line::after { display: none; }
+.sepre_line2::after { display: none; }
+.sepre_line3::after { display: none; }
+.avalability_cards .inc_data_updt .row { row-gap: 15px; }
+.avalability_cards { padding: 15px; }
+.btn_data { align-items: end; }
+.page_heading:before { width: calc(100% - 83%); }
+.page_heading:after { width: calc(100% - 9%); }
+    
+}

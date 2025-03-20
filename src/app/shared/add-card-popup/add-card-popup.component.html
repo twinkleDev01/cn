@@ -1,0 +1,147 @@
+<div class="cn_popup_box" *ngIf="data.openPop ==='addPaymentCardPopup'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Add Card Details</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <form [formGroup]="paymentCard" (ngSubmit)="onSubmit(paymentCard)" class="mb-0 cn_field pay_card_icon"
+    autocomplete="off">
+    <div class="cn_v_scroll">
+      <div class="cn_popup_body">
+        <div>
+          <div class="row">
+            <div class="col-sm-12">
+              <p class="cn_input_lbl mt-2">Name on Account <span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none" class="custom_matSuffix_icon cn_card_icn">
+                <input matInput formControlName="cardName" type="text" maxlength="64" placeholder="Enter Name on Card"
+                  class="form-control cn_input" [(ngModel)]="searchText" (keyup)="checkNameValue($event)"
+                  [ngModelOptions]="{standalone: true}" />
+                <mat-error class="error_mess" *ngIf="submitted && paymentCard.get('cardName').errors?.['required']">Name
+                  on card is required.</mat-error>
+                <mat-error class="error_mess" *ngIf="paymentCard.get('cardName').errors?.['maxlength']">Maximum 64
+                  characters are allowed.</mat-error>
+
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 cus_payment_card">
+              <p class="cn_input_lbl mt-0">Card Number <span class="txt_d"> *</span>
+              </p>
+              <label class="card_inpt">
+                <div class="pymnt_input">
+                  <div id="card-number-element" class="inpt_field card_no" name="card-number"></div>
+                </div>
+                <span class="brand" *ngIf="brandCard ==='unknown'"> <i
+                    class="material-icons pay_crd_icn">credit_card</i></span>
+                <div class="select_card_img">
+                  <!-- src="{{serverPathForUrl}}/portal/images/after-login/img_trans.gif" -->
+                  <!-- <img class="img-fluid" *ngIf="brandCard !=='unknown'" id="{{brandCard}}1x"> -->
+                </div>
+              </label>
+              <span *ngIf="cardNumberError" class="pymnt_input_error">{{cardNumberError}}</span>
+            </div>
+            <div class="col-sm-7 cus_payment_card">
+              <p class="cn_input_lbl">Expiration Date <span class="txt_d"> *</span></p>
+              <label class="card_inpt">
+                <div class="pymnt_input">
+                  <div id="card-expiry-element" class="inpt_field card_no" name="card-expiry"></div>
+                </div>
+              </label>
+              <span *ngIf="cardExpiryError" class="pymnt_input_error">{{cardExpiryError}}</span>
+            </div>
+            <div class="col-sm-5 cus_payment_card">
+              <p class="cn_input_lbl">CVV Number <span class="txt_d"> *</span></p>
+              <label class="card_inpt">
+                <div class="pymnt_input">
+                  <div id="card-cvc-element" class="inpt_field card_no" name="card-cvc"></div>
+                </div>
+              </label>
+              <span *ngIf="cardCvvError" class="pymnt_input_error">{{cardCvvError}}</span>
+            </div>
+          </div>
+          <p class="cn_t_and_c">By pressing the Save Card button, you agree to our
+            <u class="txt_p"><a href="https://stripe.com/checkout/legal" target="_blank">Terms & Conditions.</a></u>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+        <button type="submit" class="cn_btn" [disabled]="saveCardButton">Save Card</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="cn_popup_box" *ngIf="data.openPop=='removeCard'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Payment Card</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="tlt_4 my-4 text-center">Do you want to remove payment card.</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onConfirmationClick()">Ok</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="cn_popup_box" *ngIf="data.openPop=='videoPopUp'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Video Card</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <form [formGroup]="video" (ngSubmit)="onSubmit(video)" class="mb-0 cn_field pay_card_icon" autocomplete="off">
+    <div>
+      <div class="">
+        <div>
+          <div class="row">
+            <div class="col-sm-12">
+              <p class="cn_input_lbl mt-2">Name<span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none" class="custom_matSuffix_icon cn_card_icn">
+                <input matInput formControlName="name" type="text" maxlength="64" placeholder="Enter Name on Card"
+                  class="form-control cn_input" />
+                <mat-error class="error_mess" *ngIf="video.get('name').errors?.['required']">Name on card is
+                  required.</mat-error>
+                <!-- <mat-error class="error_mess" *ngIf="video.get('name').errors?.['maxlength']">Maximum 64
+                  characters are allowed.</mat-error> -->
+
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 cus_payment_card">
+              <p class="cn_input_lbl mt-2">Size<span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none" class="custom_matSuffix_icon cn_card_icn">
+                <input matInput formControlName="size" type="text" maxlength="64" placeholder="Enter Name on Card"
+                  class="form-control cn_input" />
+
+              </mat-form-field>
+
+            </div>
+            <div class="col-sm-12 cus_payment_card">
+              <p class="cn_input_lbl">Create Date <span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none" class="custom_matSuffix_icon cn_card_icn">
+                <input matInput formControlName="date" type="text" maxlength="64" placeholder="Enter Name on Card"
+                  class="form-control cn_input" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cn_popup_footer">
+      <div class="cn_f_acn">
+        <span class='txt_s material-icons pointer' (click)="downloadLink(element.reportUrl)"
+          style="margin-right: 15px;">file_delete</span>
+          <span class='txt_s material-icons pointer' (click)="downloadLink(element.reportUrl)"
+          style="margin-right: 15px;">file_download</span>
+      </div>
+    </div>
+  </form>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>
+

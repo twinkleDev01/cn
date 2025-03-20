@@ -1,0 +1,48 @@
+<div class="signin_form_container">
+  <div class="form_con">
+    <div class="container">
+      <div class="form_box">
+        <form class="cn_field" [formGroup]="verifyOtp" (ngSubmit)="verifyFormSubmit(verifyOtp)">
+          <p class="form_tlt">
+            <span>{{user_type | titlecase}} Verification Required</span>
+          </p>
+          <p class="form_dis">
+            Please check your email at 
+            <span *ngIf="user_type=='CARRIER' || user_type =='BROKER' " class="txt_b">{{email | xmask}}</span> 
+            <span *ngIf="user_type !=='CARRIER' && user_type !=='BROKER' " class="txt_b">{{email}}</span> 
+            to confirm your ownership of this {{user_type}} profile. This is the email registered with the USDOT.
+          </p>
+          <div class="">
+            <p class="cn_input_lbl">Enter OTP<span class="txt_d"> *</span></p>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="emailOtp" placeholder="Enter Verification Code" maxlength="6" class="form-control cn_input" autocomplete="off" (input)="keyPaste($event)" (keypress)="keyPress($event)"/>
+              <mat-error *ngIf="submitted && verifyOtp.get('emailOtp').errors?.['required']" class="error_mess"> Verification code is required.</mat-error>
+              <mat-error *ngIf="(verifyOtp.get('emailOtp').errors?.['maxlength']) && !(verifyOtp.get('emailOtp').errors?.['pattern'])" class="error_mess"> Verification code should be number. .</mat-error>
+            </mat-form-field>
+            <small class="error_mess" *ngIf="loginmessageError">{{loginmessageError}}</small>
+          </div>
+          <div class="form_action">
+            <button class="cn_btn" type="submit">Verify OTP</button>
+          </div>
+        </form>
+      </div>
+      <div class="acc_sign_up">
+        <span>Having Trouble? </span>
+        <span class="signup_txt" (click)="resendOTP()">Resend OTP</span>
+        <span class="custom_spinner spinner-border" role="status">
+          <span class="sr-only"></span>
+        </span>
+      </div>
+
+      <p class="acc_sign_up mt-2">
+        <span class="signup_txt" (click)="signIn()">Save & Exit</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>
+
+
+
+

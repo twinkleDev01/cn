@@ -1,0 +1,80 @@
+<div class="carrier_details_pg_con">
+  <div class="card_con">
+    <app-user-profile></app-user-profile>
+    <mat-tab-group class="mt-5" animationDuration="500ms">
+      
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">dashboard</mat-icon>
+          Overview
+        </ng-template>
+        <app-overview></app-overview>
+      </mat-tab>
+      
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">business_center</mat-icon>
+          Business Information
+        </ng-template>
+        <app-business-information></app-business-information>
+      </mat-tab>
+      
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">local_shipping</mat-icon>
+          Load Availability
+        </ng-template>
+        <app-load-availability></app-load-availability>
+      </mat-tab>
+      
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">verified_user</mat-icon>
+          Insurance
+        </ng-template>
+        <app-insurance></app-insurance>
+      </mat-tab>
+      
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">explore</mat-icon>
+          Lanes & Regions
+        </ng-template>
+        <app-lanes-regions></app-lanes-regions>
+      </mat-tab>
+      
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">collections</mat-icon>
+          Media Gallery
+        </ng-template>
+        <app-media-gallery></app-media-gallery>
+      </mat-tab>
+      
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">contacts</mat-icon>
+          Contact Information
+        </ng-template>
+        <app-contact-information></app-contact-information>
+      </mat-tab>
+      
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">health_and_safety</mat-icon>
+          Safety
+        </ng-template>
+        <app-safety></app-safety>
+      </mat-tab>
+      
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">reviews</mat-icon>
+          Reviews
+        </ng-template>
+        <app-reviews></app-reviews>
+      </mat-tab>
+      
+    </mat-tab-group>
+  </div>
+</div>

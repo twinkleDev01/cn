@@ -1,0 +1,43 @@
+.cus_payment_card .card_inpt { position: relative;
+    color: #000000;
+    font-size: 12px;
+    font-weight: 500;
+    height: 38px;
+    line-height: 38px;
+    margin-left: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 8px 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #F7F7F8; }
+.cus_payment_card .card_inpt .brand { width: 24px; height: 24px; color: #818181; display: flex; align-items: center; }
+
+.pymnt_input { flex-grow: 1; }
+
+
+.pymnt_input_error { font-size: 12px; line-height: 16px; font-weight: 500; margin: 6px 0 0 5px; display: block; color: #df0c0c; }
+
+.spinner_border { width: 12px; height: 12px; border: 0.15rem solid currentColor; border-right-color: transparent; animation: spinner-border 1s linear infinite; margin: 3px 0; }
+.custom_matSuffix_icon .mat-form-field-suffix { position: absolute; right: 5px; top: 17px; }
+.custom_matSuffix_icon .mat-button-focus-overlay,
+.custom_matSuffix_icon .mat-button-ripple.mat-ripple { display: none; }
+
+/*Payment Card Icon*/
+.custom_matSuffix_icon .mat-form-field-suffix { position: absolute; right: 10px; top: 16px; }
+
+.cn_popup_box .cn_input_lbl { font-weight: 400; font-size: 16px; line-height: 22px; color: #333333; margin: 26px 0 10px; }
+.cn_popup_box .cn_t_and_c { font-size: 14px; line-height: 20px; color: #333333; margin: 0 0 10px; margin: 26px 0 12px; }
+.pay_crd_icn { font-size: 24px; line-height: 30px; font-weight: 500; color: #818181; }
+.cn_popup_body .cn_input { font-weight: 500; }
+
+
+.cnfrm_popup { text-align: center; }
+.cnfrm_popup .cn_popup_body { padding-top: 30px; }
+.cnfrm_popup .crl_hlf_cek { font-size: 60px; }
+.cnfrm_popup .cnfrm_tlt { font-weight: 600; font-size: 30px; line-height: 38px; color: #00B4FC; margin: 0 0 12px; }
+.cnfrm_popup .cnfrm_dis { font-weight: 400; font-size: 16px; line-height: 24px; text-align: center; color: #666666; }
+.cnfrm_popup .cn_popup_footer { border: none; padding: 6px 20px 36px; }
+.cnfrm_popup .cn_f_acn { justify-content: center; }
+.txt_s { color: #4CD79E !important } /* Text color success */

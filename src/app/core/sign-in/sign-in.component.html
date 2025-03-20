@@ -1,0 +1,45 @@
+<div class="signin_form_container" *ngIf="!newTokan && !afterLoginNoContant">
+  <div class="form_con">
+    <div class="container">
+      <div class="form_box">
+        <form class="cn_field" [formGroup]="loginForm" (ngSubmit)="loginFormSubmit(loginForm)">
+          <p class="form_tlt">
+            <span>Welcome to Carrier</span>
+            <span class="txt_p"> Network</span>
+          </p>
+          <div class="">
+            <p class="cn_input_lbl">Email Address<span class="txt_d"> *</span></p>
+            <mat-form-field appearance="none">
+              <input matInput type="text" formControlName="username" placeholder="Enter Email Address" maxlength="129" class="form-control cn_input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');"/>
+              <mat-error *ngIf="submitted && loginForm.get('username').errors?.['required']" class="error_mess"> Email is required.</mat-error>
+              <mat-error *ngIf="loginForm.get('username').errors?.['pattern']" class="error_mess">Please enter valid email address.</mat-error>
+              <mat-error *ngIf="(loginForm.get('username').errors?.['maxlength']) && !(loginForm.get('username').errors?.['pattern'])" class="error_mess">Email must not exceed 128 characters.</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="cn_pfix_sfix">
+            <p class="cn_input_lbl">Password<span class="txt_d"> *</span></p>
+            <mat-form-field appearance="none" class="ic_password">
+              <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" [(ngModel)]="passwordSpaceCheck" placeholder="Enter Password" class="form-control cn_input"  minlength="6" maxlength="17"/>
+              <mat-icon matSuffix  class="txt_lb password_icn" (click)="showHidePassword(hide);">{{ hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <mat-error *ngIf="submitted && loginForm.get('password').errors?.['required']" class="error_mess">Password is required.</mat-error>
+              <mat-error *ngIf="loginForm.get('password').errors?.['minlength']" class="error_mess">Password must be at least 6 characters long.</mat-error>
+              <mat-error *ngIf="loginForm.get('password').errors?.['maxlength']" class="error_mess">Only 16 characters are allowed.</mat-error>
+            </mat-form-field>
+            <small class="remember_password error_mess" *ngIf="loginmessageError && !loginForm.get('password').errors">{{loginmessageError}}</small>
+          </div>
+          <div class="form_action">
+            <button class="cn_btn" type="submit">Sign in</button>
+          </div>
+        </form>
+      </div>
+      <p class="acc_sign_up">
+        <span>Don't have an account yet?</span>
+        <span class="signup_txt" (click)="signUp()"> Sign up</span>
+      </p>
+      <p class="forgot_password" (click)="goToForgotPassword()">
+        <span >Forgot Password?</span>
+      </p>
+    </div>
+  </div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

@@ -1,0 +1,45 @@
+.carrier_details_pg_con { margin: 14px 0px; }
+.user_profile { border: 1px solid #ddd; border-radius: 10px; width: 100px; height: 100px;  }
+.user_badge { color: #00b4fc; border-radius: 5px;color: #00b4fc; background: #00b4fc2e; font-size: 12px; line-height: normal; font-weight: 500; padding: 2px 8px; border-radius: 5px;}
+.user_details_bx { border-bottom: 1px solid #ddd; margin-top: 20px; padding: 20px 0px; }
+.detail_title { font-size: 15px; font-weight: 500; color: #000; }
+.detail_value { font-size: 15px; color: #818181; }
+.user_details_bx .row { row-gap: 15px; }
+.edit_pro_btn { border: 1px solid #ddd; background: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: 500; }
+.edit_drop { border: .5px solid #ddd; padding: 0px; rotate: 90deg; width: 30px; height: 45px; padding-top: 0px; margin-right: 19px; border-radius: 5px; }
+.contect_info_box { margin-top: 20px; background: #f0f0f0; border-radius: 10px; }
+.bx_head { padding: 10px; border-radius: 10px 10px 0px 0px;  }
+.contact_details { border: 1px solid #ddd; padding: 10px; border-radius: 10px; background: #fff; }
+.fa-circle-check { font-weight: 500; color: #11d311; }
+.email_data { border-bottom: 1px solid #ddd; }
+.prime_acc { font-size: 10px; background: #ddd; padding: 0px 4px; border-radius: 3px; margin-left: 5px;  }
+.unvery { font-size: 10px; color: red; margin-left: 5px;  }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 25%; }
+.email_data span:first-child { width: 40%; }
+.table { border: 1px solid #ddd; }
+.status_dot { position: absolute; border: 2px solid #fff; bottom: -3px; right: -5px; width: 15px; height: 15px; background: #0fe50f; border-radius: 100%; }
+.usib_reviw { display: flex; align-items: center; }
+.usib_reviw .rtng_stars { color: orange; }
+.usib_reviw .reviws { font-weight: 600; }
+
+.sngl_pont { display: inline-flex ; flex-direction: column; width: 33%; }
+.availiblity_box { background: #f0f3ff; border: 1px solid #d9d9d9; border-radius: 5px; padding: 20px; text-align: center; }
+.empty_file { background: #f1f1f1; color: #818181; font-size: 18px; font-weight: 500; line-height: 24px; padding: 18px 0; text-align: center; }
+.arting_line { border-radius: 20px; display: inline-flex; height: 10px; width: 100%; background: #36b69d; }
+.review_box { display: flex;  }
+.review_box .box:first-child { width: 27%; }
+.review_box .box:nth-child(2) { width: 35%; margin-right: 40px; border: 1px solid #ddd; border-top: 0px; border-bottom: 0; padding-left: 40px; }
+.review_box .box:nth-child(3) { width: 35%; }
+.ro_rtng_line { background: #dfdfdf; border-radius: 20px; display: flex ; width: calc(100% - 180px); }
+.ro_rtng_txt { width: 180px; }
+@media screen and (max-width: 767px) {
+.revers { flex-direction: column-reverse; }
+.email_data { flex-wrap: wrap-reverse; justify-content: end !important; }
+.email_data span:first-child { width: 100%; }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 50%; }
+.user_details_box { flex-direction: column; }
+.user_profile { width: 45px; height: 45px; }
+.carrier_profile h4 { font-size: 16px; }
+.card_con { padding: 15px; }
+    
+}

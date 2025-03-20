@@ -1,0 +1,41 @@
+    <div class="chng_pass_con">
+      <div class="tabLabels">
+        <div class="update_profile_con">
+          <form [formGroup]="emailChangeForm" (ngSubmit)="emailChange(emailChangeForm)" autocomplete="off"
+          class="cn_field">
+            <p class="edt_pg_tlt">Change
+              Email Address</p>
+
+            <p class="fs_14 txt_lb fsn_4 mb-3">Change and verify your email
+              address</p>
+            <div class="lableWith_txt">
+              <p class="fs_14 txt_lb fsn_4 mb-3">Current Email Address</p>
+              <p class="fs_14 txt_b fsm_5 mb-0" *ngIf="carrierDetails?.email">{{carrierDetails?.email}}</p>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3">
+                <p class="cn_input_lbl" style="margin: .5rem 0
+                  0rem;">New Email Address <span class="txt_d">
+                    *</span></p>
+                <mat-form-field appearance="none" class="cn_pfix_icn">
+                  <input matInput formControlName="email" placeholder="Enter New Email" maxlength="129" class="form-control cn_input" />
+                  <mat-error *ngIf="submitted && emailChangeForm.get('email').errors?.['required']" class="error_mess">Email is required.</mat-error>
+                  <mat-error *ngIf="emailChangeForm.get('email').errors?.['pattern']" class="error_mess">Please enter valid email address.</mat-error>
+                  <mat-error *ngIf="emailChangeForm.get('email').errors?.['maxlength'] && !emailChangeForm?.get('email').errors?.['pattern']" class="error_mess">Email must not exceed 128 characters.</mat-error>
+                  <span class="error_mess class">{{emailMessage}}</span>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="">
+              <p class="fs_12 fsn_4 txt_lb" style="margin: -6px 0 0;">We will use this email address for future communication. Save & Verify
+              </p>
+            </div>
+            <div class="">
+              <button class="btn custum_button button_primary mb-3 mt-4" type="submit">Save & Verify</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+<ngx-loading *ngIf="loading" [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

@@ -1,0 +1,79 @@
+<div class="media_file_con cn_cus_tab">
+	<div *ngIf="!skeletonLoader">
+		<h3 class="bx_tlt">Edit or Upload Media</h3>
+    <div class="mdia_box">
+			<mat-tab-group animationDuration="600ms" [selectedIndex]="selectedIndex" (click)="onTabChanged($event)" class="mt-3">
+				<mat-tab label="Add images">
+					<p class="tab_dis">We give you the freedom to share images of your trucks, power units, equipment, accessories, drivers on trucks, and more! Sounds exciting, right?<br>
+						All the images you share here will be publicly available to shippers and brokers.<br> This platform is ideal for marketing your company and services. Plus, it will enhance your online visibility, so we recommend adding descriptive names to each image that represent image.</p>
+					<div *ngIf="currentTab=='imageTab'">
+						<app-drag-n-drop [currentTab]="currentTab"></app-drag-n-drop>
+					</div>
+				</mat-tab>
+				<mat-tab label="Add documents">
+					<p class="tab_dis">Upload the documents you want to share with new shippers and brokers to build trust. Typically, carriers upload the following documents. Please decide which ones to upload.<br>
+						Keep in mind that all documents uploaded here will be visible to users:</p>
+					<div class="img_media_points">
+						<ul>
+							<li>Commercial Driver’s License</li>
+							<li>Medical Certificate</li>
+							<li>Motor Carrier Authority</li>
+							<li>Proof of Insurance</li>
+							<li>Cab Card</li>
+							<li>IFTA Certificate</li>
+							<li>Safety Certificates</li>
+							<li>Hazmat Paperwork</li>
+							<li>State Permits</li>
+							<li>Lease Agreement</li>
+						</ul>
+					</div>
+					<div *ngIf="currentTab=='pdfTab'">
+						<!-- <span (click)="multiImageUpload($event,'pdfUpload')">Upload Media</span> -->
+						<app-drag-n-drop [currentTab]="currentTab"></app-drag-n-drop>
+					</div>
+				</mat-tab>
+				<mat-tab label="Add Videos">
+					<p class="tab_tlt">Upload Videos</p>
+					<p class="tab_dis">Easily upload videos to showcase your carrier services and capabilities. This feature visually represents your operations, fleet, and expertise to potential customers and partners. Stand out in the industry and attract more business opportunities by sharing your carrier story with the world. Simply select the video file and upload to get started..</p>
+					<div *ngIf="currentTab=='videoTab'">
+						<!-- <span (click)="multiImageUpload($event,'videoUpload')">Upload Media</span> -->
+						<app-drag-n-drop [currentTab]="currentTab"></app-drag-n-drop>
+					</div>
+				</mat-tab>
+			</mat-tab-group>
+
+			<div class="free_usr_upgrd_box" *ngIf="getUserData?.subscriptionPlanType=='1'">
+				<div class="fuub_crd">
+					<p class="txt_1 fw_6 txt_b fuub_info">
+						<span>Please purchase the premium plan to update this “Media Gallery”.</span>
+						<span class="txt_p"> Check Benefits</span>
+					</p>
+					<div class="spic_box">
+						<p class="spic_tlt">Business</p>
+						<p class="txt_666 spic_price_b">For Carriers looking to SUPER BOOST their online visibility. Driver new calls on your Phone/SMS/WhatsApp/Email so you can drive more and earn more.</p>
+						<div class="spic_price">
+							<div class="spic_price_t">
+								<sup>$</sup>
+								<span>19.99</span>
+								<sup>USD</sup>
+							</div>
+							<p class="spic_price_b">/month, billed annually</p>
+							<button class="cn_btn" (click)="subscriptionUpgrade()">Upgrade to Business Plan</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="skt_eifr" *ngIf="skeletonLoader">
+		<ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '24px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+		<div class="add_lane_location">
+			<div *ngFor="let fake of generateFakeSkeleton(2)">
+				<ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '20px', margin: '0px 0 8px' }"></ngx-skeleton-loader>
+				<ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '40px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+			</div>
+		</div>
+		<ngx-skeleton-loader count="4" [theme]="{ width: '100%', height: '24px', margin: '0px 0 24px' }"></ngx-skeleton-loader>
+	</div>
+</div>

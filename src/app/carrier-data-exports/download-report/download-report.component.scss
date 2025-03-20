@@ -1,0 +1,151 @@
+.filter {
+    background-color: white;
+    min-width: 100%;
+    margin-top:  20px;
+    padding: 20px;
+}
+
+.list {
+    background-color: white;
+    min-width: 100%;
+    min-height: 200px;
+    margin-top:  20px;
+}
+
+.topHeader{
+    min-width: 100%;
+    min-height: 50px;
+    margin-top:  20px;
+}
+
+
+label {
+    display: block;
+}
+.col-md-6 .filter_box { background: #ECFAFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    margin: 0 0 20px;
+    padding: 10px 20px; }
+
+    .emptyScreen{
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        display: flex;
+    }
+
+    // .list_elements {
+    //     margin:10px;
+    //     max-width: 10px;
+    // }
+    // table {
+       
+    //         min-width: -webkit-fill-available;
+    // }
+
+    .page_heading:after { width: calc(100% - -6%); }
+.page_heading:before { width: calc(100% - 84%); }
+.insurance_pg_con { margin: 14px 0px; }
+.saved_carrier_list_con { background: #fff; padding: 24px; border-radius: 10px; margin: 14px 0; }
+.ed_del_buttons button { color: #333333; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #ddd0; border-radius: 10px; width: 42px; height: 42px; }
+.ed_del_buttons button.ed_edit_btn { border: 1px solid #00b4fc; background: #eaf9ff; }
+.ed_del_buttons button.ed_edit_btn:hover { color: #fff; background: #00b4fc; }
+.ed_del_buttons button.ed_dtl_btn { border: 1px solid #DF0C0C; margin-left: 14px; background: #fce9e9; }
+.ed_del_buttons button.ed_dtl_btn:hover { color: #fff; background: #DF0C0C; }
+.ed_del_buttons .material-icons-outlined { font-size: 20px; }
+
+
+.ctry_flag { margin-right: 6px; }
+.ctry_flag img { max-height: 16px; width: auto; }
+.ctry_flag span { margin: 0 5px; }
+
+/* display: flex; align-items: center; justify-content: space-between;  */
+.insu_uplod_box {  margin: 0 0 32px; }
+.insu_uplod_box .iub_btn { padding: 10px 18px; }
+
+
+
+.inc_data_updt { border-radius: 10px; padding: 16px 18px; margin: 0 0 32px; border: 1px dashed #b9b9b9; position: relative; }
+.inc_data_updt:last-child { margin: 0px; }
+.inc_data_updt .inc_head { display: flex; justify-content: space-between; }
+/*.inc_data_updt .inc_head_l { display: flex; align-items: flex-start; }*/
+.inc_data_updt .compny_nm { font-size: 20px; line-height: 26px; font-weight: 500; }
+.inc_data_updt .inc_cntr { display: flex; align-items: center; margin: 7px 0 8px; }
+.inc_data_updt .inc_row { font-size: 14px; line-height: 20px; font-weight: 500; position: relative; margin-right: 14px; padding-right: 14px; }
+.inc_data_updt .inc_row .txt_lb { font-weight: 400; margin-right: 2px; }
+.inc_data_updt .inc_row:after { position: absolute; content: '|'; font-size: 14px; font-weight: 200; right: 0; color: #c9c9c9; }
+.inc_data_updt .inc_row:last-child:after { display: none; }
+.inc_data_updt .chip_crd { font-size: 13px; line-height: 14px; font-weight: 500; border-radius: 20px; padding: 4px 12px; margin: 0 0 0 16px; display: inline-flex; align-items: center;  cursor: pointer; }
+.inc_data_updt .inc_type { border: 1px solid #00B4FC; color: #00B4FC; }
+.inc_data_updt .compny_status { color: #fff; background: #25D366; font-size: 14px; line-height: 16px; padding: 9px 24px; margin: 0; }
+.inc_data_updt .phone_no { display: flex; align-items: center; }
+.inc_data_updt .phone_no a { text-decoration: none; color: #00b4fc; }
+.inc_data_updt .inc_date { display: flex; align-items: center; font-size: 14px; line-height: 20px; margin: 0 20px 0px 0; color: #454545; font-weight: 500; }
+.inc_data_updt .inc_date .txt_lb { font-weight: 400; }
+.inc_data_updt .inc_date:last-child { margin-right: 6px; }
+.inc_data_updt .inc_date .mat-icon { font-size: 20px; line-height: 22px; color: #00b4fc; }
+.inc_data_updt .inc_locatn { display: flex; align-items: center; font-size: 14px; line-height: 20px; color: #454545; font-weight: 500; margin: 6px 0 0 -4px; }
+.inc_data_updt .inc_locatn .mat-icon { font-size: 20px; line-height: 22px; color: #00b4fc; width: auto; height: auto; margin: 0 2px 0 0; }
+
+
+
+.inc_fotr { display: flex; justify-content: space-between; align-items: flex-end; }
+/*.inc_fotr_l { margin: 8px 0 0; }*/
+.inc_date_box { display: flex; align-items: center; }
+
+
+.expired_insurance .inc_row { color: #575757; }
+.expired_insurance .compny_nm { color: #575757; }
+.expired_insurance .inc_date { color: #575757; }
+.expired_insurance .inc_locatn { color: #575757; }
+.expired_insurance .inc_locatn .mat-icon { color: #8e8e8e; }
+.expired_insurance .inc_type { border: 1px solid #8e8e8e; color: #8e8e8e; }
+.expired_insurance .inc_date .mat-icon { color: #8e8e8e; }
+.expired_insurance .compny_status { background: #8d8d8d; }
+.expired_insurance .ctry_flag img { filter: grayscale(1); opacity: 0.7; }
+.expired_insurance .phone_no a { color: #575757; }
+.expired_insurance .inc_row .txt_lb { color: #939393 !important; }
+
+
+
+
+.inc_data_updt .compny_status { background: #e9fff1; color: #25D366; font-size: 14px; line-height: 16px; padding: 7px 24px; margin: 0; border: 1px solid #25D366; font-weight: 500; }
+.expired_insurance .compny_status { background: #f2f2f2; border: 1px solid #8d8d8d; color: #8d8d8d; }
+
+@media screen and (max-width:767px) {
+    .d-flex.align-items-center.justify-content-between { flex-direction: column; align-items: start !important; }
+    .cn_btn.iub_btn { margin-top: 40px; }
+    .inc_data_updt .inc_head { flex-direction: column; align-items: end; }
+    .inc_data_updt .inc_cntr { flex-direction: column; align-items: start; }
+    .inc_data_updt .inc_row { margin-bottom: 10px; }
+  }
+
+  
+.spinner-border { display: inline-block; width: 14px; height: 14px; vertical-align: -0.125em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: 0.75s linear infinite spinner-border; margin: 2px 0 0 6px; }
+.loard_box { width: 20px; text-align: center;}
+.custom_spinner { width: 18px; height: 18px; border-width: 2px; border-color: #00b4fc; border-right-color: transparent; }
+.spinner-border { display: inline-block; width: 21px; height: 21px; vertical-align: -0.125em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: 0.75s linear infinite spinner-border; margin: 2px 0 0 6px; }
+.write_review_con .loard_box { position: relative; left: -4px; right: 0; top: 6px; }
+
+
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .back-to-top.show {
+    display: block; /* Show when needed */
+  }
+  
+
+
+
+

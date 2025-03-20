@@ -1,0 +1,186 @@
+<div class="td_card_con">
+  <div class="table_data_con">
+    <div class="table_actions">
+      <form class="cn_field">
+        <div class="btns_box">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="comn_fltr" [ngClass]="{'d-none': showAdvancedFilter}">
+                <mat-form-field appearance="none">
+                  <mat-label>Table Search</mat-label>
+                  <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
+                  <input type="text" matInput placeholder="Search" class="form-control cn_input ms-2"  [formControl]="searchControl" (keyup)="applyFilter()">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-7">
+              <div class="btn_r">
+                <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
+                  <i class="fa-sharp fa-solid fa-filter"></i>
+                </span>
+                <span class="cn_btn icn_btn">
+                  <i class="fa-duotone fa-solid fa-rotate-right"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="filter_box" [ngClass]="{'d-none': !showAdvancedFilter}">
+          <div class="form_box">
+              <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
+              <div class="row">
+                <div class="col-md-3">
+                  <mat-form-field>
+                    <mat-label>DOT Number</mat-label>
+                    <input type="text" matInput placeholder="Search">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field class="date_range_filter">
+                    <mat-label>Enter a date range</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field>
+                    <mat-label>User Type</mat-label>
+                    <mat-select>
+                      <mat-option value="carrier">Carrier</mat-option>
+                      <mat-option value="shipper">Shipper</mat-option>
+                      <mat-option value="broker">Broker</mat-option>
+                      <mat-option value="Dispature">Dispature</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3">
+                  <p class="cn_input_lbl">Checkbox</p>
+                  <mat-checkbox class="me-3">Checked</mat-checkbox>
+                  <mat-checkbox class="">Indeterminate</mat-checkbox>
+                </div>
+                <div class="col-md-3">
+                  <p class="cn_input_lbl">Radio Button</p>
+                  <mat-radio-group>
+                    <mat-radio-button value="1" class="me-3">Option 1</mat-radio-button>
+                    <mat-radio-button value="2">Option 2</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-md-3">
+                  <p class="cn_input_lbl">Toggle</p>
+                  <mat-button-toggle-group class="toggle_switch" name="fontStyle" aria-label="Font Style">
+                    <mat-button-toggle value="yes">Yes</mat-button-toggle>
+                    <mat-button-toggle value="no">NO</mat-button-toggle>
+                  </mat-button-toggle-group>
+                </div>
+                <div class="col-md-12">
+                  <div class="fltr_actn">
+                    <button class="cn_btn btn_bordered">Clear</button>
+                    <button class="cn_btn">Apply</button>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="table_data" tabindex="0">   
+      <table mat-table [dataSource]="dataSource">
+        <!-- user -->
+        <ng-container matColumnDef="companyName" sticky>
+          <th mat-header-cell *matHeaderCellDef>
+            <div class=" sticky_boder"> User </div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="user_dtl sticky_boder">
+              <div class="ud_l">
+                <div class="user_img_container">
+                  <img *ngIf="element.user?.profileImage; else defaultIcon" 
+                       [src]="element.user?.profileImage" 
+                       class="user_img"
+                       alt="User Image">
+                </div>
+                <ng-template #defaultIcon>
+                  <i class="fa-duotone fa-solid fa-circle-user user_icon"></i>
+                </ng-template>
+                <span class="user_Type">{{element.userType}}</span>
+              </div>
+              <div class="ud_r">
+                <div class="name_icn">
+                  <a href="#" class="u_name">{{ element.user?.companyName }}</a>
+                  <i class="fa-duotone fa-badge-check verify_icon" matTooltip="Account not Verified"></i>
+                </div>
+                <div class="loca_rtng">
+                  <span class="user_rtng" matTooltip="Total 10 Reviews">{{ element.user?.averageRatingValue }}<i class="fa-solid fa-star"></i> </span>
+                  <!-- <span class="u_loca"> {{ element.user?.city}}{{element.user?.state}}</span> -->
+                  {{ (element.user?.city ? element.user.city + ', ' : '') + (element.user?.state || 'Unknown Location') }}
+                </div>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+        <!-- PageSource -->
+        <ng-container matColumnDef="pageSource">
+          <th mat-header-cell *matHeaderCellDef> Page Source </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- <a [href]="element.url ? 'https://d.carriernetwork.ai' + element.url : '#'" class="txt_lnk" target="{{ element.url ? '_blank' : '' }}">{{element.impressionType}}</a> -->
+            <a [href]="'https://d.carriernetwork.ai' + element.url" class="txt_lnk" target="{{ element.url ? '_blank' : '' }}">{{element.impressionType}}</a>
+          </td>
+        </ng-container>
+        <!-- ProfileRank -->
+        <ng-container matColumnDef="profileRank">
+          <th mat-header-cell *matHeaderCellDef class="text-center"> Profile Rank </th>
+          <td mat-cell *matCellDef="let element" class="text-center" matTooltip="Profile Rank on pge">{{element.position}}</td>
+        </ng-container>
+        <!-- Location -->
+        <ng-container matColumnDef="location">
+          <th mat-header-cell *matHeaderCellDef class="loca_w mob_txt_cntr"> Location </th>
+          <td mat-cell *matCellDef="let element" class="mob_txt_cntr">
+            <img src="/assets/country/us.png" class="flaf_icn">
+            {{element.location}}
+          </td>
+        </ng-container>
+        <!-- createdAt -->
+        <ng-container matColumnDef="accessedAt">
+          <th mat-header-cell *matHeaderCellDef> Accessed At </th>
+          <td mat-cell *matCellDef="let element">{{element.createdAt}}</td>
+        </ng-container>
+        <!-- TimeSinceAccess -->
+        <ng-container matColumnDef="timeSinceAccess">
+          <th mat-header-cell *matHeaderCellDef> Time Since Access </th>
+          <td mat-cell *matCellDef="let element">
+            {{ calculateTimeSince(element.createdAt) }}
+          </td>
+        </ng-container>
+        <!-- Action -->
+        <ng-container matColumnDef="rowAction">
+          <th mat-header-cell *matHeaderCellDef class="time_since"> Action </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="row_actn">
+              <span class="cn_btn phone_btn btnActive" matTooltip="Contact Us">
+                <i class="fa-sharp-duotone fa-regular fa-phone"></i>
+              </span>
+              <span class="cn_btn comnt_btn btnActive" matTooltip="Write a Review">
+                <i class="fa-duotone fa-regular fa-comment-pen"></i>
+              </span>
+              <span class="cn_btn eye_btn btnActive" matTooltip="View User Detail">
+                <i class="fa-duotone fa-solid fa-eye"></i>
+              </span>
+              <span class="cn_btn bokmrk_btn" matTooltip="Save to List">
+                <i class="fa-duotone fa-solid fa-bookmark"></i>
+              </span>
+
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+</div>

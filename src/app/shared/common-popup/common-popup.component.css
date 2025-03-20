@@ -1,0 +1,18 @@
+.cnfrm_popup { text-align: center; }
+.cnfrm_popup .cn_popup_body { padding-top: 18px; }
+.cnfrm_popup .crl_hlf_cek { font-size: 60px; }
+.cnfrm_popup .cnfrm_tlt { font-weight: 600; font-size: 30px; line-height: 38px; color: #00B4FC; margin: 0 0 12px; }
+/*.cnfrm_popup .cnfrm_dis { text-align: center; }*/
+.cnfrm_popup .cn_popup_footer { border: 1px solid #D9D9D9; padding: 20px; background: #fff; }
+.cnfrm_popup .cn_f_acn { display: flex; align-items: center; justify-content: space-between; }
+
+.subs_pln_crd { padding-left: 32px; padding-right: 32px; }
+.subs_pln_crd .spic_box { background: #00B4FC; color: #fff; margin-bottom: 20px; padding: 16px; text-align: left; }
+.subs_pln_crd .plan_info { background: #EFF3F5; text-align: center; margin: 16px 0 22px 0; padding: 10px; }
+.subs_pln_crd .spic_tlt { font-weight: 600; font-size: 24px; line-height: 32px; margin: 0 0 10px; }
+.subs_pln_crd .spic_price { margin: 16px 0px 0px; text-align: left; }
+.subs_pln_crd .spic_price_t { margin: 0px; }
+.subs_pln_crd .spic_price_t sup { font-size: 18px; line-height: 20px; font-weight: 600; top: -12px; }
+.subs_pln_crd .spic_price_t span { font-weight: 600; font-size: 36px; line-height: 36px; }
+.subs_pln_crd .spic_price_b { font-weight: 400; font-size: 14px; line-height: 21px; }
+.subs_pln_crd .cn_btn { width: 100%; background: #fff; color: #00b4fc; margin: 24px 0 14px; }

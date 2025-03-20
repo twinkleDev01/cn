@@ -1,0 +1,223 @@
+<div class="manage_review_con">
+	<div class="">
+		<h4 class="page_heading">Respond Review</h4>
+	</div>
+	
+	<div *ngIf="!skeletonLoader" class="mt-5">
+		<div class="review_mess_box">
+			<div class="rmb_img_inicial">
+				<img *ngIf="reviewList?.user?.profileImage" src="{{reviewList?.user?.profileImage}}" class="img-fluid">
+				<span class="initail" *ngIf="!reviewList?.user?.profileImage && reviewList?.user?.companyName">{{(reviewList?.user?.companyName) | acronymOfName}}</span>
+				<span class="initail" *ngIf="!reviewList?.user?.profileImage && !reviewList?.user?.companyName && reviewList?.user?.firstName && reviewList?.user?.lastName">{{getFullName(reviewList?.user?.firstName , reviewList?.user?.lastName) | acronymOfName}}</span>
+			</div>
+			<div class="rmb_body">
+				<div class="rmb_head_t">
+					<div class="rmb_hltr_txt">
+						<p class="rmb_slogan">"{{reviewList?.title ? reviewList?.title : '-'}}"</p>
+                        <div class="rmb_name_verify">
+							<mat-icon class="material-symbols-outlined">verified_user</mat-icon>
+							<div class="rmb_name">
+								<span class="txt_lb fw_4"> Verified by </span>
+								<span class="txt_p"> {{reviewList?.user?.firstName}} {{reviewList?.user?.lastName}} </span>
+								<span class=""> {{reviewList?.user?.userType}} </span>
+								<span class="txt_lb fw_4"> from </span>
+								<span class="" > {{reviewList?.phyCity ? reviewList?.phyCity : '-'}} </span>
+							</div>
+						</div>
+                        <div class="rmb_rating">
+                            <p class="ratng_no" *ngIf="reviewList.rating">{{reviewList.rating}}.0</p>
+                            <app-review-show [averageRating]="reviewList.rating"></app-review-show>
+                            <p class="rmb_rtng_date">{{reviewList?.createdAt | date: 'MMM dd, yyyy'}}</p>
+                        </div>
+						<div class="rmb_mess">
+							<!-- <span class="quote_sign qs_start">❞</span> -->
+							<div class="quote_mess">
+								<span class="quote_dis">{{reviewList?.review}}</span>
+								<!-- <span class="quote_sign qs_end">❠</span> -->
+							</div>
+						</div>
+						
+					</div>
+
+					
+				</div>
+				<div class="sh_con">
+					<div class="sh_box">
+						
+						<div class="other_info">
+							<div class="pdt_instn_box">
+								<div class="pdt_instn_boxl">
+									<span class="instn_lbl">Lanes:</span>
+									<span class="instn_lbl" *ngIf="reviewList?.lane.length == 0">-</span>
+								</div>
+								<div class="pdt_instn_boxr" *ngIf="reviewList?.lane.length > 0">
+									<div class="pdt_instn_row" *ngFor="let laneData of reviewList?.lane.slice(0, showAll[i] ? reviewList?.lane?.length : 3)">
+										<span class="instn_picup" >{{laneData.fromCity}}, {{laneData?.fromStateCode}}</span>
+										<span class="instn_arrow">></span>
+										<span class="instn_picup">{{laneData.toCity}}, {{laneData?.toStateCode}}</span>
+									</div>
+									<button (click)="toggleShowAll(i)" *ngIf="reviewList?.lane?.length > 3" class="show_hid_btn">{{ showAll[i] ? 'Show Less' : 'Show More' }}</button>
+								</div>
+								<div class="pdt_instn_boxr" *ngIf="reviewList?.lane.length===0">Lane not added</div>
+							</div>
+
+							<p class="sngl_pont">
+								<span class="sngl_pont_lbl">Freight Details:</span>
+								<span class="sngl_pont_vlu" *ngIf="reviewList?.cargoType?.length ==0">-</span>
+								<span class="sngl_pont_vlu" *ngFor="let cargoData of reviewList?.cargoType; let j=index"> {{cargoData?.cargoTypeName ? cargoData?.cargoTypeName : '-'}}<span *ngIf="j+1 < reviewList?.cargoType?.length">, </span> </span>
+							</p>
+							<p class="sngl_pont mb-0">
+								<span class="sngl_pont_lbl">Tracking:</span>
+								<span class="sngl_pont_vlu">
+									<span *ngIf="reviewList?.tracking"> Offers electronic tracking, <span>{{reviewList?.providerDetails ? reviewList?.providerDetails : '-'}}</span> </span>
+									<span *ngIf="!reviewList?.tracking"> {{reviewList?.tracking}}</span>
+								</span>
+							</p>
+						</div>
+					</div>
+				
+				</div>
+			</div>
+		</div>
+
+    <div class="mb-4 col-sm-12">
+        <div class="" id="card_con_new">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text_area_input_box">
+                        <div class="topbar"><span class="fs_13 top_txt">Respond Review :
+                            </span><span><i class="fa-solid fa-wand-magic-sparkles"></i> <i
+                                    class="fa-solid fa-brackets-curly"></i></span></div>
+                        <div class="box_header">
+                            <div class="email_dropdown">
+                                <button type="button" class="header_options fs_13"
+                                    (click)="toggleDropdown()"><span class="ai_btn"> <i class="fa-duotone fa-microchip-ai me-2"></i> Respond AI</span></button>
+                                <div *ngIf="dropdownOpen" id="dropdown" class="dropdown">
+                                    <ul id="invite_div">
+                                        <li><button class="sub_btn" type="button"
+                                                (click)="sendInformation('AIGenerated-Review')">Let AI write
+                                                for me</button></li>
+                                        <li><button class="sub_btn" type="button"
+                                                (click)="sendInformation('Enter custom prompt')"> Enter
+                                                custom prompt</button></li>
+                                        <li class="list_one" [class.disabled]="!enableDisable">
+                                            <button class="sub_btn" type="button">Improve writing <i class="fa-duotone fa-pen-swirl"></i>
+                                                <ul class="option_one child_nesting"
+                                                    [class.disabled]="improvewriting">
+                                                    <li class="child_list"
+                                                        (click)="sendInformation('Fix spelling and grammar')">
+                                                        Fix spelling and grammar</li>
+                                                    <li class="child_list"
+                                                        (click)="sendInformation('Make it longer')">Make it
+                                                        longer</li>
+                                                    <li class="child_list"
+                                                        (click)="sendInformation('Make it shorter')">Make it
+                                                        shorter</li>
+                                                    <li class="child_list"
+                                                        (click)="sendInformation('Rewrite')">Rewrite</li>
+                                                    <li class="child_list"
+                                                        (click)="sendInformation('Improve structure')">
+                                                        Improve structure</li>
+                                                    <li class="child_list"
+                                                        (click)="sendInformation('Make more persuasive')">
+                                                        Make more persuasive</li>
+                                                    <li class="child_list"
+                                                        (click)="sendInformation('Summarize')">Summarize
+                                                    </li>
+                                                </ul>
+                                            </button>
+                                        </li>
+                                        <li class="list_two" [class.disabled]="!enableDisable"><button
+                                                class="sub_btn"> Change tone <i class="fa-brands fa-cotton-bureau"></i>
+                                                <ul class="option_one child_nesting"
+                                                    [class.disabled]="changeTone">
+                                                    <li class="child_list"
+                                                        (click)="sendInformation('Professional')">
+                                                        Professional</li>
+                                                    <li class="child_list"
+                                                        (click)="sendInformation('Friendly')">Friendly</li>
+                                                    <li class="child_list"
+                                                        (click)="sendInformation('Informative')">Informative
+                                                    </li>
+                                                    <li class="child_list"
+                                                        (click)="sendInformation('Helpful')">Helpful</li>
+                                                </ul>
+                                            </button></li>
+                                        <li [class.disabled]="!enableDisable"><button class="sub_btn"
+                                                (click)="sendInformation('Generate based on summary')">
+                                                Generate based on summary</button></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter_banner" id="filter_banner" *ngIf="isSendMessage">
+                            <input type="text" class="filter_input" [(ngModel)]="newMessage"
+                                (keydown.enter)="$event.preventDefault()"
+                                [ngModelOptions]="{standalone: true}"
+                                placeholder="Write a detailed instruction of what you'd like to see in your email">
+                            <button class="submit_btn" type="button" id="invite_div" [disabled]="!newMessage"
+                                (click)="generateReview()"><i class="fa-duotone fa-pen-nib txt_p"></i></button>
+                        </div>
+                        <div class="text_area_new" style="position: relative;">
+                            <textarea cols="20" rows="10" (input)="checkTextarea($event)"
+                                [ngModelOptions]="{standalone: true}" 
+                                (clicl)="saveUserGenerated()" [(ngModel)]="description"
+                                (keypress)="checkDecription($event)" class="text_area" maxlength="1024"
+                                placeholder="Start responding to the review by typing here. If you're a Business Pro user, you can get help from AI assistance to generate a response based on the review"> 
+                                <!-- (paste)="onPaste($event)" -->
+    </textarea>
+                            <div style="position: absolute;
+    top: 40px;">
+                                <div class="mb-4 ai_mess_gen">
+                                    <span *ngFor="let message of messages" class="message"
+                                        [ngClass]="{'user-message': message.role === 'user', 'ai-message': message.role === 'assistant'}">
+                                        {{ message.content }}</span>
+                                </div>
+                                <div class="d-flex align-itmes-center submit_btn_group"
+                                    *ngIf="showEditAbleButton">
+                                    <button class="cn_btn save_btn d-block" type="button"
+                                        (click)="useGeneratedText()">
+                                        <mat-icon class="fs_20 height_20">check</mat-icon>Use
+                                    </button>
+                                    <button class="cn_btn d-block ms-2 other_action" type="button"
+                                        (click)="tryAgainGeneratedText('tryAgain')">
+                                        <mat-icon>refresh</mat-icon>Try again
+                                    </button>
+                                    <button class="cn_btn d-block ms-2 other_action" type="button"
+                                        (click)="discardGeneratedText()">
+                                        <mat-icon class="fs_20 height_20">delete</mat-icon>Discard
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="cn_f_acn btn_b d-flex align-items-center justify-content-between" (click)="backToManageReview()">
+            <button type="submit" style="background: #575757;" class="cn_btn btn_b">Back</button>
+            <button class="cn_btn" type="submit"  [disabled]="isButtonDisabled" (click)="sendRespondReview()">Review Respond</button>
+        </div>
+    <!-- <div class="btn_action mt-1 mb-2"  (click)="sendRespondReview()">
+        
+      </div> -->
+</div>
+
+	<div class="skeletonloader" *ngIf="skeletonLoader">
+		<div class="rpvc_skt" *ngFor="let fake of generateFakeSkeleton(2)">
+			<ngx-skeleton-loader count="1" [theme]="{ 'border-radius': '0', width: '100%', height: '36px', margin: '0 0 24px' }"></ngx-skeleton-loader>
+			<div class="rpvc_skt_bx">
+				<div class="rpvc_skt_l">
+					<ngx-skeleton-loader count="1" [theme]="{ 'border-radius': '50%', width: '56px', height: '56px' }"></ngx-skeleton-loader>
+				</div>
+				<div class="rpvc_skt_r">
+					<ngx-skeleton-loader count="4" [theme]="{ 'border-radius': '0', width: '100%', height: '16px', margin: '0 0 8px' }"></ngx-skeleton-loader>
+					<ngx-skeleton-loader count="2" [theme]="{ 'border-radius': '0', width: '70%', height: '26px', margin: '0 0 10px' }"></ngx-skeleton-loader>
+					<ngx-skeleton-loader count="3" [theme]="{ 'border-radius': '0', width: '70%', height: '18px', margin: '0 0 6px' }"></ngx-skeleton-loader>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>
