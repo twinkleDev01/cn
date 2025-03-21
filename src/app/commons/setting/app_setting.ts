@@ -47,7 +47,8 @@ export class AppSettings {
        DISPATCHERUPDATE: 'dispatcher/update',   
     },
     RECENTVIEW: {
-      NONCARRIERRECETVIEW : 'non-carrier-recent-view/list'
+      NONCARRIERRECETVIEW : 'non-carrier-recent-view/list',
+      CARRIERRECETVIEW : 'recent-view/carrier-list'
     },
     PAYMENT:{
       SUBSCRIPTION:'subscription/buy-business-plan',   

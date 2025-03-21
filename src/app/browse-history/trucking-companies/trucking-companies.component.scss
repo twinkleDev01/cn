@@ -23,4 +23,14 @@
     border-radius: 50%;
   }
   
+  .highlight-filter {
+    border: 2px solid #007bff !important; /* Blue border */
+    background-color: #e7f1ff !important; /* Light blue background */
+    transition: all 0.3s ease-in-out;
+  }
+  .highlight-advanced-filter {
+    border: 2px solid #ff9800 !important;  /* Orange border */
+    background-color: #fff3e0 !important;  /* Light orange background */
+    transition: all 0.3s ease-in-out;
+  }
   

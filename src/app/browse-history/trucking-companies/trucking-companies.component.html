@@ -1,46 +1,46 @@
 <div class="td_card_con">
   <div class="table_data_con">
     <div class="table_actions">
-      <form class="cn_field">
+      <form class="cn_field" [formGroup]="filterForm">
         <div class="btns_box">
           <div class="row">
             <div class="col-md-5">
               <div class="comn_fltr" [ngClass]="{'d-none': showAdvancedFilter}">
-                <mat-form-field appearance="none">
-                  <mat-label>Table Search</mat-label>
+                <mat-form-field appearance="none" [ngClass]="{ 'highlight-filter': isFilterApplied }">
+                  <mat-label>Quick Search</mat-label>
                   <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
-                  <input type="text" matInput placeholder="Search" class="form-control cn_input ms-2"  [formControl]="searchControl" (keyup)="applyFilter()">
+                  <input type="text" matInput placeholder="Search by User" class="form-control cn_input ms-2"  [formControl]="searchControl" (keyup)="applyFilter()">
                 </mat-form-field>
               </div>
             </div>
             <div class="col-md-7">
               <div class="btn_r">
-                <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
+                <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()" *ngIf="isAdvancedFilterVisible()">
                   <i class="fa-sharp fa-solid fa-filter"></i>
                 </span>
-                <span class="cn_btn icn_btn">
+                <span class="cn_btn icn_btn" (click)="resetFilters()">
                   <i class="fa-duotone fa-solid fa-rotate-right"></i>
                 </span>
               </div>
             </div>
           </div>
         </div>
-        <div class="filter_box" [ngClass]="{'d-none': !showAdvancedFilter}">
+        <div class="filter_box" [ngClass]="{'d-none': !showAdvancedFilter}" *ngIf="isAdvancedFilterVisible()">
           <div class="form_box">
               <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
               <div class="row">
                 <div class="col-md-3">
                   <mat-form-field>
-                    <mat-label>DOT Number</mat-label>
-                    <input type="text" matInput placeholder="Search">
+                    <mat-label>Position</mat-label>
+                    <input type="text" matInput placeholder="position">
                   </mat-form-field>
                 </div>
                 <div class="col-md-3">
                   <mat-form-field class="date_range_filter">
                     <mat-label>Enter a date range</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
-                      <input matStartDate placeholder="Start date">
-                      <input matEndDate placeholder="End date">
+                      <input matStartDate placeholder="Start date" formControlName="fromDate">
+                      <input matEndDate placeholder="End date"  formControlName="toDate">
                     </mat-date-range-input>
                     <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -50,7 +50,7 @@
                 <div class="col-md-3">
                   <mat-form-field>
                     <mat-label>User Type</mat-label>
-                    <mat-select>
+                    <mat-select formControlName="selectedUserType">
                       <mat-option value="carrier">Carrier</mat-option>
                       <mat-option value="shipper">Shipper</mat-option>
                       <mat-option value="broker">Broker</mat-option>
@@ -58,18 +58,17 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col-md-3"></div>
                 <div class="col-md-3">
-                  <p class="cn_input_lbl">Checkbox</p>
-                  <mat-checkbox class="me-3">Checked</mat-checkbox>
-                  <mat-checkbox class="">Indeterminate</mat-checkbox>
+                  <mat-form-field>
+                    <mat-label>Postal Code</mat-label>
+                    <input type="text" matInput placeholder="Enter Postal Code" formControlName="postalCode">
+                  </mat-form-field>
                 </div>
                 <div class="col-md-3">
-                  <p class="cn_input_lbl">Radio Button</p>
-                  <mat-radio-group>
-                    <mat-radio-button value="1" class="me-3">Option 1</mat-radio-button>
-                    <mat-radio-button value="2">Option 2</mat-radio-button>
-                  </mat-radio-group>
+                  <mat-form-field>
+                    <mat-label>Location</mat-label>
+                    <input type="text" matInput placeholder="Enter Location" formControlName="location">
+                  </mat-form-field>
                 </div>
                 <div class="col-md-3">
                   <p class="cn_input_lbl">Toggle</p>
@@ -80,8 +79,8 @@
                 </div>
                 <div class="col-md-12">
                   <div class="fltr_actn">
-                    <button class="cn_btn btn_bordered">Clear</button>
-                    <button class="cn_btn">Apply</button>
+                    <button class="cn_btn btn_bordered" (click)="resetFilters()">Clear</button>
+                    <button class="cn_btn" (click)="applyAdvancedFilter()">Apply</button>
                   </div>
                 </div>
               </div>
@@ -89,7 +88,7 @@
         </div>
       </form>
     </div>
-    <div class="table_data" tabindex="0">   
+    <div class="table_data" #scrollContainer tabindex="0">   
       <table mat-table [dataSource]="dataSource">
         <!-- user -->
         <ng-container matColumnDef="companyName" sticky>
@@ -100,14 +99,14 @@
             <div class="user_dtl sticky_boder">
               <div class="ud_l">
                 <div class="user_img_container">
-                  <img *ngIf="element.user?.profileImage; else defaultIcon" 
-                       [src]="element.user?.profileImage" 
+                  <!-- <img *ngIf="element.user?.profileImage; else defaultIcon"  -->
+                      <img [src]="element.user?.profileImage || './assets/images/profile.webp'" 
                        class="user_img"
                        alt="User Image">
                 </div>
-                <ng-template #defaultIcon>
+                <!-- <ng-template #defaultIcon>
                   <i class="fa-duotone fa-solid fa-circle-user user_icon"></i>
-                </ng-template>
+                </ng-template> -->
                 <span class="user_Type">{{element.userType}}</span>
               </div>
               <div class="ud_r">
@@ -116,9 +115,10 @@
                   <i class="fa-duotone fa-badge-check verify_icon" matTooltip="Account not Verified"></i>
                 </div>
                 <div class="loca_rtng">
-                  <span class="user_rtng" matTooltip="Total 10 Reviews">{{ element.user?.averageRatingValue }}<i class="fa-solid fa-star"></i> </span>
-                  <!-- <span class="u_loca"> {{ element.user?.city}}{{element.user?.state}}</span> -->
-                  {{ (element.user?.city ? element.user.city + ', ' : '') + (element.user?.state || 'Unknown Location') }}
+                  <span class="user_rtng" matTooltip="Total 10 Reviews">{{element.user?.averageRatingValue.toFixed(1) || 0}}
+
+                    <i class="fa-solid fa-star"></i> </span>
+                  {{ (element.user?.city ? (element.user.city | titlecase) + ', ' : '') + (element.user?.state || 'Unknown Location') }}
                 </div>
               </div>
             </div>
@@ -128,8 +128,11 @@
         <ng-container matColumnDef="pageSource">
           <th mat-header-cell *matHeaderCellDef> Page Source </th>
           <td mat-cell *matCellDef="let element">
-            <!-- <a [href]="element.url ? 'https://d.carriernetwork.ai' + element.url : '#'" class="txt_lnk" target="{{ element.url ? '_blank' : '' }}">{{element.impressionType}}</a> -->
-            <a [href]="'https://d.carriernetwork.ai' + element.url" class="txt_lnk" target="{{ element.url ? '_blank' : '' }}">{{element.impressionType}}</a>
+            <a *ngIf="element.url" [href]="apiUrl + element.url" 
+            class="txt_lnk" target="_blank">
+           {{ element.impressionType }}
+         </a>
+         <span *ngIf="!element.url">{{ element.impressionType }}</span>         
           </td>
         </ng-container>
         <!-- ProfileRank -->
@@ -148,7 +151,8 @@
         <!-- createdAt -->
         <ng-container matColumnDef="accessedAt">
           <th mat-header-cell *matHeaderCellDef> Accessed At </th>
-          <td mat-cell *matCellDef="let element">{{element.createdAt}}</td>
+          <!-- <td mat-cell *matCellDef="let element">{{UTCDate(element?.createdAt) | date: 'MMM dd, yyyy HH:mm'}}</td> -->
+          <td mat-cell *matCellDef="let element">{{ UTCDate(element?.createdAt) | date: 'dd MMM, yyyy hh:mm a' }}</td>
         </ng-container>
         <!-- TimeSinceAccess -->
         <ng-container matColumnDef="timeSinceAccess">
