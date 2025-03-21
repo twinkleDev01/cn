@@ -63,6 +63,7 @@ export class TruckingCompaniesComponent implements OnInit {
       selectedUserType: [''],
       postalCode: [''],
       location: [''],
+      toggleControl: [null as boolean | null]
     });
   }
 
@@ -91,12 +92,13 @@ export class TruckingCompaniesComponent implements OnInit {
       userType?: string;
       postalCode?: string;
       location?: string;
+      isClick?:boolean
     } = {
       limit: 8,
       page: this.page,
     };
 
-    const { fromDate, toDate, selectedUserType, postalCode, location } = this.filterForm.value;
+    const { fromDate, toDate, selectedUserType, postalCode, location, toggleControl } = this.filterForm.value;
 
     if (fromDate) newParams.fromStartDate =this.formatDateForAPI(fromDate);
     if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
@@ -104,11 +106,12 @@ export class TruckingCompaniesComponent implements OnInit {
       newParams.userType = selectedUserType?.toString()?.toUpperCase();
     if (postalCode) newParams.postalCode = postalCode;
     if (location) newParams.location = location;
+    if (toggleControl) newParams.isClick=toggleControl
     console.log('Selected Filters:');
     console.log('From Date:', fromDate);
     console.log('To Date:', toDate);
     console.log('Selected User Type:', selectedUserType, newParams.userType);
-
+console.log('Toggle', newParams.isClick,toggleControl)
     let APIparams = {
       apiKey: AppSettings.APIsNameArray.RECENTVIEW.CARRIERRECETVIEW,
       uri: this.commonService.getAPIUriFromParams(newParams),

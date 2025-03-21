@@ -72,10 +72,15 @@
                 </div>
                 <div class="col-md-3">
                   <p class="cn_input_lbl">Toggle</p>
-                  <mat-button-toggle-group class="toggle_switch" name="fontStyle" aria-label="Font Style">
-                    <mat-button-toggle value="yes">Yes</mat-button-toggle>
-                    <mat-button-toggle value="no">NO</mat-button-toggle>
-                  </mat-button-toggle-group>
+                  <mat-button-toggle-group 
+                  class="toggle_switch" 
+                  name="fontStyle" 
+                  aria-label="Font Style" 
+                  formControlName="toggleControl">
+                  <mat-button-toggle value="true">Yes</mat-button-toggle>
+                  <mat-button-toggle value="false">No</mat-button-toggle>
+              </mat-button-toggle-group>
+              
                 </div>
                 <div class="col-md-12">
                   <div class="fltr_actn">
