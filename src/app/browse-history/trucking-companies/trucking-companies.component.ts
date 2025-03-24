@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CarrierView } from 'src/app/commons/interface/browse-history';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { SharedService } from 'src/app/commons/service/shared.service';
@@ -55,7 +56,9 @@ export class TruckingCompaniesComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
-    public commonService: CommonService
+    public commonService: CommonService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.filterForm = this.fb.group({
       fromDate: [''],
@@ -63,12 +66,31 @@ export class TruckingCompaniesComponent implements OnInit {
       selectedUserType: [''],
       postalCode: [''],
       location: [''],
+      position: [''],
       toggleControl: [null as boolean | null]
     });
   }
 
   ngOnInit(): void {
-    this.fetchCarriers();
+    console.log("aaa")
+    console.log(environment.apiEndpointDev,"76")
+    // this.fetchCarriers();
+    this.route.queryParams.subscribe((params) => {
+      if (params && Object.keys(params).length) {
+          this.filterForm.patchValue({
+              fromDate: params['fromDate'] ? new Date(params['fromDate']) : null,
+              toDate: params['toDate'] ? new Date(params['toDate']) : null,
+              selectedUserType: params['userType'] || '',
+              postalCode: params['postalCode'] || '',
+              location: params['location'] || '',
+              toggleControl: params['isClick'] === 'true'
+          });
+          this.cdRef.detectChanges();
+          this.fetchCarriers(true);
+      }else{
+        this.fetchCarriers(true);
+      }
+  });console.log(this.filterForm.value)
     this.setupSearchFilter();
     this.getSubscriptionPlan();
   }
@@ -82,8 +104,72 @@ export class TruckingCompaniesComponent implements OnInit {
     return this.subscriptionPlanType === 2 || this.subscriptionPlanType === 3;
   }
 
+  // fetchCarriers(resetData: boolean = false): void {
+  //   this.spinnerLoader = true;
+  //   let newParams: {
+  //     limit: number;
+  //     page: number;
+  //     fromStartDate?: string;
+  //     toStartDate?: string;
+  //     userType?: string;
+  //     postalCode?: string;
+  //     location?: string;
+  //     position?:number;
+  //     isClick?:boolean
+  //   } = {
+  //     limit: 8,
+  //     page: this.page,
+  //   };
+
+  //   const { fromDate, toDate, selectedUserType, postalCode, location, position, toggleControl } = this.filterForm.value;
+
+  //   if (fromDate) newParams.fromStartDate =this.formatDateForAPI(fromDate);
+  //   if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
+  //   if (selectedUserType)
+  //     newParams.userType = selectedUserType?.toString()?.toUpperCase();
+  //   if (postalCode) newParams.postalCode = postalCode;
+  //   if (location) newParams.location = location;
+  //   if (position) newParams.position = position;
+  //   if (toggleControl) newParams.isClick=toggleControl;
+  //   console.log('Selected Filters:');
+  //   console.log('From Date:', fromDate);
+  //   console.log('To Date:', toDate);
+  //   console.log('postal', newParams.location, position,  newParams.position );
+  //   console.log('Toggle', newParams.isClick,toggleControl);
+
+  //   let APIparams = {
+  //     apiKey: AppSettings.APIsNameArray.RECENTVIEW.CARRIERRECETVIEW,
+  //     uri: this.commonService.getAPIUriFromParams(newParams),
+  //   };
+  //   console.log(APIparams,"123")
+  //   this.commonService.getList(APIparams).subscribe(
+  //     (response) => {
+  //       if (response && response.response && response.response.data) {
+  //         const newData = response.response.data;
+  //         if (resetData) {
+  //           this.dataSource.data = newData;
+  //         } else {
+  //           this.dataSource.data = [...this.dataSource.data, ...newData];
+  //         }
+  //         // this.dataSource.data = [...this.dataSource.data, ...newData];
+  //         console.log(this.dataSource, 'Updated DataSource');
+  //         this.totalPages = response.response.totalPages;
+  //         this.totalRecords = response.response.totalRecords;
+  //         this.loading = false;
+  //         this.skeletonLoader = false;
+  //         this.cdRef.detectChanges();
+  //       }
+  //     },
+  //     (error) => {
+  //       this.errorMessage = 'Failed to load recent carriers. Please try again.';
+  //       this.loading = false;
+  //       console.error('Error fetching carriers:', error);
+  //     }
+  //   );
+  // }
   fetchCarriers(resetData: boolean = false): void {
     this.spinnerLoader = true;
+    
     let newParams: {
       limit: number;
       page: number;
@@ -92,30 +178,44 @@ export class TruckingCompaniesComponent implements OnInit {
       userType?: string;
       postalCode?: string;
       location?: string;
-      isClick?:boolean
+      isClick?: boolean;
     } = {
       limit: 8,
       page: this.page,
     };
-
+  
     const { fromDate, toDate, selectedUserType, postalCode, location, toggleControl } = this.filterForm.value;
-
-    if (fromDate) newParams.fromStartDate =this.formatDateForAPI(fromDate);
+  
+    if (fromDate) newParams.fromStartDate = this.formatDateForAPI(fromDate);
     if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
-    if (selectedUserType)
-      newParams.userType = selectedUserType?.toString()?.toUpperCase();
+    if (selectedUserType) newParams.userType = selectedUserType?.toString()?.toUpperCase();
     if (postalCode) newParams.postalCode = postalCode;
     if (location) newParams.location = location;
-    if (toggleControl) newParams.isClick=toggleControl
-    console.log('Selected Filters:');
-    console.log('From Date:', fromDate);
-    console.log('To Date:', toDate);
-    console.log('Selected User Type:', selectedUserType, newParams.userType);
-console.log('Toggle', newParams.isClick,toggleControl)
+    if (toggleControl) newParams.isClick = toggleControl;
+  
+    console.log('Selected Filters:', newParams);
+  
+    // ✅ Update route with query parameters
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        fromDate: newParams.fromStartDate || null,
+        toDate: newParams.toStartDate || null,
+        userType: newParams.userType || null,
+        postalCode: newParams.postalCode || null,
+        location: newParams.location || null,
+        isClick: newParams.isClick || null,
+        page: this.page,
+        limit: newParams.limit
+      },
+      queryParamsHandling: 'merge', // Merge with existing query params
+    });
+  
     let APIparams = {
       apiKey: AppSettings.APIsNameArray.RECENTVIEW.CARRIERRECETVIEW,
       uri: this.commonService.getAPIUriFromParams(newParams),
     };
+  
     this.commonService.getList(APIparams).subscribe(
       (response) => {
         if (response && response.response && response.response.data) {
@@ -125,7 +225,7 @@ console.log('Toggle', newParams.isClick,toggleControl)
           } else {
             this.dataSource.data = [...this.dataSource.data, ...newData];
           }
-          // this.dataSource.data = [...this.dataSource.data, ...newData];
+  
           console.log(this.dataSource, 'Updated DataSource');
           this.totalPages = response.response.totalPages;
           this.totalRecords = response.response.totalRecords;
@@ -181,20 +281,38 @@ console.log('Toggle', newParams.isClick,toggleControl)
     this.isFilterApplied = filterValue.length > 0;
   }
 
+  // calculateTimeSince(timestamp: string): string {
+  //   if (!timestamp) return 'Unknown';
+
+  //   const accessedDate = new Date(timestamp);
+  //   const now = new Date();
+  //   const diffMs = now.getTime() - accessedDate.getTime();
+  //   const diffMins = Math.floor(diffMs / 60000);
+  //   const diffHours = Math.floor(diffMins / 60);
+  //   const diffDays = Math.floor(diffHours / 24);
+
+  //   if (diffDays > 0) return `${diffDays} days ago`;
+  //   if (diffHours > 0) return `${diffHours} hours ago`;
+  //   if (diffMins > 0) return `${diffMins} minutes ago`;
+  //   return 'Just now';
+  // }
   calculateTimeSince(timestamp: string): string {
     if (!timestamp) return 'Unknown';
-
+  
     const accessedDate = new Date(timestamp);
     const now = new Date();
-    const diffMs = now.getTime() - accessedDate.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMins / 60);
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffDays > 0) return `${diffDays} days ago`;
-    if (diffHours > 0) return `${diffHours} hours ago`;
-    if (diffMins > 0) return `${diffMins} minutes ago`;
-    return 'Just now';
+    
+    let diffMs = now.getTime() - accessedDate.getTime();
+    let diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  
+    if (diffDays < 1) return 'Just now';
+  
+    let months = Math.floor(diffDays / 30);
+    let days = diffDays % 30;
+  
+    if (months > 0 && days > 0) return `${months} months ${days} days ago`;
+    if (months > 0) return `${months} months ago`;
+    return `${days} days ago`;
   }
 
   toggleFilter() {

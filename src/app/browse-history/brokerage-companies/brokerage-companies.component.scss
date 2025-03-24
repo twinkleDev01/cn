@@ -1,0 +1,29 @@
+.row_actn { display: flex; gap: 0.6rem; }
+.user_img_container {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f3f3; /* Light grey background if no image */
+  }
+  
+  .user_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image fills the circular area without distortion */
+    border-radius: 50%;
+  }
+  
+  .highlight-filter {
+    border: 2px solid #007bff !important; /* Blue border */
+    background-color: #e7f1ff !important; /* Light blue background */
+    transition: all 0.3s ease-in-out;
+  }
+  .highlight-advanced-filter {
+    border: 2px solid #ff9800 !important;  /* Orange border */
+    background-color: #fff3e0 !important;  /* Light orange background */
+    transition: all 0.3s ease-in-out;
+  }

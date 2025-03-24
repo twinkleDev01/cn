@@ -31,13 +31,13 @@
               <div class="row">
                 <div class="col-md-3">
                   <mat-form-field>
-                    <mat-label>Position</mat-label>
-                    <input type="text" matInput placeholder="position">
+                    <mat-label>Profile Rank</mat-label>
+                    <input type="text" matInput placeholder="Profile Rank" formControlName="position">
                   </mat-form-field>
                 </div>
                 <div class="col-md-3">
                   <mat-form-field class="date_range_filter">
-                    <mat-label>Enter a date range</mat-label>
+                    <mat-label>Enter a Accessed Date Range</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
                       <input matStartDate placeholder="Start date" formControlName="fromDate">
                       <input matEndDate placeholder="End date"  formControlName="toDate">
@@ -47,7 +47,7 @@
                     <mat-date-range-picker #picker></mat-date-range-picker>
                   </mat-form-field>
                 </div>
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                   <mat-form-field>
                     <mat-label>User Type</mat-label>
                     <mat-select formControlName="selectedUserType">
@@ -57,7 +57,7 @@
                       <mat-option value="Dispature">Dispature</mat-option>
                     </mat-select>
                   </mat-form-field>
-                </div>
+                </div> -->
                 <div class="col-md-3">
                   <mat-form-field>
                     <mat-label>Postal Code</mat-label>
@@ -71,16 +71,11 @@
                   </mat-form-field>
                 </div>
                 <div class="col-md-3">
-                  <p class="cn_input_lbl">Toggle</p>
-                  <mat-button-toggle-group 
-                  class="toggle_switch" 
-                  name="fontStyle" 
-                  aria-label="Font Style" 
-                  formControlName="toggleControl">
-                  <mat-button-toggle value="true">Yes</mat-button-toggle>
-                  <mat-button-toggle value="false">No</mat-button-toggle>
-              </mat-button-toggle-group>
-              
+                  <p class="cn_input_lbl">Viewed Profile</p>
+                  <mat-button-toggle-group class="toggle_switch" name="fontStyle" aria-label="Font Style" formControlName="toggleControl">
+                    <mat-button-toggle value="true">Yes</mat-button-toggle>
+                    <mat-button-toggle value="false">NO</mat-button-toggle>
+                  </mat-button-toggle-group>
                 </div>
                 <div class="col-md-12">
                   <div class="fltr_actn">
