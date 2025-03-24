@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CarrierView } from 'src/app/commons/interface/browse-history';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
@@ -45,21 +46,43 @@ export class BrokerageCompaniesComponent implements OnInit {
     constructor(
       private fb: FormBuilder,
       private cdRef: ChangeDetectorRef,
-      public commonService: CommonService
+      public commonService: CommonService,
+          private router: Router,
+          private route: ActivatedRoute,
     ) {
-      this.filterForm = this.fb.group({
-        fromDate: [''],
-        toDate: [''],
-        selectedUserType: [''],
-        postalCode: [''],
-        // location: [''],
-        position: [''],
-        toggleControl: [null as boolean | null]
-      });
+      // this.filterForm = this.fb.group({
+      //   fromDate: [''],
+      //   toDate: [''],
+      //   impressionType: [''],
+      //   postalCode: [''],
+      //   position: [''],
+      // });
     }
 
   ngOnInit(): void {
-    this.fetchBroker();
+    // this.fetchBroker();
+    this.route.queryParams.subscribe((params) => {
+      this.filterForm = this.fb.group({
+        fromDate: [''],
+        toDate: [''],
+        impressionType: [''],
+        postalCode: [''],
+        position: [''],
+      });
+      if (params && Object.keys(params).length) {
+          this.filterForm.patchValue({
+              fromDate: params['fromDate'] ? new Date(params['fromDate']) : null,
+              toDate: params['toDate'] ? new Date(params['toDate']) : null,
+              selectedUserType: params['impressionType'] || '',
+              postalCode: params['postalCode'] || '',
+              position:params['position'] || '',
+          });
+          this.cdRef.detectChanges();
+          this.fetchBroker(false);
+      }else{
+        this.fetchBroker(false);
+      }
+  });console.log(this.filterForm.value)
     this.setupSearchFilter();
     this.getSubscriptionPlan();
   }
@@ -81,32 +104,41 @@ export class BrokerageCompaniesComponent implements OnInit {
        page: number;
        fromStartDate?: string;
        toStartDate?: string;
-       userType?: string;
-       postalCode?: string;
-      //  location?: string;
-       position?:number;
-       isClick?:boolean
+       postalCode?: number;
+       position?: number;
+       impressionType?: string;
      } = {
        limit: 8,
        page: this.page,
      };
  
-     const { fromDate, toDate, selectedUserType, postalCode, position, toggleControl } = this.filterForm.value;
+     const { fromDate, toDate, postalCode, position, impressionType } = this.filterForm.value;
  
-     if (fromDate) newParams.fromStartDate =this.formatDateForAPI(fromDate);
-     if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
-     if (selectedUserType)
-       newParams.userType = selectedUserType?.toString()?.toUpperCase();
+    //  if (fromDate) newParams.fromStartDate =this.formatDateForAPI(fromDate);
+    //  if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
+     if (fromDate) newParams.fromStartDate =this.fromDate;
+     if (toDate) newParams.toStartDate = this.toDate;
      if (postalCode) newParams.postalCode = postalCode;
-    //  if (location) newParams.location = location;
      if (position) newParams.position = position;
-     if (toggleControl) newParams.isClick=toggleControl;
+     if (impressionType) newParams.impressionType=impressionType;
      console.log('Selected Filters:');
+     console.log('postalCode', postalCode)
      console.log('From Date:', fromDate);
      console.log('To Date:', toDate);
-    //  console.log('postal', newParams.location, position,  newParams.position );
-     console.log('Toggle', newParams.isClick,toggleControl);
- 
+     console.log('Impressiontype', newParams.impressionType,impressionType);
+ // ✅ Update route with query parameters
+ this.router.navigate([], {
+  relativeTo: this.route,
+  queryParams: {
+    fromDate: newParams.fromStartDate || null,
+    toDate: newParams.toStartDate || null,
+    postalCode: newParams.postalCode || null,
+    page: this.page,
+    limit: newParams.limit,
+    impressionType: newParams.impressionType 
+  },
+  queryParamsHandling: 'merge', // Merge with existing query params
+});
      let APIparams = {
        apiKey: AppSettings.APIsNameArray.RECENTVIEW.BROKERVIEW,
        uri: this.commonService.getAPIUriFromParams(newParams),
@@ -123,8 +155,8 @@ export class BrokerageCompaniesComponent implements OnInit {
            }
            // this.dataSource.data = [...this.dataSource.data, ...newData];
            console.log(this.dataSource, 'Updated DataSource');
-           this.totalPages = response.response.totalPages;
-           this.totalRecords = response.response.totalRecords;
+           this.totalPages = response.totalPages;
+           this.totalRecords = response.totalRecords;
            this.loading = false;
            this.skeletonLoader = false;
            this.cdRef.detectChanges();
@@ -166,32 +198,33 @@ export class BrokerageCompaniesComponent implements OnInit {
      });
    }
  
-   applyFilter() {
-     const filterValue = this.searchControl.value.trim().toLowerCase();
+  //  applyFilter() {
+  //    const filterValue = this.searchControl.value.trim().toLowerCase();
  
-     this.dataSource.filterPredicate = (data: any, filter: string) => {
-       return data.user?.companyName?.toLowerCase().includes(filter);
-     };
+  //    this.dataSource.filterPredicate = (data: any, filter: string) => {
+  //     console.log(data.broker?.companyName?.toLowerCase().includes(filter),"186")
+  //      return data.broker?.companyName?.toLowerCase().includes(filter);
+  //     //  return data.broker?data.broker?.companyName?.toLowerCase().includes(filter):data?.title;
+  //    };
  
-     this.dataSource.filter = filterValue;
-     this.isFilterApplied = filterValue.length > 0;
-   }
- 
-  //  calculateTimeSince(timestamp: string): string {
-  //    if (!timestamp) return 'Unknown';
- 
-  //    const accessedDate = new Date(timestamp);
-  //    const now = new Date();
-  //    const diffMs = now.getTime() - accessedDate.getTime();
-  //    const diffMins = Math.floor(diffMs / 60000);
-  //    const diffHours = Math.floor(diffMins / 60);
-  //    const diffDays = Math.floor(diffHours / 24);
- 
-  //    if (diffDays > 0) return `${diffDays} days ago`;
-  //    if (diffHours > 0) return `${diffHours} hours ago`;
-  //    if (diffMins > 0) return `${diffMins} minutes ago`;
-  //    return 'Just now';
+  //    this.dataSource.filter = filterValue;
+  //    this.isFilterApplied = filterValue.length > 0;
   //  }
+  applyFilter() {
+    const filterValue = this.searchControl.value.trim().toLowerCase();
+  
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      const companyName = data.broker?.companyName?.toLowerCase();
+      const title = data.title?.toLowerCase();
+  
+      return (companyName && companyName.includes(filter)) || (title && title.includes(filter));
+    };
+  
+    this.dataSource.filter = filterValue;
+    this.isFilterApplied = filterValue.length > 0;
+  }
+  
+ 
   calculateTimeSince(timestamp: string): string {
     if (!timestamp) return 'Unknown';
   

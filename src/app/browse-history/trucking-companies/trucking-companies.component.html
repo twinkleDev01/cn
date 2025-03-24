@@ -30,11 +30,15 @@
               <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
               <div class="row">
                 <div class="col-md-3">
-                  <mat-form-field>
-                    <mat-label>Profile Rank</mat-label>
-                    <input type="text" matInput placeholder="Profile Rank" formControlName="position">
-                  </mat-form-field>
-                </div>
+                    <mat-form-field  [ngClass]="{'highlighted': filterForm.get('position')?.value}">
+                      <mat-label>Profile Rank </mat-label>
+                      <mat-select formControlName="position">
+                        <ng-container *ngFor="let position of uniquePositions">
+                          <mat-option [value]="position">{{position}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                    </mat-form-field>
+                    </div>
                 <div class="col-md-3">
                   <mat-form-field class="date_range_filter">
                     <mat-label>Enter a Accessed Date Range</mat-label>

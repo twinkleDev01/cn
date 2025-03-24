@@ -52,6 +52,7 @@ export class TruckingCompaniesComponent implements OnInit {
   public skeletonLoader = false;
   public spinnerLoader = false;
   filterForm: FormGroup;
+  uniquePositions:any=[]
 
   constructor(
     private fb: FormBuilder,
@@ -73,7 +74,6 @@ export class TruckingCompaniesComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("aaa")
-    console.log(environment.apiEndpointDev,"76")
     // this.fetchCarriers();
     this.route.queryParams.subscribe((params) => {
       if (params && Object.keys(params).length) {
@@ -86,9 +86,9 @@ export class TruckingCompaniesComponent implements OnInit {
               toggleControl: params['isClick'] === 'true'
           });
           this.cdRef.detectChanges();
-          this.fetchCarriers(true);
+          this.fetchCarriers(false);
       }else{
-        this.fetchCarriers(true);
+        this.fetchCarriers(false);
       }
   });console.log(this.filterForm.value)
     this.setupSearchFilter();
@@ -220,6 +220,8 @@ export class TruckingCompaniesComponent implements OnInit {
       (response) => {
         if (response && response.response && response.response.data) {
           const newData = response.response.data;
+          this.uniquePositions = [...new Set(newData.map(item => item.position))];
+          this.cdRef.detectChanges();
           if (resetData) {
             this.dataSource.data = newData;
           } else {

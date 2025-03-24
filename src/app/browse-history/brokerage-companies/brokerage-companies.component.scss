@@ -27,3 +27,8 @@
     background-color: #fff3e0 !important;  /* Light orange background */
     transition: all 0.3s ease-in-out;
   }
+  ::ng-deep mat-form-field.highlighted .mat-form-field-infix {
+    border: 2px solid #007bff !important;
+    background-color: #e7f1ff !important;
+    transition: all 0.3s ease-in-out;       
+  }

@@ -29,67 +29,41 @@
             <div class="form_box">
                 <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
                 <div class="row">
-                  <div class="col-md-3">
+                  <!-- <div class="col-md-3">
                     <mat-form-field>
                       <mat-label>Profile Rank</mat-label>
                       <input type="text" matInput placeholder="Profile Rank" formControlName="position">
                     </mat-form-field>
-                  </div>
+                  </div> -->
                   <div class="col-md-3">
-                    <mat-form-field class="date_range_filter">
+                    <mat-form-field class="date_range_filter"  [ngClass]="{'highlighted': filterForm.get('fromDate')?.value ||  filterForm.get('toDate')?.value}">
                       <mat-label>Enter a Accessed Date Range</mat-label>
                       <mat-date-range-input [rangePicker]="picker">
-                        <input matStartDate placeholder="Start date">
-                        <input matEndDate placeholder="End date">
+                        <input matStartDate placeholder="Start date" formControlName="fromDate">
+                        <input matEndDate placeholder="End date" formControlName="toDate">
                       </mat-date-range-input>
                       <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
                       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                       <mat-date-range-picker #picker></mat-date-range-picker>
                     </mat-form-field>
                   </div>
-                  <!-- <div class="col-md-3">
-                    <mat-form-field>
-                      <mat-label>User Type</mat-label>
-                      <mat-select  formControlName="selectedUserType">
-                        <mat-option value="carrier">Carrier</mat-option>
-                        <mat-option value="shipper">Shipper</mat-option>
-                        <mat-option value="broker">Broker</mat-option>
-                        <mat-option value="Dispature">Dispature</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div> -->
-                  <!-- <div class="col-md-3"></div>
                   <div class="col-md-3">
-                    <p class="cn_input_lbl">Checkbox</p>
-                    <mat-checkbox class="me-3">Checked</mat-checkbox>
-                    <mat-checkbox class="">Indeterminate</mat-checkbox>
-                  </div>
-                  <div class="col-md-3">
-                    <p class="cn_input_lbl">Radio Button</p>
-                    <mat-radio-group>
-                      <mat-radio-button value="1" class="me-3">Option 1</mat-radio-button>
-                      <mat-radio-button value="2">Option 2</mat-radio-button>
-                    </mat-radio-group>
-                  </div> -->
-                  <div class="col-md-3">
-                    <mat-form-field>
+                    <mat-form-field  [ngClass]="{'highlighted': filterForm.get('postalCode')?.value}">
                       <mat-label>Postal Code</mat-label>
                       <input type="text" matInput placeholder="Enter Postal Code" formControlName="postalCode">
                     </mat-form-field>
                   </div>
-                  <!-- <div class="col-md-3">
-                    <mat-form-field>
-                      <mat-label>Location</mat-label>
-                      <input type="text" matInput placeholder="Enter Location" formControlName="location">
-                    </mat-form-field>
-                  </div> -->
-                  <!-- <div class="col-md-3">
-                    <p class="cn_input_lbl">Viewed Profile</p>
-                    <mat-button-toggle-group class="toggle_switch" name="fontStyle" aria-label="Font Style" formControlName="toggleControl">
-                      <mat-button-toggle value="true">Yes</mat-button-toggle>
-                      <mat-button-toggle value="false">NO</mat-button-toggle>
-                    </mat-button-toggle-group>
-                  </div> -->
+                   <div class="col-md-3">
+                  <mat-form-field  [ngClass]="{'highlighted': filterForm.get('impressionType')?.value}">
+                    <mat-label>Impression Type</mat-label>
+                    <mat-select formControlName="impressionType">
+                      <mat-option value="broker-list">broker-list</mat-option>
+                      <mat-option value="broker-detail">broker-detail</mat-option>
+                      <mat-option value="broker-insurance-history">broker-insurance-history</mat-option>
+                      <mat-option value="broker-authority-history">broker-authority-history</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
                   <div class="col-md-12">
                     <div class="fltr_actn">
                       <button class="cn_btn btn_bordered" (click)="resetFilters()">Clear</button>
@@ -146,6 +120,10 @@
               <a *ngIf="element.url" [href]="apiUrl + element.url" 
               class="txt_lnk" target="_blank">
              {{ element.impressionType }}
+             <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/>
+              <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/>
+            </svg></span>
            </a>
            <span *ngIf="!element.url">{{ element.impressionType }}</span> 
             </td>
