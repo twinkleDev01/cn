@@ -33,7 +33,12 @@
                 <span
                   class="cn_btn icn_btn adv_filter_btn"
                   (click)="toggleFilter()"
-                  *ngIf="isAdvancedFilterVisible()"
+                  *ngIf="isAdvancedFilterVisible()"[ngClass]="{
+                    'active-filter': filterForm?.get('fromDate')?.value ||
+                                     filterForm?.get('toDate')?.value ||
+                                     filterForm?.get('postalCode')?.value ||
+                                     filterForm?.get('impressionType')?.value
+                  }"
                 >
                   <i class="fa-sharp fa-solid fa-filter"></i>
                 </span>
@@ -48,15 +53,7 @@
           class="filter_box"
           [ngClass]="{ 'd-none': !showAdvancedFilter }"
           *ngIf="isAdvancedFilterVisible()"
-          [ngClass]="{
-            'active-filter':
-              filterForm?.value &&
-              (filterForm.value.fromDate ||
-                filterForm.value.toDate ||
-                filterForm.value.postalCode ||
-                filterForm.value.impressionType)
-          }"
-        >
+          >
           <div class="form_box">
             <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
             <div class="row">

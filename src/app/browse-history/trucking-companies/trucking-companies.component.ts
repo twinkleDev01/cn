@@ -102,7 +102,7 @@ export class TruckingCompaniesComponent implements OnInit {
     // this.subscriptionPlanType = 0
     console.log('Subscription Plan Type:', this.subscriptionPlanType);
   }
-  isAdvancedFilterVisible(): boolean {
+  isAdvancedFilterVisible(): boolean { 
     return this.subscriptionPlanType === 2 || this.subscriptionPlanType === 3;
   }
   fetchCarriers(resetData: boolean = false): void {
@@ -223,7 +223,7 @@ export class TruckingCompaniesComponent implements OnInit {
     const filterValue = this.searchControl.value.trim().toLowerCase();
 
     this.dataSource.filterPredicate = (data: any, filter: string) => {
-      return data.user?.companyName?.toLowerCase().includes(filter);
+      return data.carrier?.companyName?.toLowerCase().includes(filter);
     };
 
     this.dataSource.filter = filterValue;
