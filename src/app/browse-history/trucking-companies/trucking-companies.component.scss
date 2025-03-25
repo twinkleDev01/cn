@@ -33,4 +33,28 @@
     background-color: #fff3e0 !important;  /* Light orange background */
     transition: all 0.3s ease-in-out;
   }
+  ::ng-deep mat-form-field.highlighted .mat-form-field-infix {
+    border: 2px solid #007bff !important; 
+    background-color: #e7f1ff !important;
+    transition: all 0.3s ease-in-out;         
+  }
+  .txt_lnk {
+    position: relative;
+    text-decoration: none;
+    color: #007bff;
+    display: inline-flex;
+    align-items: center;
+  }
   
+  .svg-container {
+    display: none;           /* Hide by default */
+    margin-left: 5px;         /* Add some spacing */
+  }
+  
+  .txt_lnk:hover .svg-container {
+    display: inline;          /* Show on hover */
+  }
+
+  .adv_filter_btn.active-filter {
+    color: yellow; 
+  }

@@ -30,7 +30,7 @@ export class TruckingCompaniesComponent implements OnInit {
     'companyName',
     'pageSource',
     'profileRank',
-    'location',
+    // 'location',
     'accessedAt',
     'timeSinceAccess',
     'rowAction',
@@ -61,29 +61,31 @@ export class TruckingCompaniesComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    this.filterForm = this.fb.group({
-      fromDate: [''],
-      toDate: [''],
-      selectedUserType: [''],
-      postalCode: [''],
-      location: [''],
-      position: [''],
-      toggleControl: [null as boolean | null]
-    });
+   
   }
 
   ngOnInit(): void {
     console.log("aaa")
     // this.fetchCarriers();
     this.route.queryParams.subscribe((params) => {
+      this.filterForm = this.fb.group({
+        fromDate: [''],
+        toDate: [''],
+        // selectedUserType: [''],
+        postalCode: [''],
+        impressionType: [''],
+        position: [''],
+        toggleControl: [null as boolean | null]
+      });
       if (params && Object.keys(params).length) {
           this.filterForm.patchValue({
               fromDate: params['fromDate'] ? new Date(params['fromDate']) : null,
               toDate: params['toDate'] ? new Date(params['toDate']) : null,
-              selectedUserType: params['userType'] || '',
+              selectedUserType: params['impressionType'] || '',
               postalCode: params['postalCode'] || '',
-              location: params['location'] || '',
-              toggleControl: params['isClick'] === 'true'
+              // location: params['location'] || '',
+              toggleControl: params['isClick'] === 'true',
+              position: params['position'] || null
           });
           this.cdRef.detectChanges();
           this.fetchCarriers(false);
@@ -177,22 +179,23 @@ export class TruckingCompaniesComponent implements OnInit {
       toStartDate?: string;
       userType?: string;
       postalCode?: string;
-      location?: string;
+      impressionType?: string;
       isClick?: boolean;
+      position?: number;
     } = {
       limit: 8,
       page: this.page,
     };
   
-    const { fromDate, toDate, selectedUserType, postalCode, location, toggleControl } = this.filterForm.value;
+    const { fromDate, toDate, selectedUserType, postalCode,position, toggleControl } = this.filterForm.value;
   
     if (fromDate) newParams.fromStartDate = this.formatDateForAPI(fromDate);
     if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
-    if (selectedUserType) newParams.userType = selectedUserType?.toString()?.toUpperCase();
+    // if (selectedUserType) newParams.userType = selectedUserType?.toString()?.toUpperCase();
     if (postalCode) newParams.postalCode = postalCode;
-    if (location) newParams.location = location;
+    // if (location) newParams.location = location;
     if (toggleControl) newParams.isClick = toggleControl;
-  
+  if(position)  newParams.position = position
     console.log('Selected Filters:', newParams);
   
     // ✅ Update route with query parameters
@@ -203,8 +206,7 @@ export class TruckingCompaniesComponent implements OnInit {
         toDate: newParams.toStartDate || null,
         userType: newParams.userType || null,
         postalCode: newParams.postalCode || null,
-        location: newParams.location || null,
-        isClick: newParams.isClick || null,
+        impressionType: newParams.impressionType,
         page: this.page,
         limit: newParams.limit
       },
@@ -215,11 +217,12 @@ export class TruckingCompaniesComponent implements OnInit {
       apiKey: AppSettings.APIsNameArray.RECENTVIEW.CARRIERRECETVIEW,
       uri: this.commonService.getAPIUriFromParams(newParams),
     };
-  
+  console.log(APIparams)
     this.commonService.getList(APIparams).subscribe(
       (response) => {
-        if (response && response.response && response.response.data) {
-          const newData = response.response.data;
+        console.log(response,'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
+        if (response && response.response ) {
+          const newData = response.response;
           this.uniquePositions = [...new Set(newData.map(item => item.position))];
           this.cdRef.detectChanges();
           if (resetData) {
@@ -251,8 +254,8 @@ export class TruckingCompaniesComponent implements OnInit {
     this.dataSource.filter = '';
     this.page = 1;
     this.dataSource.data = [];
+    this.fetchCarriers(true);
     this.filterForm.reset();
-    this.fetchCarriers();
   }
   @HostListener('window:scroll', ['$event'])
   onWindowScroll(event: Event) {

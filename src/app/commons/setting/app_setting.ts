@@ -48,7 +48,7 @@ export class AppSettings {
     },
     RECENTVIEW: {
       NONCARRIERRECETVIEW : 'non-carrier-recent-view/list',
-      CARRIERRECETVIEW : 'recent-view/carrier-list',
+      CARRIERRECETVIEW : 'recently-viewed/carrier',
       BROKERVIEW : 'recently-viewed/broker'
     },
     PAYMENT:{

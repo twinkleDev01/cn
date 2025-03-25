@@ -32,3 +32,32 @@
     background-color: #e7f1ff !important;
     transition: all 0.3s ease-in-out;       
   }
+
+  .txt_lnk {
+    text-decoration: none;
+    color: #007bff;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .hover-container {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .svg-container {
+    display: none;             /* Hide SVG by default */
+    margin-left: 5px;
+    transition: opacity 0.3s ease;  /* Smooth appearance */
+  }
+  
+  .hover-container:hover .svg-container {
+    display: inline;            /* Show on hover */
+    opacity: 1;
+  }
+  .adv_filter_btn.active-filter {
+    color: yellow; 
+  }
+  

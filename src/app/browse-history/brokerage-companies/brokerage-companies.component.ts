@@ -178,7 +178,8 @@ export class BrokerageCompaniesComponent implements OnInit {
      this.page = 1;
      this.dataSource.data = [];
      this.filterForm.reset();
-     this.fetchBroker();
+     this.fetchBroker(true);
+    //  this.dataSource.data = [...this.dataSource.data];
    }
    @HostListener('window:scroll', ['$event'])
    onWindowScroll(event: Event) {
@@ -187,6 +188,7 @@ export class BrokerageCompaniesComponent implements OnInit {
      if (documentHeight - scrollHeight <= 1) {
        if (this.page < this.totalPages && !this.spinner) {
          this.page += 1;
+         console.log('11111111111111111111111111111111111111111111111')
          this.fetchBroker();
        }
      }
