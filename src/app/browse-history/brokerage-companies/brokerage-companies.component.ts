@@ -50,17 +50,9 @@ export class BrokerageCompaniesComponent implements OnInit {
           private router: Router,
           private route: ActivatedRoute,
     ) {
-      // this.filterForm = this.fb.group({
-      //   fromDate: [''],
-      //   toDate: [''],
-      //   impressionType: [''],
-      //   postalCode: [''],
-      //   position: [''],
-      // });
     }
 
   ngOnInit(): void {
-    // this.fetchBroker();
     this.route.queryParams.subscribe((params) => {
       this.filterForm = this.fb.group({
         fromDate: [''],
@@ -73,14 +65,14 @@ export class BrokerageCompaniesComponent implements OnInit {
           this.filterForm.patchValue({
               fromDate: params['fromDate'] ? new Date(params['fromDate']) : null,
               toDate: params['toDate'] ? new Date(params['toDate']) : null,
-              selectedUserType: params['impressionType'] || '',
+              impressionType : params['impressionType'] || '',
               postalCode: params['postalCode'] || '',
               position:params['position'] || '',
           });
           this.cdRef.detectChanges();
           this.fetchBroker(false);
       }else{
-        this.fetchBroker(false);
+        this.fetchBroker(true);
       }
   });console.log(this.filterForm.value)
     this.setupSearchFilter();
@@ -113,9 +105,7 @@ export class BrokerageCompaniesComponent implements OnInit {
      };
  
      const { fromDate, toDate, postalCode, position, impressionType } = this.filterForm.value;
- 
-    //  if (fromDate) newParams.fromStartDate =this.formatDateForAPI(fromDate);
-    //  if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
+
      if (fromDate) newParams.fromStartDate =this.fromDate;
      if (toDate) newParams.toStartDate = this.toDate;
      if (postalCode) newParams.postalCode = postalCode;
@@ -151,9 +141,12 @@ export class BrokerageCompaniesComponent implements OnInit {
            if (resetData) {
              this.dataSource.data = newData;
            } else {
-             this.dataSource.data = [...this.dataSource.data, ...newData];
+            //  this.dataSource.data = [...this.dataSource.data, ...newData];
+            const existingIds = new Set(this.dataSource.data.map(item => item.id));
+            const uniqueData = newData.filter(item => !existingIds.has(item.id));
+            this.dataSource.data = [...this.dataSource.data, ...uniqueData];
            }
-           // this.dataSource.data = [...this.dataSource.data, ...newData];
+         
            console.log(this.dataSource, 'Updated DataSource');
            this.totalPages = response.totalPages;
            this.totalRecords = response.totalRecords;
@@ -169,26 +162,28 @@ export class BrokerageCompaniesComponent implements OnInit {
        }
      );
    }
-   resetFilters(): void {
-     console.log('Reset Filters Clicked');
-     this.showAdvancedFilter = false;
-     this.searchControl.setValue('');
-     this.isFilterApplied = false;
-     this.dataSource.filter = '';
-     this.page = 1;
-     this.dataSource.data = [];
-     this.filterForm.reset();
-     this.fetchBroker(true);
-    //  this.dataSource.data = [...this.dataSource.data];
-   }
+   refresh(){
+    this.fetchBroker(true);
+  }
+  resetFilters(): void {
+    console.log('Reset Filters Clicked');
+    this.showAdvancedFilter = false;
+    this.searchControl.setValue('');
+    this.isFilterApplied = false;
+    this.dataSource.filter = '';
+    this.page = 1;
+    this.dataSource.data = [];
+    this.filterForm.reset();
+    this.fetchBroker(true);
+    
+  } 
    @HostListener('window:scroll', ['$event'])
    onWindowScroll(event: Event) {
      const scrollHeight = window.innerHeight + window.scrollY;
      const documentHeight = document.documentElement.scrollHeight;
      if (documentHeight - scrollHeight <= 1) {
-       if (this.page < this.totalPages && !this.spinner) {
+       if (this.page < this.totalPages && !this.spinner  && !this.loading) {
          this.page += 1;
-         console.log('11111111111111111111111111111111111111111111111')
          this.fetchBroker();
        }
      }
@@ -199,19 +194,7 @@ export class BrokerageCompaniesComponent implements OnInit {
        this.applyFilter();
      });
    }
- 
-  //  applyFilter() {
-  //    const filterValue = this.searchControl.value.trim().toLowerCase();
- 
-  //    this.dataSource.filterPredicate = (data: any, filter: string) => {
-  //     console.log(data.broker?.companyName?.toLowerCase().includes(filter),"186")
-  //      return data.broker?.companyName?.toLowerCase().includes(filter);
-  //     //  return data.broker?data.broker?.companyName?.toLowerCase().includes(filter):data?.title;
-  //    };
- 
-  //    this.dataSource.filter = filterValue;
-  //    this.isFilterApplied = filterValue.length > 0;
-  //  }
+
   applyFilter() {
     const filterValue = this.searchControl.value.trim().toLowerCase();
   
@@ -269,9 +252,5 @@ export class BrokerageCompaniesComponent implements OnInit {
      let year = d.getFullYear();
      return `${month}/${day}/${year}`; // Format: MM/DD/YYYY
    }
-   getCountryFlag(countryCode: string | null): string {
-    if (!countryCode) return ''; // If no country code, return empty
-    return `https://flagcdn.com/w40/${countryCode.toLowerCase()}.png`; // Uses an external flag API
-  }
-  
+    
 }

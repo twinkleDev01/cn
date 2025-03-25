@@ -15,7 +15,7 @@ export class SidebarComponent implements OnInit {
   public toggleDropdownBrowseHistory: boolean = false;
   public toggleDropdownRcalculatorReview: boolean = false;
   public toggleDropdownDigitalMarketing: boolean = false;
-  public toggleDropdownForecastAvailability: boolean = false;
+  // public toggleDropdownForecastAvailability: boolean = false;
   public toggleDropdownCarrier: boolean = false;
   public toggleDropdownFindCarrier: boolean = false;
   public getUserData: any;
@@ -66,8 +66,8 @@ export class SidebarComponent implements OnInit {
           else if (event.url.includes('review/invite-for-review') || event.url.includes('review/edit-a-review-for-carrier')) {
             this.activeSubTab = 'inviteReview';
           }
-          else if (event.url.includes('/review/manage-my-reviews')) {
-            this.activeSubTab = 'manageMyReview';
+          else if (event.url.includes('/review/my-profile-reviews')) {
+            this.activeSubTab = 'myProfileReviews';
           }
           else if (event.url.includes('/calculator/cost-per-miles')) {
             this.activeSubTab = 'calculatorMile';
@@ -110,7 +110,7 @@ export class SidebarComponent implements OnInit {
           else if (event.url.includes('/my-truck-availability')) {
             this.activeSubTab = 'my-truck-availability';
           }
-          else if (event.url.includes('performance-analytics/profile-analytics')) {
+          else if (event.url.includes('performance-analytics/profile')) {
             this.activeSubTab = 'profileAnalytics';
           }
           else if (event.url.includes('performance-analytics/contact-lead')) {
@@ -210,11 +210,13 @@ export class SidebarComponent implements OnInit {
     } else if (type == 'digitalMarketing') {
       event.preventDefault();
       this.toggleDropdownDigitalMarketing = !this.toggleDropdownDigitalMarketing;
-    } else if (type == 'forecastAvailibilty') {
-      event.preventDefault();
-      this.toggleDropdownForecastAvailability = !this.toggleDropdownForecastAvailability;
+    } 
+    // else if (type == 'forecastAvailibilty') {
+    //   event.preventDefault();
+    //   this.toggleDropdownForecastAvailability = !this.toggleDropdownForecastAvailability;
 
-    } else if (type == 'carrier') {
+    // } 
+    else if (type == 'carrier') {
       event.preventDefault();
       this.toggleDropdownCarrier = !this.toggleDropdownCarrier;
     }

@@ -8,11 +8,11 @@ export const appRoutes: Routes = [
     loadChildren: () =>
       import('./core/core.module').then((mod) => mod.CoreModule),
   },
-  // {
-  //   path: 'dashboard',canActivate : [AuthGuard],
-  //   loadChildren: () =>
-  //     import('./dashboard/dashboard.module').then((mod) => mod.DashboardModule),
-  // },
+  {
+    path: '',canActivate : [AuthGuard],
+    loadChildren: () =>
+      import('./dashboard/dashboard.module').then((mod) => mod.DashboardModule),
+  },
   {
     path: 'profile',canActivate : [AuthGuard],
     loadChildren: () =>
@@ -57,7 +57,7 @@ export const appRoutes: Routes = [
   {
     path: '',canActivate : [AuthGuard],
     loadChildren: () =>
-      import('./forecast-availability/forecast-availability.module').then((mod) => mod.ForecastAvailabilityModule),
+      import('./my-truck-availability/my-truck-availability.module').then((mod) => mod.MyTruckAvailabilityModule),
   },
   {
     path: '',canActivate : [AuthGuard],

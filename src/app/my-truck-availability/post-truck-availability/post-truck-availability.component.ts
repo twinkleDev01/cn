@@ -99,7 +99,7 @@ export class PostTruckAvailabilityComponent implements OnInit {
         (success) => {
           this.loading=false;
         if (success.success === true) {
-          this.router.navigateByUrl('forecastAvailibilty/manage-availability');
+          this.router.navigateByUrl('my-truck-availability/post-new');
           this.alertService.showNotificationMessage(
             'success',
             'bottom',

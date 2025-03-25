@@ -16,9 +16,9 @@ import { EditReviewBroker } from './edit-review-broker/edit-review-broker.compon
 
 const routes: Routes = [
   { path: 'invite-for-review', component: InviteReviewComponent, canActivate : [AuthGuard] },
-  { path: 'manage-my-reviews', component: ManageReviewComponent, canActivate: [AuthGuard] },
+  { path: 'my-profile-reviews', component: ManageReviewComponent, canActivate: [AuthGuard] },
   { path: 'invite-for-review/invite', component: AiInviteReviewComponent, canActivate: [AuthGuard] },
-  { path: 'manage-my-reviews/respond/:Id', component: AiRespondReviewComponent, canActivate: [AuthGuard] },
+  { path: 'my-profile-reviews/respond/:Id', component: AiRespondReviewComponent, canActivate: [AuthGuard] },
   { path: 'write-a-review-for-carrier', component: AddReviewNewComponent, canActivate: [AuthGuard] },
   { path: 'write-a-review-for-broker', component: AddReviewBrokerComponent, canActivate: [AuthGuard] },
   { path: 'edit-a-review-for-carrier/:Id', component: NonCarrierNewEditReviewComponent, canActivate: [AuthGuard] },{ path: 'edit-a-review-for-broker/:Id', component: EditReviewBroker, canActivate: [AuthGuard] },

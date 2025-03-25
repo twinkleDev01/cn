@@ -15,7 +15,7 @@ body { background: #f4f4f4; }
   width: 100%; 
   margin: 14px auto; 
   background: #fff; 
-  border-radius: 10px;
+  border-radius: 0px;
 }
 .empty-state__content {
   padding: 48px; 

@@ -1,19 +1,205 @@
-<div class="insurance_pg_con">
-    
-    <div class="card_con" >
-        <div class="uploadEmptyTxt">
-            <p class="edt_pg_tlt mb-2">Pending Review Invitation<span *ngIf="totalRecords > 1">s</span> ({{totalRecords ? totalRecords:0}})</p>
-            <div class="insu_uplod_box">
-                <div class="iub_l">
-                    <p class="fs_14 fsn_4 txt_lb">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum
-                        perspiciatis cupiditate fugiat corporis vitae, omnis aut quos, nesciunt tenetur itaque
-                        eligendi.
-                        Aut architecto recusandae doloribus dicta laboriosam eum, consequatur perspiciatis?</p>
-                </div>
-                <div class="iub_r">
+<div class="content_box">
+	<div class="contnt_hed mb-1">
+	  <div class="ch_l">
+		<h3 class="ch_tlt">Pending Review Invitation<span *ngIf="totalRecords > 1">s</span> ({{totalRecords ? totalRecords:0}})</h3>
+	  </div>
+	  <div class="ch_rl">
+	  </div>
+	</div>
+  <div class="content_body">
+    <p class="content_dis">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum perspiciatis cupiditate fugiat corporis vitae, omnis aut quos, nesciunt tenetur itaque eligendi.  architecto recusandae doloribus dicta laboriosam eum, consequatur perspiciatis?</p>
+  </div>
+</div>
+
+<div class="td_card_con">
+  <div class="table_data_con">
+    <!-- <div class="table_actions">
+      <form class="cn_field">
+        <div class="btns_box">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="comn_fltr" [ngClass]="{'d-none': showAdvancedFilter}">
+                <mat-form-field appearance="none">
+                  <mat-label>Table Search</mat-label>
+                  <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
+                  <input type="text" matInput placeholder="Search" class="form-control cn_input ms-2">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-7">
+              <div class="btn_r">
+                <span class="cn_btn txt_btn">
+                  <i class="fa-solid fa-plus me-2"></i>
+                  <span>View All</span>
+                </span>
+                <span class="cn_btn txt_btn">
+                  <i class="fa-solid fa-plus me-2"></i>
+                  <span>Add</span>
+                </span>
+                <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
+                  <i class="fa-sharp fa-solid fa-filter"></i>
+                </span>
+                <span class="cn_btn icn_btn">
+                  <i class="fa-duotone fa-solid fa-rotate-right"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="filter_box" [ngClass]="{'d-none': !showAdvancedFilter}">
+            <div class="filtr_con">
+                <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
+                <div class="row">
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-label>User Type</mat-label>
+                      <mat-select>
+                        <mat-option value="carrier">Carrier</mat-option>
+                        <mat-option value="shipper">Shipper</mat-option>
+                        <mat-option value="broker">Broker</mat-option>
+                        <mat-option value="Dispature">Dispature</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-label>Country</mat-label>
+                      <mat-select>
+                        <mat-option value="us">United State</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-label>State</mat-label>
+                      <mat-select>
+                        <mat-option value="texas">Texas</mat-option>
+                        <mat-option value="florida">Florida</mat-option>
+                        <mat-option value="indiana">Indiana</mat-option>
+                        <mat-option value="california">California</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-label>City</mat-label>
+                      <mat-select>
+                        <mat-option value="houston">Houston</mat-option>
+                        <mat-option value="miami">Miami</mat-option>
+                        <mat-option value="indianapolis">Indianapolis</mat-option>
+                        <mat-option value="bakersfield">Bakersfield</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-label>Postal Code</mat-label>
+                      <input type="text" matInput placeholder="Search">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-label>Page Viewed</mat-label>
+                      <input type="text" matInput placeholder="Search">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field class="date_range_filter">
+                      <mat-label>Accessed At</mat-label>
+                      <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate placeholder="Start date">
+                        <input matEndDate placeholder="End date">
+                      </mat-date-range-input>
+                      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3"></div>
+                  <div class="col-md-3">
+                    <p class="cn_input_lbl">Checkbox</p>
+                    <mat-checkbox class="me-3">Checked</mat-checkbox>
+                    <mat-checkbox class="">Indeterminate</mat-checkbox>
+                  </div>
+                  <div class="col-md-3">
+                    <p class="cn_input_lbl">Radio Button</p>
+                    <mat-radio-group>
+                      <mat-radio-button value="1" class="me-3">Option 1</mat-radio-button>
+                      <mat-radio-button value="2">Option 2</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-md-3">
+                    <p class="cn_input_lbl">Toggle</p>
+                    <mat-button-toggle-group class="toggle_switch" name="fontStyle" aria-label="Font Style">
+                      <mat-button-toggle value="yes">Yes</mat-button-toggle>
+                      <mat-button-toggle value="no">NO</mat-button-toggle>
+                    </mat-button-toggle-group>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="fltr_actn">
+                      <button class="cn_btn btn_bordered">Clear</button>
+                      <button class="cn_btn">Apply</button>
+                    </div>
+                  </div>
                 </div>
             </div>
+          </div>
         </div>
+      </form>
+    </div> -->
+    <div class="table_data" tabindex="0">
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element" class="fw_5">{{element.name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="userEmail">
+          <th mat-header-cell *matHeaderCellDef> Email </th>
+          <td mat-cell *matCellDef="let element">{{element.userEmail}}</td>
+        </ng-container>
+        <ng-container matColumnDef="invitationDate">
+          <th mat-header-cell *matHeaderCellDef class="loca_w mob_txt_cntr"> Invitation Date </th>
+          <td mat-cell *matCellDef="let element" class="mob_txt_cntr">{{element.invitationDate}}</td>
+        </ng-container>
+        <ng-container matColumnDef="reInviteDate">
+          <th mat-header-cell *matHeaderCellDef> Re-invite Date </th>
+          <td mat-cell *matCellDef="let element">{{element.reInviteDate}}</td>
+        </ng-container>
+        <ng-container matColumnDef="message">
+          <th mat-header-cell *matHeaderCellDef> Message </th>
+          <td mat-cell *matCellDef="let element" matTooltip="{{element.message}}" style="white-space: normal;">
+            <div class="td_tbl_mess">
+              {{element.message}}
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="rowAction">
+          <th mat-header-cell *matHeaderCellDef class="time_since"> Action </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="row_actn">
+              <span class="cn_btn txt_s btnActive" matTooltip="View">
+                <i class="fa-duotone fa-solid fa-eye"></i>
+              </span>
+              <span class="cn_btn txt_p btnActive" matTooltip="Resend">
+                <i class="fa-duotone fa-solid fa-paper-plane"></i>
+              </span>
+              <span class="cn_btn dlt_btn txt_d" matTooltip="withdrawal Invitation">
+                <i class="fa-duotone fa-solid fa-trash"></i>
+              </span>
+
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="insurance_pg_con">
+    <div class="card_con" >
         <div class="" *ngIf="!skeletonLoader && pendingreviewInvitationList">
             <div class="inc_data_updt"
                 *ngFor="let pendingreviewInvitationData of pendingreviewInvitationList;let i=index">
@@ -85,10 +271,8 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="empty-state" *ngIf="pendingreviewInvitationList?.length ==0 && !skeletonLoader">
-
                 <div class="empty-state__content">
                     <div class="empty-state__icon">
                         <img src="https://img.freepik.com/free-vector/upload-concept-illustration_114360-1343.jpg?size=626&ext=jpg"
@@ -98,8 +282,6 @@
                     <p class="empty-state__help">No Pending Review Invitation</p>
                 </div>
             </div>
-
-
         </div>
         <div class="saved_carrier_list_con" class="skt_eifr" *ngIf="skeletonLoader">
             <div class="mb-3">
@@ -116,14 +298,9 @@
     <div class="text-center" *ngIf="pendingreviewInvitationList?.length > 0 && spinnerLoader">
         <span class="spinner-border" role="status" style="color: #00b4fc;"></span>
     </div>
-    <!--  -->
     <div *ngIf="pendingreviewInvitationList?.length > 0 && dataNotFound && !skeletonLoader" class="noMore_record">
         <span>There are no more records to show.</span>
     </div>
-    <!--  -->
-    
-
-
 </div>
 
 <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>

@@ -22,7 +22,7 @@ import { carrierDataExportsModule } from './carrier-data-exports/carrier-data-ex
 import { SharedService } from './commons/service/shared.service';
 import { PerformanceAnalyticsModule } from './performance-analytics/performance-analytics.module';
 import { BrowseHistoryModule } from './browse-history/browse-history.module';
-
+import { DashboardModule } from './dashboard/dashboard.module';
 
 export function initializeApp(sharedService: SharedService) {
   return (): Promise<void> => {
@@ -48,6 +48,7 @@ export function initializeApp(sharedService: SharedService) {
     DigitalMarketingModule,
     PerformanceAnalyticsModule,
     BrowseHistoryModule,
+    DashboardModule
   ],
   declarations: [
     AppComponent,

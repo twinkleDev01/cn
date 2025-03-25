@@ -11,6 +11,7 @@ import { PopupComponent } from "src/app/shared/popup/popup.component";
   styleUrls: ['./pending-review-invitation.component.css']
 })
 export class PendingReviewInvitationComponent implements OnInit {
+  showAdvancedFilter = false;
   public page = 1;
   public params: any = {};
   public orderDir = '';
@@ -278,4 +279,36 @@ export class PendingReviewInvitationComponent implements OnInit {
     }
     return indexes;
   }
+
+
+    
+  // Profile analytics table
+  displayedColumns: string[] = ['name',  'userEmail', 'invitationDate', 'reInviteDate', 'message', 'rowAction'];
+  dataSource = [
+    { name: 'Jax Logistics LLC',
+      userEmail: 'test01@mailinator.com',
+      invitationDate: 'Mar 04, 2025',
+      reInviteDate: 'Feb 04, 2025',
+      message: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum perspiciatis cupiditate fugiat corporis vitae',
+    },
+    { name: 'Guest User',
+      userEmail: 'test02@mailinator.com',
+      invitationDate: 'Feb 14, 2025',
+      reInviteDate: 'Feb 14, 2025',
+      message: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum perspiciatis cupiditate fugiat corporis vitae, omnis aut quos, nesciunt tenetur itaque eligendi. architecto recusandae doloribus dicta laboriosam eum, consequatur perspiciatis?',
+    },
+    { name: 'Jax Logistics LLC 1',
+      userEmail: 'test03@mailinator.com',
+      invitationDate: 'Feb 07, 2025',
+      reInviteDate: 'Feb 07, 2025',
+      message: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum perspiciatis cupiditate fugiat corporis vitae, omnis aut quos, nesciunt tenetur itaque eligendi.',
+    },
+  ];
+
+  // Advanced filter toggle
+  toggleFilter() {
+    this.showAdvancedFilter = !this.showAdvancedFilter;
+  }
+
+
 }

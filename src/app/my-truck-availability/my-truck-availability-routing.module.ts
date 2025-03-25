@@ -5,7 +5,7 @@ import { MyTruckAvailabilityComponent } from './my-truck-availability/my-truck-a
 import { AuthGuard } from '../commons/guard/auth.guard';
 
 const routes: Routes = [
-  { path: 'post-new', component: PostTruckAvailabilityComponent, canActivate : [AuthGuard] },
+  { path: 'my-truck-availability/post-new', component: PostTruckAvailabilityComponent, canActivate : [AuthGuard] },
   { path: 'my-truck-availability', component: MyTruckAvailabilityComponent, canActivate: [AuthGuard] },
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ForecastAvailabilityRoutingModule { }
+export class MyTruckAvailabilityRoutingModule { }

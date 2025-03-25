@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ForecastAvailabilityRoutingModule } from './forecast-availability-routing.module';
+import { MyTruckAvailabilityRoutingModule } from './my-truck-availability-routing.module';
 import { PostTruckAvailabilityComponent } from './post-truck-availability/post-truck-availability.component';
 import { MyTruckAvailabilityComponent } from './my-truck-availability/my-truck-availability.component';
 import { NgxLoadingModule } from 'ngx-loading';
@@ -19,7 +19,7 @@ import { SharedModule } from '../shared/shared.module';
     MyTruckAvailabilityComponent
   ],
   imports: [
-    ForecastAvailabilityRoutingModule,
+    MyTruckAvailabilityRoutingModule,
     CommonModule,
     MatInputModule,
     MatFormFieldModule,
@@ -33,4 +33,4 @@ import { SharedModule } from '../shared/shared.module';
   ],
   schemas: [ NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA ],
 })
-export class ForecastAvailabilityModule { }
+export class MyTruckAvailabilityModule { }

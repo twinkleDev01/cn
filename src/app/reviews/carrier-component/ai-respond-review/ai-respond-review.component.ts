@@ -433,7 +433,7 @@ export class AiRespondReviewComponent implements OnInit {
       this.commonService.post(APIparams).subscribe(
         (success) => {
           if (success.success === true) {
-            this.route.navigateByUrl('review/manage-my-reviews')
+            this.route.navigateByUrl('review/my-profile-reviews')
             this.alertService.showNotificationMessage(
               'success',
               'bottom',

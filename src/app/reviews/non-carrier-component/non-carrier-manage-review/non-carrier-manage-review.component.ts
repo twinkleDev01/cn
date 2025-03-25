@@ -82,7 +82,7 @@ export class NonCarrierManageReviewComponent implements OnInit {
     this.page=1
     let uri = null;
     let APIparams, params;
-    params = { limit: 3, page: 1,};
+    params = { limit: 5, page: 1,};
     if (params) uri = this.commonService.getAPIUriFromParams(params);
     APIparams = {
       apiKey: AppSettings.APIsNameArray.REVIEW.CARRIERBROKERREVIEWLIST,

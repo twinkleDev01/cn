@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardRoutingModule } from './dashboard.routing';
+import { CarrierDashboardComponent } from './carrier-dashboard/carrier-dashboard.component';
+import { BrokerDashboardComponent } from './broker-dashboard/broker-dashboard.component';
+import { ShipperDashboardComponent } from './shipper-dashboard/shipper-dashboard.component';
+import { DispatcherDashboardComponent } from './dispatcher-dashboard/dispatcher-dashboard.component';
 
 @NgModule({
   imports: [
@@ -9,7 +12,10 @@ import { DashboardRoutingModule } from './dashboard.routing';
     DashboardRoutingModule
   ],
   declarations: [
-    DashboardComponent
+    CarrierDashboardComponent,
+    BrokerDashboardComponent,
+    ShipperDashboardComponent,
+    DispatcherDashboardComponent
   ],
 
 })

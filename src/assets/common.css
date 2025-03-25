@@ -106,7 +106,7 @@ mat-option .flag_img { width: auto; height: 16px; }
 .cn_field .mat-form-field-infix { width: auto; margin: 0px; padding: 8px 8px 8px 12px; cursor: text; background: #F7F7F8; border: 1px solid #ddd; }
 /*.cn_inpt_drop .mat-form-field-infix { border-radius: 5px 0px 0px 5px !important; }*/
 /*.cn_pfix_icnQW .mat-form-field-infix { border-radius: 0px 5px 5px 0px !important; }*/
-.cn_field .cn_input { font-weight: 400; font-size: 14px; line-height: 20px; color: #656565; padding: 0px 0px; margin: 0px; border: none; background: #F7F7F8; }
+.cn_field .cn_input { font-weight: 400; font-size: 14px; line-height: 20px; color: #656565; padding: 0px 0px; margin: 0px; border: none; border-radius: 0px; background: #F7F7F8; }
 .cn_field .mat-select-value-text { color: #818092; font-size: 14px; }
 .cn_field .mat-select-arrow { color: #818092; }
 .cn_field .cn_input::placeholder { color: #818092; opacity: 0.7; }
@@ -566,8 +566,8 @@ calculator box */
 #calculator_inputs .mat-form-field-underline { display: none; }
 #calculator_inputs .mat-form-field-flex { border: 1px solid #d9d9d9; background: #fff; border-radius: 5px; }
 #calculator_inputs .example-form-field {  width: 100%; }
-#calculator_accordion .mat-expansion-panel-header-title { width: 0%;  font-family: 'Poppins'; }
-#calculator_accordion .mat-expansion-panel-header-description { font-family: 'Poppins'; justify-content: space-around; }
+/* #calculator_accordion .mat-expansion-panel-header-title { width: 0%;  font-family: 'Poppins'; } */
+/* #calculator_accordion .mat-expansion-panel-header-description { font-family: 'Poppins'; justify-content: space-around; } */
 #calculator_accordion .cn_input_lbl { font-family: 'Poppins'; }
 #calculator_accordion .mat-form-field-underline { display: none; }
 #calculator_accordion .mat-form-field-label-wrapper { display: none; }
@@ -575,6 +575,41 @@ calculator box */
 #calculator_accordion .mat-select-arrow-wrapper { height: 0px;}
 #calculator_accordion .mat-form-field-infix { height: 40px; display: inline-flex; align-items: center; }
 #calculator_accordion .mat-form-field-label { color: #00b4fc !important; }
+
+
+.calculator_box {
+  .cn_input_lbl { font-size: 14px; line-height: 18px; }
+}
+
+.calculator_accordion_box {
+  .mat-expansion-panel { border-radius: 0px !important; box-shadow: none; border: 1px solid #ededed; margin: 0 0 0.5rem; }
+  .mat-expansion-panel-header { padding: 0 1rem; }
+  .mat-expansion-panel-header.mat-expanded { height: 46px; padding: 0 1rem; background: #e5e5e5; }
+  .mat-expansion-panel-header-title { font-size: 1rem; font-weight: 500; }
+  .mat-expansion-panel-header-description { justify-content: right; padding-right: 2rem; }
+  .mat-expansion-panel-header.mat-expanded:focus,
+  .mat-expansion-panel-header.mat-expanded:hover { background: #e6e6e6d9; }
+  .mat-expansion-panel-body { padding: 1rem; }
+  .mat-card { padding: 0; border-radius: 0; box-shadow: none; }
+  .mat-form-field-wrapper { padding-bottom: 0.6rem; }
+  .errorMessage { color: rgb(209, 10, 10); font-size: 11px; position: absolute; bottom: -16px; left: 0; width: 100%; }
+  .calculated_value { min-height: 40px; }
+  .calculated_lbl { position: absolute; }
+  .calculated_value strong { font-weight: 600; }
+  .combine_fields { display: flex; gap: 0.8rem; }
+  .combine_fields .cf_r { max-width: 40%; }
+
+  @media screen and (max-width: 1680px) {
+    .cn_field .mat-select-value-text { font-size: 12px; }
+    .cn_field .cn_input { font-size: 12px; line-height: 18px; }
+    .calculated_value { font-size: 12px; }
+  }
+
+
+
+}
+
+
 /* td.mat-cell { width: 42%;} */
 /* .compare_cal_box .mat-header-cell { width: 34%; } */
 .compare_cal_box thead tr th:first-child { width: 34%; }
@@ -591,7 +626,7 @@ margin: 0px !important;
 padding: 8px 8px 8px 12px !important; 
 cursor: pointer !important;
 background: #F7F7F8 !important;
-border-radius: 6px !important;
+border-radius: 0px !important;
 border: 1px solid #ddd !important;}
 
 .confirm_name .mat-form-field-wrapper { padding-bottom: 0px; }
@@ -732,6 +767,10 @@ border: 1px solid #ddd !important;}
   .content_head { display: flex; align-items: center; justify-content: space-between; background: #e5e5e5; }
   .content_tlt { padding: 0.7rem 1rem; font-size: 1.4rem; font-weight: 500; background: #e5e5e5; margin: 0; }
   .content_dis { color: #818181; margin: 0 0 1rem; }
+
+  .contnt_hed { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 1rem; background: #e5e5e5; margin: 0 0 1rem; }
+  .ch_tlt { font-size: 1.4rem; margin: 0 0 0rem; }
+  .ch_dis { color: #818181; margin: 0 0 1rem; }
   @media ( max-width: 767px ) {
     margin: 0 0rem 1rem;
   }

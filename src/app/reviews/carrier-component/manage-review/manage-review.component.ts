@@ -411,7 +411,7 @@ export class ManageReviewComponent implements OnInit {
 
   respondReview(reviewDataReview) {
     localStorage.setItem('userReview', JSON.stringify(reviewDataReview));
-    this.router.navigateByUrl('review/manage-my-reviews/respond/' + reviewDataReview?.id)
+    this.router.navigateByUrl('review/my-profile-reviews/respond/' + reviewDataReview?.id)
   }
 
   subscriptionUpgrade() {

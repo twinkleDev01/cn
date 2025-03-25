@@ -62,15 +62,15 @@
 
 				<div class="fld_row fld_row_inpt">
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-9">
 							<p class="cn_input_lbl">Title</p>
 							<mat-form-field appearance="none">
 								<input matInput formControlName="title" type="text" placeholder="Summarize your Experience with this Carrier" class="form-control cn_input" maxlength="128" />
 								<mat-error *ngIf="submitted && addReviewForm.get('title').errors?.['required']" class="error_mess">Title is required.</mat-error>
 							</mat-form-field>
 						</div>
-						<div class="col-md-6"></div>
-						<div class="col-md-6">
+						<!-- <div class="col-md-6"></div> -->
+						<div class="col-md-3">
 							<div class="trrt_rtng add_reviw_ratng">
 								<p class="cn_input_lbl mb-1">Enter Rating</p>
 								<span class="btn_rtng_stars">
@@ -87,7 +87,7 @@
 
 				<div class="fld_row">
 					<div class="trrt_timline">
-						<p class="cn_input_lbl">Rate For Timeliness</p>
+						<p class="cn_input_lbl">Rate For Timeliness 12121212</p>
 						<div class="btn_no_rtng">
 							<mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="rateForTimeliness">
 								<mat-button-toggle value="{{selectTimeLines.count}}" *ngFor="let selectTimeLines of timeLinaRating" (click)="selecTimeLines(selectTimeLines.count)">{{selectTimeLines.count}}</mat-button-toggle>

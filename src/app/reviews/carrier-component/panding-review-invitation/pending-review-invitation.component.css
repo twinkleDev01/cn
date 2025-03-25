@@ -53,3 +53,8 @@
     .rmb_mess { flex-direction: column; align-items: normal; }
     .ed_del_buttons { justify-content: end; margin-top: 20px; }
 }
+
+
+.td_tbl_mess {
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}

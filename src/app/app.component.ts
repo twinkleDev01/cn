@@ -81,7 +81,7 @@ handleNavigation(event: NavigationEnd) {
     this.handleProtectedRoutes();
   }
 
-  if (!currentUrl.includes('/review/manage-my-reviews/respond')) {
+  if (!currentUrl.includes('/review/my-profile-reviews/respond')) {
     localStorage.removeItem('userReview');
   }
 }

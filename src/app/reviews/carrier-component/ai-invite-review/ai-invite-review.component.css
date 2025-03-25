@@ -25,7 +25,7 @@
 #card_con_new { background-color: #fff; border-radius: 10px; }
 .invite_fm_box { background: #FFFFFF; border: 1px solid #D9D9D9; padding: 16px 20px 0px; margin: 0 0 30px; }
 
-.review_box { background: #fff; padding: 24px; border-radius: 10px; margin-top: 14px; }
+.review_box { padding: 0.5rem 0 0; }
 .btn_action { text-align: right; }
 .skt_eifr { background: #fff; padding: 24px; border-radius: 10px; margin-top: 14px; }
 .ai_btn {background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140"><polyline points="10,50 70,110 130,50" style="fill:none;stroke:%238B8C8F;stroke-width:15;stroke-linecap:round"/></svg>') no-repeat right 15px center; background-size: 10px; appearance: none; background-position: right; padding-right: 16px; color: #00b4fc; }
@@ -36,8 +36,10 @@
 
 
 /* text area box css */
-.text_area_input_box { background: #fff; padding: 10px; border: 1px solid #c2c9d2;
-    border-radius: 10px;}
+.text_area_input_box { background: #fff;
+  padding: 10px;
+  border: 1px solid #dddddd;
+}
   .box_header  { background-color: #f1f4f9; padding: 3px 10px; margin: 10px -10px;}
   .header_options { border-radius: 5px; padding: 5px 10px; color: #192435; width: 100%; margin-right: 12px; border: none; outline: none; background: none; max-width: 150px; }
   .header_options:focus { border: none; outline: none;}
@@ -157,3 +159,5 @@
     opacity: 0.5; /* Makes the div look disabled */
     background-color: #f5f5f5; /* Light gray background */
 }
+
+.cn_f_acn { justify-content: right; gap: 1.5rem; }
