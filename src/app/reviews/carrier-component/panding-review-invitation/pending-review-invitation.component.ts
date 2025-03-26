@@ -26,6 +26,9 @@ export class PendingReviewInvitationComponent implements OnInit {
   public dataNotFound = false;
   public totalRecords: any;
   public information:any;
+  showFullMessage = false;
+
+
   constructor(
     private commonService: CommonService,
     public dialog: MatDialog,
@@ -60,6 +63,9 @@ export class PendingReviewInvitationComponent implements OnInit {
 
   }
 
+  toggleView(show: boolean) {
+    this.showFullMessage = show;
+  }
 
   getPendingReviewInvitationList() {
     this.skeletonLoader = true;

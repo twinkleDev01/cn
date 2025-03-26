@@ -40,13 +40,19 @@ export class SidebarComponent implements OnInit {
           if ((event.url.includes('my-saved-carrier')) || (event.url.includes('/my-saved-carrier-list/'))) {
             this.activeSubTab = 'mySavedCarriers';
           }
-          else if (event.url.includes('/review/write-a-review')) {
-            this.activeSubTab = 'writeReview';
-            // this.toggleDropdownReview = !this.toggleDropdownReview;
-          }
+          // else if (event.url.includes('/review/write-a-review')) {
+          //   this.activeSubTab = 'writeReview';
+          //   // this.toggleDropdownReview = !this.toggleDropdownReview;
+          // }
           else if (event.url.includes('/review/non-carrier-manage-reviews') || event.url.includes('review/edit-a-review-for-carrier') ||  event.url.includes('review/edit-a-review-for-broker')) {
             this.activeSubTab = 'manageReview';
             // this.toggleDropdownReview = !this.toggleDropdownReview;
+          }
+          else if (event.url.includes('/review/reviews-to-brokers') || event.url.includes('review/write-a-review') ) {
+            this.activeSubTab = 'reviewsToBrokers';
+          }
+          else if (event.url.includes('/review/reviews-to-carrier') || event.url.includes('review/write-a-review') ) {
+            this.activeSubTab = 'reviewsToCarrier';
           }
           else if (event.url.includes('/review/non-carrier-review-invitation') || event.url.includes('review/edit-a-review-for-carrier')) {
             this.activeSubTab = 'reviewInvitation';
@@ -63,8 +69,8 @@ export class SidebarComponent implements OnInit {
           else if (event.url.includes('/browse-history/brokerage-companies') ) {
             this.activeSubTab = 'brokerageCompanies';
           }
-          else if (event.url.includes('review/invite-for-review') || event.url.includes('review/edit-a-review-for-carrier')) {
-            this.activeSubTab = 'inviteReview';
+          else if (event.url.includes('review/my-profile-reviews/request-a-review') || event.url.includes('review/edit-a-review-for-carrier')) {
+            this.activeSubTab = 'myProfileReviews';
           }
           else if (event.url.includes('/review/my-profile-reviews')) {
             this.activeSubTab = 'myProfileReviews';
@@ -91,9 +97,9 @@ export class SidebarComponent implements OnInit {
           else if (event.url.includes('/calculator/manage-cp-month')) {
             this.activeSubTab = 'manage-cp-month';
           }
-          else if (event.url.includes('/review/pending-review-invitation')) {
-            this.activeSubTab = 'pendingReviewInvitation';
-          }
+          // else if (event.url.includes('/review/pending-review-invitation')) {
+          //   this.activeSubTab = 'pendingReviewInvitation';
+          // }
           //Digital Marketing 
           else if (event.url.includes('/digital-marketing/seo')) {
             this.activeSubTab = 'seo';

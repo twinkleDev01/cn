@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { CommonService } from 'src/app/commons/service/common.service';
+import { AppSettings } from 'src/app/commons/setting/app_setting';
 
 @Component({
   selector: 'app-profile-analytics',
@@ -12,7 +14,9 @@ export class ProfileAnalyticsComponent implements OnInit {
   repeatVisitors: number = 150;
   showAdvancedFilter = false;
   selectedChart: string = 'country';
-
+  errorMessage: string = '';
+  loading = false;
+  page=1
   // Progress Bar Percentage calculation
   get totalViewsPercentage(): number {
     return 100;
@@ -24,9 +28,48 @@ export class ProfileAnalyticsComponent implements OnInit {
     return (this.repeatVisitors / this.totalViews) * 100;
   }
 
+ constructor(
+     public commonService: CommonService,
+   ) {}
+
   ngOnInit(): void {
+    this.fetchCarrierProfileAnalitics()
     this.createUserTypeChart();
     this.createCityChart();
+  }
+
+  fetchCarrierProfileAnalitics(){
+    let newParams: {
+      // limit: number;
+      // page: number;
+      // fromStartDate?: string;
+      // toStartDate?: string;
+      // userType?: string;
+      // postalCode?: string;
+      // impressionType?: string;
+      // isClick?: boolean;
+      // position?: number;
+    } = {
+      // limit: 8,
+      // page: this.page
+    };
+  
+    let APIparams = {
+      apiKey: AppSettings.APIsNameArray.RECENTVIEW.CARRIERPROFILEANALYTICSVIEW,
+      uri: this.commonService.getAPIUriFromParams(newParams),
+    };
+  console.log(APIparams)
+    this.commonService.getList(APIparams).subscribe(
+      (response) => {
+        console.log(response,'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
+       
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load recent carriers. Please try again.';
+        this.loading = false;
+        console.error('Error fetching carriers:', error);
+      }
+    );
   }
 
   // User dashboard chart
@@ -318,8 +361,7 @@ export class ProfileAnalyticsComponent implements OnInit {
     },
   ];
 
-  // Advanced filter toggle
-  constructor() { }
+  
   toggleFilter() {
     this.showAdvancedFilter = !this.showAdvancedFilter;
   }

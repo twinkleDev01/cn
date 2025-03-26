@@ -102,7 +102,7 @@ export class TruckingCompaniesComponent implements OnInit {
     // this.subscriptionPlanType = 0
     console.log('Subscription Plan Type:', this.subscriptionPlanType);
   }
-  isAdvancedFilterVisible(): boolean { 
+  isAdvancedFilterVisible(): boolean {
     return this.subscriptionPlanType === 2 || this.subscriptionPlanType === 3;
   }
   fetchCarriers(resetData: boolean = false): void {

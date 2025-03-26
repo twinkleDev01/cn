@@ -206,5 +206,22 @@ export class WriteReviewComponent implements OnInit {
     formattedAddress = formattedAddress.replace(/\s+,/g, ',');
     return formattedAddress;
   }
+
+  // Profile analytics table
+  displayedColumns: string[] = ['name', 'location',  'dotNo', 'docket', 'fleetSize', 'rowAction'];
+  dataSource = [
+    { name: 'Jax Logistics LLC',
+      dotNo: '12345',
+      docket: '82934',
+      fleetSize: '08',
+      location: '82934, Alachua, Florida',
+    },
+    { name: 'Jax Logistics LLC 1',
+      dotNo: '98786',
+      docket: '43232',
+      fleetSize: '12',
+      location: '43232, Columbus, Ohio',
+    },
+  ];
 }
 

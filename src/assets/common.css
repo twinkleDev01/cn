@@ -243,8 +243,8 @@ mat-option .flag_img { width: auto; height: 16px; }
 /*.btn_no_rtng .mat-icon-button { width: 30px; height: 30px; line-height: inherit; margin-right: 16px; }*/
 /*.btn_no_rtng .mat-icon { font-size: 30px; color: #F1C644; }*/
 .btn_no_rtng .mat-button-toggle-label-content { font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 14px;
+    line-height: 22px;
     color: #818181;
     background: #FFFFFF;
     border: 1px solid #818181;
@@ -827,9 +827,9 @@ border: 1px solid #ddd !important;}
 }
 
 /* for testing */
-.table_data tbody tr:nth-child(2) td {
+/* .table_data tbody tr:nth-child(2) td {
   .user_Type, .verify_icon, .user_rtng, .u_loca { display: none; }
-}
+} */
 
 
 .table_data_con {

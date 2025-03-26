@@ -15,16 +15,19 @@ import { AddReviewBrokerComponent } from './add-review-broker/add-review-broker.
 import { EditReviewBroker } from './edit-review-broker/edit-review-broker.component';
 
 const routes: Routes = [
-  { path: 'invite-for-review', component: InviteReviewComponent, canActivate : [AuthGuard] },
+  { path: 'my-profile-reviews/request-a-review', component: InviteReviewComponent, canActivate : [AuthGuard] },
   { path: 'my-profile-reviews', component: ManageReviewComponent, canActivate: [AuthGuard] },
-  { path: 'invite-for-review/invite', component: AiInviteReviewComponent, canActivate: [AuthGuard] },
+  { path: 'my-profile-reviews/request-a-review/invite', component: AiInviteReviewComponent, canActivate: [AuthGuard] },
+  { path: 'my-profile-reviews/manage-request', component:PendingReviewInvitationComponent , canActivate: [AuthGuard] },
   { path: 'my-profile-reviews/respond/:Id', component: AiRespondReviewComponent, canActivate: [AuthGuard] },
   { path: 'write-a-review-for-carrier', component: AddReviewNewComponent, canActivate: [AuthGuard] },
   { path: 'write-a-review-for-broker', component: AddReviewBrokerComponent, canActivate: [AuthGuard] },
   { path: 'edit-a-review-for-carrier/:Id', component: NonCarrierNewEditReviewComponent, canActivate: [AuthGuard] },{ path: 'edit-a-review-for-broker/:Id', component: EditReviewBroker, canActivate: [AuthGuard] },
   { path: 'non-carrier-manage-reviews', component: NonCarrierManageReviewComponent, canActivate: [AuthGuard] },
+  { path: 'reviews-to-brokers', component: NonCarrierManageReviewComponent, canActivate: [AuthGuard] },
+  { path: 'reviews-to-carrier', component: NonCarrierManageReviewComponent, canActivate: [AuthGuard] },
   { path: 'write-a-review', component: WriteReviewComponent, canActivate: [AuthGuard] },
-  { path: 'pending-review-invitation', component:PendingReviewInvitationComponent , canActivate: [AuthGuard] },
+  // { path: 'pending-review-invitation', component:PendingReviewInvitationComponent , canActivate: [AuthGuard] },
   { path: 'non-carrier-review-invitation', component:ReviewInvitationComponent , canActivate: [AuthGuard] },
 ];
 

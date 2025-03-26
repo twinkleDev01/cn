@@ -89,7 +89,7 @@ export class BrokerageCompaniesComponent implements OnInit {
      return this.subscriptionPlanType === 2 || this.subscriptionPlanType === 3;
    }
  
-   fetchBroker(resetData: boolean = false): void { 
+   fetchBroker(resetData: boolean = false): void {
      this.spinnerLoader = true;
      let newParams: {
        limit: number;

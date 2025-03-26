@@ -138,7 +138,8 @@
 			</li>
 
 			<!-- Browse History -->
-			<li class="lbl_2" *ngIf="userType ==='CARRIER' || userType ==='BROKER'"
+			 <!-- *ngIf="userType ==='CARRIER' || userType ==='BROKER'" -->
+			<li class="lbl_2" 
 			 [ngClass]="(activeSubTab=='truckingCompanies' || activeSubTab=='brokerageCompanies') ? 'active' :  '' ">
 				<div [ngClass]="toggleDropdownBrowseHistory ? 'menu_max' : 'menu_min'" >
 					<a class="v_drop_menu" (click)="menuToggleEvent($event,'browseHistory')">
@@ -160,7 +161,7 @@
 			</li>
 
 			<!-- for review -->
-			<li class="lbl_2" [ngClass]="(activeSubTab=='writeReview' || activeSubTab=='manageReview' || activeSubTab=='reviewInvitation' || activeSubTab=='inviteReview' || activeSubTab=='myProfileReviews' || activeSubTab=='pendingReviewInvitation') ? 'active' : '' ">
+			<li class="lbl_2" [ngClass]="(activeSubTab=='reviewsToBrokers' || activeSubTab=='reviewsToCarrier' || activeSubTab=='writeReview' || activeSubTab=='manageReview' || activeSubTab=='reviewInvitation' || activeSubTab=='inviteReview' || activeSubTab=='myProfileReviews' || activeSubTab=='pendingReviewInvitation') ? 'active' : '' ">
 				<div [ngClass]="toggleDropdownReview ? 'menu_max' : 'menu_min'" >
 					<a class="v_drop_menu" (click)="menuToggleEvent($event,'review')">
 						<div class="d-flex">
@@ -175,41 +176,51 @@
 								<span (click)="isMobile ? mobMenuToggleEvent() :null">My Profile Reviews</span>
 							</a>
 						</li>
+						<li [ngClass]="activeSubTab=='reviewsToBrokers' ? 'active' : ''" *ngIf="userType ==='CARRIER'">
+							<a [ngClass]="activeSubTab=='reviewsToBrokers' ? 'sub_menu_a' : ''" [routerLink]="['/review/reviews-to-brokers']">
+								<span (click)="isMobile ? mobMenuToggleEvent() :null">Reviews to Brokers</span>
+							</a>
+						</li>
+						<li [ngClass]="activeSubTab=='reviewsToCarrier' ? 'active' : ''" *ngIf="userType ==='BROKER'">
+							<a [ngClass]="activeSubTab=='reviewsToCarrier' ? 'sub_menu_a' : ''" [routerLink]="['/review/reviews-to-carrier']">
+								<span (click)="isMobile ? mobMenuToggleEvent() :null">Reviews to Carrier</span>
+							</a>
+						</li>
 						<!-- <li class="" [ngClass]="activeSubTab=='reviewsToBrokers' ? 'active' : ''">
 							<a [ngClass]="activeSubTab=='reviewsToBrokers' ? 'sub_menu_a' : ''" [routerLink]="['/review/reviews-to-brokers']">
 								<span (click)="isMobile ? mobMenuToggleEvent() :null">Reviews to Brokers</span>
 							</a>
 						</li> -->
-						<li *ngIf="userType =='CARRIER'" [ngClass]="activeSubTab=='inviteReview' ? 'active' : ''">
+						<!-- <li *ngIf="userType =='CARRIER'" [ngClass]="activeSubTab=='inviteReview' ? 'active' : ''">
 							<a [ngClass]="activeSubTab=='inviteReview' ? 'sub_menu_a' : ''" [routerLink]="['/review/invite-for-review']" (click)="isMobile ? mobMenuToggleEvent() :null">Invite for Review</a>
 						</li>
 						<li [ngClass]="activeSubTab=='writeReview' ? 'active' : ''" *ngIf=" userType =='CARRIER' || userType =='BROKER' || userType ==='SELLER' ||  userType ==='SHIPPER' || userType === 'DISPATCHER'">
 							<a [ngClass]="activeSubTab=='writeReview' ? 'sub_menu_a' : ''" [routerLink]="['/review/write-a-review']" >
 								<span (click)="isMobile ? mobMenuToggleEvent() :null">Write a Review</span>
 							</a>
-						</li>
+						</li> -->
 						<!-- <li class="" *ngIf="userType =='CARRIER' || userType =='BROKER'" [ngClass]="activeSubTab=='manageMyReview' ? 'active' : ''">
 							<a [ngClass]="activeSubTab=='manageMyReview' ? 'sub_menu_a' : ''" [routerLink]="['/review/manage-my-reviews']">
 								<span (click)="isMobile ? mobMenuToggleEvent() :null">Review About You</span>
 							</a>
 						</li> -->
-						<li [ngClass]="activeSubTab=='manageReview' ? 'active' : ''" *ngIf="userType ==='SELLER' || userType ==='CARRIER'|| userType ==='BROKER'||  userType ==='SHIPPER' || userType === 'DISPATCHER'">
+						<li [ngClass]="activeSubTab=='manageReview' ? 'active' : ''" *ngIf="userType ==='SELLER' || userType ==='SHIPPER' || userType === 'DISPATCHER'">
 							<a [ngClass]="activeSubTab=='manageReview' ? 'sub_menu_a' : ''" [routerLink]="['/review/non-carrier-manage-reviews']">
 								<span (click)="isMobile ? mobMenuToggleEvent() :null">Reviews You’ve Written</span>
 							</a>
 						</li>
 						<!-- durgesh gumasta -->
 						<li [ngClass]="activeSubTab=='reviewInvitation' ? 'active' : ''" *ngIf="userType ==='SELLER' || userType ==='BROKER' ||  userType ==='SHIPPER' || userType === 'DISPATCHER'">
-              <a [ngClass]="activeSubTab=='reviewInvitation' ? 'sub_menu_a' : ''" [routerLink]="['/review/non-carrier-review-invitation']" >
-                <span (click)="isMobile ? mobMenuToggleEvent() :null">Review Invitation</span>
-              </a>
-            </li>
+							<a [ngClass]="activeSubTab=='reviewInvitation' ? 'sub_menu_a' : ''" [routerLink]="['/review/non-carrier-review-invitation']" >
+								<span (click)="isMobile ? mobMenuToggleEvent() :null">Review Invitation</span>
+							</a>
+						</li>
 						<!-- new component added -->
-						<li *ngIf="userType =='CARRIER'" [ngClass]="activeSubTab=='pendingReviewInvitation' ? 'active' :''">
+						<!-- <li *ngIf="userType =='CARRIER'" [ngClass]="activeSubTab=='pendingReviewInvitation' ? 'active' :''">
 							<a [ngClass]="activeSubTab=='pendingReviewInvitation' ? 'sub_menu_a' : ''" [routerLink]="['/review/pending-review-invitation']">
 								<span (click)="isMobile ? mobMenuToggleEvent() :null">Pending Review Invitation</span>
 							</a>
-						</li>
+						</li> -->
 					</ul>
 				</div>
 			</li>

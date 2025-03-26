@@ -25,19 +25,19 @@
                 <div class="lbl_1 w-100">
                   <div class="dco_bar">
                     <div class="bar_hed">
-                      <span class="bar_txt">Total Views </span> <span class="bar_vlu"> {{totalViews}}</span>
+                      <span class="bar_txt">Total Views </span> <span class="bar_vlu"> {{carrierContactAnalyticsData.totalViews}}</span>
                     </div>
                     <mat-progress-bar mode="determinate" [value]="totalViewsPercentage"></mat-progress-bar>
                   </div>
                   <div class="dco_bar">
                     <div class="bar_hed">
-                      <span class="bar_txt">Unique Visitors </span> <span class="bar_vlu"> {{uniqueVisitors}}</span>
+                      <span class="bar_txt">Unique Visitors </span> <span class="bar_vlu"> {{carrierContactAnalyticsData.uniqueVisiter}}</span>
                     </div>
                     <mat-progress-bar mode="determinate" [value]="uniqueVisitorsPercentage"></mat-progress-bar>
                   </div>
                   <div class="dco_bar">
                     <div class="bar_hed">
-                      <span class="bar_txt">Repeat Visitors </span> <span class="bar_vlu"> {{repeatVisitors}}</span>
+                      <span class="bar_txt">Repeat Visitors </span> <span class="bar_vlu"> {{carrierContactAnalyticsData.totalRepeatCount}}</span>
                     </div>
                     <mat-progress-bar mode="determinate" [value]="repeatVisitorsPercentage"></mat-progress-bar>
                   </div>

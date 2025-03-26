@@ -42,7 +42,7 @@ export class InviteReviewComponent implements OnInit {
 
   inviteReview(numberOfCount) {
     localStorage.setItem('numberOfCount',numberOfCount)
-    this.router.navigate(['review/invite-for-review/invite'])
+    this.router.navigate(['review/my-profile-reviews/request-a-review/invite'])
   }
 
   getReviewSummary() {

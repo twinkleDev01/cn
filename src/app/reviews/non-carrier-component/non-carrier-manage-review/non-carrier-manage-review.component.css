@@ -50,6 +50,16 @@
 .rmb_sr { display: inline-block; padding: 0 0.5rem; border: 1px solid #a9a9a9; border-radius: 4px; margin: 0 6px 0 0; color: #6c6c6c; font-size: 0.8rem; line-height: normal; }
 .rmb_sr b { font-weight: 600; }
 
+.user_type {
+    position: absolute;
+    left: 0;
+    bottom: -20px;
+    color: #fff;
+    background: #000;
+    text-align: center;
+    width: 100%;
+}
+
 /*skt*/
 .rpvc_skt { background: #fff; padding: 1rem; margin: 0 0 1rem; }
 .rpvc_skt_bx { display: flex; justify-content: space-between; }

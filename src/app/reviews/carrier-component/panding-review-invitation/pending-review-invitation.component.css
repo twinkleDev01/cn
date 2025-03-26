@@ -55,6 +55,37 @@
 }
 
 
-.td_tbl_mess {
+/* .td_tbl_mess {
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+} */
+
+
+/* .td_tbl_mess {
+    .message.truncated {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  
+    .message {
+      &.truncated {
+        &.show-full {
+          -webkit-line-clamp: unset;
+        }
+      }
+    }
+  
+    .view_more, .view_less {
+      color: blue;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+  } */
+
+.view_more, .view_less {
+    font-size: 0.8rem;
+    color: #00b4fc;
+    padding: 1px 6px;
+    cursor: pointer;
 }

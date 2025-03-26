@@ -46,10 +46,17 @@ export class AppSettings {
        BROKERUPDATE: 'broker/update',
        DISPATCHERUPDATE: 'dispatcher/update',   
     },
+    // RECENTVIEW: {
+    //   NONCARRIERRECETVIEW : 'non-carrier-recent-view/list',
+    //   CARRIERRECETVIEW : 'recently-viewed/carrier',
+    //   BROKERVIEW : 'recently-viewed/broker'
+    // },
     RECENTVIEW: {
       NONCARRIERRECETVIEW : 'non-carrier-recent-view/list',
       CARRIERRECETVIEW : 'recently-viewed/carrier',
-      BROKERVIEW : 'recently-viewed/broker'
+      BROKERVIEW : 'recently-viewed/broker',
+      CARRIERPROFILEANALYTICSVIEW: 'recent-view/carrier-profile-analitics',
+      CARRIERCONTACTANALYTICSVIEW:'recent-view/carrier-contact-analitics'
     },
     PAYMENT:{
       SUBSCRIPTION:'subscription/buy-business-plan',   
