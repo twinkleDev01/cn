@@ -6,7 +6,7 @@ import { PerformanceAnalyticsRoutingModule } from './performance-analytics-routi
 import { ProfileAnalyticsComponent } from './profile-analytics/profile-analytics.component';
 import { ContactLeadComponent } from './contact-lead/contact-lead.component';
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -23,7 +23,8 @@ import { MatInputModule } from '@angular/material/input';
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class PerformanceAnalyticsModule { }

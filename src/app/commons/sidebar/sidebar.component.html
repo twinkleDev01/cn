@@ -171,7 +171,7 @@
 						<span class="material-icons-outlined">expand_more</span>
 					</a>
 					<ul class="v_sub_menu">
-						<li class="" *ngIf="userType =='CARRIER' || userType =='BROKER'" [ngClass]="activeSubTab=='myProfileReviews' ? 'active' : ''">
+						<li [ngClass]="activeSubTab=='myProfileReviews' ? 'active' : ''" class="" *ngIf="userType =='CARRIER' || userType =='BROKER'">
 							<a [ngClass]="activeSubTab=='myProfileReviews' ? 'sub_menu_a' : ''" [routerLink]="['/review/my-profile-reviews']">
 								<span (click)="isMobile ? mobMenuToggleEvent() :null">My Profile Reviews</span>
 							</a>
@@ -186,24 +186,6 @@
 								<span (click)="isMobile ? mobMenuToggleEvent() :null">Reviews to Carrier</span>
 							</a>
 						</li>
-						<!-- <li class="" [ngClass]="activeSubTab=='reviewsToBrokers' ? 'active' : ''">
-							<a [ngClass]="activeSubTab=='reviewsToBrokers' ? 'sub_menu_a' : ''" [routerLink]="['/review/reviews-to-brokers']">
-								<span (click)="isMobile ? mobMenuToggleEvent() :null">Reviews to Brokers</span>
-							</a>
-						</li> -->
-						<!-- <li *ngIf="userType =='CARRIER'" [ngClass]="activeSubTab=='inviteReview' ? 'active' : ''">
-							<a [ngClass]="activeSubTab=='inviteReview' ? 'sub_menu_a' : ''" [routerLink]="['/review/invite-for-review']" (click)="isMobile ? mobMenuToggleEvent() :null">Invite for Review</a>
-						</li>
-						<li [ngClass]="activeSubTab=='writeReview' ? 'active' : ''" *ngIf=" userType =='CARRIER' || userType =='BROKER' || userType ==='SELLER' ||  userType ==='SHIPPER' || userType === 'DISPATCHER'">
-							<a [ngClass]="activeSubTab=='writeReview' ? 'sub_menu_a' : ''" [routerLink]="['/review/write-a-review']" >
-								<span (click)="isMobile ? mobMenuToggleEvent() :null">Write a Review</span>
-							</a>
-						</li> -->
-						<!-- <li class="" *ngIf="userType =='CARRIER' || userType =='BROKER'" [ngClass]="activeSubTab=='manageMyReview' ? 'active' : ''">
-							<a [ngClass]="activeSubTab=='manageMyReview' ? 'sub_menu_a' : ''" [routerLink]="['/review/manage-my-reviews']">
-								<span (click)="isMobile ? mobMenuToggleEvent() :null">Review About You</span>
-							</a>
-						</li> -->
 						<li [ngClass]="activeSubTab=='manageReview' ? 'active' : ''" *ngIf="userType ==='SELLER' || userType ==='SHIPPER' || userType === 'DISPATCHER'">
 							<a [ngClass]="activeSubTab=='manageReview' ? 'sub_menu_a' : ''" [routerLink]="['/review/non-carrier-manage-reviews']">
 								<span (click)="isMobile ? mobMenuToggleEvent() :null">Reviews You’ve Written</span>
@@ -261,6 +243,39 @@
 				</div>
 			</li>
 
+			<!-- Team  -->
+      <li class="lbl_1" [routerLinkActive]="['active']">
+				<a class="main_menu_a" [routerLink]="['teams']">
+          <i class="fa-duotone fa-regular fa-people-group"></i>
+					<span (click)="isMobile ? mobMenuToggleEvent() :null">Teams</span>
+				</a>
+			</li>
+			<!-- <li class="lbl_2" [ngClass]="(activeSubTab=='seo' || activeSubTab=='analytics' || activeSubTab=='social-media' ) ? 'active' :  ''">
+				<div [ngClass]="toggleDropdownTeam ? 'menu_max' : 'menu_min'">
+					<a class="v_drop_menu" (click)="menuToggleEvent($event,'team')">
+						<div class="d-flex align-items-center">
+							<i class="fa-duotone fa-regular fa-people-group"></i>
+							<span>Team</span>
+						</div>
+						<span class="material-icons-outlined">expand_more</span>
+					</a>
+					<ul class="v_sub_menu">
+						<li [ngClass]="activeSubTab=='seo' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='seo' ? 'sub_menu_a' :  ''"
+								[routerLink]="['/teams/list']"><span (click)="isMobile ? mobMenuToggleEvent() :null"> Team Member List </span></a>
+						</li>
+						<li [ngClass]="activeSubTab=='analytics' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='analytics' ? 'sub_menu_a' :  ''"
+								[routerLink]="['/teams/add']"><span (click)="isMobile ? mobMenuToggleEvent() :null">Add Member</span></a>
+						</li>
+						<li [ngClass]="activeSubTab=='analytics' ? 'active' :  ''">
+							<a [ngClass]="activeSubTab=='analytics' ? 'sub_menu_a' :  ''"
+								[routerLink]="['/teams/edit']"><span (click)="isMobile ? mobMenuToggleEvent() :null">Edit Member</span></a>
+						</li>
+					</ul>
+				</div>
+			</li> -->
+
 			<!--Forecast Availability -->
 			<!-- <li class="lbl_2" *ngIf="userType ==='CARRIER'"
 				[ngClass]="(activeSubTab=='add-availability' || activeSubTab=='manage-availability') ? 'active' :  ''">
@@ -288,11 +303,20 @@
 					</ul>
 				</div>
 			</li> -->
+
 			<!-- My Truck Availability -->
 			<li class="lbl_1" *ngIf="userType ==='CARRIER'" [routerLinkActive]="['active']">
 				<a class="main_menu_a" [routerLink]="['my-truck-availability']">
 					<i class="fa-sharp-duotone fa-regular fa-truck-container"></i>
 					<span (click)="isMobile ? mobMenuToggleEvent() :null">My Truck Availability</span>
+				</a>
+			</li>
+
+			<!-- My Truck On Demand -->
+			<li class="lbl_1" *ngIf="userType ==='SELLER' || userType ==='BROKER' ||  userType ==='SHIPPER' || userType === 'DISPATCHER'">
+				<a class="main_menu_a" [routerLink]="['truck-on-demand']">
+					<i class="fa-sharp-duotone fa-regular fa-truck-container"></i>
+					<span (click)="isMobile ? mobMenuToggleEvent() :null">Truck On Demand</span>
 				</a>
 			</li>
 

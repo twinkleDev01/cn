@@ -6,7 +6,6 @@ export const environment = {
   production: false,
   apiEndpoint: 'https://api.carriernetwork.ai',
   apiEndpointDev: 'https://apid.carriernetwork.ai',
-  apiUrl : 'https://d.carriernetwork.ai',
   // apiEndpoint: 'http://localhost:3000',
 
   domain:'http://localhost:4200/',

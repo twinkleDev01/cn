@@ -31,18 +31,17 @@ export class BrokerageCompaniesComponent implements OnInit {
    totalRecords: number = 0;
    totalPages: number = 0;
    searchControl = new FormControl('');
-   apiUrl = environment.apiUrl;
    subscriptionPlanType: number | null = null;
    isFilterApplied = false;
-   fromDate: string | null = null;
-   toDate: string | null = null;
-   selectedUserType: string | null = null;
    loading = false;
    spinner = false;
    public skeletonLoader = false;
    public spinnerLoader = false;
    filterForm: FormGroup;
- 
+   uniquePositions:any=[];
+   private previousScrollY: number = 0;
+   public noDataFound: boolean = false;
+
     constructor(
       private fb: FormBuilder,
       private cdRef: ChangeDetectorRef,
@@ -60,6 +59,7 @@ export class BrokerageCompaniesComponent implements OnInit {
         impressionType: [''],
         postalCode: [''],
         position: [''],
+        toggleControl:[null as boolean | null]
       });
       if (params && Object.keys(params).length) {
           this.filterForm.patchValue({
@@ -68,15 +68,21 @@ export class BrokerageCompaniesComponent implements OnInit {
               impressionType : params['impressionType'] || '',
               postalCode: params['postalCode'] || '',
               position:params['position'] || '',
+              toggleControl: params['isClick'] === 'true',
           });
           this.cdRef.detectChanges();
-          this.fetchBroker(false);
+         
+          this.filterForm?.get("impressionType")?.setValue(params['impressionType']);
+          console.log("98", this.filterForm);
+          this.filterForm.updateValueAndValidity();
       }else{
-        this.fetchBroker(true);
+        // this.fetchBroker(true);
       }
   });console.log(this.filterForm.value)
     this.setupSearchFilter();
     this.getSubscriptionPlan();
+    setTimeout(()=>{},100);
+    this.fetchBroker();
   }
 
  getSubscriptionPlan(): void {
@@ -96,39 +102,34 @@ export class BrokerageCompaniesComponent implements OnInit {
        page: number;
        fromStartDate?: string;
        toStartDate?: string;
-       postalCode?: number;
-       position?: number;
+       postalCode?: string;
+      //  position?: number;
+      position?: string;
        impressionType?: string;
      } = {
-       limit: 8,
+       limit: 10,
        page: this.page,
      };
- 
      const { fromDate, toDate, postalCode, position, impressionType } = this.filterForm.value;
+     console.log(fromDate,toDate,114)
 
-     if (fromDate) newParams.fromStartDate =this.fromDate;
-     if (toDate) newParams.toStartDate = this.toDate;
+     if (fromDate) newParams.fromStartDate =this.formatDateForAPI(fromDate);
+     if (toDate) newParams.toStartDate =  this.formatDateForAPI(toDate);
      if (postalCode) newParams.postalCode = postalCode;
      if (position) newParams.position = position;
      if (impressionType) newParams.impressionType=impressionType;
-     console.log('Selected Filters:');
-     console.log('postalCode', postalCode)
-     console.log('From Date:', fromDate);
-     console.log('To Date:', toDate);
-     console.log('Impressiontype', newParams.impressionType,impressionType);
- // ✅ Update route with query parameters
- this.router.navigate([], {
-  relativeTo: this.route,
-  queryParams: {
-    fromDate: newParams.fromStartDate || null,
-    toDate: newParams.toStartDate || null,
-    postalCode: newParams.postalCode || null,
-    page: this.page,
-    limit: newParams.limit,
-    impressionType: newParams.impressionType 
-  },
-  queryParamsHandling: 'merge', // Merge with existing query params
-});
+     console.log(fromDate,toDate,121, newParams.toStartDate, newParams.fromStartDate)
+const queryParams = new URLSearchParams();
+if (this.page) queryParams.set('page', this.page.toString());
+if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+if (newParams.fromStartDate) queryParams.set('fromDate', newParams.fromStartDate);
+if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
+// if (newParams.userType) queryParams.set('userType', newParams.userType);
+if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
+if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
+if (newParams.position) queryParams.set('position', newParams.position);
+console.log(queryParams,131)
+history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
      let APIparams = {
        apiKey: AppSettings.APIsNameArray.RECENTVIEW.BROKERVIEW,
        uri: this.commonService.getAPIUriFromParams(newParams),
@@ -136,8 +137,10 @@ export class BrokerageCompaniesComponent implements OnInit {
      console.log(APIparams,"123")
      this.commonService.getList(APIparams).subscribe(
        (response) => {
+        console.log(response,"140")
          if (response && response.response) {
            const newData = response.response;
+           this.noDataFound = newData.length === 0;
            if (resetData) {
              this.dataSource.data = newData;
            } else {
@@ -151,11 +154,16 @@ export class BrokerageCompaniesComponent implements OnInit {
            this.totalPages = response.totalPages;
            this.totalRecords = response.totalRecords;
            this.loading = false;
+           this.spinnerLoader = false;
            this.skeletonLoader = false;
            this.cdRef.detectChanges();
+         }else{
+          this.noDataFound = true;
          }
        },
        (error) => {
+        this.spinnerLoader = false;
+        this.noDataFound = true;
          this.errorMessage = 'Failed to load recent carriers. Please try again.';
          this.loading = false;
          console.error('Error fetching carriers:', error);
@@ -182,7 +190,7 @@ export class BrokerageCompaniesComponent implements OnInit {
      const scrollHeight = window.innerHeight + window.scrollY;
      const documentHeight = document.documentElement.scrollHeight;
      if (documentHeight - scrollHeight <= 1) {
-       if (this.page < this.totalPages && !this.spinner  && !this.loading) {
+      if (this.page < this.totalPages && !this.spinnerLoader){
          this.page += 1;
          this.fetchBroker();
        }
@@ -202,7 +210,7 @@ export class BrokerageCompaniesComponent implements OnInit {
       const companyName = data.broker?.companyName?.toLowerCase();
       const title = data.title?.toLowerCase();
   
-      return (companyName && companyName.includes(filter)) || (title && title.includes(filter));
+      return (companyName && companyName.includes(filter))
     };
   
     this.dataSource.filter = filterValue;
@@ -210,24 +218,29 @@ export class BrokerageCompaniesComponent implements OnInit {
   }
   
  
-  calculateTimeSince(timestamp: string): string {
-    if (!timestamp) return 'Unknown';
+//   calculateTimeSince(timestamp: string): string {
+//     if (!timestamp) return 'Unknown';
+
+//     const accessedDate = new Date(timestamp);
+//     const now = new Date();
+
+//     let diffMs = now.getTime() - accessedDate.getTime(); // Difference in milliseconds
+//     let diffSeconds = Math.floor(diffMs / 1000);
+//     let diffMinutes = Math.floor(diffSeconds / 60);
+//     let diffHours = Math.floor(diffMinutes / 60);
+//     let diffDays = Math.floor(diffHours / 24);
   
-    const accessedDate = new Date(timestamp);
-    const now = new Date();
+//     if (diffSeconds < 60) return 'Just now';
+//     if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
+//     if (diffHours < 24) return `${diffHours} hours ago`;
     
-    let diffMs = now.getTime() - accessedDate.getTime();
-    let diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  
-    if (diffDays < 1) return 'Just now';
-  
-    let months = Math.floor(diffDays / 30);
-    let days = diffDays % 30;
-  
-    if (months > 0 && days > 0) return `${months} months ${days} days ago`;
-    if (months > 0) return `${months} months ago`;
-    return `${days} days ago`;
-  }
+//     let months = Math.floor(diffDays / 30);
+//     let days = diffDays % 30;
+
+//     if (months > 0 && days > 0) return `${months} months ${days} days ago`;
+//     if (months > 0) return `${months} months ago`;
+//     return `${diffDays} days ago`;
+// }
   
  
    toggleFilter() {
@@ -240,17 +253,21 @@ export class BrokerageCompaniesComponent implements OnInit {
      this.fetchBroker(true);
    }
  
-   UTCDate(date: any) {
-     date = new Date(date + ' ' + 'UTC');
-     return date;
-   }
+  //  UTCDate(date: any) {
+  //    date = new Date(date + ' ' + 'UTC');
+  //    return date;
+  //  }
    formatDateForAPI(date: any): string {
-     if (!date) return '';
-     let d = new Date(date);
-     let month = ('0' + (d.getMonth() + 1)).slice(-2); // Ensure 2-digit month
-     let day = ('0' + d.getDate()).slice(-2); // Ensure 2-digit day
-     let year = d.getFullYear();
-     return `${month}/${day}/${year}`; // Format: MM/DD/YYYY
-   }
-    
+    if (!date) return '';
+    let d = new Date(date);
+    let month = ('0' + (d.getMonth() + 1)).slice(-2); 
+    let day = ('0' + d.getDate()).slice(-2); 
+    let year = d.getFullYear();
+    return `${month}/${day}/${year}`; 
+  }
+
+  formatCompanyName(name: string): string {
+    return name ? name.replace(/\s+/g, '-') : '';
+  }
+  
 }

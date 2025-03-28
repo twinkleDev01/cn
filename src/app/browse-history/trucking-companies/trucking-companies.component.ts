@@ -30,7 +30,6 @@ export class TruckingCompaniesComponent implements OnInit {
     'companyName',
     'pageSource',
     'profileRank',
-    // 'location',
     'accessedAt',
     'timeSinceAccess',
     'rowAction',
@@ -41,18 +40,18 @@ export class TruckingCompaniesComponent implements OnInit {
   totalRecords: number = 0;
   totalPages: number = 0;
   searchControl = new FormControl('');
-  apiUrl = environment.apiUrl;
   subscriptionPlanType: number | null = null;
   isFilterApplied = false;
-  fromDate: string | null = null;
-  toDate: string | null = null;
-  selectedUserType: string | null = null;
+  // selectedUserType: string | null = null;
   loading = false;
   spinner = false;
   public skeletonLoader = false;
   public spinnerLoader = false;
   filterForm: FormGroup;
-  uniquePositions:any=[]
+  uniquePositions:any=[];
+  private previousScrollY: number = 0;
+  public noDataFound: boolean = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -61,45 +60,46 @@ export class TruckingCompaniesComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-   
+    
   }
 
   ngOnInit(): void {
     console.log("aaa")
-    // this.fetchCarriers();
+    
     this.route.queryParams.subscribe((params) => {
       this.filterForm = this.fb.group({
         fromDate: [''],
         toDate: [''],
-        // selectedUserType: [''],
         postalCode: [''],
         impressionType: [''],
         position: [''],
         toggleControl: [null as boolean | null]
       });
       if (params && Object.keys(params).length) {
+        console.log(params,"89");
           this.filterForm.patchValue({
               fromDate: params['fromDate'] ? new Date(params['fromDate']) : null,
               toDate: params['toDate'] ? new Date(params['toDate']) : null,
               impressionType: params['impressionType'] || '',
               postalCode: params['postalCode'] || '',
-              // location: params['location'] || '',
               toggleControl: params['isClick'] === 'true',
               position: params['position'] || null
           });
-          this.cdRef.detectChanges();
-          this.fetchCarriers(false);
+          this.filterForm?.get("impressionType")?.setValue(params['impressionType']);
+          console.log("98", this.filterForm);
+          this.filterForm.updateValueAndValidity();
       }else{
-        this.fetchCarriers(true);
+
       }
   });console.log(this.filterForm.value)
     this.setupSearchFilter();
     this.getSubscriptionPlan();
+    setTimeout(()=>{},100);
+    this.fetchCarriers();
   }
   getSubscriptionPlan(): void {
     const plan = localStorage.getItem('subscriptionPlanType');
     this.subscriptionPlanType = plan ? parseInt(plan, 10) : null;
-    // this.subscriptionPlanType = 0
     console.log('Subscription Plan Type:', this.subscriptionPlanType);
   }
   isAdvancedFilterVisible(): boolean {
@@ -117,9 +117,9 @@ export class TruckingCompaniesComponent implements OnInit {
       postalCode?: string;
       impressionType?: string;
       isClick?: boolean;
-      position?: number;
+      position?: string;
     } = {
-      limit: 8,
+      limit: 10,
       page: this.page,
     };
   
@@ -129,27 +129,22 @@ export class TruckingCompaniesComponent implements OnInit {
     if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
     if(impressionType) newParams.impressionType=impressionType
     if (postalCode) newParams.postalCode = postalCode;
-    // if (location) newParams.location = location;
     if (toggleControl) newParams.isClick = toggleControl;
   if(position)  newParams.position = position
 
     console.log('Selected Filters:', newParams);
   
-    // ✅ Update route with query parameters
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        fromDate: newParams.fromStartDate || null,
-        toDate: newParams.toStartDate || null,
-        userType: newParams.userType || null,
-        postalCode: newParams.postalCode || null,
-        impressionType: newParams.impressionType,
-        page: this.page,
-        limit: newParams.limit
-      },
-      queryParamsHandling: 'merge', // Merge with existing query params
-    });
-  
+    const queryParams = new URLSearchParams();
+      if (this.page) queryParams.set('page', this.page.toString());
+if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+if (newParams.fromStartDate) queryParams.set('fromDate', newParams.fromStartDate);
+if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
+if (newParams.userType) queryParams.set('userType', newParams.userType);
+if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
+if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
+if (newParams.position) queryParams.set('position', newParams.position);
+    
+    history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
     let APIparams = {
       apiKey: AppSettings.APIsNameArray.RECENTVIEW.CARRIERRECETVIEW,
       uri: this.commonService.getAPIUriFromParams(newParams),
@@ -160,6 +155,7 @@ export class TruckingCompaniesComponent implements OnInit {
         console.log(response,'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
         if (response && response.response ) {
           const newData = response.response;
+          this.noDataFound = newData.length === 0;
           if (resetData) {
             this.dataSource.data = newData;
           } else {
@@ -169,16 +165,20 @@ export class TruckingCompaniesComponent implements OnInit {
           }
   
           console.log(this.dataSource, 'Updated DataSource');
+          this.spinnerLoader = false;
           this.totalPages = response.totalPages;
           this.totalRecords = response.totalRecords;
           this.loading = false;
           this.skeletonLoader = false;
           this.cdRef.detectChanges();
+        }else{
+          this.noDataFound = true;
         }
       },
       (error) => {
+        this.spinnerLoader = false;
+        this.noDataFound = true;
         this.errorMessage = 'Failed to load recent carriers. Please try again.';
-        this.loading = false;
         console.error('Error fetching carriers:', error);
       }
     );
@@ -205,7 +205,7 @@ export class TruckingCompaniesComponent implements OnInit {
     const documentHeight = document.documentElement.scrollHeight;
     if (documentHeight - scrollHeight <= 1) {
       console.log(this.totalPages, this.page, "203")
-      if (this.page < this.totalPages && !this.spinner && !this.loading){
+      if (this.page < this.totalPages && !this.spinnerLoader){
         console.log(this.totalPages, this.page, "205")
         this.page += 1;
         this.fetchCarriers();
@@ -229,24 +229,29 @@ export class TruckingCompaniesComponent implements OnInit {
     this.dataSource.filter = filterValue;
     this.isFilterApplied = filterValue.length > 0;
   }
-  calculateTimeSince(timestamp: string): string {
-    if (!timestamp) return 'Unknown';
+//   calculateTimeSince(timestamp: string): string {
+//     if (!timestamp) return 'Unknown';
+
+//     const accessedDate = new Date(timestamp);
+//     const now = new Date();
+
+//     let diffMs = now.getTime() - accessedDate.getTime(); // Difference in milliseconds
+//     let diffSeconds = Math.floor(diffMs / 1000);
+//     let diffMinutes = Math.floor(diffSeconds / 60);
+//     let diffHours = Math.floor(diffMinutes / 60);
+//     let diffDays = Math.floor(diffHours / 24);
   
-    const accessedDate = new Date(timestamp);
-    const now = new Date();
+//     if (diffSeconds < 60) return 'Just now';
+//     if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
+//     if (diffHours < 24) return `${diffHours} hours ago`;
     
-    let diffMs = now.getTime() - accessedDate.getTime();
-    let diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  
-    if (diffDays < 1) return 'Just now';
-  
-    let months = Math.floor(diffDays / 30);
-    let days = diffDays % 30;
-  
-    if (months > 0 && days > 0) return `${months} months ${days} days ago`;
-    if (months > 0) return `${months} months ago`;
-    return `${days} days ago`;
-  }
+//     let months = Math.floor(diffDays / 30);
+//     let days = diffDays % 30;
+
+//     if (months > 0 && days > 0) return `${months} months ${days} days ago`;
+//     if (months > 0) return `${months} months ago`;
+//     return `${diffDays} days ago`;
+// }
 
   toggleFilter() {
     this.showAdvancedFilter = !this.showAdvancedFilter;
@@ -258,16 +263,20 @@ export class TruckingCompaniesComponent implements OnInit {
     this.fetchCarriers(true);
   }
 
-  UTCDate(date: any) {
-    date = new Date(date + ' ' + 'UTC');
-    return date;
-  }
+  // UTCDate(date: any) {
+  //   date = new Date(date + ' ' + 'UTC');
+  //   return date;
+  // }
   formatDateForAPI(date: any): string {
     if (!date) return '';
     let d = new Date(date);
-    let month = ('0' + (d.getMonth() + 1)).slice(-2); // Ensure 2-digit month
-    let day = ('0' + d.getDate()).slice(-2); // Ensure 2-digit day
+    let month = ('0' + (d.getMonth() + 1)).slice(-2); 
+    let day = ('0' + d.getDate()).slice(-2); 
     let year = d.getFullYear();
-    return `${month}/${day}/${year}`; // Format: MM/DD/YYYY
+    return `${month}/${day}/${year}`; 
+  }
+
+  formatCompanyName(name: string): string {
+    return name ? name.replace(/\s+/g, '-') : '';
   }
 }

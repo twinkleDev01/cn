@@ -1,0 +1,103 @@
+<div class="content_box add_team_member">
+  <div class="contnt_hed mb-1">
+    <div class="ch_l">
+      <h3 class="ch_tlt">Add Team Member</h3>
+    </div>
+    <div class="ch_rl"></div>
+  </div>
+  
+  <div class="content_body">
+    <form class="cn_field">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="cn_input_lbl">First Name</p>      
+          <mat-form-field appearance="none">
+            <input matInput type="text" placeholder="Enter First Name" class="form-control cn_input" autocomplete="off"/>
+            <mat-error class="error_mess">First name is required.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <p class="cn_input_lbl">Last Name</p>      
+          <mat-form-field appearance="none">
+            <input matInput type="text" placeholder="Enter Last Name" class="form-control cn_input" autocomplete="off"/>
+            <mat-error class="error_mess">Last name is required.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <p class="cn_input_lbl">Email</p>      
+          <mat-form-field appearance="none">
+            <input matInput type="email" placeholder="Enter Email" class="form-control cn_input" autocomplete="off"/>
+            <mat-error class="error_mess">Email is required.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <p class="cn_input_lbl">Contact Number
+            <img src="https://carriernetwork.ai/images/country/US.png" width="20px">
+          </p>
+          <div class="country_code_dropdown">
+            <mat-form-field appearance="none" class="cn_inpt_drop">
+              <div class="country_code_fld">
+                <mat-select placeholder="Select Country Code" class="form-control custom_input">
+                  <mat-option>
+                    <img src="/assets/country/us.png" name="cla" class="flag_img">
+                    <span class="ms-1">+1</span>
+                  </mat-option>
+                  <mat-option>
+                    <img src="/assets/country/mx.png" name="cla" class="flag_img">
+                    <span class="ms-1">+52</span>
+                  </mat-option>
+                  <mat-option>
+                    <img src="/assets/country/ca.png" name="cla" class="flag_img">
+                    <span class="ms-1">+1</span>
+                  </mat-option>
+                </mat-select>
+              </div>
+            </mat-form-field>
+            <mat-form-field appearance="none">
+              <input matInput type="text" placeholder="Enter Contact Number" maxlength="10" class="form-control cn_input" autocomplete="off" />
+              <mat-error class="error_mess d_inline">Contact number is required.</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <p class="cn_input_lbl">Status</p>
+          <mat-radio-group appearance="none" class="cn_radio_btn">
+            <mat-radio-button [value]="true"> Active </mat-radio-button>
+            <mat-radio-button [value]="false"> In-active </mat-radio-button>
+            <!-- <mat-error class="error_mess">Please select one of these options.</mat-error> -->
+          </mat-radio-group>
+        </div>
+        <div class="col-md-12">
+          <p class="cn_input_lbl">Member permission</p>
+          <div class="cn_mlti_selct">
+            <mat-checkbox>Dashboard</mat-checkbox>
+            <mat-checkbox>Edit Profile</mat-checkbox>
+            <mat-checkbox>Browse History</mat-checkbox>
+            <mat-checkbox>Review</mat-checkbox>
+            <mat-checkbox>Digital Marketing</mat-checkbox>
+            <mat-checkbox>My Truck Availability</mat-checkbox>
+            <mat-checkbox>Search Brokers</mat-checkbox>
+            <mat-checkbox>Load Leads & Quotes</mat-checkbox>
+            <mat-checkbox>Performance Analytics</mat-checkbox>
+            <mat-checkbox>Calculator</mat-checkbox>
+            <mat-checkbox>Billing & Subscription</mat-checkbox>
+            <mat-checkbox>Team</mat-checkbox>
+            <mat-checkbox>Notification Preferences</mat-checkbox>
+            <mat-checkbox>Tell a Friend</mat-checkbox>
+            <mat-checkbox>Monitor Network</mat-checkbox>
+            <!-- <mat-error class="error_mess">Please select at least one of these options.</mat-error> -->
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form_action">
+            <button class="cn_btn">Add Member</button>
+          </div>
+        </div>
+
+
+
+
+      </div>
+    </form>
+  </div>
+</div>

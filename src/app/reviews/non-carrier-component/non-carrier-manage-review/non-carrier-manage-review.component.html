@@ -38,7 +38,7 @@
 					<img *ngIf="reviewData?.carrier?.profileImage" src="{{reviewData?.carrier?.profileImage}}" class="img-fluid">
 					<span class="initail" *ngIf="!reviewData?.carrier?.profileImage && reviewData?.carrier?.companyName">{{(reviewData?.carrier?.companyName) | acronymOfName}}</span>
 					<span class="initail" *ngIf="!reviewData?.carrier?.profileImage && !reviewData?.carrier?.companyName && reviewData?.carrier?.firstName && reviewData?.carrier?.lastName">{{getFullName(reviewData?.carrier?.firstName, reviewData?.carrier?.lastName) | acronymOfName}}</span>
-          <span class="user_type">Carrier</span>
+          <!-- <span class="user_type">Carrier</span> -->
 				</div>
 				<div class="rmb_body">
 					<div class="rmb_head_t">
@@ -192,7 +192,7 @@
 					<img *ngIf="reviewData?.broker?.profileImage" src="{{reviewData?.broker?.profileImage}}" class="img-fluid">
 					<span class="initail" *ngIf="!reviewData?.broker?.profileImage && reviewData?.broker?.companyName">{{(reviewData?.broker?.companyName) | acronymOfName}}</span>
 					<span class="initail" *ngIf="!reviewData?.broker?.profileImage && !reviewData?.broker?.companyName && reviewData?.broker?.firstName && reviewData?.broker?.lastName">{{getFullName(reviewData?.broker?.firstName, reviewData?.broker?.lastName) | acronymOfName}}</span>
-          <span class="user_type">Broker</span>
+          <!-- <span class="user_type">Broker</span> -->
 				</div>
 				<div class="rmb_body">
 					<div class="rmb_head_t">
@@ -225,8 +225,8 @@
 										<span class="dot_no_vlu">{{reviewData?.broker.dotNumber ? reviewData?.broker.dotNumber : '-'}}</span>
 									</div>
 									<div class="rmb_actn">
-										<button (click)="editReview(reviewData,reviewData?.id)" class="cn_btn edt_btn">Edit</button>
-										<button (click)="deleteReview(reviewData,i)" class="cn_btn remov_btn">Remove</button>
+										<button (click)="editReviewForBroker(reviewData,reviewData?.id)" class="cn_btn edt_btn">Edit</button>
+										<button (click)="deleteBrokerReview(reviewData,i)" class="cn_btn remov_btn">Remove</button>
 									</div>
 								</div>
 						</div>

@@ -4,16 +4,7 @@
       <div class="dcoh_l">
         <p class="dco_h_tlt">90 Days Profile Performance</p>
       </div>
-      <!-- <div class="dcoh_r cn_field">
-        <div class="ic_dropdown">
-          <mat-form-field appearance="none" class="cn_inpt_drop">
-            <mat-select [(ngModel)]="selectedChart" name="chartType">
-              <mat-option value="country">Top Country</mat-option>
-              <mat-option value="city">Top City</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div> -->
+      
     </div>
     
     <div class="dco_box">
@@ -25,19 +16,19 @@
                 <div class="lbl_1 w-100">
                   <div class="dco_bar">
                     <div class="bar_hed">
-                      <span class="bar_txt">Total Views </span> <span class="bar_vlu"> {{carrierContactAnalyticsData.totalViews}}</span>
+                      <span class="bar_txt">Total Views </span> <span class="bar_vlu"> {{carrierContactAnalyticsData?.totalViews}}</span>
                     </div>
                     <mat-progress-bar mode="determinate" [value]="totalViewsPercentage"></mat-progress-bar>
                   </div>
                   <div class="dco_bar">
                     <div class="bar_hed">
-                      <span class="bar_txt">Unique Visitors </span> <span class="bar_vlu"> {{carrierContactAnalyticsData.uniqueVisiter}}</span>
+                      <span class="bar_txt">Unique Visitors </span> <span class="bar_vlu"> {{carrierContactAnalyticsData?.uniqueVisiter}}</span>
                     </div>
                     <mat-progress-bar mode="determinate" [value]="uniqueVisitorsPercentage"></mat-progress-bar>
                   </div>
                   <div class="dco_bar">
                     <div class="bar_hed">
-                      <span class="bar_txt">Repeat Visitors </span> <span class="bar_vlu"> {{carrierContactAnalyticsData.totalRepeatCount}}</span>
+                      <span class="bar_txt">Repeat Visitors </span> <span class="bar_vlu"> {{carrierContactAnalyticsData?.totalRepeatCount}}</span>
                     </div>
                     <mat-progress-bar mode="determinate" [value]="repeatVisitorsPercentage"></mat-progress-bar>
                   </div>
@@ -82,29 +73,18 @@
                 </div>
                 <div class="chart_info" [ngClass]="{'d-none': selectedChart !== 'country'}">
                   <p class="cif_lbl">Top Country Viewers</p>
+                  
                   <ul>
-                    <li>
-                      <span class="chart_txt">In USA: 750 </span>
-                    </li>
-                    <li>
-                      <span class="chart_txt">In Canada: 150 </span>
-                    </li>
-                    <li>
-                      <span class="chart_txt">In Mexico: 100 </span>
+                    <li *ngFor="let item of carrierContactAnalyticsData?.topCountry | keyvalue">
+                      <span class="chart_txt">In {{ item.key }}: {{ item.value }} </span>
                     </li>
                   </ul>
                 </div>
                 <div class="chart_info" [ngClass]="{'d-none': selectedChart !== 'city'}">
                   <p class="cif_lbl">Top City Viewers</p>
                   <ul>
-                    <li>
-                      <span class="chart_txt">Los Angeles: 60 </span>
-                    </li>
-                    <li>
-                      <span class="chart_txt">New York: 20 </span>
-                    </li>
-                    <li>
-                      <span class="chart_txt">Toronto: 20 </span>
+                    <li *ngFor="let item of carrierContactAnalyticsData?.topCity | keyvalue">
+                      <span class="chart_txt">In {{ item.key }}: {{ item.value }} </span>
                     </li>
                   </ul>
                 </div>
@@ -124,27 +104,34 @@
             <div class="col-md-5">
               <div class="comn_fltr" [ngClass]="{'d-none': showAdvancedFilter}">
                 <mat-form-field appearance="none">
-                  <mat-label>Table Search</mat-label>
+                  <mat-label>Quick Search</mat-label>
                   <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
-                  <input type="text" matInput placeholder="Search" class="form-control cn_input ms-2">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="Search by User"
+                    class="form-control cn_input ms-2"
+                    [formControl]="searchControl"
+                    (keyup)="applyFilter()"
+                  />
                 </mat-form-field>
               </div>
             </div>
             <div class="col-md-7">
               <div class="btn_r">
-                <span class="cn_btn txt_btn">
-                  <i class="fa-solid fa-plus me-2"></i>
-                  <span>View All</span>
-                </span>
-                <span class="cn_btn txt_btn">
-                  <i class="fa-solid fa-plus me-2"></i>
-                  <span>Add</span>
-                </span>
-                <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
+                <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()"  [ngClass]="{
+                  'active-filter':
+                    filterForm?.value &&
+                    (filterForm.value.fromDate ||
+                      filterForm.value.toDate ||
+                      filterForm.value.postalCode ||
+                      filterForm.value.userType)
+                }"
+              >
                   <i class="fa-sharp fa-solid fa-filter"></i>
                   <!-- <i class="fa-duotone fa-solid fa-sliders"></i> -->
                 </span>
-                <span class="cn_btn icn_btn">
+                <span class="cn_btn icn_btn" (click)="refresh()">
                   <i class="fa-duotone fa-solid fa-rotate-right"></i>
                 </span>
               </div>
@@ -153,27 +140,32 @@
           <div class="filter_box" [ngClass]="{'d-none': !showAdvancedFilter}">
             <div class="filtr_con">
                 <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
+                <form class="cn_field" [formGroup]="filterForm">
                 <div class="row">
+                  
                   <div class="col-md-3">
-                    <mat-form-field>
+                    <mat-form-field   [ngClass]="{
+                      highlighted: filterForm.get('userType')?.value
+                    }">
                       <mat-label>User Type</mat-label>
-                      <mat-select>
-                        <mat-option value="carrier">Carrier</mat-option>
-                        <mat-option value="shipper">Shipper</mat-option>
-                        <mat-option value="broker">Broker</mat-option>
-                        <mat-option value="Dispature">Dispature</mat-option>
+                      <mat-select  formControlName="userType">
+                        <ng-container *ngFor="let data of uniqueUserTypes">
+                          <mat-option [value]="data">{{data}}</mat-option>
+                        </ng-container>
+                       
                       </mat-select>
                     </mat-form-field>
                   </div>
-                  <div class="col-md-3">
+                  
+                  <!-- <div class="col-md-3">
                     <mat-form-field>
                       <mat-label>Country</mat-label>
                       <mat-select>
                         <mat-option value="us">United State</mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </div>
-                  <div class="col-md-3">
+                  </div> -->
+                  <!-- <div class="col-md-3">
                     <mat-form-field>
                       <mat-label>State</mat-label>
                       <mat-select>
@@ -183,8 +175,8 @@
                         <mat-option value="california">California</mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </div>
-                  <div class="col-md-3">
+                  </div> -->
+                  <!-- <div class="col-md-3">
                     <mat-form-field>
                       <mat-label>City</mat-label>
                       <mat-select>
@@ -194,58 +186,55 @@
                         <mat-option value="bakersfield">Bakersfield</mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </div>
+                  </div> -->
                   <div class="col-md-3">
-                    <mat-form-field>
+                    <mat-form-field [ngClass]="{
+                      highlighted: filterForm.get('postalCode')?.value
+                    }">
                       <mat-label>Postal Code</mat-label>
-                      <input type="text" matInput placeholder="Search">
+                      <input type="text" matInput placeholder="Search" formControlName="postalCode">
                     </mat-form-field>
                   </div>
                   <div class="col-md-3">
-                    <mat-form-field>
-                      <mat-label>Page Viewed</mat-label>
-                      <input type="text" matInput placeholder="Search">
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-3">
-                    <mat-form-field class="date_range_filter">
-                      <mat-label>Accessed At</mat-label>
-                      <mat-date-range-input [rangePicker]="picker">
-                        <input matStartDate placeholder="Start date">
-                        <input matEndDate placeholder="End date">
-                      </mat-date-range-input>
-                      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                      <mat-date-range-picker #picker></mat-date-range-picker>
-                    </mat-form-field>
+                    <mat-form-field
+                    class="date_range_filter"
+                    [ngClass]="{
+                      highlighted:
+                        filterForm.get('fromDate')?.value ||
+                        filterForm.get('toDate')?.value
+                    }"
+                  >
+                    <mat-label>Enter a Accessed Date Range</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                      <input
+                        matStartDate
+                        placeholder="Start date"
+                        formControlName="fromDate"
+                      />
+                      <input
+                        matEndDate
+                        placeholder="End date"
+                        formControlName="toDate"
+                      />
+                    </mat-date-range-input>
+                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle
+                      matIconSuffix
+                      [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                  </mat-form-field>
                   </div>
                   <div class="col-md-3"></div>
-                  <div class="col-md-3">
-                    <p class="cn_input_lbl">Checkbox</p>
-                    <mat-checkbox class="me-3">Checked</mat-checkbox>
-                    <mat-checkbox class="">Indeterminate</mat-checkbox>
-                  </div>
-                  <div class="col-md-3">
-                    <p class="cn_input_lbl">Radio Button</p>
-                    <mat-radio-group>
-                      <mat-radio-button value="1" class="me-3">Option 1</mat-radio-button>
-                      <mat-radio-button value="2">Option 2</mat-radio-button>
-                    </mat-radio-group>
-                  </div>
-                  <div class="col-md-3">
-                    <p class="cn_input_lbl">Toggle</p>
-                    <mat-button-toggle-group class="toggle_switch" name="fontStyle" aria-label="Font Style">
-                      <mat-button-toggle value="yes">Yes</mat-button-toggle>
-                      <mat-button-toggle value="no">NO</mat-button-toggle>
-                    </mat-button-toggle-group>
-                  </div>
+              
                   <div class="col-md-12">
                     <div class="fltr_actn">
-                      <button class="cn_btn btn_bordered">Clear</button>
-                      <button class="cn_btn">Apply</button>
+                      <button class="cn_btn btn_bordered" (click)="resetFilters()">Clear</button>
+                      <button class="cn_btn" (click)="applyAdvancedFilter()">Apply</button>
                     </div>
                   </div>
                 </div>
+              </form>
             </div>
           </div>
         </div>
@@ -260,20 +249,27 @@
           <td mat-cell *matCellDef="let element">
             <div class="user_dtl sticky_boder">
               <div class="ud_l">
-                <i class="fa-duotone fa-solid fa-circle-user user_icon"></i>
-                <!-- <img src="/assets/images/tst_profile_img.png" class="img-fluid"> -->
-                <span class="user_Type">Carrier</span>
+                <img style="width: 50px;
+    border-radius: 60px;"
+                [src]="
+                  element.user?.profileImage ||
+                  './assets/images/profile.webp'
+                "
+                class="user_img"
+                alt="User Image"
+              />
+                <span class="user_Type">{{element.userType}}</span>
               </div>
               <div class="ud_r">
                 <div class="name_icn">
-                  <a href="#" class="u_name">{{element.name}}</a>
-                  <i class="fa-duotone fa-badge-check verify_icon" matTooltip="Account not Verified"></i>
-                  <!-- <i class="fa-duotone fa-badge-check verify_icon user_verified" matTooltip="Account Verified"></i> -->
+                  <a class="u_name">{{element?.user?.companyName}}</a>
+                  <i *ngIf="!element?.user?.id" class="fa-duotone fa-badge-check verify_icon" matTooltip="Account not Verified"></i>
+                  <i *ngIf="element?.user?.id" class="fa-duotone fa-badge-check verify_icon user_verified" matTooltip="Account Verified"></i>
                 </div>
                 <div class="loca_rtng">
-                  <span class="user_rtng" matTooltip="Total 10 Reviews">4.5 <i class="fa-solid fa-star"></i> </span>
-                  <!-- <span class="user_rtng zero_rating" matTooltip="0 Review">0.0 <i class="fa-solid fa-star"></i> </span> -->
-                  <span class="u_loca">Jacksonville, FL</span>
+                  <span class="user_rtng" *ngIf="element?.user?.averageRatingValue && element?.user?.averageRatingValue!=0" matTooltip="{{element?.user?.averageRatingValue}} rating">{{element?.user?.averageRatingValue}} <i class="fa-solid fa-star"></i> </span>
+                  <span class="user_rtng zero_rating" *ngIf="element?.user?.averageRatingValue==0" matTooltip="{{element?.user?.averageRatingValue}} rating">0.0 <i class="fa-solid fa-star"></i> </span>
+                  <span class="u_loca">{{element?.user?.city}}</span>
                 </div>
               </div>
             </div>
@@ -282,10 +278,35 @@
         <ng-container matColumnDef="pageSource">
           <th mat-header-cell *matHeaderCellDef> Page Source </th>
           <td mat-cell *matCellDef="let element">
-            <a href="https://carriernetwork.ai/carrier-profile/3900988/jax-logistics-llc" class="txt_lnk" target="_blank">{{element.pageSource}}</a>
-          </td>
-          <td mat-cell *matCellDef="let element">
-            <a href="https://carriernetwork.ai/carrier-profile/3900988/jax-logistics-llc" class="txt_lnk" target="_blank">Broker detail</a>
+            <a
+              *ngIf="element.url"
+              [href]="apiUrl + element.url"
+              class="txt_lnk"
+              target="_blank"
+            >
+              <span class="impression-type">{{ element.contactType }}</span>
+              <span class="svg-container">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-box-arrow-up-right"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"
+                  />
+                </svg>
+              </span>
+            </a>
+
+            <span *ngIf="!element.url">{{ element.contactType }}</span>
           </td>
         </ng-container>
         <ng-container matColumnDef="location">
@@ -299,9 +320,7 @@
           <th mat-header-cell *matHeaderCellDef> Platform </th>
           <td mat-cell *matCellDef="let element">
             <div class="comn_icn">
-              <i class="fa-regular {{element.platform}} platform_in" matTooltip="Desktop Device"></i>
-              <!-- <i class="fa-regular fa-tablet platform_in"></i>
-              <i class="fa-regular fa-mobile platform_in"></i> -->
+              <i class="fa-regular {{getDeviceIcon(element.platform)}} platform_in" matTooltip="Desktop Device"></i>
             </div>
           </td>
         </ng-container>
@@ -309,12 +328,7 @@
           <th mat-header-cell *matHeaderCellDef> OS </th>
           <td mat-cell *matCellDef="let element">
             <div class="comn_icn">
-              <img src="{{element.os}}" matTooltip="Windows Operating System">
-              <!-- <img src="/assets/images/android.png">
-              <img src="/assets/images/ios.png"> -->
-              <!-- <i class="fa-brands fa-apple os_icn"></i>
-              <i class="fa-brands fa-linux os_icn"></i>
-              <i class="fa-brands fa-ubuntu os_icn"></i> -->
+              <img src="{{getOSImage(element.osPlatform)}}" matTooltip="Windows Operating System">
             </div>
           </td>
         </ng-container>
@@ -322,21 +336,25 @@
           <th mat-header-cell *matHeaderCellDef> Browser </th>
           <td mat-cell *matCellDef="let element">
             <div class="comn_icn">
-              <img src="{{element.browser}}" matTooltip="Chrome Browser">
+              <img src="{{getBrowserImage(element.browser)}}" matTooltip="Chrome Browser">
+              <!-- <p>{{getBrowserImage(element.browser)}}</p> -->
             </div>
           </td>
         </ng-container>
         <ng-container matColumnDef="accessedAt">
           <th mat-header-cell *matHeaderCellDef> Accessed At </th>
-          <td mat-cell *matCellDef="let element">{{element.accessedAt}}</td>
+          <td mat-cell *matCellDef="let element">{{formatDate(UTCDate(element?.createdAt))   }}</td>
         </ng-container>
         <ng-container matColumnDef="timeSinceAccess">
           <th mat-header-cell *matHeaderCellDef class="time_since"> Time Since Access </th>
-          <td mat-cell *matCellDef="let element">{{element.timeSinceAccess}}</td>
+          <td mat-cell *matCellDef="let element">{{ calculateTimeSince(element.createdAt) }}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
+      <div class="text-center my-5" *ngIf="showScrollSpinner">
+        <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+</div>
     </div>
   </div>
 </div>

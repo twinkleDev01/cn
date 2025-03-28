@@ -58,11 +58,30 @@
             <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
             <div class="row">
               <!-- <div class="col-md-3">
-                    <mat-form-field>
-                      <mat-label>Profile Rank</mat-label>
-                      <input type="text" matInput placeholder="Profile Rank" formControlName="position">
-                    </mat-form-field>
-                  </div> -->
+                <mat-form-field  [ngClass]="{'highlighted': filterForm.get('position')?.value}">
+                  <mat-label>Profile Rank </mat-label>
+                  <mat-select formControlName="position">
+                    <ng-container *ngFor="let position of uniquePositions">
+                      <mat-option [value]="position">{{position}}</mat-option>
+                    </ng-container>
+                  </mat-select>
+                </mat-form-field>
+                </div> -->
+                <!-- <div class="col-md-3">
+                  <mat-form-field
+                    [ngClass]="{
+                      highlighted: filterForm.get('position')?.value
+                    }"
+                  >
+                    <mat-label>Profile Rank</mat-label>
+                    <input
+                      type="text"
+                      matInput
+                      placeholder="Enter Profile Rank"
+                      formControlName="position"
+                    />
+                  </mat-form-field>
+                </div> -->
               <div class="col-md-3">
                 <mat-form-field
                   class="date_range_filter"
@@ -114,7 +133,7 @@
                     highlighted: filterForm.get('impressionType')?.value
                   }"
                 >
-                  <mat-label>Impression Type</mat-label>
+                  <mat-label>Page Source</mat-label>
                   <mat-select formControlName="impressionType">
                     <mat-option value="broker-list">broker-list</mat-option>
                     <mat-option value="broker-detail">broker-detail</mat-option>
@@ -152,7 +171,6 @@
             <div class="user_dtl sticky_boder">
               <div class="ud_l">
                 <div class="user_img_container">
-                  <!-- <img *ngIf="element.user?.profileImage; else defaultIcon"  -->
                   <img
                     [src]="
                       element.broker?.profileImage ||
@@ -162,36 +180,33 @@
                     alt="User Image"
                   />
                 </div>
-                <!-- <ng-template #defaultIcon>
-                    <i class="fa-duotone fa-solid fa-circle-user user_icon"></i>
-                  </ng-template> -->
-                <span class="user_Type">{{ element.userType }}</span>
+                <!-- <span class="user_Type">{{ element.userType }}</span> -->
               </div>
 
               <div class="ud_r">
-                <div class="name_icn">
-                  <a href="#" class="u_name">{{
-                    element.broker?.companyName
-                  }}</a>
+                <div class="name_icn" *ngIf="element.broker?.companyName">
+                  <a [href]="'/freight-brokerage/' + element.broker?.dotNumber + '/' + formatCompanyName(element.broker?.companyName)" class="u_name"  target="_blank">
+                    {{ element.broker?.companyName }}
+                  </a>            
                   <i
                     class="fa-duotone fa-badge-check verify_icon"
-                    matTooltip="Account not Verified"
+                    [matTooltip]="element.broker?.userId ? 'Account Verified' : 'Account not Verified'"
+                    [ngClass]="{'blue-icon': element.broker?.userId, 'gray-icon': !element.broker?.userId}"
                   ></i>
-                  <!-- <i class="fa-duotone fa-badge-check verify_icon user_verified" matTooltip="Account Verified"></i> -->
                 </div>
                 <div class="loca_rtng">
-                  <span class="user_rtng" matTooltip="Total 10 Reviews"
+                  <span *ngIf="element.broker?.companyName" class="user_rtng" matTooltip="Total 10 Reviews"
                     >{{ element.broker?.averageRatingValue.toFixed(1) || 0 }}
                     <i class="fa-solid fa-star"></i>
                   </span>
-                  <!-- <span class="user_rtng zero_rating" matTooltip="0 Review">0.0 <i class="fa-solid fa-star"></i> </span> -->
-                  <!-- <span class="u_loca">Jacksonville, FL</span> -->
-                  {{
-                    (element.broker?.phyCity
-                      ? (element.broker.phyCity | titlecase) + ", "
-                      : "") + (element.broker?.phyStateCode || element.title)
-                  }}
-                  <!-- {{ (element.broker?.phyCity ? (element.broker.phyStateCode | titlecase) + ', ' : '') + (element.broker?.phyStateCode || 'Unknown Location') }} -->
+                  <span>
+                    {{
+                      (element.broker?.phyCity || element.broker?.phyStateCode)
+                        ? ((element.broker?.phyCity ? (element.broker.phyCity | titlecase) + ", " : "") + 
+                           (element.broker?.phyStateCode ? (element.broker.phyStateCode | titlecase) + ", " : "")).slice(0, -2)
+                        : (element.title || '')
+                    }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -202,7 +217,7 @@
           <td mat-cell *matCellDef="let element">
             <a
               *ngIf="element.url"
-              [href]="apiUrl + element.url"
+              [href]="element.url"
               class="txt_lnk"
               target="_blank"
             >
@@ -232,9 +247,6 @@
 
             <span *ngIf="!element.url">{{ element.impressionType }}</span>
           </td>
-          <!-- <td mat-cell *matCellDef="let element">
-              <a href="https://carriernetwork.ai/carrier-profile/3900988/jax-logistics-llc" class="txt_lnk" target="_blank">Broker detail</a>
-            </td> -->
         </ng-container>
         <ng-container matColumnDef="profileRank">
           <th mat-header-cell *matHeaderCellDef class="text-center">
@@ -249,22 +261,11 @@
             {{ element.position }}
           </td>
         </ng-container>
-        <!-- <ng-container matColumnDef="location">
-            <th mat-header-cell *matHeaderCellDef class="loca_w mob_txt_cntr"> Location </th>
-            <td mat-cell *matCellDef="let element" class="mob_txt_cntr">
-              <img
-              *ngIf="getCountryFlag(element?.broker?.phyCountryCode)"
-              [src]="getCountryFlag(element?.broker?.phyCountryCode)"
-              class="flag-icon"
-              alt="Country Flag"
-              matTooltip="{{ element?.broker?.phyCountryCode }}">
-              {{element.location}}
-            </td>
-          </ng-container> -->
         <ng-container matColumnDef="accessedAt">
           <th mat-header-cell *matHeaderCellDef>Accessed At</th>
           <td mat-cell *matCellDef="let element">
-            {{ UTCDate(element?.createdAt) | date : "dd MMM, yyyy hh:mm a" }}
+            <!-- {{ UTCDate(element?.createdAt) | date : "dd MMM, yyyy hh:mm a" }} -->
+            {{ element?.createdAt | utcDate | date: 'MMM dd, yyyy hh:mm a' }}
           </td>
         </ng-container>
         <ng-container matColumnDef="timeSinceAccess">
@@ -272,7 +273,8 @@
             Time Since Access
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ calculateTimeSince(element.createdAt) }}
+            <!-- {{ calculateTimeSince(element.createdAt) }} -->
+            {{ element.createdAt | timeAgo }}
           </td>
         </ng-container>
         <ng-container matColumnDef="rowAction">
@@ -303,6 +305,15 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
+              <!-- 🔄 Loader for infinite scroll -->
+  <div class="text-center mt-3" *ngIf="spinnerLoader">
+    <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+  </div>
     </div>
   </div>
+  
+</div>
+<!-- 📭 No data template -->
+<div class="text-center my-4" *ngIf="noDataFound && !spinnerLoader">
+  <p class="txt_2 fw_6">No records found</p>
 </div>

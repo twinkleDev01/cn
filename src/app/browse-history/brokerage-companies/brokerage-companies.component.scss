@@ -60,4 +60,21 @@
   .adv_filter_btn.active-filter {
     background: #0fc00f;
     }
-  
+    .spinner-border {
+      display: inline-block;
+      width: 21px;
+      height: 21px;
+      vertical-align: -0.125em;
+      border: 2px solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: 0.75s linear infinite spinner-border;
+      margin: 2px 0 0 6px;
+    }
+    .blue-icon {
+      color: blue;
+    }
+    
+    .gray-icon {
+      color: gray;
+    }

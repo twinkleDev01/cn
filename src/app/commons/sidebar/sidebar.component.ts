@@ -116,6 +116,9 @@ export class SidebarComponent implements OnInit {
           else if (event.url.includes('/my-truck-availability')) {
             this.activeSubTab = 'my-truck-availability';
           }
+          else if (event.url.includes('/truck-on-demand')) {
+            this.activeSubTab = 'truck-on-demand';
+          }
           else if (event.url.includes('performance-analytics/profile')) {
             this.activeSubTab = 'profileAnalytics';
           }

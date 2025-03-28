@@ -1610,5 +1610,23 @@
 </div>
 
 
+<!-- add another certificate popup -->
+<div class="cn_popup_box" *ngIf="data?.openPop =='deleteMember'">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Remove Member</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_v_scroll">
+    <div class="cn_popup_body">
+      <p class="cn_input_lbl my-4 text-center">Are you sure you want to remove this member?</p>
+    </div>
+  </div>
+  <div class="cn_popup_footer">
+    <div class="cn_f_acn" style="justify-content: end;">
+      <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
+      <button type="button" class="cn_btn" (click)="onNoClick()">Remove</button>
+    </div>
+  </div>
+</div>
 
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>
+<ngx-loading [show]="loading" [config]="{ fullScreenBackdrop:true }"></ngx-loading>

@@ -62,6 +62,11 @@ export const appRoutes: Routes = [
   {
     path: '',canActivate : [AuthGuard],
     loadChildren: () =>
+      import('./team/team.module').then((mod) => mod.TeamModule),
+  },
+  {
+    path: '',canActivate : [AuthGuard],
+    loadChildren: () =>
       import('./load-quote/load-quote.module').then((mod) => mod.LoadQuoteModule),
   },
   

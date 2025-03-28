@@ -8,13 +8,17 @@ import { BrokerageCompaniesComponent } from './brokerage-companies/brokerage-com
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CustomDatePipe } from '../commons/pipe/date.pipe';
+import { TimeAgoPipe } from '../commons/pipe/time-ago.pipe';
+import { UtcDatePipe } from '../commons/pipe/utc-date.pipe';
 
 
 @NgModule({
   declarations: [
     TruckingCompaniesComponent,
     BrokerageCompaniesComponent,
-    CustomDatePipe
+    CustomDatePipe,
+    TimeAgoPipe,
+    UtcDatePipe,
   ],
   imports: [
     MaterialModule,

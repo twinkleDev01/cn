@@ -46,23 +46,32 @@ export class AppSettings {
        BROKERUPDATE: 'broker/update',
        DISPATCHERUPDATE: 'dispatcher/update',   
     },
-    // RECENTVIEW: {
-    //   NONCARRIERRECETVIEW : 'non-carrier-recent-view/list',
-    //   CARRIERRECETVIEW : 'recently-viewed/carrier',
-    //   BROKERVIEW : 'recently-viewed/broker'
-    // },
     RECENTVIEW: {
       NONCARRIERRECETVIEW : 'non-carrier-recent-view/list',
       CARRIERRECETVIEW : 'recently-viewed/carrier',
       BROKERVIEW : 'recently-viewed/broker',
-      CARRIERPROFILEANALYTICSVIEW: 'recent-view/carrier-profile-analitics',
-      CARRIERCONTACTANALYTICSVIEW:'recent-view/carrier-contact-analitics'
+
+    // Contact lead
+    BROKERCONTACTLIST:'recent-view/broker-contact-list',
+    CARRIERCONTACTLIST:'recent-view/carrier-contact-list',
+
+    BROKERCONTACTANALITICS:'recent-view/broker-contact-analitics',
+    CARRIERCONTACTANALITICS:'recent-view/carrier-contact-analitics',
+
+    // Profile Analytics
+    BROKERLIST:'recent-view/broker-list',
+    CARRIERLIST:'recent-view/carrier-list',
+
+    BROKERPROFILEANALITICS:'recent-view/broker-profile-analitics',
+    CARRIERPROFILEANALYTICS:'recent-view/carrier-profile-analitics'
+
+     
     },
     PAYMENT:{
       SUBSCRIPTION:'subscription/buy-business-plan',   
     },
     REVIEW: {
-      ADDREVIEW : 'carrier/review/invite-for-review',
+      ADDREVIEW : 'review/invite/add',
       REVIEWSUMMARY : 'carrier/review/summary',
       REVIEWLIST : 'carrier/review/list',
       REVIEWADD : 'carrier/review/add',
@@ -77,9 +86,9 @@ export class AppSettings {
       INVITEAI:'ai/generate-invite-review',
       AIRESPOND:'ai/generate-review-respond',
       RESPONDREVIEW:'carrier/review/respond/add',
-      PENDINGREVIEWINVITATIONLIST:'carrier/review/pending-review-invitation/list',
-      PENDINGREVIEWINVITATIONDELETE:'carrier/review/pending-review-invitation/delete',
-      PENDINGREVIEWINVITATIONRESEND:'carrier/review/resend',
+      PENDINGREVIEWINVITATIONLIST:'review/invite/list',
+      PENDINGREVIEWINVITATIONDELETE:'review/invite/delete',
+      PENDINGREVIEWINVITATIONRESEND:'review/invite/resend',
       REVIEWINVITATIONLIST:'carrier/review/invite-review/list',
       FEATUREDREVIEW:'carrier-broker/review/featured/add',
       

@@ -50,3 +50,29 @@
     .bar_crt_box .col-md-8 { width: 100%; margin: 1rem 0 0; }
     .bar_crt_box .col-md-4 { width: 100%; margin: 0; }
 }
+.txt_lnk {
+    position: relative;
+    text-decoration: none;
+    color: #007bff;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .svg-container {
+    display: none;         
+    margin-left: 5px;         
+  }
+  
+  .txt_lnk:hover .svg-container {
+    display: inline;         
+  }
+  .adv_filter_btn.active-filter {
+    background: #0fc00f;
+    }
+    .spinner-border { display: inline-block; width: 21px; height: 21px; vertical-align: -0.125em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: 0.75s linear infinite spinner-border; margin: 2px 0 0 6px; }
+
+    ::ng-deep mat-form-field.highlighted .mat-form-field-infix {
+        border: 2px solid #007bff !important; 
+        background-color: #e7f1ff !important;
+        transition: all 0.3s ease-in-out;         
+      }

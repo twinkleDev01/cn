@@ -60,7 +60,7 @@
           <div class="form_box">
             <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
             <div class="row">
-              <!-- <div class="col-md-3">
+               <!-- <div class="col-md-3">
                     <mat-form-field  [ngClass]="{'highlighted': filterForm.get('position')?.value}">
                       <mat-label>Profile Rank </mat-label>
                       <mat-select formControlName="position">
@@ -69,6 +69,21 @@
                         </ng-container>
                       </mat-select>
                     </mat-form-field>
+                    </div> -->
+                    <!-- <div class="col-md-3">
+                      <mat-form-field
+                        [ngClass]="{
+                          highlighted: filterForm.get('position')?.value
+                        }"
+                      >
+                        <mat-label>Profile Rank</mat-label>
+                        <input
+                          type="text"
+                          matInput
+                          placeholder="Enter Profile Rank"
+                          formControlName="position"
+                        />
+                      </mat-form-field>
                     </div> -->
               <div class="col-md-3">
                 <mat-form-field
@@ -100,17 +115,6 @@
                   <mat-date-range-picker #picker></mat-date-range-picker>
                 </mat-form-field>
               </div>
-              <!-- <div class="col-md-3">
-                  <mat-form-field>
-                    <mat-label>User Type</mat-label>
-                    <mat-select formControlName="selectedUserType">
-                      <mat-option value="carrier">Carrier</mat-option>
-                      <mat-option value="shipper">Shipper</mat-option>
-                      <mat-option value="broker">Broker</mat-option>
-                      <mat-option value="Dispature">Dispature</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div> -->
               <div class="col-md-3">
                 <mat-form-field
                   [ngClass]="{
@@ -132,7 +136,7 @@
                     highlighted: filterForm.get('impressionType')?.value
                   }"
                 >
-                  <mat-label>Impression Type</mat-label>
+                  <mat-label>Page Source</mat-label>
                   <mat-select formControlName="impressionType">
                     <mat-option value="carrier-list">carrier-list</mat-option>
                     <mat-option value="carrier-detail"
@@ -141,23 +145,12 @@
                     <mat-option value="carrier-insurance-history"
                       >carrier-insurance-history</mat-option
                     >
-                    <!-- <mat-option value="broker-authority-history">broker-authority-history</mat-option> -->
+                    <mat-option value="carrier-authority-history"
+                    >carrier-authority-history</mat-option
+                  >
                   </mat-select>
                 </mat-form-field>
               </div>
-              <!-- <div class="col-md-3">
-                  <mat-form-field  [ngClass]="{'highlighted': filterForm.get('location')?.value}">
-                    <mat-label>Location</mat-label>
-                    <input type="text" matInput placeholder="Enter Location" formControlName="location">
-                  </mat-form-field>
-                </div> -->
-              <!-- <div class="col-md-3">
-                  <p class="cn_input_lbl">Viewed Profile</p>
-                  <mat-button-toggle-group class="toggle_switch" name="fontStyle" aria-label="Font Style" formControlName="toggleControl">
-                    <mat-button-toggle value="true">Yes</mat-button-toggle>
-                    <mat-button-toggle value="false">NO</mat-button-toggle>
-                  </mat-button-toggle-group>
-                </div> -->
               <div class="col-md-12">
                 <div class="fltr_actn">
                   <button class="cn_btn btn_bordered" (click)="resetFilters()">
@@ -184,7 +177,6 @@
             <div class="user_dtl sticky_boder">
               <div class="ud_l">
                 <div class="user_img_container">
-                  <!-- <img *ngIf="element.user?.profileImage; else defaultIcon"  -->
                   <img
                     [src]="
                       element.carrier?.profileImage ||
@@ -194,32 +186,55 @@
                     alt="User Image"
                   />
                 </div>
-                <!-- <ng-template #defaultIcon>
-                  <i class="fa-duotone fa-solid fa-circle-user user_icon"></i>
-                </ng-template> -->
-                <span class="user_Type">{{ element.userType }}</span>
+                <!-- <span class="user_Type">{{ element.userType }}</span> -->
               </div>
               <div class="ud_r">
-                <div class="name_icn">
-                  <a href="#" class="u_name">{{
+                <!-- <div class="name_icn">
+                  <a [href]="apiUrl + '/carrier-profile/' + element.carrier?.dotNumber + '/' + formatCompanyName(element.carrier?.companyName)" class="u_name"  target="_blank">
+                    {{
                     element.carrier?.companyName
                   }}</a>
                   <i
                     class="fa-duotone fa-badge-check verify_icon"
                     matTooltip="Account not Verified"
                   ></i>
+                </div> -->
+                <div class="name_icn" *ngIf="element.carrier?.companyName">
+                  <a 
+                    [href]="'/carrier-profile/' + element.carrier?.dotNumber + '/' + formatCompanyName(element.carrier?.companyName)" 
+                    class="u_name"  
+                    target="_blank">
+                    {{ element.carrier?.companyName }}
+                  </a>
+                  <i
+                    class="fa-duotone fa-badge-check verify_icon"
+                    [matTooltip]="element.carrier?.userId ? 'Account Verified' : 'Account not Verified'"
+                    [ngClass]="{'blue-icon': element.carrier?.userId, 'gray-icon': !element.carrier?.userId}"
+                  ></i>
                 </div>
+                
+                
+                
                 <div class="loca_rtng">
-                  <span class="user_rtng" matTooltip="Total 10 Reviews"
+                  <span *ngIf="element.carrier?.companyName" class="user_rtng" matTooltip="Total 10 Reviews"
                     >{{ element.carrier?.averageRatingValue.toFixed(1) || 0 }}
 
                     <i class="fa-solid fa-star"></i>
                   </span>
-                  {{
+                  <!-- {{
                     (element.carrier?.city
-                      ? (element.carrier.city | titlecase) + ", "
-                      : "") + (element.carrier?.state || "Unknown Location")
-                  }}
+                      ? (element.carrier.phyCity | titleCase) + ", "
+                      : "") + (element.carrier?.phyStateCode | titleCase)
+                  }} -->
+                  <span>
+                    {{
+                      (element.carrier?.phyCity || element.carrier?.phyStateCode)
+                        ? ((element.carrier?.phyCity ? (element.carrier.phyCity | titlecase) + ", " : "") + 
+                           (element.carrier?.phyStateCode ? (element.carrier.phyStateCode | titlecase) + ", " : "")).slice(0, -2)
+                        : (element.title || '')
+                    }}
+                  </span>
+                  
                 </div>
               </div>
             </div>
@@ -231,7 +246,7 @@
           <td mat-cell *matCellDef="let element">
             <a
               *ngIf="element.url"
-              [href]="apiUrl + element.url"
+              [href]="element.url"
               class="txt_lnk"
               target="_blank"
             >
@@ -274,27 +289,20 @@
             {{ element.position }}
           </td>
         </ng-container>
-        <!-- Location -->
-        <!-- <ng-container matColumnDef="location">
-          <th mat-header-cell *matHeaderCellDef class="loca_w mob_txt_cntr"> Location </th>
-          <td mat-cell *matCellDef="let element" class="mob_txt_cntr">
-            <img src="/assets/country/us.png" class="flaf_icn">
-            {{element.location}}
-          </td>
-        </ng-container> -->
         <!-- createdAt -->
         <ng-container matColumnDef="accessedAt">
           <th mat-header-cell *matHeaderCellDef>Accessed At</th>
-          <!-- <td mat-cell *matCellDef="let element">{{UTCDate(element?.createdAt) | date: 'MMM dd, yyyy HH:mm'}}</td> -->
           <td mat-cell *matCellDef="let element">
-            {{ UTCDate(element?.createdAt) | date : "dd MMM, yyyy hh:mm a" }}
+            {{ element?.createdAt | utcDate | date: 'MMM dd, yyyy hh:mm a' }}
           </td>
         </ng-container>
         <!-- TimeSinceAccess -->
         <ng-container matColumnDef="timeSinceAccess">
           <th mat-header-cell *matHeaderCellDef>Time Since Access</th>
           <td mat-cell *matCellDef="let element">
-            {{ calculateTimeSince(element.createdAt) }}
+            <!-- {{ calculateTimeSince(element.createdAt) }} -->
+            {{ element.createdAt | timeAgo }}
+
           </td>
         </ng-container>
         <!-- Action -->
@@ -326,6 +334,14 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
+        <!-- 🔄 Loader for infinite scroll -->
+  <div class="text-center mt-3" *ngIf="spinnerLoader">
+    <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+  </div>
     </div>
   </div>
+</div>
+<!-- 📭 No data template -->
+<div class="text-center my-4" *ngIf="noDataFound && !spinnerLoader">
+  <p class="txt_2 fw_6">No records found</p>
 </div>

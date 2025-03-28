@@ -1,14 +1,15 @@
-<div class="note_saved_container">
-  <div class="lable_field" *ngIf="!skeletonLoader">
-    <p class="edt_pg_tlt">
-      <span>Review Invitation ({{totalRecords ? totalRecords : '0'}})</span>
+<div class="content_box">
+	<div class="contnt_hed mb-1">
+	  <div class="ch_l">
+		  <h3 class="ch_tlt">Review Invitation ({{totalRecords ? totalRecords : '0'}})</h3>
+	  </div>
+	  <div class="ch_rl"></div>
+	</div>
+  <div class="content_body" *ngIf="!skeletonLoader">
+    <p class="content_dis"> 
+      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus, laudantium harum eos a veritatis ex cumque sapiente obcaecati molestias suscipit sed dolor velit earum. Qui quae vero molestias nihil porro?
     </p>
-    <p class="lable_vlu">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus, laudantium harum eos a
-      veritatis ex cumque sapiente obcaecati molestias suscipit sed dolor velit earum. Qui quae vero molestias nihil
-      porro?</p>
-  </div>
 
-  <div class="trrb_form_box" *ngIf="!skeletonLoader">
     <div class="cslc_box" *ngFor="let reviewInvitationData of reviewInvitationList; let i=index;">
       <div class="cslc_crd">
         <div class="cslc_crd_l">
@@ -23,115 +24,68 @@
           <div class="cslc_crd_lr">
             <div class="cslc_nm">
               <span class="txt_ellipsis" matTooltip="{{reviewInvitationData?.compnayName}} ">{{reviewInvitationData?.compnayName}} </span>
-
             </div>
-            <div class="cslc_locatn">
-              <span *ngIf="!isAddressEmpty(reviewInvitationData?.phyCity, reviewInvitationData?.phyStateCode, eviewInvitationData?.phyZipShort)">
-                <mat-icon class="material-icon">location_on</mat-icon>
-                <span> {{ getFormattedAddress(reviewInvitationData?.phyCity, reviewInvitationData?.phyStateCode, reviewInvitationData?.phyZipShort) }}
-                </span>
+            <div class="crd_row_info">
+              <span class="user_rtng">
+                <span>{{reviewInvitationData?.averageRatingValue ? reviewInvitationData?.averageRatingValue : '0'}}.0</span>
+                <i class="fa-solid fa-star"></i>
               </span>
-              <span  *ngIf="isAddressEmpty(reviewInvitationData?.phyCity, reviewInvitationData?.phyStateCode, eviewInvitationData?.phyZipShort)">-</span>
+              <a href="https://carriernetwork.ai/carrier-profile/{{reviewInvitationData?.dotNumber}}/{{reviewInvitationData?.companyName}}/#review" target="_blank" (click)="redirectPageCarrier(reviewInvitationData?.dotNumber,reviewInvitationData?.compnayName)" class="totl_review">
+                {{reviewInvitationData?.averageRatingValue ? reviewInvitationData?.averageRatingValue : '0'}} 
+                <span>Review<span *ngIf="reviewInvitationData?.averageRatingValue > 1">s</span></span> 
+              </a>
+              <span class="boder_sapration">
+                <span class="fw_4 txt_lb" *ngIf="!isAddressEmpty(reviewInvitationData?.phyCity, reviewInvitationData?.phyStateCode, eviewInvitationData?.phyZipShort)"> 
+                  {{ getFormattedAddress(reviewInvitationData?.phyCity, reviewInvitationData?.phyStateCode, reviewInvitationData?.phyZipShort) }}
+                </span>
+                <span *ngIf="isAddressEmpty(reviewInvitationData?.phyCity, reviewInvitationData?.phyStateCode, eviewInvitationData?.phyZipShort)" class="fw_4 txt_lb">-</span>
+              </span>
+              <span class="fw_4 txt_lb boder_sapration"> {{UTCDate(reviewInvitationData?.invitationDate) | date: 'MMM dd, yyyy'}}</span>
             </div>
-            <div class="cslc_dot_active">
+            <div class="crd_row_info">
               <p class="cslc_dot">
-                <b>DOT #: </b>
-                <span>{{reviewInvitationData?.dotNumber ? reviewInvitationData?.dotNumber : '-'}}</span>
+                <b class="fw_4 txt_lb">DOT #: </b>
+                <span class="txt_b"> {{reviewInvitationData?.dotNumber ? reviewInvitationData?.dotNumber : '-'}}</span>
               </p>
-              <span class="cslc_sapration"> | </span>
-              <p class="cslc_dot">
-                <b>Docket: </b>
-                <span>{{reviewInvitationData?.dunsNumber ? reviewInvitationData?.dunsNumber : '-'}}</span>
+              <p class="cslc_dot boder_sapration">
+                <b class="fw_4 txt_lb">Docket: </b>
+                <span class="txt_b"> {{reviewInvitationData?.dunsNumber ? reviewInvitationData?.dunsNumber : '-'}}</span>
               </p>
-              <span class="cslc_sapration"> | </span>
-              <p class="cslc_dot">
-                <b>Name: </b>
-                <span>{{reviewInvitationData?.fullName ? reviewInvitationData?.fullName : '-'}}</span>
+              <p class="cslc_dot boder_sapration">
+                <b class="fw_4 txt_lb">Name: </b>
+                <span class="txt_b"> {{reviewInvitationData?.fullName ? reviewInvitationData?.fullName : '-'}}</span>
               </p>
             </div>
           </div>
         </div>
-        <div class="cslc_crd_r review_invitation_rev">
-          <div class="cslc_reviw">
-            <p class="avrg_rtng">{{reviewInvitationData?.averageRatingValue ? reviewInvitationData?.averageRatingValue :
-              '0'}}</p>
-            <app-review-show
-              [averageRating]="reviewInvitationData?.averageRatingValue ? reviewInvitationData?.averageRatingValue : '0'"></app-review-show>
-            <div class="reviws">
-              <a href="https://carriernetwork.ai/carrier-profile/{{reviewInvitationData?.dotNumber}}/{{reviewInvitationData?.companyName}}/#review"
-                target="_blank"
-                (click)="redirectPageCarrier(reviewInvitationData?.dotNumber,reviewInvitationData?.compnayName)">{{reviewInvitationData?.averageRatingValue
-                ? reviewInvitationData?.averageRatingValue : '0'}} <span>Review<span
-                    *ngIf="reviewInvitationData?.averageRatingValue > 1">s</span></span> </a>
-            </div>
-          </div>
+        <div class="cslc_crd_r">
+          <!-- <app-review-show [averageRating]="reviewInvitationData?.averageRatingValue ? reviewInvitationData?.averageRatingValue : '0'"></app-review-show> -->
+          <button class="cn_btn web_cn_btn" (click)="redirectPageCity(reviewInvitationData)">Write a Review</button>
         </div>
       </div>
-      <div class="note_box">
-        <div class="nb_t">
-          <span class="note_mess">{{reviewInvitationData?.invitationMessage ? reviewInvitationData?.invitationMessage :
-            '-'}}</span>
-        </div>
-        <div class="nb_b">
-          <div class="inc_fotr">
-            <div class="inc_fotr_l">
-              <div class="inc_date_box">
-                <div class="inc_date">
-                  <mat-icon class="material-icon">calendar_month</mat-icon>
-                  <span>
-                    <span class="txt_lb">Invitation Date</span> {{UTCDate(reviewInvitationData?.invitationDate) | date:
-                    'MMM dd, yyyy'}}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="inc_fotr_r">
-              <div class="ed_del_buttons">
-                <button class="ed_edit_btn" (click)="redirectPageCity(reviewInvitationData)">
-                  <span>Write a Review</span>
-                </button>
-
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="note_mess">{{reviewInvitationData?.invitationMessage ? reviewInvitationData?.invitationMessage : '-'}}</div>
+      <div class="text-end">
+        <button class="cn_btn tab_cn_btn" (click)="redirectPageCity(reviewInvitationData)">Write a Review</button>
       </div>
     </div>
-  </div>
 
-  <div class="text-center" *ngIf="reviewInvitationList?.length > 0 && spinnerLoader">
-    <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
-  </div>
-
-  <div class="saved_carrier_list_con" class="skeletonloader" *ngIf="reviewInvitationList?.length==0 && !skeletonLoader">
-    <div class="empty-state">
-      <div class="empty-state__content">
-        <div class="empty-state__icon">
-          <img src="./assets/images/no_data_found_img.jpg" alt="">
-        </div>
-        <div class="empty-state__message">Review Invitation</div>
-        <p class="empty-state__help">This is no Review Invitation .</p>
-      </div>
+    <div class="text-center" *ngIf="reviewInvitationList?.length > 0 && spinnerLoader">
+      <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
     </div>
-  </div>
+
+    <div *ngIf="reviewInvitationList?.length > 0 && dataNotFound && !skeletonLoader" class="noMore_record">
+      <span>There are no more records to show.</span>
+    </div>
   
-
-	<div *ngIf="reviewInvitationList?.length > 0 && dataNotFound && !skeletonLoader" class="noMore_record">
-		<span>There are no more records to show.</span>
-	</div>
-
-  <div class="saved_carrier_list_con" class="skt_eifr" *ngIf="skeletonLoader">
-    <div class="mb-3">
-      <ngx-skeleton-loader count="1"
-        [theme]="{ width: '100%', height: '24px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
-    </div>
-    <div class="scl_row pt-3 px-3" *ngFor="let fake of generateFakeSkeleton(8)" style="display: block;">
-      <ngx-skeleton-loader count="1"
-        [theme]="{ width: '100%', height: '32px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+    <div class="saved_carrier_list_con" class="skt_eifr" *ngIf="skeletonLoader">
+      <div class="mb-3">
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '24px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+      </div>
+      <div class="scl_row pt-3 px-3" *ngFor="let fake of generateFakeSkeleton(8)" style="display: block;">
+        <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '32px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+      </div>
     </div>
   </div>
 </div>
 
-
-
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading>
+<ngx-loading [show]="loading" [config]="{ fullScreenBackdrop:true }"></ngx-loading>

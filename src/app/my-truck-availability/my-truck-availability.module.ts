@@ -12,11 +12,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 import { ProfileRoutingModule } from '../profile/profile.routing';
 import { SharedModule } from '../shared/shared.module';
+import { TruckOnDemandComponent } from './truck-on-demand/truck-on-demand.component';
 
 @NgModule({
   declarations: [
     PostTruckAvailabilityComponent,
-    MyTruckAvailabilityComponent
+    MyTruckAvailabilityComponent,
+    TruckOnDemandComponent
   ],
   imports: [
     MyTruckAvailabilityRoutingModule,
