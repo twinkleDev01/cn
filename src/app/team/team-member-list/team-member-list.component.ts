@@ -33,7 +33,7 @@ export class TeamMemberListComponent implements OnInit {
   }
 
   // Profile analytics table
-  displayedColumns: string[] = ['name', 'email', 'phone', 'status', 'permission', 'action'];
+  displayedColumns: string[] = ['name', 'email', 'status', 'permission', 'action'];
   dataSource = [
     { name: 'Alison Parkar',
       email: 'test@gmail.com',

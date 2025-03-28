@@ -276,7 +276,31 @@ if (newParams.position) queryParams.set('position', newParams.position);
     return `${month}/${day}/${year}`; 
   }
 
-  formatCompanyName(name: string): string {
-    return name ? name.replace(/\s+/g, '-') : '';
+  // formatCompanyName(name: string): string {
+  //   return name ? name.replace(/\s+/g, '-') : '';
+  // }
+  
+  openInNewTab(dotNumber: string, companyName: string): void {
+    const formattedName = this.formatCompanyName(companyName);
+    const url = `/carrier-profile/${dotNumber}/${formattedName}`;
+    const newTab = window.open('', '_blank');
+    if (newTab) {
+      newTab.location.href = url;
+    }
   }
+
+  formatCompanyName(name: string): string {
+    return name ? name.replace(/\s+/g, '-').toLowerCase() : '';
+  }
+  openExternalLink(url: string, event: MouseEvent) {
+    event.preventDefault();
+    
+    const newTab = window.open('', '_blank');  // Open tab first
+    if (newTab) {
+      setTimeout(() => {
+        newTab.location.href = url;  // Navigate to URL after opening the tab
+      }, 100);  // Delay navigation slightly to avoid `about:blank`
+    }
+  }
+  
 }

@@ -125,15 +125,19 @@
       <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let element" class="fw_5">{{element.name}}</td>
+          <td mat-cell *matCellDef="let element" class="fw_5">
+            <div class="membr_info">
+              <span>{{element.name}}</span>
+              <div class="phone_data">
+                <i class="fa-duotone fa-solid fa-phone txt_p"></i>
+                <span>{{element.phone}}</span>
+              </div>
+            </div>
+          </td>
         </ng-container>
         <ng-container matColumnDef="email">
           <th mat-header-cell *matHeaderCellDef> Email </th>
           <td mat-cell *matCellDef="let element">{{element.email}}</td>
-        </ng-container>
-        <ng-container matColumnDef="phone">
-          <th mat-header-cell *matHeaderCellDef> Phone </th>
-          <td mat-cell *matCellDef="let element">{{element.phone}}</td>
         </ng-container>
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef> Status </th>
@@ -144,10 +148,9 @@
           <td mat-cell *matCellDef="let element" class="fw_5">{{element.permission}}</td>
         </ng-container>
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef> Action </th>
-          <td mat-cell *matCellDef="let element">
+          <th mat-header-cell *matHeaderCellDef class="text-center actin_col"> Action </th>
+          <td mat-cell *matCellDef="let element" class="actin_td">
             <div class="actin_icon">
-              
               <a [routerLink]="['edit']" class="actn_btn">
                 <i class="fa-duotone fa-solid fa-user-pen txt_p"></i>
               </a>

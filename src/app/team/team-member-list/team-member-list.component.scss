@@ -1,17 +1,8 @@
-.actin_icon {
-    display: flex;
-    gap: 1rem;
-}
-
-.actin_icon i {
-    font-size: 1rem;
-    display: inline-block;
-    padding: 0.9rem 0.7rem;
-    cursor: pointer;
-}
-
 .filtr_con { padding-top: 1rem; margin-top: 1rem; border-top: 1px solid #ededed; }
 .comn_fltr { display: flex; height: 100%; align-items: center; }
-@media screen and (max-width: 1640px) { 
-    .chart_info_box { max-width: 100%; }
-}
+.membr_info { padding: 0.4rem 0; }
+.phone_data { color: #818181; display: flex; align-items: center; gap: 0.3rem; margin: 3px 0 0; }
+// .actin_col, .actin_icon { max-width: 120px; }
+.actin_icon { display: flex; justify-content: center; gap: 1rem; }
+.actin_icon i { font-size: 1rem; display: inline-block; padding: 0.9rem 0.7rem; cursor: pointer; }
+
