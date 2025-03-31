@@ -976,3 +976,20 @@ border: 1px solid #ddd !important;}
   .mat-select-placeholder { font-size: 14px; line-height: 20px; color: #818181;  opacity: 0.7; }
 }
 
+/* Custom toggle True/False */
+.cus_slide_toggle {
+  .mat-slide-toggle-bar { height: 20px; border-radius: 30px; }
+  .mat-slide-toggle-thumb-container { top: 2px; left: 3px; }
+  .mat-slide-toggle-thumb { height: 15px; width: 15px; }
+  .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb { background-color: #fff; }
+  .mat-slide-toggle.mat-checked .mat-slide-toggle-bar { background-color: #4fd366;}
+  .mat-checked .mat-slide-toggle.mat-checked .mat-slide-toggle-bar { background-color: #FFF; }
+  .mat-checked .mat-slide-toggle-content { color: #4fd366; font-weight: 500; }
+  .mat-slide-toggle-content { font-family: 'Poppins'; color: #818181; }
+  .mat-slide-toggle .mat-slide-toggle-ripple { top: calc(50% - 20px); left: calc(50% - 20px); height: 36px; width: 36px; }
+  .mat-slide-toggle.mat-checked .mat-ripple-element { background-color: #4fd366; }
+}
+
+
+
+

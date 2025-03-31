@@ -10,11 +10,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TimeAgoPipe } from '../commons/pipe/time-ago.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
     ProfileAnalyticsComponent,
-    ContactLeadComponent
+    ContactLeadComponent,
+    // TimeAgoPipe
   ],
   imports: [
     CommonModule,
@@ -24,7 +27,8 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class PerformanceAnalyticsModule { }

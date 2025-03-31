@@ -4,9 +4,8 @@
       <div class="dcoh_l">
         <p class="dco_h_tlt">90 Days Profile Performance</p>
       </div>
-      
     </div>
-    
+
     <div class="dco_box">
       <div class="row">
         <div class="col-md-6 pie_crt_box">
@@ -16,21 +15,41 @@
                 <div class="lbl_1 w-100">
                   <div class="dco_bar">
                     <div class="bar_hed">
-                      <span class="bar_txt">Total Views </span> <span class="bar_vlu"> {{carrierContactAnalyticsData?.totalViews}}</span>
+                      <span class="bar_txt">Total Views </span>
+                      <span class="bar_vlu">
+                        {{ carrierContactAnalyticsData?.totalViews }}</span
+                      >
                     </div>
-                    <mat-progress-bar mode="determinate" [value]="totalViewsPercentage"></mat-progress-bar>
+                    <mat-progress-bar
+                      mode="determinate"
+                      [value]="totalViewsPercentage"
+                    ></mat-progress-bar>
                   </div>
                   <div class="dco_bar">
                     <div class="bar_hed">
-                      <span class="bar_txt">Unique Visitors </span> <span class="bar_vlu"> {{carrierContactAnalyticsData?.uniqueVisiter}}</span>
+                      <span class="bar_txt">Unique Visitors </span>
+                      <span class="bar_vlu">
+                        {{ carrierContactAnalyticsData?.uniqueVisiter }}</span
+                      >
                     </div>
-                    <mat-progress-bar mode="determinate" [value]="uniqueVisitorsPercentage"></mat-progress-bar>
+                    <mat-progress-bar
+                      mode="determinate"
+                      [value]="uniqueVisitorsPercentage"
+                    ></mat-progress-bar>
                   </div>
                   <div class="dco_bar">
                     <div class="bar_hed">
-                      <span class="bar_txt">Repeat Visitors </span> <span class="bar_vlu"> {{carrierContactAnalyticsData?.totalRepeatCount}}</span>
+                      <span class="bar_txt">Repeat Visitors </span>
+                      <span class="bar_vlu">
+                        {{
+                          carrierContactAnalyticsData?.totalRepeatCount
+                        }}</span
+                      >
                     </div>
-                    <mat-progress-bar mode="determinate" [value]="repeatVisitorsPercentage"></mat-progress-bar>
+                    <mat-progress-bar
+                      mode="determinate"
+                      [value]="repeatVisitorsPercentage"
+                    ></mat-progress-bar>
                   </div>
                 </div>
               </div>
@@ -48,12 +67,18 @@
         <div class="col-md-6 bar_crt_box">
           <div class="row">
             <div class="col-md-8">
-              <div class="country_chart" [ngClass]="{'d-none': selectedChart !== 'country'}">
+              <div
+                class="country_chart"
+                [ngClass]="{ 'd-none': selectedChart !== 'country' }"
+              >
                 <div class="">
                   <canvas id="topCountryChartC1"></canvas>
                 </div>
               </div>
-              <div class="city_chart" [ngClass]="{'d-none': selectedChart !== 'city'}">
+              <div
+                class="city_chart"
+                [ngClass]="{ 'd-none': selectedChart !== 'city' }"
+              >
                 <div class="">
                   <canvas id="cityDistributionChartC1"></canvas>
                 </div>
@@ -71,20 +96,40 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <div class="chart_info" [ngClass]="{'d-none': selectedChart !== 'country'}">
+                <div
+                  class="chart_info"
+                  [ngClass]="{ 'd-none': selectedChart !== 'country' }"
+                >
                   <p class="cif_lbl">Top Country Viewers</p>
-                  
+
                   <ul>
-                    <li *ngFor="let item of carrierContactAnalyticsData?.topCountry | keyvalue">
-                      <span class="chart_txt">In {{ item.key }}: {{ item.value }} </span>
+                    <li
+                      *ngFor="
+                        let item of carrierContactAnalyticsData?.topCountry
+                          | keyvalue
+                      "
+                    >
+                      <span class="chart_txt"
+                        >In {{ item.key }}: {{ item.value }}
+                      </span>
                     </li>
                   </ul>
                 </div>
-                <div class="chart_info" [ngClass]="{'d-none': selectedChart !== 'city'}">
+                <div
+                  class="chart_info"
+                  [ngClass]="{ 'd-none': selectedChart !== 'city' }"
+                >
                   <p class="cif_lbl">Top City Viewers</p>
                   <ul>
-                    <li *ngFor="let item of carrierContactAnalyticsData?.topCity | keyvalue">
-                      <span class="chart_txt">In {{ item.key }}: {{ item.value }} </span>
+                    <li
+                      *ngFor="
+                        let item of carrierContactAnalyticsData?.topCity
+                          | keyvalue
+                      "
+                    >
+                      <span class="chart_txt"
+                        >In {{ item.key }}: {{ item.value }}
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -102,10 +147,15 @@
         <div class="btns_box">
           <div class="row">
             <div class="col-md-5">
-              <div class="comn_fltr" [ngClass]="{'d-none': showAdvancedFilter}">
+              <div
+                class="comn_fltr"
+                [ngClass]="{ 'd-none': showAdvancedFilter }"
+              >
                 <mat-form-field appearance="none">
                   <mat-label>Quick Search</mat-label>
-                  <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
+                  <mat-icon matTextPrefix class="material-symbols-outlined"
+                    >filter_list</mat-icon
+                  >
                   <input
                     type="text"
                     matInput
@@ -119,15 +169,18 @@
             </div>
             <div class="col-md-7">
               <div class="btn_r">
-                <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()"  [ngClass]="{
-                  'active-filter':
-                    filterForm?.value &&
-                    (filterForm.value.fromDate ||
-                      filterForm.value.toDate ||
-                      filterForm.value.postalCode ||
-                      filterForm.value.userType)
-                }"
-              >
+                <span
+                  class="cn_btn icn_btn adv_filter_btn"
+                  (click)="toggleFilter()"
+                  [ngClass]="{
+                    'active-filter':
+                      filterForm?.value &&
+                      (filterForm.value.fromDate ||
+                        filterForm.value.toDate ||
+                        filterForm.value.postalCode ||
+                        filterForm.value.userType)
+                  }"
+                >
                   <i class="fa-sharp fa-solid fa-filter"></i>
                   <!-- <i class="fa-duotone fa-solid fa-sliders"></i> -->
                 </span>
@@ -137,26 +190,33 @@
               </div>
             </div>
           </div>
-          <div class="filter_box" [ngClass]="{'d-none': !showAdvancedFilter}">
+          <div class="filter_box" [ngClass]="{ 'd-none': !showAdvancedFilter }">
             <div class="filtr_con">
-                <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
-                <form class="cn_field" [formGroup]="filterForm">
+              <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
+              <form class="cn_field" [formGroup]="filterForm">
                 <div class="row">
-                  
                   <div class="col-md-3">
-                    <mat-form-field   [ngClass]="{
-                      highlighted: filterForm.get('userType')?.value
-                    }">
+                    <mat-form-field
+                      [ngClass]="{
+                        highlighted: filterForm.get('userType')?.value
+                      }"
+                    >
                       <mat-label>User Type</mat-label>
-                      <mat-select  formControlName="userType">
+                      <mat-select formControlName="userType">
                         <ng-container *ngFor="let data of uniqueUserTypes">
-                          <mat-option [value]="data">{{data}}</mat-option>
+                          <mat-option [value]="data">{{ data }}</mat-option>
                         </ng-container>
-                       
                       </mat-select>
                     </mat-form-field>
                   </div>
-                  
+                  <!-- Location -->
+                  <div class="col-md-3">
+                    <mat-form-field  [ngClass]="{'highlighted': filterForm.get('location')?.value}">
+                      <mat-label>Location</mat-label>
+                      <input type="text" matInput placeholder="Enter Location" formControlName="location">
+                    </mat-form-field>
+                  </div> 
+
                   <!-- <div class="col-md-3">
                     <mat-form-field>
                       <mat-label>Country</mat-label>
@@ -188,49 +248,64 @@
                     </mat-form-field>
                   </div> -->
                   <div class="col-md-3">
-                    <mat-form-field [ngClass]="{
-                      highlighted: filterForm.get('postalCode')?.value
-                    }">
+                    <mat-form-field
+                      [ngClass]="{
+                        highlighted: filterForm.get('postalCode')?.value
+                      }"
+                    >
                       <mat-label>Postal Code</mat-label>
-                      <input type="text" matInput placeholder="Search" formControlName="postalCode">
+                      <input
+                        type="text"
+                        matInput
+                        placeholder="Search"
+                        formControlName="postalCode"
+                        (input)="onPostalCodeInput($event)"
+                      />
                     </mat-form-field>
                   </div>
                   <div class="col-md-3">
                     <mat-form-field
-                    class="date_range_filter"
-                    [ngClass]="{
-                      highlighted:
-                        filterForm.get('fromDate')?.value ||
-                        filterForm.get('toDate')?.value
-                    }"
-                  >
-                    <mat-label>Enter a Accessed Date Range</mat-label>
-                    <mat-date-range-input [rangePicker]="picker">
-                      <input
-                        matStartDate
-                        placeholder="Start date"
-                        formControlName="fromDate"
-                      />
-                      <input
-                        matEndDate
-                        placeholder="End date"
-                        formControlName="toDate"
-                      />
-                    </mat-date-range-input>
-                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                    <mat-datepicker-toggle
-                      matIconSuffix
-                      [for]="picker"
-                    ></mat-datepicker-toggle>
-                    <mat-date-range-picker #picker></mat-date-range-picker>
-                  </mat-form-field>
+                      class="date_range_filter"
+                      [ngClass]="{
+                        highlighted:
+                          filterForm.get('fromDate')?.value ||
+                          filterForm.get('toDate')?.value
+                      }"
+                    >
+                      <mat-label>Enter a Accessed Date Range</mat-label>
+                      <mat-date-range-input [rangePicker]="picker">
+                        <input
+                          matStartDate
+                          placeholder="Start date"
+                          formControlName="fromDate"
+                        />
+                        <input
+                          matEndDate
+                          placeholder="End date"
+                          formControlName="toDate"
+                        />
+                      </mat-date-range-input>
+                      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                      <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="picker"
+                      ></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
                   </div>
                   <div class="col-md-3"></div>
-              
+
                   <div class="col-md-12">
                     <div class="fltr_actn">
-                      <button class="cn_btn btn_bordered" (click)="resetFilters()">Clear</button>
-                      <button class="cn_btn" (click)="applyAdvancedFilter()">Apply</button>
+                      <button
+                        class="cn_btn btn_bordered"
+                        (click)="resetFilters()"
+                      >
+                        Clear
+                      </button>
+                      <button class="cn_btn" (click)="applyAdvancedFilter()">
+                        Apply
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -244,39 +319,77 @@
       <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="name" sticky>
           <th mat-header-cell *matHeaderCellDef>
-            <div class=" sticky_boder"> User </div>
+            <div class="sticky_boder">User</div>
           </th>
           <td mat-cell *matCellDef="let element">
             <div class="user_dtl sticky_boder">
               <div class="ud_l">
-                <img style="width: 50px;
-    border-radius: 60px;"
-                [src]="
-                  element.user?.profileImage ||
-                  './assets/images/profile.webp'
-                "
-                class="user_img"
-                alt="User Image"
-              />
-                <span class="user_Type">{{element.userType}}</span>
+                <img
+                  style="width: 50px; border-radius: 60px"
+                  [src]="
+                    element.user?.profileImage || './assets/images/profile.webp'
+                  "
+                  class="user_img"
+                  alt="User Image"
+                />
+                <span class="user_Type">{{ element.userType }}</span>
               </div>
               <div class="ud_r">
-                <div class="name_icn">
-                  <a class="u_name">{{element?.user?.companyName}}</a>
-                  <i *ngIf="!element?.user?.id" class="fa-duotone fa-badge-check verify_icon" matTooltip="Account not Verified"></i>
-                  <i *ngIf="element?.user?.id" class="fa-duotone fa-badge-check verify_icon user_verified" matTooltip="Account Verified"></i>
+                <div class="name_icn" *ngIf="element.user?.companyName">
+                  <a class="u_name">{{ element?.user?.companyName }}</a>
+                  <i
+                    *ngIf="!element?.user?.id"
+                    class="fa-duotone fa-badge-check verify_icon"
+                    matTooltip="Account not Verified"
+                  ></i>
+                  <i
+                    *ngIf="element?.user?.id"
+                    class="fa-duotone fa-badge-check verify_icon user_verified"
+                    matTooltip="Account Verified"
+                  ></i>
                 </div>
                 <div class="loca_rtng">
-                  <span class="user_rtng" *ngIf="element?.user?.averageRatingValue && element?.user?.averageRatingValue!=0" matTooltip="{{element?.user?.averageRatingValue}} rating">{{element?.user?.averageRatingValue}} <i class="fa-solid fa-star"></i> </span>
-                  <span class="user_rtng zero_rating" *ngIf="element?.user?.averageRatingValue==0" matTooltip="{{element?.user?.averageRatingValue}} rating">0.0 <i class="fa-solid fa-star"></i> </span>
-                  <span class="u_loca">{{element?.user?.city}}</span>
+                  <span
+                    class="user_rtng"
+                    *ngIf="
+                      element?.user?.averageRatingValue &&
+                      element?.user?.averageRatingValue != 0 &&
+                      element.user?.companyName
+                    "
+                    matTooltip="{{ element?.user?.averageRatingValue }} rating"
+                    >{{ element?.user?.averageRatingValue.toFixed(1) }}
+                    <i class="fa-solid fa-star"></i>
+                  </span>
+                  <span
+                    class="user_rtng zero_rating"
+                    *ngIf="
+                      element?.user?.averageRatingValue == 0 &&
+                      element.user?.companyName
+                    "
+                    matTooltip="{{ element?.user?.averageRatingValue }} rating"
+                    >0.0 <i class="fa-solid fa-star"></i>
+                  </span>
+                  <span class="u_loca">
+                    {{
+                      element.user?.city || element.user?.state
+                        ? (
+                            (element.user?.city
+                              ? (element.user.city | titlecase) + ", "
+                              : "") +
+                            (element.user?.state
+                              ? (element.user.state | titlecase) + ", "
+                              : "")
+                          ).slice(0, -2)
+                        : element.location || ""
+                    }}</span
+                  >
                 </div>
               </div>
             </div>
           </td>
         </ng-container>
         <ng-container matColumnDef="pageSource">
-          <th mat-header-cell *matHeaderCellDef> Page Source </th>
+          <th mat-header-cell *matHeaderCellDef>Page Source</th>
           <td mat-cell *matCellDef="let element">
             <a
               *ngIf="element.url"
@@ -310,51 +423,88 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="location">
-          <th mat-header-cell *matHeaderCellDef class="loca_w mob_txt_cntr"> Location </th>
+          <th mat-header-cell *matHeaderCellDef class="loca_w mob_txt_cntr">
+            Location
+          </th>
           <td mat-cell *matCellDef="let element" class="mob_txt_cntr">
-            <img src="/assets/country/us.png" class="flaf_icn">
-            82934, Alachua, Florida
+            <img src="/assets/country/us.png" class="flaf_icn" />
+            {{ element.location }}
           </td>
         </ng-container>
         <ng-container matColumnDef="platform">
-          <th mat-header-cell *matHeaderCellDef> Platform </th>
+          <th mat-header-cell *matHeaderCellDef>Platform</th>
           <td mat-cell *matCellDef="let element">
             <div class="comn_icn">
-              <i class="fa-regular {{getDeviceIcon(element.platform)}} platform_in" matTooltip="Desktop Device"></i>
+              <i
+                class="fa-regular {{
+                  getDeviceIcon(element.platform)
+                }} platform_in"
+                matTooltip="Desktop Device"
+              ></i>
             </div>
           </td>
         </ng-container>
         <ng-container matColumnDef="os">
-          <th mat-header-cell *matHeaderCellDef> OS </th>
+          <th mat-header-cell *matHeaderCellDef>OS</th>
           <td mat-cell *matCellDef="let element">
             <div class="comn_icn">
-              <img src="{{getOSImage(element.osPlatform)}}" matTooltip="Windows Operating System">
+              <img
+                src="{{ getOSImage(element.osPlatform) }}"
+                matTooltip="Windows Operating System"
+              />
             </div>
           </td>
         </ng-container>
         <ng-container matColumnDef="browser">
-          <th mat-header-cell *matHeaderCellDef> Browser </th>
+          <th mat-header-cell *matHeaderCellDef>Browser</th>
           <td mat-cell *matCellDef="let element">
             <div class="comn_icn">
-              <img src="{{getBrowserImage(element.browser)}}" matTooltip="Chrome Browser">
+              <img
+                src="{{ getBrowserImage(element.browser) }}"
+                matTooltip="Chrome Browser"
+              />
               <!-- <p>{{getBrowserImage(element.browser)}}</p> -->
             </div>
           </td>
         </ng-container>
         <ng-container matColumnDef="accessedAt">
-          <th mat-header-cell *matHeaderCellDef> Accessed At </th>
-          <td mat-cell *matCellDef="let element">{{formatDate(UTCDate(element?.createdAt))   }}</td>
+          <th mat-header-cell *matHeaderCellDef>Accessed At</th>
+          <td mat-cell *matCellDef="let element">
+            <!-- {{ formatDate(UTCDate(element?.createdAt)) }} -->
+            {{ element?.createdAt | date : "MMM dd, yyyy hh:mm a" : "UTC" }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="timeSinceAccess">
-          <th mat-header-cell *matHeaderCellDef class="time_since"> Time Since Access </th>
-          <td mat-cell *matCellDef="let element">{{ calculateTimeSince(element.createdAt) }}</td>
+          <th mat-header-cell *matHeaderCellDef class="time_since">
+            Time Since Access
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- {{ calculateTimeSince(element.createdAt) }} -->
+            {{ element.createdAt | timeAgo }}
+          </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
       <div class="text-center my-5" *ngIf="showScrollSpinner">
-        <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+        <span
+          class="spinner-border"
+          role="status"
+          style="color: #00b4fc"
+        ></span>
+      </div>
+    </div>
+  </div>
 </div>
+<!-- No Record -->
+<div class="skeletonloader">
+  <div class="empty-state" *ngIf="!dataSource.data.length && !showScrollSpinner">
+    <div class="empty-state__content">
+    <div class="empty-state__icon">
+      <img src="./assets/images/no_data_found_img.jpg" alt="">
+    </div>
+    <div class="empty-state__message">List Empty</div>
+      <p class="empty-state__help">This is no Records</p>
     </div>
   </div>
 </div>

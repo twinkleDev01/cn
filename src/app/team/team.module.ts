@@ -6,6 +6,7 @@ import { TeamRoutingModule } from './team-routing.module';
 import { TeamMemberListComponent } from './team-member-list/team-member-list.component';
 import { AddMemberComponent } from './add-member/add-member.component';
 import { EditMemberComponent } from './edit-member/edit-member.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { EditMemberComponent } from './edit-member/edit-member.component';
   imports: [
     CommonModule,
     TeamRoutingModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ]
 })
 export class TeamModule { }

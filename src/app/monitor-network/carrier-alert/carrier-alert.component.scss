@@ -1,0 +1,9 @@
+.filtr_con { padding-top: 1rem; margin-top: 1rem; border-top: 1px solid #ededed; }
+.comn_fltr { display: flex; height: 100%; align-items: center; }
+.actin_icon { display: flex; justify-content: center; gap: 1rem; min-width: 98px; }
+.actin_icon i { font-size: 1rem; display: inline-block; padding: 0.9rem 0.7rem; cursor: pointer; }
+.company_name { color: #00b4fc; max-width: 280px; overflow: hidden; text-overflow: ellipsis; display: inline-block; }
+.table_data_con {
+    .Active { color: #25D366; }
+    .Expired { color: #818181; }
+}

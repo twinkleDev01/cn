@@ -18,6 +18,7 @@ export class SidebarComponent implements OnInit {
   // public toggleDropdownForecastAvailability: boolean = false;
   public toggleDropdownCarrier: boolean = false;
   public toggleDropdownFindCarrier: boolean = false;
+  public toggleDropdownMonitorNetwork: boolean = false;
   public getUserData: any;
   public userType: any;
   public totalStrenth: any = 0;
@@ -125,6 +126,18 @@ export class SidebarComponent implements OnInit {
           else if (event.url.includes('performance-analytics/contact-lead')) {
             this.activeSubTab = 'contactLead';
           }
+          else if (event.url.includes('monitor-network/broker-alert')) {
+            this.activeSubTab = 'brokerAlert';
+          }
+          else if (event.url.includes('monitor-network/carrier-alert')) {
+            this.activeSubTab = 'carrierAlert';
+          }
+          else if (event.url.includes('monitor-network/authority-alert')) {
+            this.activeSubTab = 'authorityAlert';
+          }
+          else if (event.url.includes('monitor-network/insurance-alert')) {
+            this.activeSubTab = 'insuranceAlert';
+          }
 
           // else if (event.url.includes('carrier/carrier-search')) {
           //   this.activeSubTab = 'carrier-search';
@@ -219,6 +232,9 @@ export class SidebarComponent implements OnInit {
     } else if (type == 'digitalMarketing') {
       event.preventDefault();
       this.toggleDropdownDigitalMarketing = !this.toggleDropdownDigitalMarketing;
+    }  else if (type == 'monitorNetwork') {
+      event.preventDefault();
+      this.toggleDropdownMonitorNetwork = !this.toggleDropdownMonitorNetwork;
     } 
     // else if (type == 'forecastAvailibilty') {
     //   event.preventDefault();

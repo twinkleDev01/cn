@@ -65,6 +65,11 @@ export const appRoutes: Routes = [
       import('./team/team.module').then((mod) => mod.TeamModule),
   },
   {
+    path: 'monitor-network',canActivate : [AuthGuard],
+    loadChildren: () =>
+      import('./monitor-network/monitor-network.module').then((mod) => mod.MonitorNetworkModule),
+  },
+  {
     path: '',canActivate : [AuthGuard],
     loadChildren: () =>
       import('./load-quote/load-quote.module').then((mod) => mod.LoadQuoteModule),

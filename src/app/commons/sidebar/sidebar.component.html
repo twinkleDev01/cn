@@ -250,6 +250,44 @@
 					<span (click)="isMobile ? mobMenuToggleEvent() :null">Teams</span>
 				</a>
 			</li>
+
+			<!-- Monitor Network  -->
+			<li class="lbl_2" [ngClass]="(activeSubTab=='brokerAlert' || activeSubTab=='carrierAlert' || activeSubTab=='authorityAlert'  || activeSubTab=='insuranceAlert' ) ? 'active' :  ''">
+      <div [ngClass]="toggleDropdownMonitorNetwork ? 'menu_max' : 'menu_min'">
+        <a class="v_drop_menu" (click)="menuToggleEvent($event,'monitorNetwork')">
+          <div class="d-flex align-items-center">
+            <i class="fa-solid fa-bell-on"></i>
+            <span>Monitor Network</span>
+          </div>
+          <span class="material-icons-outlined">expand_more</span>
+        </a>
+        <ul class="v_sub_menu">
+          <li [ngClass]="activeSubTab=='brokerAlert' ? 'active' :  ''">
+            <a [ngClass]="activeSubTab=='brokerAlert' ? 'sub_menu_a' :  ''" [routerLink]="['/monitor-network/broker-alert']">
+              <span (click)="isMobile ? mobMenuToggleEvent() :null"> Broker Alert </span>
+            </a>
+          </li>
+          <li [ngClass]="activeSubTab=='carrierAlert' ? 'active' :  ''">
+            <a [ngClass]="activeSubTab=='carrierAlert' ? 'sub_menu_a' :  ''" [routerLink]="['/monitor-network/carrier-alert']">
+              <span (click)="isMobile ? mobMenuToggleEvent() :null"> Carrier Alert </span>
+            </a>
+          </li>
+          <li [ngClass]="activeSubTab=='authorityAlert' ? 'active' :  ''">
+            <a [ngClass]="activeSubTab=='authorityAlert' ? 'sub_menu_a' :  ''" [routerLink]="['/monitor-network/authority-alert']">
+              <span (click)="isMobile ? mobMenuToggleEvent() :null"> Authority Alert </span>
+            </a>
+          </li>
+          <li [ngClass]="activeSubTab=='insuranceAlert' ? 'active' :  ''">
+            <a [ngClass]="activeSubTab=='insuranceAlert' ? 'sub_menu_a' :  ''" [routerLink]="['/monitor-network/insurance-alert']">
+              <span (click)="isMobile ? mobMenuToggleEvent() :null"> Insurance Alert </span>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+    </li>
+
+
 			<!-- <li class="lbl_2" [ngClass]="(activeSubTab=='seo' || activeSubTab=='analytics' || activeSubTab=='social-media' ) ? 'active' :  ''">
 				<div [ngClass]="toggleDropdownTeam ? 'menu_max' : 'menu_min'">
 					<a class="v_drop_menu" (click)="menuToggleEvent($event,'team')">

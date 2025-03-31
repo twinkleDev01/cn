@@ -235,7 +235,13 @@ export class AppSettings {
       AUTORENEW: 'subscription/auto-renew',
       CONTACTUS: 'subscription/contact-me',
 
-    }
+    },
+    TEAM:{
+      TEAMLIST:'team/list',   
+      TEAMPERMISSIONLIST:'team/permission-list',
+      TEAMADD:'team/add',
+      EDITTEAM:'team/edit'
 
+    },
   }
 }

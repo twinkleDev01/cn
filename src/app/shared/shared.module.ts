@@ -36,6 +36,7 @@ import { BrokerBusinessInfoComponent } from './broker/broker-business-info/broke
 import { BrokerInsuranceComponent } from './broker/broker-insurance/broker-insurance.component';
 import { BrokerLanesRegionsComponent } from './broker/broker-lanes-regions/broker-lanes-regions.component';
 import { BrokerReviewsComponent } from './broker/broker-reviews/broker-reviews.component';
+import { TimeAgoPipe } from '../commons/pipe/time-ago.pipe';
 
 @NgModule({
   imports: [
@@ -77,6 +78,8 @@ import { BrokerReviewsComponent } from './broker/broker-reviews/broker-reviews.c
       BrokerInsuranceComponent,
       BrokerLanesRegionsComponent,
       BrokerReviewsComponent,
+      // Pipe
+      TimeAgoPipe
   ],
   exports: [
     // Popup Components
@@ -109,6 +112,8 @@ import { BrokerReviewsComponent } from './broker/broker-reviews/broker-reviews.c
    BrokerInsuranceComponent,
    BrokerLanesRegionsComponent,
    BrokerReviewsComponent,
+  //  Pipe
+  TimeAgoPipe
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

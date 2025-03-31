@@ -1,32 +1,36 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'timeAgo',
-  // standalone: false // set to true only if you're using standalone pipe (Angular 15+)
+  name: 'timeAgo'
 })
 export class TimeAgoPipe implements PipeTransform {
+  transform(value: string): string {
+    if (!value) return 'Invalid Date';
 
-  transform(timestamp: string | Date): string {
-    if (!timestamp) return 'Unknown';
+    const inputUtcDate = new Date(value);
+    if (isNaN(inputUtcDate.getTime())) return 'Invalid Date';
 
-    const accessedDate = new Date(timestamp);
-    const now = new Date();
+    const inputUtcTimestamp = inputUtcDate.getTime();
+    const currentUtcTimestamp = Date.now();
+    // console.log('Input UTC:', inputUtcDate.toISOString());
+    // console.log('Current UTC:', new Date(currentUtcTimestamp).toISOString());
+    
+    const diffMs = currentUtcTimestamp - inputUtcTimestamp;
+    if (diffMs < 0) return 'In the future';
 
-    const diffMs = now.getTime() - accessedDate.getTime();
-    const diffSeconds = Math.floor(diffMs / 1000);
-    const diffMinutes = Math.floor(diffSeconds / 60);
-    const diffHours = Math.floor(diffMinutes / 60);
-    const diffDays = Math.floor(diffHours / 24);
+    const totalSeconds = Math.floor(diffMs / 1000);
 
-    if (diffSeconds < 60) return 'Just now';
-    if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
-    if (diffHours < 24) return `${diffHours} hours ago`;
-
-    const months = Math.floor(diffDays / 30);
-    const days = diffDays % 30;
-
-    if (months > 0 && days > 0) return `${months} months ${days} days ago`;
-    if (months > 0) return `${months} months ago`;
-    return `${diffDays} days ago`;
+    const diffDays = Math.floor(totalSeconds / (24 * 3600));
+    const diffHours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+    const diffMinutes = Math.floor((totalSeconds % 3600) / 60);
+    const diffSeconds = totalSeconds % 60;
+    if (diffDays > 30) {
+      const diffMonths = Math.floor(diffDays / 30);
+      const remainingDays = diffDays % 30;
+      return `${diffMonths} months, ${remainingDays} days, ${diffHours} hours, ${diffMinutes} minutes ago`;
+    }
+    // return `${diffDays} days, ${diffHours} hours, ${diffMinutes} minutes, and ${diffSeconds} seconds ago`;
+    return `${diffDays} days, ${diffHours} hours, ${diffMinutes} minutes ago`;
   }
 }
+

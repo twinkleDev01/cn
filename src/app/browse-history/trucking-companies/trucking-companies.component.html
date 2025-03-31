@@ -127,6 +127,7 @@
                     matInput
                     placeholder="Enter Postal Code"
                     formControlName="postalCode"
+                    (input)="onPostalCodeInput($event)"
                   />
                 </mat-form-field>
               </div>
@@ -186,21 +187,15 @@
                     alt="User Image"
                   />
                 </div>
-                <!-- <span class="user_Type">{{ element.userType }}</span> -->
               </div>
               <div class="ud_r">
                 <div class="name_icn" *ngIf="element.carrier?.companyName">
-                  <!-- <a 
+                  <a 
                     [href]="'/carrier-profile/' + element.carrier?.dotNumber + '/' + formatCompanyName(element.carrier?.companyName)" 
                     class="u_name"  
                     target="_blank">
                     {{ element.carrier?.companyName }}
-                  </a> -->
-                  <a 
-                  (click)="openInNewTab(element.carrier?.dotNumber, element.carrier?.companyName)"
-                  class="u_name">
-                  {{ element.carrier?.companyName }}
-                </a>
+                  </a>
                   <i
                     class="fa-duotone fa-badge-check verify_icon"
                     [matTooltip]="element.carrier?.userId ? 'Account Verified' : 'Account not Verified'"
@@ -211,7 +206,8 @@
                 
                 
                 <div class="loca_rtng">
-                  <span *ngIf="element.carrier?.companyName" class="user_rtng" matTooltip="Total 10 Reviews"
+                  <span *ngIf="element.carrier?.companyName"
+                   class="user_rtng" matTooltip="{{ element?.carrier?.averageRatingValue }} rating"
                     >{{ element.carrier?.averageRatingValue.toFixed(1) || 0 }}
 
                     <i class="fa-solid fa-star"></i>
@@ -221,7 +217,7 @@
                       ? (element.carrier.phyCity | titleCase) + ", "
                       : "") + (element.carrier?.phyStateCode | titleCase)
                   }} -->
-                  <span>
+                  <span class="u_loca">
                     {{
                       (element.carrier?.phyCity || element.carrier?.phyStateCode)
                         ? ((element.carrier?.phyCity ? (element.carrier.phyCity | titlecase) + ", " : "") + 
@@ -239,18 +235,12 @@
         <ng-container matColumnDef="pageSource">
           <th mat-header-cell *matHeaderCellDef>Page Source</th>
           <td mat-cell *matCellDef="let element">
-            <!-- <a
+            <a
               *ngIf="element.url"
               [routerLink]="element.url"
               class="txt_lnk"
               target="_blank"
-            > -->
-            <a
-            *ngIf="element.url"
-            class="txt_lnk"
-            (click)="openExternalLink(element.url, $event)"
-          >
-                  
+            >
               <span class="impression-type">{{ element.impressionType }}</span>
               <span class="svg-container">
                 <svg
@@ -294,14 +284,14 @@
         <ng-container matColumnDef="accessedAt">
           <th mat-header-cell *matHeaderCellDef>Accessed At</th>
           <td mat-cell *matCellDef="let element">
-            {{ element?.createdAt | utcDate | date: 'MMM dd, yyyy hh:mm a' }}
+          
+            {{ element?.createdAt | date: 'MMM dd, yyyy hh:mm a' : 'UTC' }}
           </td>
         </ng-container>
         <!-- TimeSinceAccess -->
         <ng-container matColumnDef="timeSinceAccess">
           <th mat-header-cell *matHeaderCellDef>Time Since Access</th>
           <td mat-cell *matCellDef="let element">
-            <!-- {{ calculateTimeSince(element.createdAt) }} -->
             {{ element.createdAt | timeAgo }}
 
           </td>
@@ -343,6 +333,17 @@
   </div>
 </div>
 <!-- 📭 No data template -->
-<div class="text-center my-4" *ngIf="noDataFound && !spinnerLoader">
+<!-- <div class="text-center my-4" *ngIf="noDataFound && !spinnerLoader">
   <p class="txt_2 fw_6">No records found</p>
+</div> -->
+<div class="skeletonloader">
+  <div class="empty-state" *ngIf="noDataFound && !spinnerLoader">
+    <div class="empty-state__content">
+    <div class="empty-state__icon">
+      <img src="./assets/images/no_data_found_img.jpg" alt="">
+    </div>
+    <div class="empty-state__message">List Empty</div>
+      <p class="empty-state__help">This is no Records</p>
+    </div>
+  </div>
 </div>

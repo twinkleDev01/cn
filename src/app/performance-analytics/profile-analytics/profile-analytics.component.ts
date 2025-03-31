@@ -19,7 +19,7 @@ export class ProfileAnalyticsComponent implements OnInit {
   selectedChart: string = 'country';
   errorMessage: string = '';
   loading = false;
-  page=1
+  public page=1
   carrierContactAnalyticsData:any
   showScrollSpinner=false
   filterForm: FormGroup;
@@ -30,6 +30,7 @@ export class ProfileAnalyticsComponent implements OnInit {
   totalPages: number = 0;
   isFilterApplied = false;
   spinner = false;
+  subscriptionPlanType: number | null = null;
   // Progress Bar Percentage calculation
   get totalViewsPercentage(): number {
     return 100;
@@ -53,10 +54,10 @@ export class ProfileAnalyticsComponent implements OnInit {
       this.filterForm = this.fb.group({
         fromDate: [''],
         toDate: [''],
-        // selectedUserType: [''],
         postalCode: [''],
         userType: [''],
         position: [''],
+        location: [''],
         toggleControl: [null as boolean | null]
       });
       if (params && Object.keys(params).length) {
@@ -65,15 +66,24 @@ export class ProfileAnalyticsComponent implements OnInit {
               toDate: params['toDate'] ? new Date(params['toDate']) : null,
               userType: params['userType'] || '',
               postalCode: params['postalCode'] || '',
+              location: params['location'] || ''
           });
           this.cdRef.detectChanges();
         
       }
-  })
+  });
+
   this.fetchCarriersContactList()
     this.fetchCarrierProfileAnalitics()
-    
+      this.getSubscriptionPlan();
   }
+  
+ getSubscriptionPlan(): void {
+  const plan = localStorage.getItem('subscriptionPlanType');
+  this.subscriptionPlanType = plan ? parseInt(plan, 10) : null;
+  // this.subscriptionPlanType = 0
+  console.log('Subscription Plan Type:', this.subscriptionPlanType);
+}
   fetchCarriersContactList(resetData: boolean = false): void {
     this.showScrollSpinner=true
     
@@ -86,18 +96,19 @@ export class ProfileAnalyticsComponent implements OnInit {
       postalCode?: string;
       isClick?: boolean;
       position?: number;
+      location?: string;
     } = {
-      limit: 8,
+      limit: 10,
       page: this.page,
     };
   
-    const { fromDate, toDate, userType, postalCode,position, toggleControl } = this.filterForm.value;
+    const { fromDate, toDate, userType, postalCode,position,location, toggleControl } = this.filterForm.value;
   
     if (fromDate) newParams.fromStartDate = this.formatDateForAPI(fromDate);
     if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
     if(userType) newParams.userType=userType
     if (postalCode) newParams.postalCode = postalCode;
-    // if (location) newParams.location = location;
+    if (location) newParams.location = location;
     if (toggleControl) newParams.isClick = toggleControl;
   if(position)  newParams.position = position
 
@@ -111,7 +122,7 @@ if (newParams.fromStartDate) queryParams.set('fromDate', newParams.fromStartDate
 if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
 if (newParams.userType) queryParams.set('userType', newParams.userType);
 if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
-
+if (newParams.location) queryParams.set('location', newParams.location);
 
 // Replace the current history entry with new params
 history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
@@ -166,6 +177,9 @@ if (apiKey) {
       }
     );
   }
+}
+isAdvancedFilterVisible(): boolean {
+  return this.subscriptionPlanType === 2 || this.subscriptionPlanType === 3;
 }
   fetchCarrierProfileAnalitics(){
   
@@ -409,118 +423,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
   
   // Profile analytics table
   displayedColumns: string[] = ['name', 'insights', 'pageSource', 'profileRank', 'location', 'platform', 'os', 'browser', 'accessedAt', 'timeSinceAccess'];
-  // dataSource = [
-  //   { name: 'Jax Logistics LLC',
-  //     insights: 'You check your profile',
-  //     pageSource: 'Broker detail',
-  //     profileRank: 1,
-  //     location: '82934, Alachua, Florida',
-  //     platform: 'fa-desktop',
-  //     os: '/assets/images/windows.png',
-  //     browser: '/assets/images/chrome.png',
-  //     accessedAt: '29 Dec, 2023',
-  //     timeSinceAccess: '2 hours ago'
-  //   },
-  //   { name: 'Guest User',
-  //     insights: 'Profile ranked on 1 position',
-  //     pageSource: 'Broker insurance history',
-  //     profileRank: 2,
-  //     location: '43232, Columbus, Ohio',
-  //     platform: 'fa-tablet',
-  //     os: '/assets/images/android.png',
-  //     browser: '/assets/images/safari.png',
-  //     accessedAt: '29 Dec, 2023',
-  //     timeSinceAccess: '2 hours ago'
-  //   },
-  //   { name: 'Jax Logistics LLC 1',
-  //     insights: 'Profile ranked on 1 position',
-  //     pageSource: 'Broker insurance history',
-  //     profileRank: 2,
-  //     location: '43232, Columbus, Ohio',
-  //     platform: 'fa-mobile',
-  //     os: '/assets/images/ios.png',
-  //     browser: '/assets/images/firefox.png',
-  //     accessedAt: '29 Dec, 2023',
-  //     timeSinceAccess: '2 hours ago'
-  //   },
-  //   { name: 'Jax Logistics LLC 1',
-  //     insights: 'Profile ranked on 1 position',
-  //     pageSource: 'Broker insurance history',
-  //     profileRank: 2,
-  //     location: '43232, Columbus, Ohio',
-  //     platform: 'fa-desktop',
-  //     os: '/assets/images/macOS.png',
-  //     browser: '/assets/images/opera.png',
-  //     accessedAt: '29 Dec, 2023',
-  //     timeSinceAccess: '2 hours ago'
-  //   },
-  //   { name: 'Jax Logistics LLC 1',
-  //     insights: 'Profile ranked on 1 position',
-  //     pageSource: 'Broker insurance history',
-  //     profileRank: 2,
-  //     location: '43232, Columbus, Ohio',
-  //     platform: 'fa-mobile',
-  //     os: '/assets/images/linux.png',
-  //     browser: '/assets/images/other_browser.png',
-  //     accessedAt: '29 Dec, 2023',
-  //     timeSinceAccess: '2 hours ago'
-  //   },
-  //   { name: 'Jax Logistics LLC 1',
-  //     insights: 'Profile ranked on 1 position',
-  //     pageSource: 'Broker insurance history',
-  //     profileRank: 2,
-  //     location: '92807, Anaheim Hills, CA ',
-  //     platform: 'fa-desktop',
-  //     os: '/assets/images/ubuntu.png',
-  //     browser: '/assets/images/chrome.png',
-  //     accessedAt: '29 Dec, 2023',
-  //     timeSinceAccess: '2 hours ago'
-  //   },
-  //   { name: 'Jax Logistics LLC 1',
-  //     insights: 'Profile ranked on 1 position',
-  //     pageSource: 'Broker insurance history',
-  //     profileRank: 2,
-  //     location: '96101, Alturas, Califonia',
-  //     platform: 'fa-desktop',
-  //     os: '/assets/images/other_os.png',
-  //     browser: '/assets/images/safari.png',
-  //     accessedAt: '09 Oct, 2020',
-  //     timeSinceAccess: '2 hours ago'
-  //   },    { name: 'Jax Logistics LLC 1',
-  //     insights: 'Profile ranked on 1 position',
-  //     pageSource: 'Broker insurance history',
-  //     profileRank: 2,
-  //     location: '43232, Columbus, Ohio',
-  //     platform: 'fa-mobile',
-  //     os: '/assets/images/linux.png',
-  //     browser: '/assets/images/other_browser.png',
-  //     accessedAt: '29 Dec, 2023',
-  //     timeSinceAccess: '2 hours ago'
-  //   },
-  //   { name: 'Jax Logistics LLC 1',
-  //     insights: 'Profile ranked on 1 position',
-  //     pageSource: 'Broker insurance history',
-  //     profileRank: 2,
-  //     location: '92807, Anaheim Hills, CA ',
-  //     platform: 'fa-desktop',
-  //     os: '/assets/images/ubuntu.png',
-  //     browser: '/assets/images/chrome.png',
-  //     accessedAt: '29 Dec, 2023',
-  //     timeSinceAccess: '2 hours ago'
-  //   },
-  //   { name: 'Jax Logistics LLC 1',
-  //     insights: 'Profile ranked on 1 position',
-  //     pageSource: 'Broker insurance history',
-  //     profileRank: 2,
-  //     location: '96101, Alturas, Califonia',
-  //     platform: 'fa-desktop',
-  //     os: '/assets/images/other_os.png',
-  //     browser: '/assets/images/safari.png',
-  //     accessedAt: '09 Oct, 2020',
-  //     timeSinceAccess: '2 hours ago'
-  //   },
-  // ];
-
+  
   
   toggleFilter() {
     this.showAdvancedFilter = !this.showAdvancedFilter;
@@ -534,46 +437,46 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     return `${month}/${day}/${year}`; // Format: MM/DD/YYYY
   }
 
-  UTCDate(date: any) {
+  // UTCDate(date: any) {
 
-    date = new Date(date + ' ' + 'UTC');
-    return date;
-  }
-  formatDate(dateStr: string): string {
-    const date = new Date(dateStr);
+  //   date = new Date(date + ' ' + 'UTC');
+  //   return date;
+  // }
+  // formatDate(dateStr: string): string {
+  //   const date = new Date(dateStr);
   
-    const options: Intl.DateTimeFormatOptions = {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',       // Ensure type is valid
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    };
+  //   const options: Intl.DateTimeFormatOptions = {
+  //     day: '2-digit',
+  //     month: 'short',
+  //     year: 'numeric',       // Ensure type is valid
+  //     hour: '2-digit',
+  //     minute: '2-digit',
+  //     hour12: true
+  //   };
   
-    return date.toLocaleString('en-GB', options)
-      .replace(',', '')       // Remove extra comma after date
-      .replace(' ', ', ');    // Add comma after the month
-  }
+  //   return date.toLocaleString('en-GB', options)
+  //     .replace(',', '')       // Remove extra comma after date
+  //     .replace(' ', ', ');    // Add comma after the month
+  // }
 
-  calculateTimeSince(timestamp: string): string {
-    if (!timestamp) return 'Unknown';
+  // calculateTimeSince(timestamp: string): string {
+  //   if (!timestamp) return 'Unknown';
   
-    const accessedDate = new Date(timestamp);
-    const now = new Date();
+  //   const accessedDate = new Date(timestamp);
+  //   const now = new Date();
     
-    let diffMs = now.getTime() - accessedDate.getTime();
-    let diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  //   let diffMs = now.getTime() - accessedDate.getTime();
+  //   let diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   
-    if (diffDays < 1) return 'Just now';
+  //   if (diffDays < 1) return 'Just now';
   
-    let months = Math.floor(diffDays / 30);
-    let days = diffDays % 30;
+  //   let months = Math.floor(diffDays / 30);
+  //   let days = diffDays % 30;
   
-    if (months > 0 && days > 0) return `${months} months ${days} days ago`;
-    if (months > 0) return `${months} months ago`;
-    return `${days} days ago`;
-  }
+  //   if (months > 0 && days > 0) return `${months} months ${days} days ago`;
+  //   if (months > 0) return `${months} months ago`;
+  //   return `${days} days ago`;
+  // }
 
   getBrowserImage(uaString: string): string {
     const lowerUA = uaString?.toLowerCase();
@@ -627,13 +530,90 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
         const scrollHeight = window.innerHeight + window.scrollY;
         const documentHeight = document.documentElement.scrollHeight;
         if (documentHeight - scrollHeight <= 1) {
+          // if (scrollHeight >= documentHeight - 1) {
           console.log(this.totalPages, this.page, "203")
-          if (this.page < this.totalPages && !this.spinner && !this.loading){
+          if (this.page < this.totalPages && !this.showScrollSpinner){
             console.log(this.totalPages, this.page, "205")
             this.page += 1;
+            console.log(this.page, "537")
             this.fetchCarriersContactList();
           }
         }
+        this.getCurrentPage();
       }
+      getCurrentPage() {
+        console.log("📌 Debugging Scroll Behavior");
+        
+        const tbody = document.querySelector("tbody");
+        const table = document.querySelector("table");
+        const itemsPerPage = 10;
+        
+        if (!tbody || !table) return 1; // Ensure elements exist
+    
+        const scrollTop = window.scrollY; // Corrected scroll position
+        const rowHeight = tbody.querySelector("tr")?.clientHeight || 0;
+    
+        if (rowHeight === 0) return 1; // Avoid division by zero
+    
+        // Calculate how many rows are visible on the screen
+        const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
+    
+        // Calculate current page
+        let currentPage = Math.floor((scrollTop + table.offsetTop) / (rowHeight * itemsPerPage - alreadyLoaded * rowHeight));
+    
+        // Ensure currentPage never goes out of bounds
+        currentPage = Math.max(1, Math.min(this.totalPages, currentPage));
+    
+        console.log({
+            scrollTop,
+            rowHeight,
+            alreadyLoaded,
+            calculatedPage: currentPage,
+            currentPageBeforeUpdate: this.page,
+        });
+    
+        // ✅ Update the page only if there's an actual change
+        if (this.page !== currentPage) {
+            this.page = currentPage;
+            this.addParams(currentPage);
+            this.fetchCarriersContactList();
+        }
+    
+        return currentPage;
+    }
+    
+    addParams(currentPage?:any){
+      let newParams: {
+        limit: number;
+        page: number;
+        fromStartDate?: string;
+        toStartDate?: string;
+        userType?: string;
+        postalCode?: string;
+        isClick?: boolean;
+        position?: number;
+        location?: string;
+      } = {
+        limit: 10,
+        page: this.page,
+      };
+      const queryParams = new URLSearchParams();
+if (this.page) queryParams.set('page', this.page.toString());
+if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+if (newParams.fromStartDate) queryParams.set('fromDate', newParams.fromStartDate);
+if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
+if (newParams.userType) queryParams.set('userType', newParams.userType);
+if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
+if (newParams.location) queryParams.set('location', newParams.location);
 
+// Replace the current history entry with new params
+history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
+    }
+    // Postal case
+    onPostalCodeInput(event: Event): void {
+      const input = (event.target as HTMLInputElement).value;
+      // Allow only digits and trim to 9 characters
+      const numericInput = input.replace(/\D/g, '').slice(0, 9);
+      this.filterForm.get('postalCode')?.setValue(numericInput, { emitEvent: false });
+    }
 }

@@ -10,14 +10,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CustomDatePipe } from '../commons/pipe/date.pipe';
 import { TimeAgoPipe } from '../commons/pipe/time-ago.pipe';
 import { UtcDatePipe } from '../commons/pipe/utc-date.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
   declarations: [
     TruckingCompaniesComponent,
     BrokerageCompaniesComponent,
-    CustomDatePipe,
-    TimeAgoPipe,
+    // TimeAgoPipe,
     UtcDatePipe,
   ],
   imports: [
@@ -25,7 +25,8 @@ import { UtcDatePipe } from '../commons/pipe/utc-date.pipe';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    BrowseHistoryRoutingModule
+    BrowseHistoryRoutingModule,
+    SharedModule
   ],
   providers: [DatePipe],
   // exports: [CustomDatePipe]
