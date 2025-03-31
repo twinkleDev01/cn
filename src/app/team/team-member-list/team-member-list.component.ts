@@ -17,6 +17,7 @@ page=1
 isFilterApplied = false;
   searchControl = new FormControl('');
   totalPages: number = 0;
+  showScrollSpinner=false
 dataSource: MatTableDataSource<any> = new MatTableDataSource();
   constructor(
     public dialog: MatDialog,
@@ -30,12 +31,12 @@ dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
     teamList(resetData: boolean = false): void {
      
-      
+      this.showScrollSpinner=true
       let newParams: {
         limit: number;
         page: number;
       } = {
-        limit: 5,
+        limit: 8,
         page: this.page,
       };
     
@@ -54,6 +55,7 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
     };
       this.commonService.getList(APIparams).subscribe(
         (response) => {
+          this.showScrollSpinner=false
           console.log(response)
           this.totalPages = response.response.totalPages;
           if (response && response.response && response.response.teamArray ) {
@@ -71,12 +73,15 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
           }
         },
         (error) => {
+          this.showScrollSpinner=false
           console.error('Error fetching carriers:', error);
         }
       );
     }}
   
-
+    refresh(){
+      this.teamList(true);
+    }
   deleteTeamMember(type:any){
     const dialogRef = this.dialog.open(PopupComponent, {
       disableClose: true,
@@ -118,61 +123,90 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
     this.isFilterApplied = filterValue.length > 0;
   }
 
-  
+  scrollPoints: number[] = [];  
   @HostListener('window:scroll', ['$event'])
   onWindowScroll(event: Event) {
     const scrollHeight = window.innerHeight + window.scrollY;
     const documentHeight = document.documentElement.scrollHeight;
+
+    // ✅ Bottom Scroll: Increment page and store scroll point
     if (documentHeight - scrollHeight <= 1) {
-      console.log(this.totalPages, this.page, "203")
-      if (this.page < this.totalPages ){
-        console.log(this.totalPages, this.page, "205")
+      if (this.page < this.totalPages) {
         this.page += 1;
-        console.log(this.page, "537")
-        // this.teamList();
+        this.teamList();
+        console.log(`Page incremented: ${this.page}`);
+
+        // Store the scroll point where page was incremented
+        this.scrollPoints.push(window.scrollY);
       }
     }
-    this.getCurrentPage();
-  }
 
-  getCurrentPage() {
-    console.log("📌 Debugging Scroll Behavior");
-    
-    const tbody = document.querySelector("tbody");
-    const table = document.querySelector("table");
-    const itemsPerPage = 5;
-    
-    if (!tbody || !table) return 1; // Ensure elements exist
-
-    const scrollTop = window.scrollY; // Corrected scroll position
-    const rowHeight = tbody.querySelector("tr")?.clientHeight || 0;
-
-    if (rowHeight === 0) return 1; // Avoid division by zero
-
-    // Calculate how many rows are visible on the screen
-    const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
-
-    // Calculate current page
-    let currentPage = Math.floor((scrollTop + table.offsetTop) / (rowHeight * itemsPerPage - alreadyLoaded * rowHeight));
-
-    // Ensure currentPage never goes out of bounds
-    currentPage = Math.max(1, Math.min(this.totalPages, currentPage));
-
-    console.log({
-        scrollTop,
-        rowHeight,
-        alreadyLoaded,
-        calculatedPage: currentPage,
-        currentPageBeforeUpdate: this.page,
-    });
-
-    // ✅ Update the page only if there's an actual change
-    if (this.page !== currentPage) {
-        this.page = currentPage;
+    // ✅ Top Scroll: Decrement page if crossing previous scroll point
+    if (window.scrollY < (this.scrollPoints[this.scrollPoints.length - 1] || 0)) {
+      if (this.page > 1) {
+        this.page -= 1;
         this.teamList();
+        console.log(`Page decremented: ${this.page}`);
+        this.scrollPoints.pop();  // Remove the last point
+      }
     }
 
-    return currentPage;
-}
+  }
+  
+  // @HostListener('window:scroll', ['$event'])
+  // onWindowScroll(event: Event) {
+  //   const scrollHeight = window.innerHeight + window.scrollY;
+  //   const documentHeight = document.documentElement.scrollHeight;
+  //   if (documentHeight - scrollHeight <= 1) {
+  //     console.log(this.totalPages, this.page, "203")
+  //     if (this.page < this.totalPages ){
+  //       console.log(this.totalPages, this.page, "205")
+  //       this.page += 1;
+  //       console.log(this.page, "537")
+  //       this.teamList();
+  //     }
+  //   }
+  //   // this.getCurrentPage();
+  // }
+
+//   getCurrentPage() {
+//     console.log("📌 Debugging Scroll Behavior");
+    
+//     const tbody = document.querySelector("tbody");
+//     const table = document.querySelector("table");
+//     const itemsPerPage = 5;
+    
+//     if (!tbody || !table) return 1; // Ensure elements exist
+
+//     const scrollTop = window.scrollY; // Corrected scroll position
+//     const rowHeight = tbody.querySelector("tr")?.clientHeight || 0;
+
+//     if (rowHeight === 0) return 1; // Avoid division by zero
+
+//     // Calculate how many rows are visible on the screen
+//     const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
+
+//     // Calculate current page
+//     let currentPage = Math.floor((scrollTop + table.offsetTop) / (rowHeight  itemsPerPage - alreadyLoaded  rowHeight));
+
+//     // Ensure currentPage never goes out of bounds
+//     currentPage = Math.max(1, Math.min(this.totalPages, currentPage));
+
+//     console.log({
+//         scrollTop,
+//         rowHeight,
+//         alreadyLoaded,
+//         calculatedPage: currentPage,
+//         currentPageBeforeUpdate: this.page,
+//     });
+
+//     // ✅ Update the page only if there's an actual change
+//     if (this.page !== currentPage) {
+//         this.page = currentPage;
+//         this.teamList();
+//     }
+
+//     return currentPage;
+// }
 
 }

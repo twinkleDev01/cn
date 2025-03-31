@@ -158,7 +158,7 @@
                 [ngClass]="{ 'd-none': showAdvancedFilter }"
               >
                 <mat-form-field appearance="none">
-                  <mat-label>Table Search</mat-label>
+                  <mat-label>Quick Search</mat-label>
                   <mat-icon matTextPrefix class="material-symbols-outlined"
                     >filter_list</mat-icon
                   >
@@ -167,6 +167,7 @@
                     matInput
                     placeholder="Search"
                     class="form-control cn_input ms-2"
+                    [formControl]="searchControl"
                     (keyup)="applyFilter()"
                   />
                 </mat-form-field>
@@ -340,9 +341,18 @@
               </div>
               <div class="ud_r">
                 <div class="name_icn" *ngIf="element.user?.companyName">
-                  <a href="#" class="u_name">{{
+                  <a    *ngIf="element.userType === 'CARRIER'" 
+                   [href]="'/carrier-profile/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)" 
+                   class="u_name" target="_blank">{{
                     element?.user?.companyName
                   }}</a>
+                    <a 
+                    *ngIf="element.userType === 'BROKER'" 
+                    [href]="'/freight-brokerage/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)" 
+                    class="u_name" 
+                    target="_blank">
+                    {{ element.user?.companyName }}
+                  </a>
                   <i
                   *ngIf="!element?.user?.id"
                     class="fa-duotone fa-badge-check verify_icon"
@@ -367,7 +377,7 @@
                   <i class="fa-solid fa-star"></i>
                 </span>
                 <span
-                class="user_rtng zero_rating"
+                class="user_rtng"
                 *ngIf="
                   element?.user?.averageRatingValue == 0 &&
                   element.user?.companyName
@@ -376,7 +386,7 @@
                 >0.0 <i class="fa-solid fa-star"></i>
               </span>
                  
-              <span class="u_loca">
+              <!-- <span class="u_loca">
                 {{
                   element.user?.city || element.user?.state
                     ? (
@@ -389,7 +399,15 @@
                       ).slice(0, -2)
                     : element.location || ""
                 }}</span
-              >
+              > -->
+              <span class="u_loca">
+                {{
+                  (element.user?.city || element.user?.state)
+                    ? ((element.user?.city ? (element.user.city | titlecase) + ", " : "") + 
+                       (element.user?.state ? (element.user.state | titlecase) + ", " : "")).slice(0, -2)
+                    : (element.location || '').slice(0,-4)
+                }}
+              </span>
                 </div>
               </div>
             </div>
@@ -513,6 +531,17 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr class="mat-row" *matNoDataRow style="text-align: center">
+          <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+           <div class="empty-state">
+             <div class="empty-state__content">
+           <div class="empty-state__icon">
+             <img src="./assets/images/no_data_found_img.jpg" alt="">
+           </div>
+           <div class="empty-state__message">List Empty</div>
+             <p class="empty-state__help">This is no Records</p>
+         </div></div>
+          </td> </tr>
       </table>
       <div class="text-center my-5" *ngIf="showScrollSpinner">
         <span
@@ -525,8 +554,8 @@
   </div>
 </div>
 <!-- No Record -->
-<div class="skeletonloader">
-  <div class="empty-state" *ngIf="!dataSource.data.length && !showScrollSpinner">
+<!-- <div class="skeletonloader">
+  <div class="empty-state">
     <div class="empty-state__content">
     <div class="empty-state__icon">
       <img src="./assets/images/no_data_found_img.jpg" alt="">
@@ -535,4 +564,4 @@
       <p class="empty-state__help">This is no Records</p>
     </div>
   </div>
-</div>
+</div> -->

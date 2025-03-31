@@ -35,7 +35,8 @@
             ],
             "styles": [
               "src/styles.css",
-              "src/assets/common.css"
+              "src/assets/common.css",
+                "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",
@@ -139,7 +140,8 @@
             ],
             "styles": [
               "src/styles.css",
-              "src/assets/common.css"
+              "src/assets/common.css",
+                "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",

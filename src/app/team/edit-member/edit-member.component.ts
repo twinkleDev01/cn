@@ -3,7 +3,8 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
-
+import { Location } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-edit-member',
   templateUrl: './edit-member.component.html',
@@ -14,7 +15,7 @@ export class EditMemberComponent implements OnInit {
   dataToEdit:any
  memberForm: FormGroup;
  permissionList=[]
-  constructor(private router: Router,private fb: FormBuilder,public commonService: CommonService,private cdRef: ChangeDetectorRef,) {
+  constructor(private router: Router,private fb: FormBuilder,public commonService: CommonService,private cdRef: ChangeDetectorRef,private location: Location,private toastr: ToastrService) {
     this.createForm()
     
     const navigation = this.router.getCurrentNavigation();
@@ -177,14 +178,20 @@ export class EditMemberComponent implements OnInit {
             this.commonService.putAllValue(APIparams).subscribe({
               next: (response) => {
                 console.log('API Response:', response);
+                this.toastr.success('Data saved successfully!', 'Success');
+                this.location.back();
               },
               error: (error) => {
+                this.toastr.error('Something went wrong!', 'Error');
                 console.error('API Error:', error);
               }
             });
           }
           
-  
+          Cancel(){
+            this.memberForm.reset();
+            this.location.back();
+          }
     isInvalid(controlName: string) {
       const control = this.getControl(controlName);
       return control?.invalid && (control?.touched || control?.dirty);

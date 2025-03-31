@@ -61,7 +61,7 @@
         <div class="col-md-6">
           <p class="cn_input_lbl">Status</p>
           <mat-radio-group formControlName="status" class="cn_radio_btn">
-            <mat-radio-button [value]="1">Active</mat-radio-button>
+            <mat-radio-button [value]="2">Active</mat-radio-button>
             <mat-radio-button [value]="0">In-active</mat-radio-button>
           </mat-radio-group>
           <mat-error *ngIf="isInvalid('status')">Please select status.</mat-error>
@@ -93,7 +93,7 @@
         <!-- Buttons -->
         <div class="col-md-12">
           <div class="form_action">
-            <button type="button" class="cn_btn btn_bordered" (click)="memberForm.reset()">Cancel</button>
+            <button type="button" class="cn_btn btn_bordered" (click)="Cancel()">Cancel</button>
             <button type="submit" class="cn_btn ms-4" >Update Member</button>
           </div>
         </div>

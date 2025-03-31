@@ -115,7 +115,7 @@ if (apiKey) {
   }}
 
   fetchCarriersContactList(resetData: boolean = false): void {
-    this.showScrollSpinner=true
+    // this.showScrollSpinner=true
     
     let newParams: {
       limit: number;
@@ -568,6 +568,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     };
 
     this.dataSource.filter = filterValue;
+    console.log(this.dataSource.data,"571")
     this.isFilterApplied = filterValue.length > 0;
   }
   
@@ -604,5 +605,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     const numericInput = input.replace(/\D/g, '').slice(0, 9);
     this.filterForm.get('postalCode')?.setValue(numericInput, { emitEvent: false });
   }
-
+  formatCompanyName(name: string): string {
+    return name ? name.replace(/\s+/g, '-') : '';
+  }
 }

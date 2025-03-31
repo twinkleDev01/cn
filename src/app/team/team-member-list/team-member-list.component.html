@@ -31,10 +31,10 @@
                   <!-- <i class="fa-solid fa-plus me-2"></i> -->
                   <span>Add Member</span>
                 </a>
-                <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
+                <!-- <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
                   <i class="fa-sharp fa-solid fa-filter"></i>
-                </span>
-                <span class="cn_btn icn_btn">
+                </span> -->
+                <span class="cn_btn icn_btn" (click)="refresh()">
                   <i class="fa-duotone fa-solid fa-rotate-right"></i>
                 </span>
               </div>
@@ -172,6 +172,13 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
+      <div class="text-center my-5" *ngIf="showScrollSpinner">
+        <span
+          class="spinner-border"
+          role="status"
+          style="color: #00b4fc"
+        ></span>
+      </div>
     </div>
   </div>
 </div>

@@ -37,6 +37,7 @@
     "ngx-loading": "^13.0.0",
     "ngx-mat-select-search": "^7.0.1",
     "ngx-skeleton-loader": "^5.0.0",
+    "ngx-toastr": "^14.2.0",
     "popper.js": "^1.16.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

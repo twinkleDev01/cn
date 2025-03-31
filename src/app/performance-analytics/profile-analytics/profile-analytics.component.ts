@@ -85,7 +85,7 @@ export class ProfileAnalyticsComponent implements OnInit {
   console.log('Subscription Plan Type:', this.subscriptionPlanType);
 }
   fetchCarriersContactList(resetData: boolean = false): void {
-    this.showScrollSpinner=true
+    // this.showScrollSpinner=true
     
     let newParams: {
       limit: number;
@@ -615,5 +615,8 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams.toStri
       // Allow only digits and trim to 9 characters
       const numericInput = input.replace(/\D/g, '').slice(0, 9);
       this.filterForm.get('postalCode')?.setValue(numericInput, { emitEvent: false });
+    }
+    formatCompanyName(name: string): string {
+      return name ? name.replace(/\s+/g, '-') : '';
     }
 }

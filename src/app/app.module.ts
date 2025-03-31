@@ -24,6 +24,7 @@ import { PerformanceAnalyticsModule } from './performance-analytics/performance-
 import { BrowseHistoryModule } from './browse-history/browse-history.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { MonitorNetworkModule } from './monitor-network/monitor-network.module';
+import { ToastrModule } from 'ngx-toastr';
 
 
 export function initializeApp(sharedService: SharedService) {
@@ -51,7 +52,12 @@ export function initializeApp(sharedService: SharedService) {
     PerformanceAnalyticsModule,
     BrowseHistoryModule,
     DashboardModule,
-    MonitorNetworkModule
+    MonitorNetworkModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,         
+      positionClass: 'toast-top-right',  
+      preventDuplicates: true,  
+    }),
   ],
   declarations: [
     AppComponent,

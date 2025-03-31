@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
-
+import { Location } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-add-member',
   templateUrl: './add-member.component.html',
@@ -11,7 +12,7 @@ import { AppSettings } from 'src/app/commons/setting/app_setting';
 export class AddMemberComponent implements OnInit {
   memberForm: FormGroup;
 permissionList=[]
-  constructor(private fb: FormBuilder, public commonService: CommonService,) { }
+  constructor(private fb: FormBuilder, public commonService: CommonService,private location: Location,private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -93,11 +94,19 @@ permissionList=[]
     this.commonService.postAllValue(APIparams).subscribe({
       next: (response) => {
         console.log('API Response:', response);
+        this.toastr.success('Data saved successfully!', 'Success');
+        this.location.back();
       },
       error: (error) => {
         console.error('API Error:', error);
+        this.toastr.error('Something went wrong!', 'Error');
       }
     });
+  }
+
+  Cancel(){
+    this.memberForm.reset();
+    this.location.back();
   }
 
   getControl(controlName: string) {
