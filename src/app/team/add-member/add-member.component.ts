@@ -103,8 +103,7 @@ public spinnerLoader = false;
       error: (error) => {
           this.spinnerLoader = false;
         console.error('API Error:', error);
-        // this.toastr.error('User already exists!', 'Error');
-         this.toastr.error(error?.error[0]?.message, 'Error');
+        this.toastr.error('Something went wrong!', 'Error');
       }
     });
   }

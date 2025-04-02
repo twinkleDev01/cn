@@ -13,23 +13,8 @@
         <div class="col-md-6">
           <p class="cn_input_lbl">First Name</p>
           <mat-form-field appearance="none">
-            <input
-              matInput
-              type="text"
-              placeholder="Enter First Name"
-              formControlName="firstName"
-              class="form-control cn_input"
-              autocomplete="off"
-              maxlength="64"
-            />
-            <mat-error class="error_mess">First name is required.</mat-error>
-            <!-- <mat-error *ngIf="memberForm.get('firstName')?.hasError('required')"
-              >First name is required.</mat-error
-            > -->
-            <mat-error
-              *ngIf="memberForm.get('firstName')?.hasError('maxLength')"
-              >Max 64 characters allowed.</mat-error
-            >
+            <input matInput type="text" placeholder="Enter First Name" formControlName="firstName" class="form-control cn_input"/>
+            <mat-error *ngIf="isInvalid('firstName')">First name is required (Min: 2 chars).</mat-error>
           </mat-form-field>
         </div>
 
@@ -37,19 +22,8 @@
         <div class="col-md-6">
           <p class="cn_input_lbl">Last Name</p>
           <mat-form-field appearance="none">
-            <input
-              matInput
-              type="text"
-              placeholder="Enter Last Name"
-              formControlName="lastName"
-              class="form-control cn_input"
-              autocomplete="off"
-              maxlength="64"
-            />
-            <mat-error class="error_mess">Last name is required.</mat-error>
-            <!-- <mat-error *ngIf="memberForm.get('lastName')?.hasError('required')">Last name is required.</mat-error> -->
-            <mat-error *ngIf="memberForm.get('lastName')?.hasError('maxLength')">Max 64 characters allowed.</mat-error>
-
+            <input matInput type="text" placeholder="Enter Last Name" formControlName="lastName" class="form-control cn_input"/>
+            <mat-error *ngIf="isInvalid('lastName')">Last name is required (Min: 2 chars).</mat-error>
           </mat-form-field>
         </div>
 
@@ -145,9 +119,9 @@
         <!-- Status -->
         <div class="col-md-6">
           <p class="cn_input_lbl">Status</p>
-          <mat-radio-group appearance="none" formControlName="status" class="cn_radio_btn">
-            <mat-radio-button [value]="0">Active</mat-radio-button>
-            <mat-radio-button [value]="2">In-active</mat-radio-button>
+          <mat-radio-group formControlName="status" class="cn_radio_btn">
+            <mat-radio-button [value]="2">Active</mat-radio-button>
+            <mat-radio-button [value]="0">In-active</mat-radio-button>
           </mat-radio-group>
           <mat-error *ngIf="isInvalid('status')"
             >Please select status.</mat-error
@@ -176,14 +150,12 @@
         <div class="col-md-12">
           <div class="form_action">
             <button type="button" class="cn_btn btn_bordered" (click)="Cancel()">Cancel</button>
-            <button type="submit" class="cn_btn ms-4">
-              <span class="me-1 spinner-border" role="status" *ngIf="spinnerLoader"></span>
-              Add Member
-            </button>
+            <button type="submit" class="cn_btn ms-4" >Add Member</button>
           </div>
         </div>
       </div>
     </form>
+    
   </div>
 
 </div>
