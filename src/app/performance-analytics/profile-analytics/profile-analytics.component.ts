@@ -32,6 +32,8 @@ export class ProfileAnalyticsComponent implements OnInit {
   isFilterApplied = false;
   public spinnerLoader = false;
   subscriptionPlanType: number | null = null;
+  uniquePositions:any=[];
+  profilePerfomrmanceDuration:any
   // Progress Bar Percentage calculation
   get totalViewsPercentage(): number {
     return 100;
@@ -161,7 +163,15 @@ if (apiKey) {
       (response) => {
         
         if (response && response.response && response.response.data ) {
-          const newData = response.response.data;
+          // const newData = response.response.data;
+          const newData = response.response.data.map((item:any)=>({
+            ...item,
+            createdAt: this.formatDate(item.createdAt),
+          }));
+          this.uniquePositions = [...new Set(newData.map(item => {return item.position}))];
+          this.uniquePositions = [...this.uniquePositions];
+          console.log( this.uniquePositions,"161")
+          this.cdRef.detectChanges();
           if (resetData) {
             this.dataSource.data = newData;
           
@@ -196,10 +206,47 @@ if (apiKey) {
 isAdvancedFilterVisible(): boolean {
   return this.subscriptionPlanType === 2 || this.subscriptionPlanType === 3;
 }
-  fetchCarrierProfileAnalitics(){
-  
-    let newParams: {} = {};
+checkDate() {
+  const fromStartDate = this.filterPForm.get('fromPDate')?.value;
+  const toStartDate = this.filterPForm.get('toPDate')?.value;
 
+  console.log('Selected Dates:', { fromStartDate, toStartDate });
+
+  // Ensure both dates are selected before calling the API
+  if (!fromStartDate || !toStartDate) return;
+
+  this.fetchCarrierProfileAnalitics(fromStartDate, toStartDate);
+
+  // Days calculation
+  
+  // Convert dates to JavaScript Date objects
+  const fromDate = new Date(fromStartDate);
+  const toDate = new Date(toStartDate);
+
+  // Calculate the difference in milliseconds
+  const timeDifference = toDate.getTime() - fromDate.getTime();
+
+  // Convert milliseconds to days
+  const dayDifference = timeDifference / (1000 * 3600 * 24);
+  this.profilePerfomrmanceDuration = dayDifference;
+  console.log('Time difference in days:', dayDifference);
+}
+
+  fetchCarrierProfileAnalitics(fromStartDate?:string, toStartDate?:string){
+    console.log("Calling API with:", fromStartDate, toStartDate);
+
+    let newParams: {
+      fromStartDate?:string;
+      toStartDate?:string;
+    } = {};
+
+    const {fromPDate, toPDate} = this.filterPForm.value;
+    if (fromPDate) newParams.fromStartDate = this.formatDateForAPI(fromPDate);
+    if (toPDate) newParams.toStartDate = this.formatDateForAPI(toPDate);
+    const queryParams = new URLSearchParams();
+    if (newParams.fromStartDate) queryParams.set('fromStartDate', newParams.fromStartDate);
+    if (newParams.toStartDate) queryParams.set('toStartDate', newParams.toStartDate);
+    history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
     const usertype = localStorage.getItem('user_type');
     // Conditionally set the API key for CARRIER or BROKER
 const apiKey = usertype === 'CARRIER' 

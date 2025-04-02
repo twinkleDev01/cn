@@ -167,6 +167,16 @@
                 <i class="fa-duotone fa-solid fa-trash txt_d"></i>
               </a>
             </div>
+          </td> -->
+          <td mat-cell *matCellDef="let element" class="actin_td">
+            <div class="actin_icon">
+              <a [routerLink]="['/teams/edit']" [state]="{ data: element }" class="actn_btn">
+                <i class="fa-duotone fa-solid fa-user-pen txt_p"></i>
+              </a>
+              <div class="actin_icon cus_slide_toggle">
+                <!-- <mat-slide-toggle  [checked]="element.activeStatus === 0 ? false : true"></mat-slide-toggle> -->
+              </div>
+            </div>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
