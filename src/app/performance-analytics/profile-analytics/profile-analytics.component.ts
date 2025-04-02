@@ -32,7 +32,8 @@ export class ProfileAnalyticsComponent implements OnInit {
   isFilterApplied = false;
   public spinnerLoader = false;
   subscriptionPlanType: number | null = null;
-  uniquePositions:any=[]
+  uniquePositions:any=[];
+  profilePerfomrmanceDuration:any
   // Progress Bar Percentage calculation
   get totalViewsPercentage(): number {
     return 100;
@@ -162,7 +163,11 @@ if (apiKey) {
       (response) => {
         
         if (response && response.response && response.response.data ) {
-          const newData = response.response.data;
+          // const newData = response.response.data;
+          const newData = response.response.data.map((item:any)=>({
+            ...item,
+            createdAt: this.formatDate(item.createdAt),
+          }));
           this.uniquePositions = [...new Set(newData.map(item => {return item.position}))];
           this.uniquePositions = [...this.uniquePositions];
           console.log( this.uniquePositions,"161")
@@ -211,6 +216,20 @@ checkDate() {
   if (!fromStartDate || !toStartDate) return;
 
   this.fetchCarrierProfileAnalitics(fromStartDate, toStartDate);
+
+  // Days calculation
+  
+  // Convert dates to JavaScript Date objects
+  const fromDate = new Date(fromStartDate);
+  const toDate = new Date(toStartDate);
+
+  // Calculate the difference in milliseconds
+  const timeDifference = toDate.getTime() - fromDate.getTime();
+
+  // Convert milliseconds to days
+  const dayDifference = timeDifference / (1000 * 3600 * 24);
+  this.profilePerfomrmanceDuration = dayDifference;
+  console.log('Time difference in days:', dayDifference);
 }
 
   fetchCarrierProfileAnalitics(fromStartDate?:string, toStartDate?:string){
@@ -258,6 +277,19 @@ if (apiKey) {
     );
   }}
 
+  formatDate(inputDate:string): string {
+    // Parse the input date string
+    let [datePart, timePart] = inputDate.split(' ');
+    let [month, day, year] = datePart.split('/');
+
+    // Construct the formatted date
+    let formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(
+      2,
+      '0'
+    )}T${timePart}.000Z`;
+
+    return formattedDate;
+  }
   applyFilter() {
     const filterValue = this.searchControl.value.trim().toLowerCase();
 console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')

@@ -2,7 +2,7 @@
   <div class="dashboard_chat_overview">
     <div class="dco_head" [formGroup]="filterPForm">
       <div class="dcoh_l">
-        <p class="dco_h_tlt">90 Days Profile Performance</p>
+        <p class="dco_h_tlt">{{profilePerfomrmanceDuration || 90}} Days Profile Performance</p>
       </div>
       <div class="dcoh_r cn_field">
         <mat-form-field class="date_range_filter">
@@ -587,9 +587,7 @@
         <ng-container matColumnDef="accessedAt">
           <th mat-header-cell *matHeaderCellDef>Accessed At</th>
           <td mat-cell *matCellDef="let element">
-            <!-- {{formatDate(UTCDate(element?.createdAt))   }} -->
             {{ element?.createdAt | date : "MMM dd, yyyy hh:mm a"}}
-            <!-- {{ convertToLocalTime(element?.createdAt) | date : "MMM dd, yyyy hh:mm a" }} -->
           </td>
         </ng-container>
         <ng-container matColumnDef="timeSinceAccess">
@@ -597,7 +595,6 @@
             Time Since Access
           </th>
           <td mat-cell *matCellDef="let element">
-            <!-- {{ calculateTimeSince(element.createdAt) }} -->
             {{ element.createdAt | timeAgo }}
           </td>
         </ng-container>

@@ -179,7 +179,11 @@ if (apiKey) {
       (response) => {
         
         if (response && response.response && response.response.data ) {
-          const newData = response.response.data;
+          // const newData = response.response.data;
+          const newData = response.response.data.map((item:any)=>({
+            ...item,
+            createdAt: this.formatDate(item.createdAt),
+          }));
           if (resetData) {
             this.dataSource.data = newData;
           
@@ -211,7 +215,19 @@ if (apiKey) {
     );
   }
 }
+formatDate(inputDate:string): string {
+  // Parse the input date string
+  let [datePart, timePart] = inputDate.split(' ');
+  let [month, day, year] = datePart.split('/');
 
+  // Construct the formatted date
+  let formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(
+    2,
+    '0'
+  )}T${timePart}.000Z`;
+
+  return formattedDate;
+}
   refresh(){
     this.fetchCarriersContactList(true);
   }

@@ -9,6 +9,13 @@
 .btn_bordered { color: #818181; border: 1px solid #818181; }
 .btn_bordered:hover { color: #000; border: 1px solid #000; }
 
+.form_action .spinner-border {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #fff !important;
+    border-right-color: transparent !important;
+  }
+
 @media screen and (max-width: 760px) {
     .cn_mlti_selct { display: flex; flex-direction: column; }
 }

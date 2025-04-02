@@ -134,7 +134,11 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
        (response) => {
         console.log(response,"140")
          if (response && response.response) {
-           const newData = response.response;
+          //  const newData = response.response;
+          const newData = response.response.data.map((item:any)=>({
+            ...item,
+            createdAt: this.formatDate(item.createdAt),
+          }));
            this.noDataFound = newData.length === 0;
            if (resetData) {
              this.dataSource.data = newData;
@@ -164,6 +168,19 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
        }
      );
    }
+   formatDate(inputDate:string): string {
+    // Parse the input date string
+    let [datePart, timePart] = inputDate.split(' ');
+    let [month, day, year] = datePart.split('/');
+
+    // Construct the formatted date
+    let formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(
+      2,
+      '0'
+    )}T${timePart}.000Z`;
+
+    return formattedDate;
+  }
    refresh(){
     this.fetchBroker(true);
   }

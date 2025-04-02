@@ -149,7 +149,11 @@ if (newParams.position) queryParams.set('position', newParams.position);
       (response) => {
         console.log(response,'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
         if (response && response.response ) {
-          const newData = response.response;
+          // const newData = response.response;
+          const newData = response.response.data.map((item:any)=>({
+            ...item,
+            createdAt: this.formatDate(item.createdAt),
+          }));
           this.noDataFound = newData.length === 0;
           if (resetData) {
             this.dataSource.data = newData;
@@ -178,6 +182,19 @@ if (newParams.position) queryParams.set('position', newParams.position);
         console.error('Error fetching carriers:', error);
       }
     );
+  }
+  formatDate(inputDate:string): string {
+    // Parse the input date string
+    let [datePart, timePart] = inputDate.split(' ');
+    let [month, day, year] = datePart.split('/');
+
+    // Construct the formatted date
+    let formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(
+      2,
+      '0'
+    )}T${timePart}.000Z`;
+
+    return formattedDate;
   }
   refresh(){
     this.fetchCarriers(true);

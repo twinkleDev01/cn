@@ -144,45 +144,30 @@ export class EditMemberComponent implements OnInit {
             }
           }
 
-          // patchPermissions(data:any) {
-          //   if (this.dataToEdit?.teamPermission && Array.isArray(this.dataToEdit.teamPermission)) {
-          //     const slugs = data.teamPermission.map((perm: any) => perm.permissionSlug);
-        
-          //     // Clear existing permissions array
-          //     this.permissions.clear();
-        
-          //     this.permissionList.forEach((perm) => {
-          //       if (slugs.includes(perm.permissionSlug)) {
-          //         // Add only the `permissionSlug` to the FormArray
-          //         this.permissions.push(this.fb.control(perm.permissionSlug));
-          //       }
-          //     });
-        
-          //     console.log('Patched Permissions (Slug):', this.memberForm.value);
-          //     this.cdRef.detectChanges();
-          //   }
-          // }
 
           editTeam(): void {
+            const selectedPermissions = this.memberForm.value.permissions
+            .map((selected: boolean, index: number) => selected ? this.permissionList[index]?.permissionSlug : null)
+            .filter(permissionSlug => permissionSlug !== null);
             const APIparams = {
-              apiKey:  AppSettings.APIsNameArray.TEAM.EDITTEAM,               // Add your URI parameters if needed
+              apiKey:  AppSettings.APIsNameArray.TEAM.EDITTEAM,             
               postBody: {        
-                "id": this.dataToEdit?.id,              // Add your POST body data
+                "id": this.dataToEdit?.id,            
                 "firstName":  this.memberForm.get('firstName')?.value,
             "lastName":  this.memberForm.get('lastName')?.value,
             "activeStatus":  this.memberForm.get('status')?.value,
-            // "teamPermission":  this.memberForm.get('permissions')?.value
+            "teamPermission":  selectedPermissions
               }
             };
         
             this.commonService.putAllValue(APIparams).subscribe({
               next: (response) => {
                 console.log('API Response:', response);
-                this.toastr.success('Data saved successfully!', 'Success');
+                this.toastr.success('Team Member update successfully!', 'Success');
                 this.location.back();
               },
               error: (error) => {
-                this.toastr.error('Something went wrong!', 'Error');
+                this.toastr.error('User already exists!', 'Error');
                 console.error('API Error:', error);
               }
             });

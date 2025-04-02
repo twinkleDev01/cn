@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
@@ -15,17 +15,16 @@ export class InsuranceAlertComponent implements OnInit {
   public page=1
   filterForm: FormGroup;
     dataSource: MatTableDataSource<any> = new MatTableDataSource();
-    
+     searchControl = new FormControl('');
+     isFilterApplied = false;
   dateRanges = [
     { label: 'Created', start: 'createdStart', end: 'createdEnd', picker: 'picker1' },
     { label: 'Last Email Sent At', start: 'emailStart', end: 'emailEnd', picker: 'picker2' },
     { label: 'Updated', start: 'updatedStart', end: 'updatedEnd', picker: 'picker3' },
     { label: 'Expire', start: 'expireStart', end: 'expireEnd', picker: 'picker4' }
   ];
-  constructor(public commonService: CommonService,private fb: FormBuilder) { }
-
-  ngOnInit(): void {
-    this.fetchChangeAlertInsurance()
+  totalPages: number = 0;
+  constructor(public commonService: CommonService,private fb: FormBuilder) {
     this.filterForm = this.fb.group({
       policyNumber: [''],
       status: [''],
@@ -38,6 +37,10 @@ export class InsuranceAlertComponent implements OnInit {
       expireStart: [''],
       expireEnd: ['']
     });
+   }
+
+  ngOnInit(): void {
+    this.fetchChangeAlertInsurance()
   }
 
     fetchChangeAlertInsurance(resetData: boolean = false): void {
@@ -52,7 +55,7 @@ export class InsuranceAlertComponent implements OnInit {
         toLastEmailSendDate?: string;
         fromExpireDate?: string;
         toExpireDate?: string;
-        status?: boolean;
+        status?: string;
         policyNo?:string;
         limit: number;
         page: number;
@@ -61,40 +64,43 @@ export class InsuranceAlertComponent implements OnInit {
         page: this.page,
       };
     
-      const { policyNumber, status, createdStart, createdEnd,emailStart,emailEnd, updatedStart,updatedEnd,expireStart,expireEnd } = this.filterForm.value;
+      const { policyNumber, status, createdStart, createdEnd,emailStart,emailEnd, updatedStart,updatedEnd,expireStart,expireEnd } = this.filterForm?.value;
     
       if (createdStart) newParams.fromCreatedAtDate = this.formatDateForAPI(createdStart);
       if (createdEnd) newParams.toCreatedAtDate = this.formatDateForAPI(createdEnd);
-      if (createdStart) newParams.fromUpdatedAtDate = this.formatDateForAPI(createdStart);
-      if (createdEnd) newParams.toUpdatedAtDate = this.formatDateForAPI(createdEnd);
-      if (createdStart) newParams.fromLastEmailSendDate = this.formatDateForAPI(createdStart);
-      if (createdEnd) newParams.toLastEmailSendDate = this.formatDateForAPI(createdEnd);
-      if (createdStart) newParams.fromExpireDate = this.formatDateForAPI(createdStart);
-      if (createdEnd) newParams.toExpireDate = this.formatDateForAPI(createdEnd);
+      if (updatedStart) newParams.fromUpdatedAtDate = this.formatDateForAPI(updatedStart);
+      if (updatedEnd) newParams.toUpdatedAtDate = this.formatDateForAPI(updatedEnd);
+      if (emailStart) newParams.fromLastEmailSendDate = this.formatDateForAPI(emailStart);
+      if (emailEnd) newParams.toLastEmailSendDate = this.formatDateForAPI(emailEnd);
+      if (expireStart) newParams.fromExpireDate = this.formatDateForAPI(expireStart);
+      if (expireEnd) newParams.toExpireDate = this.formatDateForAPI(expireEnd);
       if(policyNumber) newParams.policyNo=policyNumber
       if (status) newParams.status = status;
     
   
-  //     console.log('Selected Filters:', newParams);
+      console.log('Selected Filters:', newParams);
     
-  //    // ✅ Conditionally add parameters only if they have values
-  // const queryParams = new URLSearchParams();
-  // if (this.page) queryParams.set('page', this.page.toString());
-  // if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
-  // if (newParams.fromStartDate) queryParams.set('fromDate', newParams.fromStartDate);
-  // if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
-  // if (newParams.userType) queryParams.set('userType', newParams.userType);
-  // if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
-  // if (newParams.location) queryParams.set('location', newParams.location);
+     // ✅ Conditionally add parameters only if they have values
+  const queryParams = new URLSearchParams();
+  if (this.page) queryParams.set('page', this.page.toString());
+  if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+  if (newParams.fromCreatedAtDate) queryParams.set('fromCreatedAtDate', newParams.fromCreatedAtDate);
+  if (newParams.toCreatedAtDate) queryParams.set('toDate', newParams.toCreatedAtDate);
+  if (newParams.fromUpdatedAtDate) queryParams.set('toCreatedAtDate', newParams.fromUpdatedAtDate);
+  if (newParams.toUpdatedAtDate) queryParams.set('toUpdatedAtDate', newParams.toUpdatedAtDate);
+  if (newParams.fromLastEmailSendDate) queryParams.set('fromLastEmailSendDate', newParams.fromLastEmailSendDate);
+  if (newParams.toLastEmailSendDate) queryParams.set('toLastEmailSendDate', newParams.toLastEmailSendDate);
+  if (newParams.fromExpireDate) queryParams.set('fromExpireDate', newParams.fromExpireDate);
+  if (newParams.toExpireDate) queryParams.set('toExpireDate', newParams.toExpireDate);
+  if (newParams.policyNo) queryParams.set('policyNo', newParams.policyNo);
+  if (newParams.status) queryParams.set('status', newParams.status);
   
-  // // Replace the current history entry with new params
-  // history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
+  
+  history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
  
   
-  // Conditionally set the API key for CARRIER or BROKER
   const apiKey = AppSettings.APIsNameArray.CHANGEALTERT.INSURANCE 
   
-  // Only call the API if a valid API key is present
   if (apiKey) {
     let APIparams = {
       apiKey: apiKey,
@@ -113,14 +119,13 @@ export class InsuranceAlertComponent implements OnInit {
               const existingIds = new Set(this.dataSource.data.map(item => item.id));
               const uniqueData = newData.filter(item => !existingIds.has(item.id));
               this.dataSource.data = [...this.dataSource.data, ...uniqueData];
-             
             }
           
           // this.uniqueUserTypes = Array.from(new Set([...this.uniqueUserTypes, ...newUserTypes]));
           //   this.showScrollSpinner=false
           //   console.log(this.dataSource, 'Updated DataSource');
-          //   this.totalPages = response.response.totalPages;
-          //   this.totalRecords = response.response.totalRecords;
+            this.totalPages = response.response.totalPages;
+            // this.totalRecords = response.response.totalRecords;
           //   this.loading = false;
           //   this.cdRef.detectChanges();
           }
@@ -135,9 +140,10 @@ export class InsuranceAlertComponent implements OnInit {
   }
 
   applyFilters() {
-    console.log('Applied Filters:', this.filterForm.value);
-    // 
-    // Here you can call your API with the filter form values
+    this.isFilterApplied = true;
+    this.page = 1;
+    this.dataSource.data = [];
+    this.fetchChangeAlertInsurance(true);
   }
   clearForm() {
     this.filterForm.reset();
@@ -159,5 +165,100 @@ export class InsuranceAlertComponent implements OnInit {
   toggleFilter() {
     this.showAdvancedFilter = !this.showAdvancedFilter;
   }
+  checkExpiry(expiryDate?: string): string {
+    if (!expiryDate) return "Active"; // If no date is provided, return "active"
+  
+    const expiry = new Date(expiryDate).getTime();
+    const current = new Date().getTime();
+  
+    return current > expiry ? "Expired" : "Active";
+  }
+  refresh(){
+    this.fetchChangeAlertInsurance(true);
+  }
+  resetFilters(): void {
+    console.log('Reset Filters Clicked');
+    this.showAdvancedFilter = false;
+    // this.searchControl.setValue('');
+    this.isFilterApplied = false;
+    this.dataSource.filter = '';
+    this.page = 1;
+    this.dataSource.data = [];
+    this.filterForm.reset();
+    this.fetchChangeAlertInsurance(true);
+    
+  }
 
+  setupSearchFilter() {
+  this.searchControl.valueChanges.subscribe(() => {
+    this.applyFilter();
+  });
+}
+
+applyFilter() {
+  const filterValue = this.searchControl.value.trim().toLowerCase();
+
+  this.dataSource.filterPredicate = (data: any, filter: string) => {
+    return data.carrier?.companyName?.toLowerCase().includes(filter);
+  };
+
+  this.dataSource.filter = filterValue;
+  this.isFilterApplied = filterValue.length > 0;
+} 
+
+ @HostListener('window:scroll', ['$event'])
+  onWindowScroll(event: Event) {
+    const scrollHeight = window.innerHeight + window.scrollY;
+    const documentHeight = document.documentElement.scrollHeight;
+    if (documentHeight - scrollHeight <= 1) {
+      if (this.page < this.totalPages ){
+        this.page += 1;
+        this.fetchChangeAlertInsurance();
+      }
+    }
+    this.getCurrentPage()
+  }
+  getCurrentPage() {
+    const tbody = document.querySelector("tbody");
+    const table = document.querySelector("table")
+    const itemsPerPage = 10; 
+    const scrollTop = $(window).scrollTop();
+    const rowHeight = tbody.querySelector("tr")?.clientHeight || 0; 
+    if (rowHeight === 0) return 1;
+    const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1
+    const currentPage = Math.ceil(((scrollTop + table.offsetTop) + 1) / ((rowHeight * itemsPerPage) - (alreadyLoaded * rowHeight) ));
+    if (currentPage > this.totalPages) return; 
+    console.log(currentPage,"219")
+  //   if (this.page !== currentPage) {
+  //     this.page = currentPage;
+  //     this.fetchCarriers();
+  // }
+  this.addParams(currentPage)
+    return currentPage;
+}
+addParams(currentPage?:any){
+  
+  let newParams: {
+    limit: number;
+    page: number;
+    fromStartDate?: string;
+    toStartDate?: string;
+    postalCode?: string;
+    impressionType?: string;
+    position?: string;
+  } = {
+    limit: 10,
+    page: this.page,
+  };
+  const queryParams = new URLSearchParams();
+    if (currentPage) queryParams.set('page', currentPage.toString());
+if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+if (newParams.fromStartDate) queryParams.set('fromDate', newParams.fromStartDate);
+if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
+if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
+if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
+if (newParams.position) queryParams.set('position', newParams.position);
+  
+  history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
+ }
 }
