@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 export class AddMemberComponent implements OnInit {
   memberForm: FormGroup;
 permissionList=[]
+public spinnerLoader = false;
   constructor(private fb: FormBuilder, public commonService: CommonService,private location: Location,private toastr: ToastrService) { }
 
   ngOnInit(): void {
@@ -45,10 +46,10 @@ permissionList=[]
 
   createForm() {
     this.memberForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(64)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(64)]],
       email: ['', [Validators.required, Validators.email]],
-      contactNumber: ['', [Validators.required]],
+      contactNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       countryCode: ['', Validators.required],
       status: ['', Validators.required],
       permissions: this.fb.array([], Validators.required)
@@ -78,9 +79,10 @@ permissionList=[]
   }
 
   addTeam(): void {
+    this.spinnerLoader = true;
     const APIparams = {
-      apiKey:  AppSettings.APIsNameArray.TEAM.TEAMADD,               // Add your URI parameters if needed
-      postBody: {                       // Add your POST body data
+      apiKey:  AppSettings.APIsNameArray.TEAM.TEAMADD,       
+      postBody: {                 
         "firstName":  this.memberForm.get('firstName')?.value,
     "lastName":  this.memberForm.get('lastName')?.value,
     "email":  this.memberForm.get('email')?.value,
@@ -94,12 +96,14 @@ permissionList=[]
     this.commonService.postAllValue(APIparams).subscribe({
       next: (response) => {
         console.log('API Response:', response);
-        this.toastr.success('Data saved successfully!', 'Success');
+          this.spinnerLoader = false;
+        this.toastr.success('Team Member update successfully!', 'Success');
         this.location.back();
       },
       error: (error) => {
+          this.spinnerLoader = false;
         console.error('API Error:', error);
-        this.toastr.error('Something went wrong!', 'Error');
+        this.toastr.error('User already exists!', 'Error');
       }
     });
   }
@@ -117,5 +121,10 @@ permissionList=[]
     const control = this.getControl(controlName);
     return control?.invalid && (control?.touched || control?.dirty);
   }
-
+  onContactInput(event: Event): void {
+    const input = (event.target as HTMLInputElement).value;
+    const numericOnly = input.replace(/[^0-9]/g, '');
+    this.memberForm.get('contactNumber')?.setValue(numericOnly);
+  }
+  
 }

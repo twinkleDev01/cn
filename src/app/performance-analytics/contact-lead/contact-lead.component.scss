@@ -58,11 +58,18 @@
     display: inline-flex;
     align-items: center;
   }
-  
+  .svg-container .fa-arrow-up-right-from-square { font-weight: 600; }
   .svg-container {
     display: none;         
     margin-left: 5px;       
   }
+  .txt_lnk { position: relative; }
+.show_icon:hover .svg-container {
+  display: inline; /* Show on hover */
+  position: absolute;
+  right: -20px;
+  top: 1px;
+}
   
   .txt_lnk:hover .svg-container {
     display: inline;          
@@ -70,11 +77,8 @@
   .adv_filter_btn.active-filter {
     background: #0fc00f;
     }
+
+    .adv_filter_btn { position: relative; }
+    .acrive_circle { position: absolute; top: -4px; left: -5px; color: #818181; font-size: 13px;  opacity: 0; }
+    .adv_filter_btn.active-filter .acrive_circle { opacity: 1; }
     .spinner-border { display: inline-block; width: 21px; height: 21px; vertical-align: -0.125em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: 0.75s linear infinite spinner-border; margin: 2px 0 0 6px; }
-
-
-    ::ng-deep mat-form-field.highlighted .mat-form-field-infix {
-        border: 2px solid #007bff !important; 
-        background-color: #e7f1ff !important;
-        transition: all 0.3s ease-in-out;         
-      }

@@ -1,0 +1,25 @@
+export const USER_TYPES =[{
+        value:"BROKER",displayName:"BROKER"
+      },
+    {
+        value:"CARRIER",displayName:"CARRIER"
+    },
+    {
+      value:"DISPATCHER",displayName:"DISPATCHER"
+    },
+    {
+      value:"INSURANCE_COMPANY",displayName:"INSURANCE_COMPANY"
+    },
+    {
+      value:"BROKER_TEAM",displayName:"BROKER_TEAM"
+    },
+    {
+      value:"CARRIER_TEAM",displayName:"CARRIER_TEAM"
+    },
+    {
+      value:"DISPATCHER_TEAM",displayName:"DISPATCHER_TEAM"
+    },
+    {
+      value:"INSURANCE_COMPANY_TEAM",displayName:"INSURANCE_COMPANY_TEAM"
+    },
+    ]

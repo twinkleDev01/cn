@@ -14,6 +14,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { NgxLoadingModule } from 'ngx-loading';
 import { MaterialModule } from "../material.module";
 import { SharedModule } from "../shared/shared.module";
+import { FindParkingComponent } from "./find-parking/find-parking.component";
 
 @NgModule({
 declarations:[
@@ -21,6 +22,8 @@ declarations:[
     FindCarriersComponent,
     FindCarrierDetailsComponent,
     FindBrokerDetailsComponent,
+    FindParkingComponent,
+
     
 ],
 imports:[

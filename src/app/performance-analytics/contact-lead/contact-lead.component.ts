@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
+import { USER_TYPES } from 'src/app/commons/constants/constant';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
 
@@ -27,9 +28,8 @@ export class ContactLeadComponent implements OnInit {
   isFilterApplied = false;
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   filterForm: FormGroup;
-  uniqueUserTypes=[]
-  spinner = false;
-  showScrollSpinner=false
+   uniqueUserTypes=USER_TYPES;
+   public spinnerLoader = false;
   // Progress Bar Percentage calculation
   get totalViewsPercentage(): number {
     return 100;
@@ -57,6 +57,7 @@ constructor(
         userType: [''],
         position: [''],
         location: [''],
+        contactType: [''],
         toggleControl: [null as boolean | null]
       });
       if (params && Object.keys(params).length) {
@@ -65,7 +66,8 @@ constructor(
               toDate: params['toDate'] ? new Date(params['toDate']) : null,
               userType: params['userType'] || '',
               postalCode: params['postalCode'] || '',
-              location: params['location'] || ''
+              location: params['location'] || '',
+              contactType: params['contactType'] || '',
           });
           this.cdRef.detectChanges();
         
@@ -98,7 +100,7 @@ if (apiKey) {
   console.log(APIparams)
     this.commonService.getList(APIparams).subscribe(
       (response) => {
-        
+        console.log(response,"249hhhhhhhhhhhhh")
        this.carrierContactAnalyticsData=response.response
        console.log(this.carrierContactAnalyticsData,'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
        this.createUserTypeChart()
@@ -115,8 +117,8 @@ if (apiKey) {
   }}
 
   fetchCarriersContactList(resetData: boolean = false): void {
-    // this.showScrollSpinner=true
-    
+
+    this.spinnerLoader = true;
     let newParams: {
       limit: number;
       page: number;
@@ -127,12 +129,13 @@ if (apiKey) {
       isClick?: boolean;
       position?: number;
       location?: string;
+      contactType?: string;
     } = {
       limit: 10,
       page: this.page,
     };
   
-    const { fromDate, toDate, userType, postalCode,position,location, toggleControl } = this.filterForm.value;
+    const { fromDate, toDate, userType, postalCode,position,contactType,location, toggleControl } = this.filterForm.value;
   
     if (fromDate) newParams.fromStartDate = this.formatDateForAPI(fromDate);
     if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
@@ -140,7 +143,8 @@ if (apiKey) {
     if (postalCode) newParams.postalCode = postalCode;
     if (location) newParams.location = location;
     if (toggleControl) newParams.isClick = toggleControl;
-  if(position)  newParams.position = position
+  if(position)  newParams.position = position;
+  if(contactType) newParams.contactType=contactType
 
     console.log('Selected Filters:', newParams);
   
@@ -153,7 +157,7 @@ if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
 if (newParams.userType) queryParams.set('userType', newParams.userType);
 if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
 if (newParams.location) queryParams.set('location', newParams.location);
-
+if (newParams.contactType) queryParams.set('contactType', newParams.contactType);
 // Replace the current history entry with new params
 history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
 const usertype = localStorage.getItem('user_type');
@@ -190,19 +194,18 @@ if (apiKey) {
           .filter(userType => userType);  // Filter out falsy values
         
         // Use Set to ensure uniqueness
-        this.uniqueUserTypes = Array.from(new Set([...this.uniqueUserTypes, ...newUserTypes]));
-          this.showScrollSpinner=false
+        // this.uniqueUserTypes = Array.from(new Set([...this.uniqueUserTypes, ...newUserTypes]));
           console.log(this.dataSource, 'Updated DataSource');
           this.totalPages = response.response.totalPages;
           this.totalRecords = response.response.totalRecords;
-          this.loading = false;
+          this.spinnerLoader = false;
           this.cdRef.detectChanges();
         }
       },
       (error) => {
-        this.showScrollSpinner=false
+        this.spinnerLoader = false;
         this.errorMessage = 'Failed to load recent carriers. Please try again.';
-        this.loading = false;
+  
         console.error('Error fetching carriers:', error);
       }
     );
@@ -227,10 +230,14 @@ if (apiKey) {
   // User dashboard chart
   createUserTypeChart() {
     const ctx = document.getElementById('userTypeChartC1') as HTMLCanvasElement;
+    const labels = Object.keys(this.carrierContactAnalyticsData.topUserType).map(label =>
+      label.split('_').map(word => word.charAt(0)).join('')
+    );
     new Chart(ctx, {
       type: 'pie',
       data: {
-        labels: Object.keys(this.carrierContactAnalyticsData.topUserType),
+        // labels: Object.keys(this.carrierContactAnalyticsData.topUserType),
+        labels: labels,
         datasets: [{
           data:  Object.values(this.carrierContactAnalyticsData.topUserType),
           backgroundColor: this.getRandomColors((Object.values(this.carrierContactAnalyticsData.topUserType)).length),
@@ -408,7 +415,7 @@ if (apiKey) {
       if (documentHeight - scrollHeight <= 1) {
         // if (scrollHeight >= documentHeight - 1) {
         console.log(this.totalPages, this.page, "203")
-        if (this.page < this.totalPages && !this.showScrollSpinner){
+        if (this.page < this.totalPages && !this.spinnerLoader){
           console.log(this.totalPages, this.page, "205")
           this.page += 1;
           console.log(this.page, "537")
@@ -469,6 +476,7 @@ if (apiKey) {
       isClick?: boolean;
       position?: number;
       location?: string;
+      contactType?: string;
     } = {
       limit: 5,
       page: this.page,
@@ -481,7 +489,7 @@ if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
 if (newParams.userType) queryParams.set('userType', newParams.userType);
 if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
 if (newParams.location) queryParams.set('location', newParams.location);
-
+if (newParams.contactType) queryParams.set('contactType', newParams.contactType);
 // Replace the current history entry with new params
 history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
   }
@@ -523,42 +531,21 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams.toStri
         return '/assets/images/other_os.png'; 
     }
   }
-  getDeviceIcon(input: number): string {
-    switch (input) {
-      case 1:
-        return 'fa-desktop';
-      case 2:
-        return 'fa-tablet';
-      case 3:
-        return 'fa-mobile';
-      default:
-        return 'fa-question-circle';  // Fallback icon for invalid input
-    }
+
+  getPlatformDetails(input: number): { icon: string; tooltip: string } {
+    const platformMap = {
+      1: { icon: 'fa-desktop', tooltip: 'Desktop Device' },
+      2: { icon: 'fa-tablet', tooltip: 'Tablet Device' },
+      3: { icon: 'fa-mobile', tooltip: 'Mobile Device' },
+    };
+  
+    // Default to Mobile Device if input is invalid or undefined
+    return platformMap[input] || { icon: 'fa-mobile', tooltip: 'Mobile Device' };
   }
   toggleFilter() {
     this.showAdvancedFilter = !this.showAdvancedFilter;
   }
-  // UTCDate(date: any) {
 
-  //   date = new Date(date + ' ' + 'UTC');
-  //   return date;
-  // }
-  // formatDate(dateStr: string): string {
-  //   const date = new Date(dateStr);
-  
-  //   const options: Intl.DateTimeFormatOptions = {
-  //     day: '2-digit',
-  //     month: 'short',
-  //     year: 'numeric',       // Ensure type is valid
-  //     hour: '2-digit',
-  //     minute: '2-digit',
-  //     hour12: true
-  //   };
-  
-  //   return date.toLocaleString('en-GB', options)
-  //     .replace(',', '')       // Remove extra comma after date
-  //     .replace(' ', ', ');    // Add comma after the month
-  // }
    
   applyFilter() {
     const filterValue = this.searchControl.value.trim().toLowerCase();
@@ -572,24 +559,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     this.isFilterApplied = filterValue.length > 0;
   }
   
-  // calculateTimeSince(timestamp: string): string {
-  //   if (!timestamp) return 'Unknown';
-  
-  //   const accessedDate = new Date(timestamp);
-  //   const now = new Date();
-    
-  //   let diffMs = now.getTime() - accessedDate.getTime();
-  //   let diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  
-  //   if (diffDays < 1) return 'Just now';
-  
-  //   let months = Math.floor(diffDays / 30);
-  //   let days = diffDays % 30;
-  
-  //   if (months > 0 && days > 0) return `${months} months ${days} days ago`;
-  //   if (months > 0) return `${months} months ago`;
-  //   return `${days} days ago`;
-  // }
+ 
   formatDateForAPI(date: any): string {
     if (!date) return '';
     let d = new Date(date);
