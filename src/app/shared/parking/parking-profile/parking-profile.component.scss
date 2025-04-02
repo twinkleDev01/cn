@@ -1,0 +1,59 @@
+.user_profile { border: 1px solid #ddd; border-radius: 100%; width: 100px; height: 100px; box-shadow: 0px 0px 10px 4px #00000012; }
+
+.detail_title { font-size: 16px; font-weight: 500; color: #000; }
+.detail_value { font-size: 14px; color: #818181; }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 25%; }
+.email_data span:first-child { width: 40%; }
+.status_dot { position: absolute; border: 2px solid #fff; bottom: -3px; right: -5px; width: 15px; height: 15px; background: #0fe50f; border-radius: 100%; }
+.usib_reviw { display: flex ; align-items: center; gap: 5px; margin-top: 6px; }
+.usib_reviw .rtng_stars { color: orange; font-size: 20px; }
+.usib_reviw .reviws { font-weight: 600; }
+.reviws_lnk { font-size: 12px; text-decoration: none;  }
+.reviws_lnk:hover { color: blue }
+.num_value { font-size: 12px; color: #6a6a6a; }
+
+
+.linear_text { background: linear-gradient(90deg, #4A90E2, #0057B7); -webkit-background-clip: text; color: transparent;  }
+.linear_value { background: linear-gradient(90deg, #555555, #333333); -webkit-background-clip: text; color: transparent;  }
+@media screen and (max-width: 767px) {
+.email_data span:first-child { width: 100%; }
+.email_data span:nth-child(2), .email_data span:nth-child(3) { width: 50%; }
+.user_details_box { flex-direction: column; }
+.user_profile { width: 45px; height: 45px; }
+.carrier_profile h4 { font-size: 16px; }
+    
+}
+
+
+/* General Chip Style */
+.chip {
+    display: inline-flex;
+    gap: 10px;
+    padding: 5px 10px;
+    border-radius: 16px; /* Modern pill shape */
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #FFFFFF; /* Default text color */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+//   .chip:hover {
+//     transform: translateY(-2px); /* Slight hover lift */
+//     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* More shadow on hover */
+//   }
+  
+  /* Specific Chips */
+  .chip-interstate-non-hazmat {
+    background: linear-gradient(90deg, #4A90E2, #0057B7); /* Blue gradient */
+  }
+  
+  .chip-non-hazmat {
+    background: linear-gradient(90deg, #34C759, #228B22); /* Green gradient */
+  }
+  
+  .chip-intrastate {
+    background: linear-gradient(90deg, #555555, #333333); /* Gray gradient */
+    color: #E0E0E0; /* Silver text */
+  }
+  

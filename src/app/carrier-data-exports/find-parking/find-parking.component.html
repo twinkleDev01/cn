@@ -1,0 +1,40 @@
+<div class="carrier_details_pg_con">
+    <div class="card_con">
+      <app-parking-profile></app-parking-profile>
+      <mat-tab-group class="mt-5" animationDuration="500ms">
+        
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">dashboard</mat-icon>
+            Overview
+          </ng-template>
+         <app-parking-overview></app-parking-overview>
+        </mat-tab>
+        
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">business_center</mat-icon>
+            Amenities
+          </ng-template>
+          <app-parking-amenities></app-parking-amenities>
+        </mat-tab>
+        
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">local_shipping</mat-icon>
+            Location
+          </ng-template>
+          <app-parking-location></app-parking-location>
+        </mat-tab>
+        
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">verified_user</mat-icon>
+            Media Gallery
+          </ng-template>
+          <app-parking-media-gallery></app-parking-media-gallery>
+        </mat-tab>     
+      </mat-tab-group>
+    </div>
+  </div>
+  

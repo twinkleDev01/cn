@@ -6,6 +6,7 @@ import { BrokerAlertComponent } from './broker-alert/broker-alert.component';
 import { CarrierAlertComponent } from './carrier-alert/carrier-alert.component';
 import { AuthorityAlertComponent } from './authority-alert/authority-alert.component';
 import { InsuranceAlertComponent } from './insurance-alert/insurance-alert.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { InsuranceAlertComponent } from './insurance-alert/insurance-alert.compo
   imports: [
     CommonModule,
     MonitorNetworkRoutingModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ]
 })
 export class MonitorNetworkModule { }

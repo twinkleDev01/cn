@@ -37,6 +37,16 @@ import { BrokerInsuranceComponent } from './broker/broker-insurance/broker-insur
 import { BrokerLanesRegionsComponent } from './broker/broker-lanes-regions/broker-lanes-regions.component';
 import { BrokerReviewsComponent } from './broker/broker-reviews/broker-reviews.component';
 import { TimeAgoPipe } from '../commons/pipe/time-ago.pipe';
+// parking data components 
+import { ParkingAmenitiesComponent } from './parking/parking-amenities/parking-amenities.component';
+import { ParkingLocationComponent } from './parking/parking-location/parking-location.component';
+import { ParkingMediaGalleryComponent } from './parking/parking-media-gallery/parking-media-gallery.component';
+import { ParkingOverviewComponent } from './parking/parking-overview/parking-overview.component';
+import { ParkingProfileComponent } from './parking/parking-profile/parking-profile.component';
+
+// parking data component 
+
+
 
 @NgModule({
   imports: [
@@ -71,7 +81,8 @@ import { TimeAgoPipe } from '../commons/pipe/time-ago.pipe';
     SafetyComponent,
     ReviewsComponent,
     OverviewComponent,
-    // Broker data Components 
+
+  // Broker data Components 
     ComplianceComponent,
       BrokerOverviewComponent,
       BrokerBusinessInfoComponent,
@@ -79,7 +90,14 @@ import { TimeAgoPipe } from '../commons/pipe/time-ago.pipe';
       BrokerLanesRegionsComponent,
       BrokerReviewsComponent,
       // Pipe
-      TimeAgoPipe
+      TimeAgoPipe,
+
+      // parking data componets 
+      ParkingAmenitiesComponent,
+      ParkingLocationComponent,
+      ParkingMediaGalleryComponent,
+      ParkingOverviewComponent,
+      ParkingProfileComponent,
   ],
   exports: [
     // Popup Components
@@ -95,25 +113,33 @@ import { TimeAgoPipe } from '../commons/pipe/time-ago.pipe';
 
     // Carrier Data Components
     UserProfileComponent,
-    ReviewsComponent,
-    OverviewComponent,
     BusinessInformationComponent,
     LoadAvailabilityComponent,
     InsuranceComponent,
     LanesRegionsComponent,
     MediaGalleryComponent,
-    SafetyComponent,
     ContactInformationComponent,
+    SafetyComponent,
+    ReviewsComponent,
+    OverviewComponent,
 
-   // Broker data Components 
-   ComplianceComponent,
-   BrokerOverviewComponent,
-   BrokerBusinessInfoComponent,
-   BrokerInsuranceComponent,
-   BrokerLanesRegionsComponent,
-   BrokerReviewsComponent,
+  // Broker data Components 
+    ComplianceComponent,
+      BrokerOverviewComponent,
+      BrokerBusinessInfoComponent,
+      BrokerInsuranceComponent,
+      BrokerLanesRegionsComponent,
+      BrokerReviewsComponent,
   //  Pipe
-  TimeAgoPipe
+  TimeAgoPipe,
+
+
+      // parking data componets 
+      ParkingAmenitiesComponent,
+      ParkingLocationComponent,
+      ParkingMediaGalleryComponent,
+      ParkingOverviewComponent,
+      ParkingProfileComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

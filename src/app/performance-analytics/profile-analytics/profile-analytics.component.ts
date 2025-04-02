@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
+import { USER_TYPES } from 'src/app/commons/constants/constant';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
 
@@ -21,16 +22,17 @@ export class ProfileAnalyticsComponent implements OnInit {
   loading = false;
   public page=1
   carrierContactAnalyticsData:any
-  showScrollSpinner=false
   filterForm: FormGroup;
-  uniqueUserTypes=[]
+  filterPForm: FormGroup;
+ uniqueUserTypes=USER_TYPES;
   searchControl = new FormControl('');
    dataSource: MatTableDataSource<any> = new MatTableDataSource();
    totalRecords: number = 0;
   totalPages: number = 0;
   isFilterApplied = false;
-  spinner = false;
+  public spinnerLoader = false;
   subscriptionPlanType: number | null = null;
+  uniquePositions:any=[]
   // Progress Bar Percentage calculation
   get totalViewsPercentage(): number {
     return 100;
@@ -47,7 +49,12 @@ export class ProfileAnalyticsComponent implements OnInit {
               public commonService: CommonService,
               private router: Router,
               private route: ActivatedRoute,
-   ) {}
+   ) {
+    this.filterPForm = this.fb.group({
+      fromPDate: [''],
+      toPDate: [''],
+    })
+   }
 
    ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -58,6 +65,7 @@ export class ProfileAnalyticsComponent implements OnInit {
         userType: [''],
         position: [''],
         location: [''],
+        impressionType: [''],
         toggleControl: [null as boolean | null]
       });
       if (params && Object.keys(params).length) {
@@ -66,17 +74,21 @@ export class ProfileAnalyticsComponent implements OnInit {
               toDate: params['toDate'] ? new Date(params['toDate']) : null,
               userType: params['userType'] || '',
               postalCode: params['postalCode'] || '',
-              location: params['location'] || ''
+              location: params['location'] || '',
+              impressionType: params['impressionType'] || '',
+              toggleControl: params['isClick'] === 'true',
           });
           this.cdRef.detectChanges();
-        
+          // this.filterForm?.get("impressionType")?.setValue(params['impressionType']);
+          // console.log("98", this.filterForm);
+          // this.filterForm.updateValueAndValidity();
       }
   });
 
   this.fetchCarriersContactList()
-    this.fetchCarrierProfileAnalitics()
-      this.getSubscriptionPlan();
-  }
+  this.fetchCarrierProfileAnalitics()
+  this.getSubscriptionPlan();
+}
   
  getSubscriptionPlan(): void {
   const plan = localStorage.getItem('subscriptionPlanType');
@@ -85,7 +97,7 @@ export class ProfileAnalyticsComponent implements OnInit {
   console.log('Subscription Plan Type:', this.subscriptionPlanType);
 }
   fetchCarriersContactList(resetData: boolean = false): void {
-    // this.showScrollSpinner=true
+    this.spinnerLoader = true;
     
     let newParams: {
       limit: number;
@@ -95,14 +107,15 @@ export class ProfileAnalyticsComponent implements OnInit {
       userType?: string;
       postalCode?: string;
       isClick?: boolean;
-      position?: number;
+      position?: string;
       location?: string;
+      impressionType?: string;
     } = {
       limit: 10,
       page: this.page,
     };
   
-    const { fromDate, toDate, userType, postalCode,position,location, toggleControl } = this.filterForm.value;
+    const { fromDate, toDate, userType, postalCode,position,location,impressionType, toggleControl } = this.filterForm.value;
   
     if (fromDate) newParams.fromStartDate = this.formatDateForAPI(fromDate);
     if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
@@ -110,6 +123,7 @@ export class ProfileAnalyticsComponent implements OnInit {
     if (postalCode) newParams.postalCode = postalCode;
     if (location) newParams.location = location;
     if (toggleControl) newParams.isClick = toggleControl;
+    if(impressionType) newParams.impressionType=impressionType
   if(position)  newParams.position = position
 
     console.log('Selected Filters:', newParams);
@@ -123,6 +137,9 @@ if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
 if (newParams.userType) queryParams.set('userType', newParams.userType);
 if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
 if (newParams.location) queryParams.set('location', newParams.location);
+if (newParams.position) queryParams.set('position', newParams.position);
+if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
+if (newParams.isClick) queryParams.set('toggleControl', newParams.isClick.toString());
 
 // Replace the current history entry with new params
 history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
@@ -146,6 +163,10 @@ if (apiKey) {
         
         if (response && response.response && response.response.data ) {
           const newData = response.response.data;
+          this.uniquePositions = [...new Set(newData.map(item => {return item.position}))];
+          this.uniquePositions = [...this.uniquePositions];
+          console.log( this.uniquePositions,"161")
+          this.cdRef.detectChanges();
           if (resetData) {
             this.dataSource.data = newData;
           
@@ -160,19 +181,18 @@ if (apiKey) {
           .filter(userType => userType);  // Filter out falsy values
         
         // Use Set to ensure uniqueness
-        this.uniqueUserTypes = Array.from(new Set([...this.uniqueUserTypes, ...newUserTypes]));
-          this.showScrollSpinner=false
+        // this.uniqueUserTypes = Array.from(new Set([...this.uniqueUserTypes, ...newUserTypes]));
           console.log(this.dataSource, 'Updated DataSource');
           this.totalPages = response.response.totalPages;
           this.totalRecords = response.response.totalRecords;
-          this.loading = false;
+          this.spinnerLoader = false
           this.cdRef.detectChanges();
         }
       },
       (error) => {
-        this.showScrollSpinner=false
+
+        this.spinnerLoader = false
         this.errorMessage = 'Failed to load recent carriers. Please try again.';
-        this.loading = false;
         console.error('Error fetching carriers:', error);
       }
     );
@@ -181,13 +201,35 @@ if (apiKey) {
 isAdvancedFilterVisible(): boolean {
   return this.subscriptionPlanType === 2 || this.subscriptionPlanType === 3;
 }
-  fetchCarrierProfileAnalitics(){
-  
-    let newParams: {} = {};
+checkDate() {
+  const fromStartDate = this.filterPForm.get('fromPDate')?.value;
+  const toStartDate = this.filterPForm.get('toPDate')?.value;
 
+  console.log('Selected Dates:', { fromStartDate, toStartDate });
+
+  // Ensure both dates are selected before calling the API
+  if (!fromStartDate || !toStartDate) return;
+
+  this.fetchCarrierProfileAnalitics(fromStartDate, toStartDate);
+}
+
+  fetchCarrierProfileAnalitics(fromStartDate?:string, toStartDate?:string){
+    console.log("Calling API with:", fromStartDate, toStartDate);
+
+    let newParams: {
+      fromStartDate?:string;
+      toStartDate?:string;
+    } = {};
+
+    const {fromPDate, toPDate} = this.filterPForm.value;
+    if (fromPDate) newParams.fromStartDate = this.formatDateForAPI(fromPDate);
+    if (toPDate) newParams.toStartDate = this.formatDateForAPI(toPDate);
+    const queryParams = new URLSearchParams();
+    if (newParams.fromStartDate) queryParams.set('fromStartDate', newParams.fromStartDate);
+    if (newParams.toStartDate) queryParams.set('toStartDate', newParams.toStartDate);
+    history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
     const usertype = localStorage.getItem('user_type');
-
-// Conditionally set the API key for CARRIER or BROKER
+    // Conditionally set the API key for CARRIER or BROKER
 const apiKey = usertype === 'CARRIER' 
   ? AppSettings.APIsNameArray.RECENTVIEW.CARRIERPROFILEANALYTICS 
   : usertype === 'BROKER' 
@@ -203,7 +245,6 @@ if (apiKey) {
   console.log(APIparams)
     this.commonService.getList(APIparams).subscribe(
       (response) => {
-        
        this.carrierContactAnalyticsData=response.response
        this.createUserTypeChart()
        this.createCityChart();
@@ -262,10 +303,15 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
 
   createUserTypeChart() {
     const ctx = document.getElementById('userTypeChartC1') as HTMLCanvasElement;
+    console.log(this.carrierContactAnalyticsData.topUserType,"308");
+    const labels = Object.keys(this.carrierContactAnalyticsData.topUserType).map(label =>
+      label.split('_').map(word => word.charAt(0)).join('')
+    );
     new Chart(ctx, {
       type: 'pie',
       data: {
-        labels: Object.keys(this.carrierContactAnalyticsData.topUserType),
+        // labels: Object.keys(this.carrierContactAnalyticsData.topUserType),
+        labels: labels,
         datasets: [{
           data:  Object.values(this.carrierContactAnalyticsData.topUserType),
           backgroundColor: this.getRandomColors((Object.values(this.carrierContactAnalyticsData.topUserType)).length),
@@ -437,47 +483,6 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     return `${month}/${day}/${year}`; // Format: MM/DD/YYYY
   }
 
-  // UTCDate(date: any) {
-
-  //   date = new Date(date + ' ' + 'UTC');
-  //   return date;
-  // }
-  // formatDate(dateStr: string): string {
-  //   const date = new Date(dateStr);
-  
-  //   const options: Intl.DateTimeFormatOptions = {
-  //     day: '2-digit',
-  //     month: 'short',
-  //     year: 'numeric',       // Ensure type is valid
-  //     hour: '2-digit',
-  //     minute: '2-digit',
-  //     hour12: true
-  //   };
-  
-  //   return date.toLocaleString('en-GB', options)
-  //     .replace(',', '')       // Remove extra comma after date
-  //     .replace(' ', ', ');    // Add comma after the month
-  // }
-
-  // calculateTimeSince(timestamp: string): string {
-  //   if (!timestamp) return 'Unknown';
-  
-  //   const accessedDate = new Date(timestamp);
-  //   const now = new Date();
-    
-  //   let diffMs = now.getTime() - accessedDate.getTime();
-  //   let diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  
-  //   if (diffDays < 1) return 'Just now';
-  
-  //   let months = Math.floor(diffDays / 30);
-  //   let days = diffDays % 30;
-  
-  //   if (months > 0 && days > 0) return `${months} months ${days} days ago`;
-  //   if (months > 0) return `${months} months ago`;
-  //   return `${days} days ago`;
-  // }
-
   getBrowserImage(uaString: string): string {
     const lowerUA = uaString?.toLowerCase();
   
@@ -512,18 +517,18 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
         return '/assets/images/other_os.png'; 
     }
   }
-  getDeviceIcon(input: number): string {
-    switch (input) {
-      case 1:
-        return 'fa-desktop';
-      case 2:
-        return 'fa-tablet';
-      case 3:
-        return 'fa-mobile';
-      default:
-        return 'fa-question-circle';  // Fallback icon for invalid input
-    }
+
+  getPlatformDetails(input: number): { icon: string; tooltip: string } {
+    const platformMap = {
+      1: { icon: 'fa-desktop', tooltip: 'Desktop Device' },
+      2: { icon: 'fa-tablet', tooltip: 'Tablet Device' },
+      3: { icon: 'fa-mobile', tooltip: 'Mobile Device' },
+    };
+  
+    // Default to Mobile Device if input is invalid or undefined
+    return platformMap[input] || { icon: 'fa-mobile', tooltip: 'Mobile Device' };
   }
+  
 
    @HostListener('window:scroll', ['$event'])
       onWindowScroll(event: Event) {
@@ -532,7 +537,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
         if (documentHeight - scrollHeight <= 1) {
           // if (scrollHeight >= documentHeight - 1) {
           console.log(this.totalPages, this.page, "203")
-          if (this.page < this.totalPages && !this.showScrollSpinner){
+          if (this.page < this.totalPages && !this.spinnerLoader){
             console.log(this.totalPages, this.page, "205")
             this.page += 1;
             console.log(this.page, "537")
@@ -576,7 +581,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
         if (this.page !== currentPage) {
             this.page = currentPage;
             this.addParams(currentPage);
-            this.fetchCarriersContactList();
+            // this.fetchCarriersContactList();
         }
     
         return currentPage;
@@ -591,8 +596,9 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
         userType?: string;
         postalCode?: string;
         isClick?: boolean;
-        position?: number;
+        position?: string;
         location?: string;
+        impressionType?: string;
       } = {
         limit: 10,
         page: this.page,
@@ -605,7 +611,9 @@ if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
 if (newParams.userType) queryParams.set('userType', newParams.userType);
 if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
 if (newParams.location) queryParams.set('location', newParams.location);
-
+if (newParams.position) queryParams.set('position', newParams.position);
+if (newParams.isClick) queryParams.set('toggleControl', newParams.isClick.toString());
+if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
 // Replace the current history entry with new params
 history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
     }
@@ -619,4 +627,5 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams.toStri
     formatCompanyName(name: string): string {
       return name ? name.replace(/\s+/g, '-') : '';
     }
+    
 }

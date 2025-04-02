@@ -5,32 +5,18 @@
         <div class="btns_box">
           <div class="row">
             <div class="col-md-5">
-              <div
-                class="comn_fltr"
-                [ngClass]="{ 'd-none': showAdvancedFilter }"
-              >
+              <div class="comn_fltr" [ngClass]="{ 'd-none': showAdvancedFilter }">
                 <mat-form-field appearance="none">
                   <mat-label>Quick Search</mat-label>
-                  <mat-icon matTextPrefix class="material-symbols-outlined"
-                    >filter_list</mat-icon
-                  >
-                  <input
-                    type="text"
-                    matInput
-                    placeholder="Search by user"
-                    class="form-control cn_input ms-2"
-                    [formControl]="searchControl"
-                    (keyup)="applyFilter()"
-                  />
+                  <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
+                  <input type="text" matInput placeholder="Search by user" class="form-control cn_input ms-2"
+                    [formControl]="searchControl" (keyup)="applyFilter()" />
                 </mat-form-field>
               </div>
             </div>
             <div class="col-md-7">
               <div class="btn_r">
-                <span
-                  class="cn_btn icn_btn adv_filter_btn"
-                  (click)="toggleFilter()"
-                  *ngIf="isAdvancedFilterVisible()"
+                <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()" *ngIf="isAdvancedFilterVisible()"
                   [ngClass]="{
                     'active-filter':
                       filterForm?.value &&
@@ -38,8 +24,8 @@
                         filterForm.value.toDate ||
                         filterForm.value.postalCode ||
                         filterForm.value.impressionType)
-                  }"
-                >
+                  }">
+                  <i class="fa-solid fa-circle acrive_circle"></i>
                   <i class="fa-sharp fa-solid fa-filter"></i>
                 </span>
                 <span class="cn_btn icn_btn" (click)="refresh()">
@@ -49,11 +35,7 @@
             </div>
           </div>
         </div>
-        <div
-          class="filter_box"
-          [ngClass]="{ 'd-none': !showAdvancedFilter }"
-          *ngIf="isAdvancedFilterVisible()"
-        >
+        <div class="filter_box" [ngClass]="{ 'd-none': !showAdvancedFilter }" *ngIf="isAdvancedFilterVisible()">
           <div class="form_box">
             <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
             <div class="row">
@@ -67,7 +49,7 @@
                   </mat-select>
                 </mat-form-field>
                 </div> -->
-                <!-- <div class="col-md-3">
+              <!-- <div class="col-md-3">
                   <mat-form-field
                     [ngClass]="{
                       highlighted: filterForm.get('position')?.value
@@ -83,41 +65,25 @@
                   </mat-form-field>
                 </div> -->
               <div class="col-md-3">
-                <mat-form-field
-                  class="date_range_filter"
-                  [ngClass]="{
+                <mat-form-field class="date_range_filter" [ngClass]="{
                     highlighted:
                       filterForm.get('fromDate')?.value ||
                       filterForm.get('toDate')?.value
-                  }"
-                >
+                  }">
                   <mat-label>Enter a Accessed Date Range</mat-label>
                   <mat-date-range-input [rangePicker]="picker">
-                    <input
-                      matStartDate
-                      placeholder="Start date"
-                      formControlName="fromDate"
-                    />
-                    <input
-                      matEndDate
-                      placeholder="End date"
-                      formControlName="toDate"
-                    />
+                    <input matStartDate placeholder="Start date" formControlName="fromDate" />
+                    <input matEndDate placeholder="End date" formControlName="toDate" />
                   </mat-date-range-input>
                   <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                  <mat-datepicker-toggle
-                    matIconSuffix
-                    [for]="picker"
-                  ></mat-datepicker-toggle>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-date-range-picker #picker></mat-date-range-picker>
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field
-                  [ngClass]="{
+                <mat-form-field [ngClass]="{
                     highlighted: filterForm.get('postalCode')?.value
-                  }"
-                >
+                  }">
                   <mat-label>Postal Code</mat-label>
                   <input
                     type="text"
@@ -129,21 +95,15 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field
-                  [ngClass]="{
+                <mat-form-field [ngClass]="{
                     highlighted: filterForm.get('impressionType')?.value
-                  }"
-                >
+                  }">
                   <mat-label>Page Source</mat-label>
                   <mat-select formControlName="impressionType">
                     <mat-option value="broker-list">broker-list</mat-option>
                     <mat-option value="broker-detail">broker-detail</mat-option>
-                    <mat-option value="broker-insurance-history"
-                      >broker-insurance-history</mat-option
-                    >
-                    <mat-option value="broker-authority-history"
-                      >broker-authority-history</mat-option
-                    >
+                    <mat-option value="broker-insurance-history">broker-insurance-history</mat-option>
+                    <mat-option value="broker-authority-history">broker-authority-history</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -172,20 +132,20 @@
             <div class="user_dtl sticky_boder">
               <div class="ud_l">
                 <div class="user_img_container">
-                  <img
-                    [src]="
-                      element.broker?.profileImage ||
-                      './assets/images/profile.webp'
-                    "
-                    class="user_img"
-                    alt="User Image"
-                  />
+                  <div class="ud_l">
+                    <img *ngIf="element.broker?.profileImage" [src]="element.broker.profileImage" class="user_img"
+                      alt="User profile image" width="40px" height="40px" />
+                    <i *ngIf="!element.broker?.profileImage" class="fa-duotone fa-solid fa-circle-user user_icon"
+                      aria-hidden="true"></i>
+                    <span class="user_Type">Carrier</span>
+                  </div>
                 </div>
               </div>
 
               <div class="ud_r">
                 <div class="name_icn" *ngIf="element.broker?.companyName">
-                  <a [href]="'/freight-brokerage/' + element.broker?.dotNumber + '/' + formatCompanyName(element.broker?.companyName)" class="u_name"  target="_blank">
+                  <a [href]="'/freight-brokerage/' + element.broker?.dotNumber + '/' + formatCompanyName(element.broker?.companyName)"
+                    class="u_name" target="_blank">
                     {{ element.broker?.companyName }}
                   </a>            
                   <i
@@ -214,33 +174,12 @@
         </ng-container>
         <ng-container matColumnDef="pageSource">
           <th mat-header-cell *matHeaderCellDef>Page Source</th>
-          <td mat-cell *matCellDef="let element">
-            <a
-              *ngIf="element.url"
-              [href]="element.url"
-              class="txt_lnk"
-              target="_blank"
-            >
+          <td mat-cell *matCellDef="let element" class="show_icon">
+            <a *ngIf="element.url" [href]="element.url" class="txt_lnk" target="_blank">
               <span class="hover-container">
                 {{ element.impressionType }}
                 <span class="svg-container">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-box-arrow-up-right"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"
-                    />
-                    <path
-                      fill-rule="evenodd"
-                      d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"
-                    />
-                  </svg>
+                  <i class="fa-regular fa-arrow-up-right-from-square"></i>
                 </span>
               </span>
             </a>
@@ -252,19 +191,14 @@
           <th mat-header-cell *matHeaderCellDef class="text-center">
             Profile Rank
           </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            class="text-center"
-            matTooltip="Profile Rank on pge"
-          >
+          <td mat-cell *matCellDef="let element" class="text-center" matTooltip="Profile Rank on pge">
             {{ element.position }}
           </td>
         </ng-container>
         <ng-container matColumnDef="accessedAt">
           <th mat-header-cell *matHeaderCellDef>Accessed At</th>
           <td mat-cell *matCellDef="let element">
-            {{ element?.createdAt | date: 'MMM dd, yyyy hh:mm a' : 'UTC' }}
+            {{ element?.createdAt | date: 'MMM dd, yyyy hh:mm a' }}
           </td>
         </ng-container>
         <ng-container matColumnDef="timeSinceAccess">
@@ -283,16 +217,10 @@
               <span class="cn_btn phone_btn btnActive" matTooltip="Contact Us">
                 <i class="fa-sharp-duotone fa-regular fa-phone"></i>
               </span>
-              <span
-                class="cn_btn comnt_btn btnActive"
-                matTooltip="Write a Review"
-              >
+              <span class="cn_btn comnt_btn btnActive" matTooltip="Write a Review">
                 <i class="fa-duotone fa-regular fa-comment-pen"></i>
               </span>
-              <span
-                class="cn_btn eye_btn btnActive"
-                matTooltip="View User Detail"
-              >
+              <span class="cn_btn eye_btn btnActive" matTooltip="View User Detail">
                 <i class="fa-duotone fa-solid fa-eye"></i>
               </span>
               <span class="cn_btn bokmrk_btn" matTooltip="Save to List">
@@ -304,13 +232,13 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-              <!-- 🔄 Loader for infinite scroll -->
-  <div class="text-center mt-3" *ngIf="spinnerLoader">
-    <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
-  </div>
+      <!-- 🔄 Loader for infinite scroll -->
+      <div class="text-center mt-3" *ngIf="spinnerLoader">
+        <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+      </div>
     </div>
   </div>
-  
+
 </div>
 <!-- 📭 No data template -->
 <!-- <div class="text-center my-4" *ngIf="noDataFound && !spinnerLoader">

@@ -43,6 +43,7 @@
                         filterForm.value.impressionType)
                   }"
                 >
+                <i class="fa-solid fa-circle acrive_circle"></i>
                   <i class="fa-sharp fa-solid fa-filter"></i>
                 </span>
                 <span class="cn_btn icn_btn" (click)="refresh()">
@@ -178,14 +179,13 @@
             <div class="user_dtl sticky_boder">
               <div class="ud_l">
                 <div class="user_img_container">
-                  <img
-                    [src]="
-                      element.carrier?.profileImage ||
-                      './assets/images/profile.webp'
-                    "
-                    class="user_img"
-                    alt="User Image"
-                  />
+                  <div class="ud_l">
+                    <img *ngIf="element.carrier?.profileImage" [src]="element.carrier.profileImage" class="user_img"
+                      alt="User profile image" width="40px" height="40px" />
+                    <i *ngIf="!element.carrier?.profileImage" class="fa-duotone fa-solid fa-circle-user user_icon"
+                      aria-hidden="true"></i>
+                    <span class="user_Type">Carrier</span>
+                  </div>
                 </div>
               </div>
               <div class="ud_r">
@@ -199,7 +199,7 @@
                   <i
                     class="fa-duotone fa-badge-check verify_icon"
                     [matTooltip]="element.carrier?.userId ? 'Account Verified' : 'Account not Verified'"
-                    [ngClass]="{'blue-icon': element.carrier?.userId, 'gray-icon': !element.carrier?.userId}"
+                    [ngClass]="{'txt_p': element.carrier?.userId, 'txt_lb': !element.carrier?.userId}"
                   ></i>
                 </div>
                 
@@ -234,35 +234,11 @@
         <!-- PageSource -->
         <ng-container matColumnDef="pageSource">
           <th mat-header-cell *matHeaderCellDef>Page Source</th>
-          <td mat-cell *matCellDef="let element">
-            <a
-              *ngIf="element.url"
-              [routerLink]="element.url"
-              class="txt_lnk"
-              target="_blank"
-            >
+          <td mat-cell *matCellDef="let element" class="onhover_show_icon">
+            <a *ngIf="element.url" [href]="element.url" target="_blank" class="txt_p">
               <span class="impression-type">{{ element.impressionType }}</span>
-              <span class="svg-container">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-box-arrow-up-right"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"
-                  />
-                  <path
-                    fill-rule="evenodd"
-                    d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"
-                  />
-                </svg>
-              </span>
+              <i class="fa-regular fa-arrow-up-right-from-square"></i>
             </a>
-
             <span *ngIf="!element.url">{{ element.impressionType }}</span>
           </td>
         </ng-container>
@@ -285,7 +261,7 @@
           <th mat-header-cell *matHeaderCellDef>Accessed At</th>
           <td mat-cell *matCellDef="let element">
           
-            {{ element?.createdAt | date: 'MMM dd, yyyy hh:mm a' : 'UTC' }}
+            {{ element?.createdAt | date: 'MMM dd, yyyy hh:mm a' }}
           </td>
         </ng-container>
         <!-- TimeSinceAccess -->
@@ -324,11 +300,15 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
       </table>
+    
+       <div class="text-center spinner_loader" *ngIf="spinnerLoader">
+          <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+        </div>
+  
         <!-- 🔄 Loader for infinite scroll -->
-  <div class="text-center mt-3" *ngIf="spinnerLoader">
-    <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
-  </div>
+ 
     </div>
   </div>
 </div>

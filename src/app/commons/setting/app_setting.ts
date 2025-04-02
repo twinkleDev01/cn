@@ -243,5 +243,9 @@ export class AppSettings {
       EDITTEAM:'team/edit'
 
     },
+    CHANGEALTERT:{
+      INSURANCE:'change-alert/insurance', 
+      INSURANCEADD:'team/add', 
+    },
   }
 }

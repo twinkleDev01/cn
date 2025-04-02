@@ -178,9 +178,10 @@
                       (filterForm.value.fromDate ||
                         filterForm.value.toDate ||
                         filterForm.value.postalCode ||
-                        filterForm.value.userType)
+                        filterForm.value.userType || filterForm.value.contactType)
                   }"
                 >
+              <i class="fa-solid fa-circle acrive_circle"></i>
                   <i class="fa-sharp fa-solid fa-filter"></i>
                   <!-- <i class="fa-duotone fa-solid fa-sliders"></i> -->
                 </span>
@@ -216,7 +217,34 @@
                       <input type="text" matInput placeholder="Enter Location" formControlName="location">
                     </mat-form-field>
                   </div> 
-
+<!-- PageSource -->
+<div class="col-md-3">
+  <mat-form-field
+    [ngClass]="{
+      highlighted: filterForm.get('contactType')?.value
+    }"
+  >
+    <mat-label>Page Source</mat-label>
+    <mat-select formControlName="contactType">
+      <mat-option value="carrier-list">carrier-list</mat-option>
+      <mat-option value="carrier-detail"
+        >carrier-detail</mat-option
+      >
+      <mat-option value="carrier-insurance-history"
+        >carrier-insurance-history</mat-option
+      >
+      <mat-option value="carrier-authority-history"
+      >carrier-authority-history</mat-option
+    >
+    <mat-option value="header-search"
+    >header-search</mat-option
+  >
+  <mat-option value="load-availability"
+  >load-availability</mat-option
+>
+    </mat-select>
+  </mat-form-field>
+</div>
                   <!-- <div class="col-md-3">
                     <mat-form-field>
                       <mat-label>Country</mat-label>
@@ -325,19 +353,18 @@
             <div class="user_dtl sticky_boder">
               <div class="ud_l">
                 <img
-                  style="width: 50px; border-radius: 60px"
-                  [src]="
-                    element.user?.profileImage || './assets/images/profile.webp'
-                  "
-                  class="user_img"
-                  alt="User Image"
-                />
-                <span class="user_Type">{{ element.userType }}</span>
+                [src]="
+                  element.user?.profileImage ||
+                  './assets/images/profile.webp'
+                "
+                class="user_img"
+                alt="User Image"
+               width="40px" height="40px"/>
+                <span class="user_Type">{{element.userType}}</span>
               </div>
               <div class="ud_r">
                 <div class="name_icn" *ngIf="element.user?.companyName">
-                  <!-- <a class="u_name">{{ element?.user?.companyName }}</a> -->
-                  <a    *ngIf="element.userType === 'CARRIER'" 
+                 <a    *ngIf="element.userType === 'CARRIER'" 
                    [href]="'/carrier-profile/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)" 
                    class="u_name" target="_blank">{{
                     element?.user?.companyName
@@ -349,6 +376,12 @@
                     target="_blank">
                     {{ element.user?.companyName }}
                   </a>
+                  <a 
+                  *ngIf="element.userType !== 'BROKER' && element.userType !== 'CARRIER' " 
+                  class="u_name" 
+                  target="_blank">
+                  {{ element.user?.companyName }}
+                </a>
                   <i
                     *ngIf="!element?.user?.id"
                     class="fa-duotone fa-badge-check verify_icon"
@@ -381,7 +414,7 @@
                     matTooltip="{{ element?.user?.averageRatingValue }} rating"
                     >0.0 <i class="fa-solid fa-star"></i>
                   </span>
-                  <span class="u_loca">
+                  <!-- <span class="u_loca">
                     {{
                       element.user?.city || element.user?.state
                         ? (
@@ -394,7 +427,15 @@
                           ).slice(0, -2)
                         : element.location || ""
                     }}</span
-                  >
+                  > -->
+                  <span class="u_loca">
+                    {{
+                      (element.user?.city || element.user?.state)
+                        ? ((element.user?.city ? (element.user.city | titlecase) + ", " : "") + 
+                           (element.user?.state ? (element.user.state) + ", " : "")).slice(0, -2)
+                        : element?.userType === 'GUEST'?'':(element.location || '').slice(0,-4)
+                    }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -402,32 +443,16 @@
         </ng-container>
         <ng-container matColumnDef="pageSource">
           <th mat-header-cell *matHeaderCellDef>Page Source</th>
-          <td mat-cell *matCellDef="let element">
+          <td mat-cell *matCellDef="let element" class="show_icon">
             <a
               *ngIf="element.url"
-              [href]="apiUrl + element.url"
+              [href]="element.url"
               class="txt_lnk"
               target="_blank"
             >
               <span class="impression-type">{{ element.contactType }}</span>
               <span class="svg-container">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-box-arrow-up-right"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"
-                  />
-                  <path
-                    fill-rule="evenodd"
-                    d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"
-                  />
-                </svg>
+                <i class="fa-regular fa-arrow-up-right-from-square"></i>
               </span>
             </a>
 
@@ -447,12 +472,16 @@
           <th mat-header-cell *matHeaderCellDef>Platform</th>
           <td mat-cell *matCellDef="let element">
             <div class="comn_icn">
-              <i
+              <!-- <i
                 class="fa-regular {{
                   getDeviceIcon(element.platform)
                 }} platform_in"
                 matTooltip="Desktop Device"
-              ></i>
+              ></i> -->
+              <i
+              class="fa-regular {{ getPlatformDetails(element.platform).icon }} platform_in"
+              [matTooltip]="getPlatformDetails(element.platform).tooltip"
+            ></i>
             </div>
           </td>
         </ng-container>
@@ -483,7 +512,7 @@
           <th mat-header-cell *matHeaderCellDef>Accessed At</th>
           <td mat-cell *matCellDef="let element">
             <!-- {{ formatDate(UTCDate(element?.createdAt)) }} -->
-            {{ element?.createdAt | date : "MMM dd, yyyy hh:mm a" : "UTC" }}
+            {{ element?.createdAt | date : "MMM dd, yyyy hh:mm a" }}
           </td>
         </ng-container>
         <ng-container matColumnDef="timeSinceAccess">
@@ -509,13 +538,10 @@
           </div></div>
            </td> </tr>
       </table>
-      <div class="text-center my-5" *ngIf="showScrollSpinner">
-        <span
-          class="spinner-border"
-          role="status"
-          style="color: #00b4fc"
-        ></span>
-      </div>
+                   <!-- 🔄 Loader for infinite scroll -->
+  <div class="text-center mt-3" *ngIf="spinnerLoader">
+    <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+  </div>
     </div>
   </div>
 </div>
