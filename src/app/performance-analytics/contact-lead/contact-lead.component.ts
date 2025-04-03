@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
-import { USER_TYPES } from 'src/app/commons/constants/constant';
+import { PAGE_SOURCE_BROKER, PAGE_SOURCE_CARRIER, USER_TYPES } from 'src/app/commons/constants/constant';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
 
@@ -30,6 +30,12 @@ export class ContactLeadComponent implements OnInit {
   filterForm: FormGroup;
    uniqueUserTypes=USER_TYPES;
    public spinnerLoader = false;
+   filterPForm: FormGroup;
+   profilePerfomrmanceDuration:any
+   uniquePositions:any=[];
+   usertype:any
+   carrierList = PAGE_SOURCE_CARRIER;
+   brokerList = PAGE_SOURCE_BROKER;
   // Progress Bar Percentage calculation
   get totalViewsPercentage(): number {
     return 100;
@@ -46,9 +52,15 @@ constructor(
          public commonService: CommonService,
          private router: Router,
          private route: ActivatedRoute,
-   ) {}
+   ) {
+    this.filterPForm = this.fb.group({
+      fromPDate: [''],
+      toPDate: [''],
+    })
+   }
 
   ngOnInit(): void {
+    this.usertype = localStorage.getItem('user_type');
     this.route.queryParams.subscribe((params) => {
       this.filterForm = this.fb.group({
         fromDate: [''],
@@ -77,9 +89,16 @@ constructor(
     this.fetchCarrierProfileAnalitics()
     
   }
-fetchCarrierProfileAnalitics(){
+fetchCarrierProfileAnalitics(fromStartDate?:string, toStartDate?:string){
   
-    let newParams: {} = {};
+  let newParams: {
+    fromStartDate?:string;
+    toStartDate?:string;
+  } = {};
+
+  const {fromPDate, toPDate} = this.filterPForm.value;
+  if (fromPDate) newParams.fromStartDate = this.formatDateForAPI(fromPDate);
+  if (toPDate) newParams.toStartDate = this.formatDateForAPI(toPDate);
   
 
     const usertype = localStorage.getItem('user_type');
@@ -175,6 +194,7 @@ if (apiKey) {
     apiKey: apiKey,
     uri: this.commonService.getAPIUriFromParams(newParams),
   };
+  this.loaddedScreens = this.page
     this.commonService.getList(APIparams).subscribe(
       (response) => {
         
@@ -207,6 +227,7 @@ if (apiKey) {
         }
       },
       (error) => {
+        this.loaddedScreens--; 
         this.spinnerLoader = false;
         this.errorMessage = 'Failed to load recent carriers. Please try again.';
   
@@ -306,15 +327,31 @@ formatDate(inputDate:string): string {
     this.fetchCarriersContactList(true);
   }
 
+  // getRandomColors(length: number): string[] {
+  //   const colors = [];
+  //   for (let i = 0; i < length; i++) {
+  //     const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+  //     colors.push(color);
+  //   }
+  //   return colors;
+  // }
   getRandomColors(length: number): string[] {
     const colors = [];
     for (let i = 0; i < length; i++) {
-      const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+      let color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+      
+      // Ensure it's always a valid 6-character hex color
+      color = color.padEnd(7, "0");
+  
+      // If white, assign another color (e.g., black or any predefined color)
+      if (color.toLowerCase() === "#ffffff") {
+        color = "#cccccc"; //d Assign black instead of white
+      }
+  
       colors.push(color);
     }
     return colors;
   }
-  
   createCountryChart(){
     const ctx = document.getElementById('topCountryChartC1') as HTMLCanvasElement;
     new Chart(ctx, {
@@ -424,62 +461,113 @@ formatDate(inputDate:string): string {
     });
   }
 
-    @HostListener('window:scroll', ['$event'])
-    onWindowScroll(event: Event) {
-      const scrollHeight = window.innerHeight + window.scrollY;
-      const documentHeight = document.documentElement.scrollHeight;
-      if (documentHeight - scrollHeight <= 1) {
-        // if (scrollHeight >= documentHeight - 1) {
-        console.log(this.totalPages, this.page, "203")
-        if (this.page < this.totalPages && !this.spinnerLoader){
-          console.log(this.totalPages, this.page, "205")
+  loaddedScreens = 0;
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll(event: Event) {
+    const scrollHeight = window.innerHeight + window.scrollY;
+    const documentHeight = document.documentElement.scrollHeight;
+    if ((documentHeight - scrollHeight) <= 1) {
+      if (this.page <= this.totalPages && !this.spinnerLoader) {
+        if(this.page <= this.loaddedScreens)
           this.page += 1;
-          console.log(this.page, "537")
-          this.fetchCarriersContactList();
-        }
+        if((this.totalPages >= this.page) && (this.loaddedScreens < this.page))
+        this.fetchCarriersContactList();
       }
-      this.getCurrentPage();
     }
-    getCurrentPage() {
-      console.log("📌 Debugging Scroll Behavior");
-      
-      const tbody = document.querySelector("tbody");
-      const table = document.querySelector("table");
-      const itemsPerPage = 5;
-      
-      if (!tbody || !table) return 1; // Ensure elements exist
-  
-      const scrollTop = window.scrollY; // Corrected scroll position
-      const rowHeight = tbody.querySelector("tr")?.clientHeight || 0;
-  
-      if (rowHeight === 0) return 1; // Avoid division by zero
-  
-      // Calculate how many rows are visible on the screen
-      const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
-  
-      // Calculate current page
-      let currentPage = Math.floor((scrollTop + table.offsetTop) / (rowHeight * itemsPerPage - alreadyLoaded * rowHeight));
-  
-      // Ensure currentPage never goes out of bounds
-      currentPage = Math.max(1, Math.min(this.totalPages, currentPage));
-  
-      console.log({
-          scrollTop,
-          rowHeight,
-          alreadyLoaded,
-          calculatedPage: currentPage,
-          currentPageBeforeUpdate: this.page,
-      });
-  
-      // ✅ Update the page only if there's an actual change
-      if (this.page !== currentPage) {
-          this.page = currentPage;
-          this.addParams(currentPage);
-          this.fetchCarriersContactList();
-      }
-  
-      return currentPage;
+    this.getCurrentPage();
   }
+  
+  getCurrentPage() {
+    console.log('📌 Debugging Scroll Behavior');
+
+    const tbody = document.querySelector('tbody');
+    const table = document.querySelector('table');
+    const itemsPerPage = 10;
+
+    if (!tbody || !table) return 1; // Ensure elements exist
+
+    const scrollTop = window.scrollY; // Corrected scroll position
+    const rowHeight = tbody.querySelector('tr')?.clientHeight || 0;
+
+    if (rowHeight === 0) return 1; // Avoid division by zero
+
+    // Calculate how many rows are visible on the screen
+    const alreadyLoaded =
+      Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
+
+    // Calculate current page
+    let currentPage = Math.floor(
+      (scrollTop + table.offsetTop) /
+        (rowHeight * itemsPerPage - alreadyLoaded * rowHeight)
+    );
+    // Ensure currentPage never goes out of bounds
+    currentPage = Math.max(1, Math.min(this.totalPages, currentPage)) || 1;
+    console.log('CurrentPage: ' + this.page);
+    // ✅ Update the page only if there's an actual change
+    if (this.page !== currentPage) {
+      this.page = currentPage;
+      this.addParams(currentPage);
+      // this.fetchCarriersContactList();
+    }
+
+    return currentPage;
+  }
+    // @HostListener('window:scroll', ['$event'])
+    // onWindowScroll(event: Event) {
+    //   const scrollHeight = window.innerHeight + window.scrollY;
+    //   const documentHeight = document.documentElement.scrollHeight;
+    //   if (documentHeight - scrollHeight <= 1) {
+    //     // if (scrollHeight >= documentHeight - 1) {
+    //     console.log(this.totalPages, this.page, "203")
+    //     if (this.page < this.totalPages && !this.spinnerLoader){
+    //       console.log(this.totalPages, this.page, "205")
+    //       this.page += 1;
+    //       console.log(this.page, "537")
+    //       this.fetchCarriersContactList();
+    //     }
+    //   }
+    //   this.getCurrentPage();
+    // }
+  //   getCurrentPage() {
+  //     console.log("📌 Debugging Scroll Behavior");
+      
+  //     const tbody = document.querySelector("tbody");
+  //     const table = document.querySelector("table");
+  //     const itemsPerPage = 5;
+      
+  //     if (!tbody || !table) return 1; // Ensure elements exist
+  
+  //     const scrollTop = window.scrollY; // Corrected scroll position
+  //     const rowHeight = tbody.querySelector("tr")?.clientHeight || 0;
+  
+  //     if (rowHeight === 0) return 1; // Avoid division by zero
+  
+  //     // Calculate how many rows are visible on the screen
+  //     const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
+  
+  //     // Calculate current page
+  //     let currentPage = Math.floor((scrollTop + table.offsetTop) / (rowHeight * itemsPerPage - alreadyLoaded * rowHeight));
+  
+  //     // Ensure currentPage never goes out of bounds
+  //     currentPage = Math.max(1, Math.min(this.totalPages, currentPage));
+  
+  //     console.log({
+  //         scrollTop,
+  //         rowHeight,
+  //         alreadyLoaded,
+  //         calculatedPage: currentPage,
+  //         currentPageBeforeUpdate: this.page,
+  //     });
+  
+  //     // ✅ Update the page only if there's an actual change
+  //     if (this.page !== currentPage) {
+  //         this.page = currentPage;
+  //         this.addParams(currentPage);
+  //         this.fetchCarriersContactList();
+  //     }
+  
+  //     return currentPage;
+  // }
   
   addParams(currentPage?:any){
     let newParams: {
@@ -494,7 +582,7 @@ formatDate(inputDate:string): string {
       location?: string;
       contactType?: string;
     } = {
-      limit: 5,
+      limit: 10,
       page: this.page,
     };
     const queryParams = new URLSearchParams();
@@ -593,5 +681,30 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
   }
   formatCompanyName(name: string): string {
     return name ? name.replace(/\s+/g, '-') : '';
+  }
+  checkDate() {
+    const fromStartDate = this.filterPForm.get('fromPDate')?.value;
+    const toStartDate = this.filterPForm.get('toPDate')?.value;
+  
+    console.log('Selected Dates:', { fromStartDate, toStartDate });
+  
+    // Ensure both dates are selected before calling the API
+    if (!fromStartDate || !toStartDate) return;
+  
+    this.fetchCarrierProfileAnalitics(fromStartDate, toStartDate);
+  
+    // Days calculation
+    
+    // Convert dates to JavaScript Date objects
+    const fromDate = new Date(fromStartDate);
+    const toDate = new Date(toStartDate);
+  
+    // Calculate the difference in milliseconds
+    const timeDifference = toDate.getTime() - fromDate.getTime();
+  
+    // Convert milliseconds to days
+    const dayDifference = timeDifference / (1000 * 3600 * 24);
+    this.profilePerfomrmanceDuration = dayDifference;
+    console.log('Time difference in days:', dayDifference);
   }
 }

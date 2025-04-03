@@ -164,7 +164,7 @@
                 class="txt_1 fw_6"
                 [ngClass]="{ 'd-none': !showAdvancedFilter }"
               >
-                Quick Filter
+                Advanced Filter
               </p>
               <div
                 class="comn_fltr"
@@ -240,11 +240,12 @@
                   <div class="col-md-3">
                     <mat-form-field  [ngClass]="{'highlighted': filterForm.get('position')?.value}">
                       <mat-label>Profile Rank </mat-label>
-                      <mat-select formControlName="position">
+                      <!-- <mat-select formControlName="position">
                         <ng-container *ngFor="let position of uniquePositions">
                           <mat-option [value]="position">{{position}}</mat-option>
                         </ng-container>
-                      </mat-select>
+                      </mat-select> -->
+                      <input type="text" matInput placeholder="Enter position" formControlName="position">
                     </mat-form-field>
                     </div>
                     <!-- Toggle-Profile-Viewed -->
@@ -263,23 +264,10 @@
                     }"
                   >
                     <mat-label>Page Source</mat-label>
-                    <mat-select formControlName="impressionType">
-                      <mat-option value="carrier-list">carrier-list</mat-option>
-                      <mat-option value="carrier-detail"
-                        >carrier-detail</mat-option
-                      >
-                      <mat-option value="carrier-insurance-history"
-                        >carrier-insurance-history</mat-option
-                      >
-                      <mat-option value="carrier-authority-history"
-                      >carrier-authority-history</mat-option
-                    >
-                    <mat-option value="header-search"
-                    >header-search</mat-option
-                  >
-                  <mat-option value="load-availability"
-                  >load-availability</mat-option
-                >
+                    <mat-select>
+                    <ng-container *ngFor="let data of (usertype === 'CARRIER' ? carrierList : brokerList)">
+                      <mat-option value="data">{{data}}</mat-option>
+                    </ng-container>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -390,46 +378,19 @@
           <td mat-cell *matCellDef="let element">
             <div class="user_dtl sticky_boder">
               <div class="ud_l">
-                <img
-                  style="width: 50px; border-radius: 60px"
-                  [src]="
-                    element.user?.profileImage || './assets/images/profile.webp'
-                  "
-                  class="user_img"
-                  alt="User Image"
-                />
+                <img style="width: 50px; border-radius: 60px" [src]="element.user?.profileImage" class="user_img" alt="User Image" *ngIf="element.user?.profileImage" />
+                <i *ngIf="!element.user?.profileImage" class="fa-duotone fa-solid fa-circle-user user_icon" aria-hidden="true"></i>
                 <span class="user_Type">{{ element.userType }}</span>
               </div>
               <div class="ud_r">
                 <div class="name_icn" *ngIf="element.user?.companyName">
-                  <a    *ngIf="element.userType === 'CARRIER'" 
+                  <a *ngIf="element.userType === 'CARRIER'" 
                    [href]="'/carrier-profile/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)" 
-                   class="u_name" target="_blank">{{
-                    element?.user?.companyName
-                  }}</a>
-                    <a 
-                    *ngIf="element.userType === 'BROKER'" 
-                    [href]="'/freight-brokerage/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)" 
-                    class="u_name" 
-                    target="_blank">
-                    {{ element.user?.companyName }}
-                  </a>
-                  <a 
-                  *ngIf="element.userType !== 'BROKER' && element.userType !== 'CARRIER' " 
-                  class="u_name" 
-                  target="_blank">
-                  {{ element.user?.companyName }}
-                </a>
-                  <i
-                  *ngIf="!element?.user?.id"
-                    class="fa-duotone fa-badge-check verify_icon"
-                    matTooltip="Account not Verified"
-                  ></i>
-                  <i
-                    *ngIf="element?.user?.id"
-                    class="fa-duotone fa-badge-check verify_icon user_verified"
-                    matTooltip="Account Verified"
-                  ></i>
+                   class="u_name" target="_blank">{{element?.user?.companyName}}</a>
+                  <a *ngIf="element.userType === 'BROKER'" [href]="'/freight-brokerage/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)" class="u_name" target="_blank">{{element.user?.companyName}}</a>
+                  <a *ngIf="element.userType !== 'BROKER' && element.userType !== 'CARRIER' " class="u_name" target="_blank">{{element.user?.companyName}}</a>
+                  <i *ngIf="!element?.user?.id" class="fa-duotone fa-badge-check verify_icon" matTooltip="Profile not Verified"></i>
+                  <i *ngIf="element?.user?.id" class="fa-duotone fa-badge-check verify_icon user_verified" matTooltip="Profile Verified"></i>
                 </div>
                 <div class="loca_rtng">
                   <span
@@ -467,9 +428,7 @@
                     : element.location || ""
                 }}</span
               > -->
-              <span class="u_loca">
-                {{
-                  (element.user?.city || element.user?.state)
+              <span class="u_loca">{{(element.user?.city || element.user?.state)
                     ? ((element.user?.city ? (element.user.city | titlecase) + ", " : "") + 
                        (element.user?.state ? (element.user.state) + ", " : "")).slice(0, -2)
                     : element?.userType === 'GUEST'?'':(element.location || '').slice(0,-4)
@@ -482,41 +441,16 @@
         </ng-container>
         <ng-container matColumnDef="insights">
           <th mat-header-cell *matHeaderCellDef class="insights_w">Insights</th>
-          <td mat-cell *matCellDef="let element" class="min_w_200">
-            {{ element.insight }}
-          </td>
+          <td mat-cell *matCellDef="let element" class="min_w_200">{{ element.insight }}</td>
         </ng-container>
         <ng-container matColumnDef="pageSource">
           <th mat-header-cell *matHeaderCellDef>Page Source</th>
-          <td mat-cell *matCellDef="let element">
-            <a
-              *ngIf="element.url"
-              [href]="element.url"
-              class="txt_lnk"
-              target="_blank"
-            >
-              <span class="impression-type">{{ element.impressionType }}</span>
-              <span class="svg-container">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-box-arrow-up-right"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"
-                  />
-                  <path
-                    fill-rule="evenodd"
-                    d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"
-                  />
-                </svg>
-              </span>
-            </a>
 
+          <td mat-cell *matCellDef="let element" class="onhover_show_icon">
+            <a *ngIf="element.url" [href]="element.url" target="_blank" class="txt_p">
+              <span class="impression-type">{{ element.impressionType }}</span>
+              <i class="fa-regular fa-arrow-up-right-from-square"></i>
+            </a>
             <span *ngIf="!element.url">{{ element.impressionType }}</span>
           </td>
         </ng-container>
@@ -537,23 +471,14 @@
           </th>
           <td mat-cell *matCellDef="let element" class="mob_txt_cntr">
             <img src="/assets/country/us.png" class="flaf_icn" />
-            {{ element.location }}
+            {{ element.location || '-' }}
           </td>
         </ng-container>
         <ng-container matColumnDef="platform">
           <th mat-header-cell *matHeaderCellDef>Platform</th>
           <td mat-cell *matCellDef="let element">
             <div class="comn_icn">
-              <!-- <i
-                class="fa-regular {{
-                  getDeviceIcon(element.platform)
-                }} platform_in"
-                matTooltip="Desktop Device"
-              ></i> -->
-              <i
-              class="fa-regular {{ getPlatformDetails(element.platform).icon }} platform_in"
-              [matTooltip]="getPlatformDetails(element.platform).tooltip"
-            ></i>
+              <i class="fa-regular {{ getPlatformDetails(element.platform).icon }} platform_in" [matTooltip]="getPlatformDetails(element.platform).tooltip"></i>
             </div>
           </td>
         </ng-container>
@@ -563,7 +488,7 @@
             <div class="comn_icn">
               <img
                 src="{{ getOSImage(element.osPlatform) }}"
-                matTooltip="Windows Operating System"
+                [matTooltip]="element.osPlatform"
               />
               <!-- <img src="/assets/images/android.png">
               <img src="/assets/images/ios.png"> -->
@@ -600,6 +525,7 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <ng-container *ngIf="!spinnerLoader">
         <tr class="mat-row" *matNoDataRow style="text-align: center">
           <td class="mat-cell" [attr.colspan]="displayedColumns.length">
            <div class="empty-state">
@@ -611,11 +537,13 @@
              <p class="empty-state__help">This is no Records</p>
          </div></div>
           </td> </tr>
+        </ng-container>
       </table>
-              <!-- 🔄 Loader for infinite scroll -->
-  <div class="text-center mt-3" *ngIf="spinnerLoader">
-    <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
-  </div>
+    
+      <!-- 🔄 Loader for infinite scroll -->
+      <div class="text-center spinner_loader" *ngIf="spinnerLoader">
+        <span class="spinner-border" role="status"></span>
+      </div>
     </div>
   </div>
 </div>

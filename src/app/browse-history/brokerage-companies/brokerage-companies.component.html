@@ -5,8 +5,9 @@
         <div class="btns_box">
           <div class="row">
             <div class="col-md-5">
-              <div class="comn_fltr" [ngClass]="{ 'd-none': showAdvancedFilter }">
-                <mat-form-field appearance="none">
+              <div class="comn_fltr">
+                <p class="txt_2 fw_6" [ngClass]="{ 'd-none': !showAdvancedFilter }">Advanced Filter</p>
+                <mat-form-field appearance="none" [ngClass]="{ 'd-none': showAdvancedFilter }">
                   <mat-label>Quick Search</mat-label>
                   <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
                   <input type="text" matInput placeholder="Search by user" class="form-control cn_input ms-2"
@@ -29,7 +30,8 @@
                   <i class="fa-sharp fa-solid fa-filter"></i>
                 </span>
                 <span class="cn_btn icn_btn" (click)="refresh()">
-                  <i class="fa-duotone fa-solid fa-rotate-right"></i>
+                  <i class="fa-duotone fa-solid fa-rotate-right" *ngIf="!spinnerLoader"></i>
+                  <i class="fa-solid fa-rotate fa-spin" *ngIf="spinnerLoader"></i>
                 </span>
               </div>
             </div>
@@ -37,7 +39,7 @@
         </div>
         <div class="filter_box" [ngClass]="{ 'd-none': !showAdvancedFilter }" *ngIf="isAdvancedFilterVisible()">
           <div class="form_box">
-            <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
+            <p class="txt_2 fw_6 mb-3" [ngClass]="{ 'd-none': showAdvancedFilter }">Advanced Filter</p>
             <div class="row">
               <!-- <div class="col-md-3">
                 <mat-form-field  [ngClass]="{'highlighted': filterForm.get('position')?.value}">
@@ -134,7 +136,7 @@
                 <div class="user_img_container">
                   <div class="ud_l">
                     <img *ngIf="element.broker?.profileImage" [src]="element.broker.profileImage" class="user_img"
-                      alt="User profile image" width="40px" height="40px" />
+                      alt="User profile image" width="50px" height="50px" />
                     <i *ngIf="!element.broker?.profileImage" class="fa-duotone fa-solid fa-circle-user user_icon"
                       aria-hidden="true"></i>
                     <span class="user_Type">Carrier</span>
@@ -144,14 +146,11 @@
 
               <div class="ud_r">
                 <div class="name_icn" *ngIf="element.broker?.companyName">
-                  <a [href]="'/freight-brokerage/' + element.broker?.dotNumber + '/' + formatCompanyName(element.broker?.companyName)"
-                    class="u_name" target="_blank">
-                    {{ element.broker?.companyName }}
-                  </a>            
+                  <a [href]="'/freight-brokerage/' + element.broker?.dotNumber + '/' + formatCompanyName(element.broker?.companyName)" class="u_name" target="_blank">{{ element.broker?.companyName }}</a> 
                   <i
                     class="fa-duotone fa-badge-check verify_icon"
                     [matTooltip]="element.broker?.userId ? 'Account Verified' : 'Account not Verified'"
-                    [ngClass]="{'blue-icon': element.broker?.userId, 'gray-icon': !element.broker?.userId}"
+                    [ngClass]="{'txt_p': element.broker?.userId, 'txt_lb': !element.broker?.userId}"
                   ></i>
                 </div>
                 <div class="loca_rtng">
@@ -174,16 +173,11 @@
         </ng-container>
         <ng-container matColumnDef="pageSource">
           <th mat-header-cell *matHeaderCellDef>Page Source</th>
-          <td mat-cell *matCellDef="let element" class="show_icon">
-            <a *ngIf="element.url" [href]="element.url" class="txt_lnk" target="_blank">
-              <span class="hover-container">
-                {{ element.impressionType }}
-                <span class="svg-container">
-                  <i class="fa-regular fa-arrow-up-right-from-square"></i>
-                </span>
-              </span>
+          <td mat-cell *matCellDef="let element" class="onhover_show_icon">
+            <a *ngIf="element.url" [href]="element.url" target="_blank" class="txt_p">
+              <span class="impression-type">{{ element.impressionType }}</span>
+              <i class="fa-regular fa-arrow-up-right-from-square"></i>
             </a>
-
             <span *ngIf="!element.url">{{ element.impressionType }}</span>
           </td>
         </ng-container>
@@ -232,9 +226,10 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
+    
       <!-- 🔄 Loader for infinite scroll -->
-      <div class="text-center mt-3" *ngIf="spinnerLoader">
-        <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+      <div class="text-center spinner_loader" *ngIf="spinnerLoader">
+        <span class="spinner-border" role="status"></span>
       </div>
     </div>
   </div>

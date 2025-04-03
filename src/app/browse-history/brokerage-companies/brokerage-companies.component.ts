@@ -135,7 +135,7 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
         console.log(response,"140")
          if (response && response.response) {
           //  const newData = response.response;
-          const newData = response.response.data.map((item:any)=>({
+          const newData = response.response.map((item:any)=>({
             ...item,
             createdAt: this.formatDate(item.createdAt),
           }));

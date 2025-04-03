@@ -72,3 +72,28 @@
     .gray-icon {
       color: gray;
     }
+
+
+
+
+    .row_actn { display: flex; gap: 0.6rem; }
+    .user_img_container { border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .user_img { object-fit: cover; border-radius: 50%; }
+    .table_data_con .highlight-filter { border: 1px solid #00b4fc; background-color: #e7f1ff; transition: all 0.3s ease-in-out; }
+    .onhover_show_icon a { text-decoration: none; }
+    .onhover_show_icon i { display: inline-block; margin-left: 4px; text-decoration: none; opacity: 0; }
+    .onhover_show_icon:hover i { opacity: 1; }
+    
+    .adv_filter_btn.active-filter { background: #0fc00f; }
+    .adv_filter_btn { position: relative; }
+    .acrive_circle { position: absolute; top: -4px; left: -5px; color: #818181; font-size: 13px;  opacity: 0; }
+    .adv_filter_btn.active-filter .acrive_circle { opacity: 1; }
+    
+    .spinner-border { width: 20px; height: 20px; }
+    .spinner_loader { min-height: 54px; padding: 13px 0px 0px; }
+    
+    .table_data_con {
+        .comn_fltr { display: flex; align-items: center; height: 100%; }
+        .table_actions { margin: 0 0 1.5rem; }
+        .btns_box { margin: 0 0 0rem; border-bottom: none; }
+    }

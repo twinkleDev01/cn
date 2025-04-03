@@ -13,6 +13,7 @@ export class AddMemberComponent implements OnInit {
   memberForm: FormGroup;
 permissionList=[]
 public spinnerLoader = false;
+
   constructor(private fb: FormBuilder, public commonService: CommonService,private location: Location,private toastr: ToastrService) { }
 
   ngOnInit(): void {
@@ -48,7 +49,8 @@ public spinnerLoader = false;
     this.memberForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(64)]],
       lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(64)]],
-      email: ['', [Validators.required, Validators.email]],
+      // email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required,Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.(com|in|net|org|edu)$/i)]],
       contactNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       countryCode: ['', Validators.required],
       status: ['', Validators.required],

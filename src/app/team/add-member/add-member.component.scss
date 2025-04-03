@@ -1,7 +1,6 @@
-.cn_radio_btn { margin: 0 0 22px; display: block; }
-.cn_radio_btn .mat-radio-button { font-size: 16px; line-height: 22px; font-weight: 400; color: #818181; margin-right: 18px; }
-// .country_code_dropdown mat-form-field:first-child { width: 192px; }
-// .country_code_dropdown mat-form-field:last-child { width: calc(100% - 192px); }
+.cn_radio_btn { padding: 0 0 22px; display: block; }
+.cn_radio_btn .mat-radio-button { font-size: 16px; line-height: 22px; font-weight: 400; color: #818181; margin: 0 1.2rem 0.2rem 0; }
+
 .cn_mlti_selct { margin: 0 0 22px; }
 .cn_mlti_selct .mat-accent { display: inline-block; width: 25%; font-size: 16px; line-height: 22px; font-weight: 400; color: #818181; margin: 4px 0 4px; }
 .form_action { text-align: right; }
@@ -9,12 +8,7 @@
 .btn_bordered { color: #818181; border: 1px solid #818181; }
 .btn_bordered:hover { color: #000; border: 1px solid #000; }
 
-.form_action .spinner-border {
-    width: 16px;
-    height: 16px;
-    border: 2px solid #fff !important;
-    border-right-color: transparent !important;
-  }
+.form_action .spinner-border { width: 16px; height: 16px; border: 2px solid #fff !important; border-right-color: transparent !important; }
 
 @media screen and (max-width: 760px) {
     .cn_mlti_selct { display: flex; flex-direction: column; }

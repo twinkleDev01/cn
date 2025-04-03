@@ -63,69 +63,37 @@
 
         <!-- Contact Number with Country Code -->
         <div class="col-md-6">
-          <p class="cn_input_lbl">Contact Number</p>
-          <img
-            src="https://carriernetwork.ai/images/country/US.png"
-            width="20px"
-          />
-          <span class="text-danger ms-1">*</span>
+          <p class="cn_input_lbl">
+            Contact Number
+            <img src="https://carriernetwork.ai/images/country/US.png" width="20px" />
+            <span class="text-danger ms-1">*</span>
+          </p>
           <div class="country_code_dropdown">
             <mat-form-field appearance="none" class="cn_inpt_drop">
               <div class="country_code_fld">
-                <mat-select
-                  formControlName="countryCode"
-                  placeholder="Select Country Code"
-                  [disabled]="true"
-                  class="form-control custom_input"
-                >
+                <mat-select formControlName="countryCode" placeholder="Select Country Code" [disabled]="true" class="form-control custom_input">
                   <mat-option value="US">
-                    <img
-                      src="/assets/country/us.png"
-                      name="cla"
-                      class="flag_img"
-                    />
+                    <img src="/assets/country/us.png" name="cla" class="flag_img" />
                     <span class="ms-1">+1</span>
                   </mat-option>
                   <mat-option value="MX">
-                    <img
-                      src="/assets/country/mx.png"
-                      name="cla"
-                      class="flag_img"
-                    />
+                    <img src="/assets/country/mx.png" name="cla" class="flag_img" />
                     <span class="ms-1">+52</span>
                   </mat-option>
                   <mat-option value="CA">
-                    <img
-                      src="/assets/country/ca.png"
-                      name="cla"
-                      class="flag_img"
-                    />
+                    <img src="/assets/country/ca.png" name="cla" class="flag_img" />
                     <span class="ms-1">+1</span>
                   </mat-option>
                 </mat-select>
               </div>
-              <!-- <mat-error *ngIf="isInvalid('countryCode')">Country code is required.</mat-error> -->
+              <mat-error *ngIf="isInvalid('countryCode')" class="error_mess">Country code is required.</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="none">
-              <input
-                matInput
-                type="text"
-                placeholder="Enter Contact Number"
-                [disabled]="true"
-                maxlength="10"
-                formControlName="contactNumber"
-                class="form-control cn_input"
-              />
-              <mat-error class="error_mess d_inline"
-              >Contact number is required.</mat-error
-            >
-              <!-- <mat-error *ngIf="isInvalid('contactNumber')"
-                >Contact number is required.</mat-error
-              > -->
-              <mat-error *ngIf="memberForm.get('contactNumber')?.hasError('pattern')">
-                Contact number must be 10 digits.
-              </mat-error>
+              <input matInput type="text" placeholder="Enter Contact Number" [disabled]="true" maxlength="10" formControlName="contactNumber" class="form-control cn_input" />
+              <mat-error class="error_mess d_inline">Contact number is required.</mat-error>
+              <!-- <mat-error *ngIf="isInvalid('contactNumber')">Contact number is required.</mat-error> -->
+              <mat-error *ngIf="memberForm.get('contactNumber')?.hasError('pattern')" class="error_mess">Contact number must be 10 digits.</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -136,10 +104,8 @@
           <mat-radio-group formControlName="status" class="cn_radio_btn">
             <mat-radio-button [value]="0">Active</mat-radio-button>
             <mat-radio-button [value]="2">In-active</mat-radio-button>
+            <mat-error class="error_mess" *ngIf="isInvalid('status')">Please select status.</mat-error>
           </mat-radio-group>
-          <mat-error *ngIf="isInvalid('status')"
-            >Please select status.</mat-error
-          >
         </div>
 
         <!-- Permissions -->
@@ -158,26 +124,19 @@
           <p class="cn_input_lbl">Member Permission</p>
           <div class="cn_mlti_selct" formArrayName="permissions">
             <span *ngFor="let permCtrl of permissions.controls; let i = index">
-              <mat-checkbox [formControlName]="i">
-                {{ permissionList[i]?.permissionName }}
-              </mat-checkbox>
+              <mat-checkbox [formControlName]="i">{{ permissionList[i]?.permissionName }}</mat-checkbox>
             </span>
+            <mat-error *ngIf="isInvalid('permissions')" >Select at least one permission.</mat-error>
           </div>
-          <mat-error *ngIf="isInvalid('permissions')"
-            >Select at least one permission.</mat-error
-          >
         </div>
         <!-- Buttons -->
         <div class="col-md-12">
           <div class="form_action">
-            <button
-              type="button"
-              class="cn_btn btn_bordered"
-              (click)="Cancel()"
-            >
-              Cancel
+            <button type="button" class="cn_btn btn_bordered" (click)="Cancel()">Cancel</button>
+            <button type="submit" class="cn_btn ms-4">
+              <span class="me-1 spinner-border" role="status"></span>
+              Update Member
             </button>
-            <button type="submit" class="cn_btn ms-4">Update Member</button>
           </div>
         </div>
       </div>

@@ -1,11 +1,23 @@
 <div class="td_card_con">
   <div class="dashboard_chat_overview">
-    <div class="dco_head">
+    <div class="dco_head" [formGroup]="filterPForm">
       <div class="dcoh_l">
-        <p class="dco_h_tlt">90 Days Profile Performance</p>
+        <p class="dco_h_tlt">{{profilePerfomrmanceDuration || 90}} Days Profile Performance</p>
       </div>
+      <div class="dcoh_r cn_field">
+        <mat-form-field class="date_range_filter">
+          <mat-label>Accessed At</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Start date"  formControlName="fromPDate"  (dateChange)="checkDate()">
+            <input matEndDate placeholder="End date"  formControlName="toPDate"   (dateChange)="checkDate()">
+          </mat-date-range-input>
+          <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+    <!--  -->
     </div>
-
     <div class="dco_box">
       <div class="row">
         <div class="col-md-6 pie_crt_box">
@@ -226,22 +238,9 @@
   >
     <mat-label>Page Source</mat-label>
     <mat-select formControlName="contactType">
-      <mat-option value="carrier-list">carrier-list</mat-option>
-      <mat-option value="carrier-detail"
-        >carrier-detail</mat-option
-      >
-      <mat-option value="carrier-insurance-history"
-        >carrier-insurance-history</mat-option
-      >
-      <mat-option value="carrier-authority-history"
-      >carrier-authority-history</mat-option
-    >
-    <mat-option value="header-search"
-    >header-search</mat-option
-  >
-  <mat-option value="load-availability"
-  >load-availability</mat-option
->
+      <ng-container *ngFor="let data of (usertype === 'CARRIER' ? carrierList : brokerList)">
+      <mat-option value="data">{{data}}</mat-option>
+    </ng-container>
     </mat-select>
   </mat-form-field>
 </div>
@@ -352,46 +351,17 @@
           <td mat-cell *matCellDef="let element">
             <div class="user_dtl sticky_boder">
               <div class="ud_l">
-                <img
-                [src]="
-                  element.user?.profileImage ||
-                  './assets/images/profile.webp'
-                "
-                class="user_img"
-                alt="User Image"
-               width="40px" height="40px"/>
+                <img [src]="element.user?.profileImage" *ngIf="element.user?.profileImage" class="user_img" alt="User Image" width="50px" height="50px"/>
+                <i *ngIf="!element.user?.profileImage" class="fa-duotone fa-solid fa-circle-user user_icon" aria-hidden="true"></i>
                 <span class="user_Type">{{element.userType}}</span>
               </div>
               <div class="ud_r">
                 <div class="name_icn" *ngIf="element.user?.companyName">
-                 <a    *ngIf="element.userType === 'CARRIER'" 
-                   [href]="'/carrier-profile/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)" 
-                   class="u_name" target="_blank">{{
-                    element?.user?.companyName
-                  }}</a>
-                    <a 
-                    *ngIf="element.userType === 'BROKER'" 
-                    [href]="'/freight-brokerage/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)" 
-                    class="u_name" 
-                    target="_blank">
-                    {{ element.user?.companyName }}
-                  </a>
-                  <a 
-                  *ngIf="element.userType !== 'BROKER' && element.userType !== 'CARRIER' " 
-                  class="u_name" 
-                  target="_blank">
-                  {{ element.user?.companyName }}
-                </a>
-                  <i
-                    *ngIf="!element?.user?.id"
-                    class="fa-duotone fa-badge-check verify_icon"
-                    matTooltip="Account not Verified"
-                  ></i>
-                  <i
-                    *ngIf="element?.user?.id"
-                    class="fa-duotone fa-badge-check verify_icon user_verified"
-                    matTooltip="Account Verified"
-                  ></i>
+                  <a *ngIf="element.userType === 'CARRIER'" [href]="'/carrier-profile/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)" class="u_name" target="_blank">{{element?.user?.companyName}}</a>
+                  <a *ngIf="element.userType === 'BROKER'" [href]="'/freight-brokerage/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)" class="u_name" target="_blank">{{ element.user?.companyName }}</a>
+                  <a *ngIf="element.userType !== 'BROKER' && element.userType !== 'CARRIER' "  class="u_name"  target="_blank">{{ element.user?.companyName }}</a>
+                  <i *ngIf="!element?.user?.id" class="fa-duotone fa-badge-check verify_icon" matTooltip="Profile not Verified"></i>
+                  <i *ngIf="element?.user?.id" class="fa-duotone fa-badge-check verify_icon user_verified" matTooltip="Profile Verified"></i>
                 </div>
                 <div class="loca_rtng">
                   <span
@@ -428,13 +398,7 @@
                         : element.location || ""
                     }}</span
                   > -->
-                  <span class="u_loca">
-                    {{
-                      (element.user?.city || element.user?.state)
-                        ? ((element.user?.city ? (element.user.city | titlecase) + ", " : "") + 
-                           (element.user?.state ? (element.user.state) + ", " : "")).slice(0, -2)
-                        : element?.userType === 'GUEST'?'':(element.location || '').slice(0,-4)
-                    }}
+                  <span class="u_loca">{{ (element.user?.city || element.user?.state) ? ((element.user?.city ? (element.user.city | titlecase) + ", " : "") + (element.user?.state ? (element.user.state) + ", " : "")).slice(0, -2) : element?.userType === 'GUEST'?'':(element.location || '').slice(0,-4) }}
                   </span>
                 </div>
               </div>
@@ -443,19 +407,11 @@
         </ng-container>
         <ng-container matColumnDef="pageSource">
           <th mat-header-cell *matHeaderCellDef>Page Source</th>
-          <td mat-cell *matCellDef="let element" class="show_icon">
-            <a
-              *ngIf="element.url"
-              [href]="element.url"
-              class="txt_lnk"
-              target="_blank"
-            >
+          <td mat-cell *matCellDef="let element" class="onhover_show_icon">
+            <a *ngIf="element.url" [href]="element.url" target="_blank" class="txt_p">
               <span class="impression-type">{{ element.contactType }}</span>
-              <span class="svg-container">
-                <i class="fa-regular fa-arrow-up-right-from-square"></i>
-              </span>
+              <i class="fa-regular fa-arrow-up-right-from-square"></i>
             </a>
-
             <span *ngIf="!element.url">{{ element.contactType }}</span>
           </td>
         </ng-container>
@@ -491,7 +447,7 @@
             <div class="comn_icn">
               <img
                 src="{{ getOSImage(element.osPlatform) }}"
-                matTooltip="Windows Operating System"
+                [matTooltip]="element.osPlatform"
               />
             </div>
           </td>
@@ -525,6 +481,7 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <ng-container *ngIf="!spinnerLoader">
         <tr class="mat-row" *matNoDataRow style="text-align: center">
            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
             <div class="empty-state">
@@ -536,6 +493,7 @@
               <p class="empty-state__help">This is no Records</p>
           </div></div>
            </td> </tr>
+           </ng-container>
       </table>
                    <!-- 🔄 Loader for infinite scroll -->
   <div class="text-center mt-3" *ngIf="spinnerLoader">

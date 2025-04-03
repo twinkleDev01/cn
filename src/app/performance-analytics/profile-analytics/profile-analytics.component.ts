@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
-import { USER_TYPES } from 'src/app/commons/constants/constant';
+import { PAGE_SOURCE_BROKER, PAGE_SOURCE_CARRIER, USER_TYPES } from 'src/app/commons/constants/constant';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
 
@@ -34,6 +34,9 @@ export class ProfileAnalyticsComponent implements OnInit {
   subscriptionPlanType: number | null = null;
   uniquePositions:any=[];
   profilePerfomrmanceDuration:any
+  usertype:any
+  carrierList = PAGE_SOURCE_CARRIER;
+    brokerList = PAGE_SOURCE_BROKER;
   // Progress Bar Percentage calculation
   get totalViewsPercentage(): number {
     return 100;
@@ -58,6 +61,7 @@ export class ProfileAnalyticsComponent implements OnInit {
    }
 
    ngOnInit(): void {
+    this.usertype = localStorage.getItem('user_type');
     this.route.queryParams.subscribe((params) => {
       this.filterForm = this.fb.group({
         fromDate: [''],
@@ -243,10 +247,10 @@ checkDate() {
     const {fromPDate, toPDate} = this.filterPForm.value;
     if (fromPDate) newParams.fromStartDate = this.formatDateForAPI(fromPDate);
     if (toPDate) newParams.toStartDate = this.formatDateForAPI(toPDate);
-    const queryParams = new URLSearchParams();
-    if (newParams.fromStartDate) queryParams.set('fromStartDate', newParams.fromStartDate);
-    if (newParams.toStartDate) queryParams.set('toStartDate', newParams.toStartDate);
-    history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
+    // const queryParams = new URLSearchParams();
+    // if (newParams.fromStartDate) queryParams.set('fromStartDate', newParams.fromStartDate);
+    // if (newParams.toStartDate) queryParams.set('toStartDate', newParams.toStartDate);
+    // history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
     const usertype = localStorage.getItem('user_type');
     // Conditionally set the API key for CARRIER or BROKER
 const apiKey = usertype === 'CARRIER' 
@@ -324,14 +328,32 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     this.fetchCarriersContactList(true);
   }
 
+  // getRandomColors(length: number): string[] {
+  //   const colors = [];
+  //   for (let i = 0; i < length; i++) {
+  //     const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+  //     colors.push(color);
+  //   }
+  //   return colors;
+  // }
   getRandomColors(length: number): string[] {
     const colors = [];
     for (let i = 0; i < length; i++) {
-      const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+      let color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+      
+      // Ensure it's always a valid 6-character hex color
+      color = color.padEnd(7, "0");
+  
+      // If white, assign another color (e.g., black or any predefined color)
+      if (color.toLowerCase() === "#ffffff") {
+        color = "#cccccc"; //d Assign black instead of white
+      }
+  
       colors.push(color);
     }
     return colors;
   }
+
 
   createUserTypeChart() {
     const ctx = document.getElementById('userTypeChartC1') as HTMLCanvasElement;

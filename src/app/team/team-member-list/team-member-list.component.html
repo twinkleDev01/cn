@@ -125,9 +125,9 @@
       <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let element" class="fw_5">
+          <td mat-cell *matCellDef="let element" class="name_col text-wrap fw_5">
             <div class="membr_info">
-              <span>{{ element.firstName + ' ' + element.lastName }}</span>
+              <span class="text-capitalize text-break">{{ element.firstName + ' ' + element.lastName }}</span>
               <div class="phone_data">
                 <i class="fa-duotone fa-solid fa-phone txt_p"></i>
                 <span>{{element.phone}}</span>
@@ -142,8 +142,8 @@
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef> Status </th>
           <td mat-cell *matCellDef="let element" 
-          [class.txt_lb]="element.activeStatus === 0" 
-          [class.txt_s]="element.activeStatus !== 0">
+          [class.txt_lb]="element.activeStatus === 2" 
+          [class.txt_s]="element.activeStatus !== 2">
         {{ element.activeStatus === 2 ? 'In-active' : 'Active' }}
       </td>
       
@@ -151,7 +151,7 @@
         </ng-container>
         <ng-container matColumnDef="permission">
           <th mat-header-cell *matHeaderCellDef> Permission </th>
-          <td mat-cell *matCellDef="let element" class="fw_5">
+          <td mat-cell *matCellDef="let element" class="permision_col fw_5 text-wrap">
             {{ getPermissionNames(element.teamPermission) }}
           </td>
         </ng-container>

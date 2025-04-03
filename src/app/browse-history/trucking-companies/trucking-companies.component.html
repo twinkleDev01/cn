@@ -5,14 +5,9 @@
         <div class="btns_box">
           <div class="row">
             <div class="col-md-5">
-              <div
-                class="comn_fltr"
-                [ngClass]="{ 'd-none': showAdvancedFilter }"
-              >
-                <mat-form-field
-                  appearance="none"
-                  [ngClass]="{ 'highlight-filter': isFilterApplied }"
-                >
+              <div class="comn_fltr">
+                <p class="txt_2 fw_6" [ngClass]="{ 'd-none': !showAdvancedFilter }">Advanced Filter</p>
+                <mat-form-field appearance="none" [ngClass]="{ 'highlight-filter': isFilterApplied }" [ngClass]="{ 'd-none': showAdvancedFilter }">
                   <mat-label>Quick Search</mat-label>
                   <mat-icon matTextPrefix class="material-symbols-outlined"
                     >filter_list</mat-icon
@@ -47,7 +42,8 @@
                   <i class="fa-sharp fa-solid fa-filter"></i>
                 </span>
                 <span class="cn_btn icn_btn" (click)="refresh()">
-                  <i class="fa-duotone fa-solid fa-rotate-right"></i>
+                  <i class="fa-duotone fa-solid fa-rotate-right" *ngIf="!spinnerLoader"></i>
+                  <i class="fa-solid fa-rotate fa-spin" *ngIf="spinnerLoader"></i>
                 </span>
               </div>
             </div>
@@ -59,7 +55,7 @@
           *ngIf="isAdvancedFilterVisible()"
         >
           <div class="form_box">
-            <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
+            <p class="txt_2 fw_6 mb-3" [ngClass]="{ 'd-none': showAdvancedFilter }">Advanced Filter</p>
             <div class="row">
                <!-- <div class="col-md-3">
                     <mat-form-field  [ngClass]="{'highlighted': filterForm.get('position')?.value}">
@@ -153,6 +149,23 @@
                   </mat-select>
                 </mat-form-field>
               </div>
+              <!-- TeamId filter -->
+              <div class="col-md-3">
+                <mat-form-field  
+                 [ngClass]="{
+                  highlighted: filterForm.get('teamIds')?.value
+                }">
+                  <mat-label>Team IDs</mat-label>
+                  <input
+                  type="text"
+                  matInput
+                  placeholder="Enter teamId"
+                  formControlName="teamIds"
+                  (input)="onteamIdsInput($event)"
+                />
+                </mat-form-field>
+              </div>
+              <!--  -->
               <div class="col-md-12">
                 <div class="fltr_actn">
                   <button class="cn_btn btn_bordered" (click)="resetFilters()">
@@ -181,7 +194,7 @@
                 <div class="user_img_container">
                   <div class="ud_l">
                     <img *ngIf="element.carrier?.profileImage" [src]="element.carrier.profileImage" class="user_img"
-                      alt="User profile image" width="40px" height="40px" />
+                      alt="User profile image" width="50px" height="50px" />
                     <i *ngIf="!element.carrier?.profileImage" class="fa-duotone fa-solid fa-circle-user user_icon"
                       aria-hidden="true"></i>
                     <span class="user_Type">Carrier</span>
@@ -300,15 +313,12 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
       </table>
     
-       <div class="text-center spinner_loader" *ngIf="spinnerLoader">
-          <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
-        </div>
-  
-        <!-- 🔄 Loader for infinite scroll -->
- 
+      <!-- 🔄 Loader for infinite scroll -->
+      <div class="text-center spinner_loader" *ngIf="!spinnerLoader">
+        <span class="spinner-border" role="status"></span>
+      </div>
     </div>
   </div>
 </div>

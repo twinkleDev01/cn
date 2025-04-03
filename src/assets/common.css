@@ -856,7 +856,7 @@ border: 1px solid #ddd !important;}
   .sticky_boder { border-right: 1px solid #ddd; }
   .user_dtl { display: flex; align-items: center; padding: 0.7rem 1.1rem 0.7rem 0; gap: 10px; width: 100%; min-width: 290px; white-space: break-spaces; }
   .verify_icon { font-size: 1rem; color: initial; }
-  .user_icon { font-size: 2.5rem; color: #00000082; }
+  .user_icon { font-size: 3.14rem; color: #818181; }
   .u_name { font-weight: 600; display: inline; margin-right: 5px; color: #000; text-decoration: none; }
   table .mat-row:hover .u_name { color: #29c0fd; text-decoration: underline; }
   .u_loca { color: #636363; }
@@ -871,7 +871,10 @@ border: 1px solid #ddd !important;}
   .zero_rating { background: #999999; }
   td.mat-cell.min_w_200 { min-width: 230px; white-space: break-spaces; }
   .ud_l { position: relative; }
-  .user_Type { position: absolute; left: 50%; bottom: -5px; font-size: 10px; line-height: 10px; font-weight: 600; background: #ffffff; color: #000; padding: 2px 3px; box-shadow: 0px 0px 3px #00000082; border-radius: 4px; transform: translate(-50%, 0%); }
+  .user_Type { position: absolute; left: 50%; bottom: -5px; font-size: 10px; line-height: 10px; font-weight: 600; background: #ffffff; color: #000; padding: 2px 3px; box-shadow: 0px 0px 3px #00000082; border-radius: 4px; transform: translate(-50%, 0%); overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 70px; }
 
   table .mat-row:hover { background: whitesmoke; }
   .row_actn {

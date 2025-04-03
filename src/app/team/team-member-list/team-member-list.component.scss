@@ -2,7 +2,8 @@
 .comn_fltr { display: flex; height: 100%; align-items: center; }
 .membr_info { padding: 0.4rem 0; }
 .phone_data { color: #818181; display: flex; align-items: center; gap: 0.3rem; margin: 3px 0 0; }
-// .actin_col, .actin_icon { max-width: 120px; }
-.actin_icon { display: flex; justify-content: center; gap: 1rem; }
+
+.actin_icon { display: flex; align-items: center; justify-content: center; gap: 1rem; }
 .actin_icon i { font-size: 1rem; display: inline-block; padding: 0.9rem 0.7rem; cursor: pointer; }
 
+.name_col { max-width: 290px; }

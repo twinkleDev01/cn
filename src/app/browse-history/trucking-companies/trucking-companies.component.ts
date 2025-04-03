@@ -73,6 +73,7 @@ export class TruckingCompaniesComponent implements OnInit {
         postalCode: [''],
         impressionType: [''],
         position: [''],
+        teamIds: [''],
         toggleControl: [null as boolean | null]
       });
       if (params && Object.keys(params).length) {
@@ -82,6 +83,7 @@ export class TruckingCompaniesComponent implements OnInit {
               toDate: params['toDate'] ? new Date(params['toDate']) : null,
               impressionType: params['impressionType'] || '',
               postalCode: params['postalCode'] || '',
+              teamIds: params['teamIds'] || '',
               position: params['position'] || null
           });
           this.cdRef.detectChanges();
@@ -113,6 +115,7 @@ export class TruckingCompaniesComponent implements OnInit {
       fromStartDate?: string;
       toStartDate?: string;
       postalCode?: string;
+      teamIds?: string;
       impressionType?: string;
       position?: string;
     } = {
@@ -120,12 +123,13 @@ export class TruckingCompaniesComponent implements OnInit {
       page: this.page,
     };
   
-    const { fromDate, toDate, impressionType, postalCode,position } = this.filterForm.value;
+    const { fromDate, toDate, impressionType, postalCode,position,teamIds } = this.filterForm.value;
   
     if (fromDate) newParams.fromStartDate = this.formatDateForAPI(fromDate);
     if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
     if(impressionType) newParams.impressionType=impressionType
     if (postalCode) newParams.postalCode = postalCode;
+    if (teamIds) newParams.teamIds = teamIds;
   if(position)  newParams.position = position
 
     console.log('Selected Filters:', newParams);
@@ -138,7 +142,7 @@ if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
 if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
 if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
 if (newParams.position) queryParams.set('position', newParams.position);
-    
+if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
     history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
     let APIparams = {
       apiKey: AppSettings.APIsNameArray.RECENTVIEW.CARRIERRECETVIEW,
@@ -150,7 +154,7 @@ if (newParams.position) queryParams.set('position', newParams.position);
         console.log(response,'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
         if (response && response.response ) {
           // const newData = response.response;
-          const newData = response.response.data.map((item:any)=>({
+          const newData = response.response.map((item:any)=>({
             ...item,
             createdAt: this.formatDate(item.createdAt),
           }));
@@ -250,6 +254,7 @@ addParams(currentPage?:any){
     fromStartDate?: string;
     toStartDate?: string;
     postalCode?: string;
+    teamIds?: string;
     impressionType?: string;
     position?: string;
   } = {
@@ -264,7 +269,8 @@ if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
 if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
 if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
 if (newParams.position) queryParams.set('position', newParams.position);
-  
+if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
+
   history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
  }
   setupSearchFilter() {
@@ -311,5 +317,11 @@ if (newParams.position) queryParams.set('position', newParams.position);
     // Allow only digits and trim to 9 characters
     const numericInput = input.replace(/\D/g, '').slice(0, 9);
     this.filterForm.get('postalCode')?.setValue(numericInput, { emitEvent: false });
+  }
+  onteamIdsInput(event: Event): void {
+    const input = (event.target as HTMLInputElement).value;
+    // Allow only digits and trim to 9 characters
+    const numericInput = input.replace(/\D/g, '').slice(0, 9);
+    this.filterForm.get('teamIds')?.setValue(numericInput, { emitEvent: false });
   }
 }

@@ -11,5 +11,11 @@
 .acrive_circle { position: absolute; top: -4px; left: -5px; color: #818181; font-size: 13px;  opacity: 0; }
 .adv_filter_btn.active-filter .acrive_circle { opacity: 1; }
 
-.spinner-border { display: inline-block; width: 21px; height: 21px; vertical-align: -0.125em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: 0.75s linear infinite spinner-border; margin: 2px 0 0 6px; }
+.spinner-border { width: 20px; height: 20px; }
 .spinner_loader { min-height: 54px; padding: 13px 0px 0px; }
+
+.table_data_con {
+    .comn_fltr { display: flex; align-items: center; height: 100%; }
+    .table_actions { margin: 0 0 1.5rem; }
+    .btns_box { margin: 0 0 0rem; border-bottom: none; }
+}

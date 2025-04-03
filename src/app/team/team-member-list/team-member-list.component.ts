@@ -116,7 +116,10 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
       const lastName = data.lastName?.toLowerCase() || '';
   
       // Check if the filter value matches either firstName or lastName
-      return firstName.includes(filter) || lastName.includes(filter);
+      // return firstName.includes(filter) || lastName.includes(filter);
+      const name = firstName + ' ' + lastName
+      // Check if the filter value matches either firstName or lastName
+      return name.includes(filter) ;
     };
   
     this.dataSource.filter = filterValue;

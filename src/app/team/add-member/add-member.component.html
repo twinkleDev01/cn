@@ -26,10 +26,7 @@
             <!-- <mat-error *ngIf="memberForm.get('firstName')?.hasError('required')"
               >First name is required.</mat-error
             > -->
-            <mat-error
-              *ngIf="memberForm.get('firstName')?.hasError('maxLength')"
-              >Max 64 characters allowed.</mat-error
-            >
+            <mat-error class="error_mess" *ngIf="memberForm.get('firstName')?.hasError('maxLength')">Max 64 characters allowed.</mat-error>
           </mat-form-field>
         </div>
 
@@ -48,8 +45,7 @@
             />
             <mat-error class="error_mess">Last name is required.</mat-error>
             <!-- <mat-error *ngIf="memberForm.get('lastName')?.hasError('required')">Last name is required.</mat-error> -->
-            <mat-error *ngIf="memberForm.get('lastName')?.hasError('maxLength')">Max 64 characters allowed.</mat-error>
-
+            <mat-error class="error_mess" *ngIf="memberForm.get('lastName')?.hasError('maxLength')">Max 64 characters allowed.</mat-error>
           </mat-form-field>
         </div>
 
@@ -65,7 +61,13 @@
               class="form-control cn_input"
               autocomplete="off"
             />
-            <mat-error class="error_mess">Email is required.</mat-error>
+            <!-- <mat-error class="error_mess">Email is required.</mat-error> -->
+            <mat-error class="error_mess" *ngIf="memberForm.get('email')?.hasError('required')">
+              Email is required.
+            </mat-error>
+            <mat-error class="error_mess" *ngIf="memberForm.get('email')?.hasError('pattern')">
+              Email must end with .com, .in, .net, .org, or .edu.
+            </mat-error>
           </mat-form-field>
         </div>
 
@@ -130,13 +132,13 @@
                 (input)="onContactInput($event)"
                 autocomplete="off"
               />
-              <mat-error class="error_mess d_inline"
+              <!-- <mat-error class="error_mess"
                 >Contact number is required.</mat-error
-              >
-              <!-- <mat-error *ngIf="memberForm.get('contactNumber')?.hasError('required')">
+              > -->
+              <mat-error class="error_mess d_inline" *ngIf="memberForm.get('contactNumber')?.hasError('required')">
                 Contact number is required.
-              </mat-error> -->
-              <mat-error *ngIf="memberForm.get('contactNumber')?.hasError('pattern')">
+              </mat-error>
+              <mat-error class="error_mess d_inline" *ngIf="memberForm.get('contactNumber')?.hasError('pattern')">
                 Contact number must be 10 digits.
               </mat-error>
             </mat-form-field>
@@ -148,28 +150,19 @@
           <mat-radio-group appearance="none" formControlName="status" class="cn_radio_btn">
             <mat-radio-button [value]="0">Active</mat-radio-button>
             <mat-radio-button [value]="2">In-active</mat-radio-button>
+            <mat-error class="error_mess" *ngIf="isInvalid('status')">Please select status.</mat-error>
           </mat-radio-group>
-          <mat-error *ngIf="isInvalid('status')"
-            >Please select status.</mat-error
-          >
-            <!-- <mat-error class="error_mess">Please select status</mat-error> -->
         </div>
 
         <!-- Permissions -->
         <div class="col-md-12">
           <p class="cn_input_lbl">Member Permission</p>
           <div class="cn_mlti_selct">
-            <mat-checkbox
-              *ngFor="let perm of permissionList"
-              (change)="onCheckboxChange($event)"
-              [value]="perm.permissionSlug"
-            >
+            <mat-checkbox *ngFor="let perm of permissionList" (change)="onCheckboxChange($event)" [value]="perm.permissionSlug">
               {{ perm.permissionName }}
             </mat-checkbox>
+            <mat-error class="error_mess" *ngIf="isInvalid('permissions')">Select at least one permission.</mat-error>
           </div>
-          <mat-error *ngIf="isInvalid('permissions')"
-            >Select at least one permission.</mat-error
-          >
         </div>
 
         <!-- Buttons -->
