@@ -322,12 +322,27 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
   } 
 
   applyAdvancedFilter() {
+    this.showAdvancedFilter = false;
     this.isFilterApplied = true;
     this.page = 1;
     this.dataSource.data = [];
     this.fetchCarriersContactList(true);
   }
-
+  getBrowserToolTip(uaString: string): string {
+    const lowerUA = uaString?.toLowerCase();
+  
+    if (lowerUA?.includes('google chrome')) {
+      return 'Google Chrome';
+    } else if (lowerUA?.includes('safari') && !lowerUA?.includes('chrome')) {
+      return 'Safari';   // Safari doesn't include Chrome
+    } else if (lowerUA?.includes('firefox')) {
+      return 'Firefox';
+    } else if (lowerUA?.includes('opera') || lowerUA?.includes('opr')) {
+      return 'Opera';
+    } else {
+      return 'Other Browser';  // Fallback for unknown browsers
+    }
+  }
   // getRandomColors(length: number): string[] {
   //   const colors = [];
   //   for (let i = 0; i < length; i++) {

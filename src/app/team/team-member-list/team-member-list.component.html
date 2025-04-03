@@ -181,11 +181,25 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <ng-container *ngIf="!spinnerLoader">
+          <tr class="mat-row" *matNoDataRow style="text-align: center">
+             <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              <div class="empty-state">
+                <div class="empty-state__content">
+              <div class="empty-state__icon">
+                <img src="./assets/images/no_data_found_img.jpg" alt="">
+              </div>
+              <div class="empty-state__message">List Empty</div>
+                <p class="empty-state__help">This is no Records</p>
+            </div></div>
+             </td> </tr>
+             </ng-container>
       </table>
-      <div class="text-center my-4" *ngIf="showScrollSpinner">
-        <span class="spinner-border" role="status"></span>
+          <!-- 🔄 Loader for infinite scroll -->
+      <div class="text-center mt-3" *ngIf="spinnerLoader">
+        <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
       </div>
-      <div class="skeletonloader" *ngIf="dataSource.filteredData.length === 0">
+      <!-- <div class="skeletonloader" *ngIf="dataSource.filteredData.length === 0">
         <div class="empty-state">
           <div class="empty-state__content">
             <div class="empty-state__icon">
@@ -195,7 +209,7 @@
             <p class="empty-state__help">There is no Team Member</p>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

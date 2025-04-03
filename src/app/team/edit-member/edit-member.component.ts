@@ -15,6 +15,7 @@ export class EditMemberComponent implements OnInit {
   dataToEdit:any
  memberForm: FormGroup;
  permissionList=[]
+ public spinnerLoader = false;
   constructor(private router: Router,private fb: FormBuilder,public commonService: CommonService,private cdRef: ChangeDetectorRef,private location: Location,private toastr: ToastrService) {
     this.createForm()
     
@@ -146,6 +147,7 @@ export class EditMemberComponent implements OnInit {
 
 
           editTeam(): void {
+             this.spinnerLoader = true;
             const selectedPermissions = this.memberForm.value.permissions
             .map((selected: boolean, index: number) => selected ? this.permissionList[index]?.permissionSlug : null)
             .filter(permissionSlug => permissionSlug !== null);
@@ -162,11 +164,13 @@ export class EditMemberComponent implements OnInit {
         
             this.commonService.putAllValue(APIparams).subscribe({
               next: (response) => {
+                this.spinnerLoader = false;
                 console.log('API Response:', response);
                 this.toastr.success('Team Member update successfully!', 'Success');
                 this.location.back();
               },
               error: (error) => {
+                this.spinnerLoader = false;
                 // this.toastr.error('User already exists!', 'Error');
                 this.toastr.error(error?.error[0]?.message, 'Error');
                 console.error('API Error:', error);

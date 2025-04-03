@@ -363,6 +363,9 @@
                   <i *ngIf="!element?.user?.id" class="fa-duotone fa-badge-check verify_icon" matTooltip="Profile not Verified"></i>
                   <i *ngIf="element?.user?.id" class="fa-duotone fa-badge-check verify_icon user_verified" matTooltip="Profile Verified"></i>
                 </div>
+                <div *ngIf="!element.user?.companyName">
+                  <a class="u_name">Guest User</a>
+                </div>
                 <div class="loca_rtng">
                   <span
                     class="user_rtng"
@@ -458,7 +461,7 @@
             <div class="comn_icn">
               <img
                 src="{{ getBrowserImage(element.browser) }}"
-                matTooltip="Chrome Browser"
+                [matTooltip]="getBrowserToolTip(element.browser)"
               />
               <!-- <p>{{getBrowserImage(element.browser)}}</p> -->
             </div>
@@ -481,7 +484,7 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        <ng-container *ngIf="!spinnerLoader">
+        <!-- <ng-container *ngIf="!spinnerLoader">
         <tr class="mat-row" *matNoDataRow style="text-align: center">
            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
             <div class="empty-state">
@@ -493,7 +496,21 @@
               <p class="empty-state__help">This is no Records</p>
           </div></div>
            </td> </tr>
-           </ng-container>
+           </ng-container> -->
+           <ng-container >
+            <tr class="mat-row" *matNoDataRow style="text-align: center">
+              <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                <div class="empty-state" *ngIf="!spinnerLoader">
+                  <div class="empty-state__content">
+                <div class="empty-state__icon">
+                  <img src="./assets/images/no_data_found_img.jpg" alt="">
+                </div>
+                <div class="empty-state__message">List Empty</div>
+                  <p class="empty-state__help">This is no Records</p>
+                </div>
+                </div>
+              </td> </tr>
+            </ng-container>
       </table>
                    <!-- 🔄 Loader for infinite scroll -->
   <div class="text-center mt-3" *ngIf="spinnerLoader">

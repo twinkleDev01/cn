@@ -294,6 +294,7 @@ if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
     this.showAdvancedFilter = !this.showAdvancedFilter;
   }
   applyAdvancedFilter() {
+    this.showAdvancedFilter = false;
     this.isFilterApplied = true;
     this.page = 1;
     this.dataSource.data = [];

@@ -13,7 +13,13 @@ export class AddMemberComponent implements OnInit {
   memberForm: FormGroup;
 permissionList=[]
 public spinnerLoader = false;
+selectedCountryFlag: string | null = 'https://carriernetwork.ai/images/country/US.png';
 
+  countryList = [
+    { value: 'US', flag: '/assets/country/us.png', code: '+1' },
+    { value: 'MX', flag: '/assets/country/mx.png', code: '+52' },
+    { value: 'CA', flag: '/assets/country/ca.png', code: '+1' }
+  ];
   constructor(private fb: FormBuilder, public commonService: CommonService,private location: Location,private toastr: ToastrService) { }
 
   ngOnInit(): void {
@@ -21,7 +27,10 @@ public spinnerLoader = false;
     this.getTeamPermissionList();
 
   }
-
+  onCountryChange(event: any) {
+    const selectedCountry = this.countryList.find(country => country.value === event.value);
+    this.selectedCountryFlag = selectedCountry ? selectedCountry.flag : null;
+  };
   getTeamPermissionList(): void {
         
     let newParams: {}
@@ -99,7 +108,7 @@ public spinnerLoader = false;
       next: (response) => {
         console.log('API Response:', response);
           this.spinnerLoader = false;
-        this.toastr.success('Team Member update successfully!', 'Success');
+        this.toastr.success('Team Member added successfully!', 'Success');
         this.location.back();
       },
       error: (error) => {

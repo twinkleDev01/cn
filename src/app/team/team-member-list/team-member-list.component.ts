@@ -17,7 +17,7 @@ page=1
 isFilterApplied = false;
   searchControl = new FormControl('');
   totalPages: number = 0;
-  showScrollSpinner=false
+  public spinnerLoader = false;
 dataSource: MatTableDataSource<any> = new MatTableDataSource();
   constructor(
     public dialog: MatDialog,
@@ -31,7 +31,7 @@ dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
     teamList(resetData: boolean = false): void {
      
-      this.showScrollSpinner=true
+      this.spinnerLoader=true
       let newParams: {
         limit: number;
         page: number;
@@ -55,7 +55,7 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
     };
       this.commonService.getList(APIparams).subscribe(
         (response) => {
-          this.showScrollSpinner=false
+          this.spinnerLoader=false
           console.log(response)
           this.totalPages = response.response.totalPages;
           if (response && response.response && response.response.teamArray ) {
@@ -73,7 +73,7 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
           }
         },
         (error) => {
-          this.showScrollSpinner=false
+          this.spinnerLoader=false
           console.error('Error fetching carriers:', error);
         }
       );

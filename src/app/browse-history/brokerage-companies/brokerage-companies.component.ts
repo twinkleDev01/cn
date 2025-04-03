@@ -272,6 +272,7 @@ if (newParams.position) queryParams.set('position', newParams.position);
      this.showAdvancedFilter = !this.showAdvancedFilter;
    }
    applyAdvancedFilter() {
+    this.showAdvancedFilter = false;
      this.isFilterApplied = true;
      this.page = 1;
      this.dataSource.data = [];

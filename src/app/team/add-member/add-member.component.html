@@ -75,18 +75,22 @@
         <div class="col-md-6">
           <p class="cn_input_lbl">
             Contact Number
-            <img
+            <!-- <img
               src="https://carriernetwork.ai/images/country/US.png"
               width="20px"
+            /> -->
+            <img
+            *ngIf="selectedCountryFlag"
+            [src]="selectedCountryFlag"
+              width="20px"
             />
-            <!-- <img src="assets/country/us.png" width="20px" /> -->
             <span class="text-danger ms-1">*</span>
           </p>
           <!-- Country Dropdown -->
           <div class="country_code_dropdown">
             <mat-form-field appearance="none" class="cn_inpt_drop">
               <div class="country_code_fld">
-                <mat-select
+                <!-- <mat-select
                   placeholder="Select Country Code"
                   formControlName="countryCode"
                   class="form-control custom_input"
@@ -115,7 +119,18 @@
                     />
                     <span class="ms-1">+1</span>
                   </mat-option>
-                </mat-select>
+                </mat-select> -->
+                <mat-select
+                placeholder="Select Country Code"
+                formControlName="countryCode"
+                class="form-control custom_input"
+                (selectionChange)="onCountryChange($event)"
+              >
+                <mat-option *ngFor="let country of countryList" [value]="country.value">
+                  <img [src]="country.flag" class="flag_img" />
+                  <span class="ms-1">{{ country.code }}</span>
+                </mat-option>
+              </mat-select>
               </div>
               <!-- <mat-error class="error_mess d_inline"
               >Country code is required.</mat-error

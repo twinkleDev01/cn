@@ -225,6 +225,20 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <ng-container >
+          <tr class="mat-row" *matNoDataRow style="text-align: center">
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              <div class="empty-state" *ngIf="!spinnerLoader">
+                <div class="empty-state__content">
+              <div class="empty-state__icon">
+                <img src="./assets/images/no_data_found_img.jpg" alt="">
+              </div>
+              <div class="empty-state__message">List Empty</div>
+                <p class="empty-state__help">This is no Records</p>
+              </div>
+              </div>
+            </td> </tr>
+          </ng-container>
       </table>
     
       <!-- 🔄 Loader for infinite scroll -->
@@ -234,19 +248,4 @@
     </div>
   </div>
 
-</div>
-<!-- 📭 No data template -->
-<!-- <div class="text-center my-4" *ngIf="noDataFound && !spinnerLoader">
-  <p class="txt_2 fw_6">No records found</p>
-</div> -->
-<div class="skeletonloader">
-  <div class="empty-state" *ngIf="noDataFound && !spinnerLoader">
-    <div class="empty-state__content">
-    <div class="empty-state__icon">
-      <img src="./assets/images/no_data_found_img.jpg" alt="">
-    </div>
-    <div class="empty-state__message">List Empty</div>
-      <p class="empty-state__help">This is no Records</p>
-    </div>
-  </div>
 </div>
