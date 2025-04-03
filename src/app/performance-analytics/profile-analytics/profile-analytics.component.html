@@ -528,33 +528,21 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        <!-- <ng-container *ngIf="!spinnerLoader">
         <tr class="mat-row" *matNoDataRow style="text-align: center">
-          <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-           <div class="empty-state">
-             <div class="empty-state__content">
-           <div class="empty-state__icon">
-             <img src="./assets/images/no_data_found_img.jpg" alt="">
-           </div>
-           <div class="empty-state__message">List Empty</div>
-             <p class="empty-state__help">This is no Records</p>
-         </div></div>
-          </td> </tr>
-        </ng-container> -->
-        <ng-container >
-          <tr class="mat-row" *matNoDataRow style="text-align: center">
+          <ng-container *ngIf="!spinnerLoader">
             <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-              <div class="empty-state" *ngIf="!spinnerLoader">
+              <div class="empty-state">
                 <div class="empty-state__content">
-              <div class="empty-state__icon">
-                <img src="./assets/images/no_data_found_img.jpg" alt="">
+                  <div class="empty-state__icon">
+                    <img src="./assets/images/no_data_found_img.jpg" alt="">
+                  </div>
+                  <div class="empty-state__message">List Empty</div>
+                  <p class="empty-state__help">This is no Records</p>
+                </div>
               </div>
-              <div class="empty-state__message">List Empty</div>
-                <p class="empty-state__help">This is no Records</p>
-              </div>
-              </div>
-            </td> </tr>
+            </td>
           </ng-container>
+        </tr>
       </table>
     
       <!-- 🔄 Loader for infinite scroll -->

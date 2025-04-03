@@ -138,6 +138,7 @@ if (apiKey) {
   fetchCarriersContactList(resetData: boolean = false): void {
 
     this.spinnerLoader = true;
+    this.cdRef.detectChanges();
     let newParams: {
       limit: number;
       page: number;
@@ -229,6 +230,7 @@ if (apiKey) {
       (error) => {
         this.loaddedScreens--; 
         this.spinnerLoader = false;
+        this.cdRef.detectChanges();
         this.errorMessage = 'Failed to load recent carriers. Please try again.';
   
         console.error('Error fetching carriers:', error);

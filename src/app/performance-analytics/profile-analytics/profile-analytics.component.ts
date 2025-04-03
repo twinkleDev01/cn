@@ -163,6 +163,7 @@ if (apiKey) {
     apiKey: apiKey,
     uri: this.commonService.getAPIUriFromParams(newParams),
   };
+    this.loaddedScreens = this.page;
     this.commonService.getList(APIparams).subscribe(
       (response) => {
         
@@ -199,7 +200,7 @@ if (apiKey) {
         }
       },
       (error) => {
-
+        this.loaddedScreens--;
         this.spinnerLoader = false
         this.errorMessage = 'Failed to load recent carriers. Please try again.';
         console.error('Error fetching carriers:', error);
@@ -599,63 +600,58 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
   }
   
 
-   @HostListener('window:scroll', ['$event'])
-      onWindowScroll(event: Event) {
-        const scrollHeight = window.innerHeight + window.scrollY;
-        const documentHeight = document.documentElement.scrollHeight;
-        if (documentHeight - scrollHeight <= 1) {
-          // if (scrollHeight >= documentHeight - 1) {
-          console.log(this.totalPages, this.page, "203")
-          if (this.page < this.totalPages && !this.spinnerLoader){
-            console.log(this.totalPages, this.page, "205")
-            this.page += 1;
-            console.log(this.page, "537")
-            this.fetchCarriersContactList();
-          }
-        }
-        this.getCurrentPage();
+  
+  loaddedScreens = 0;
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll(event: Event) {
+    const scrollHeight = window.innerHeight + window.scrollY;
+    const documentHeight = document.documentElement.scrollHeight;
+    if ((documentHeight - scrollHeight) <= 1) {
+      if (this.page <= this.totalPages && !this.spinnerLoader) {
+        if(this.page <= this.loaddedScreens)
+          this.page += 1;
+        if((this.totalPages >= this.page) && (this.loaddedScreens < this.page))
+        this.fetchCarriersContactList();
       }
-      getCurrentPage() {
-        console.log("📌 Debugging Scroll Behavior");
-        
-        const tbody = document.querySelector("tbody");
-        const table = document.querySelector("table");
-        const itemsPerPage = 10;
-        
-        if (!tbody || !table) return 1; // Ensure elements exist
-    
-        const scrollTop = window.scrollY; // Corrected scroll position
-        const rowHeight = tbody.querySelector("tr")?.clientHeight || 0;
-    
-        if (rowHeight === 0) return 1; // Avoid division by zero
-    
-        // Calculate how many rows are visible on the screen
-        const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
-    
-        // Calculate current page
-        let currentPage = Math.floor((scrollTop + table.offsetTop) / (rowHeight * itemsPerPage - alreadyLoaded * rowHeight));
-    
-        // Ensure currentPage never goes out of bounds
-        currentPage = Math.max(1, Math.min(this.totalPages, currentPage));
-    
-        console.log({
-            scrollTop,
-            rowHeight,
-            alreadyLoaded,
-            calculatedPage: currentPage,
-            currentPageBeforeUpdate: this.page,
-        });
-    
-        // ✅ Update the page only if there's an actual change
-        if (this.page !== currentPage) {
-            this.page = currentPage;
-            this.addParams(currentPage);
-            // this.fetchCarriersContactList();
-        }
-    
-        return currentPage;
     }
-    
+    this.getCurrentPage();
+  }
+  
+  getCurrentPage() {
+    console.log('📌 Debugging Scroll Behavior');
+
+    const tbody = document.querySelector('tbody');
+    const table = document.querySelector('table');
+    const itemsPerPage = 10;
+
+    if (!tbody || !table) return 1; // Ensure elements exist
+
+    const scrollTop = window.scrollY; // Corrected scroll position
+    const rowHeight = tbody.querySelector('tr')?.clientHeight || 0;
+
+    if (rowHeight === 0) return 1; // Avoid division by zero
+
+    // Calculate how many rows are visible on the screen
+    const alreadyLoaded =
+      Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
+
+    // Calculate current page
+    let currentPage = Math.floor(
+      (scrollTop + table.offsetTop) /
+        (rowHeight * itemsPerPage - alreadyLoaded * rowHeight)
+    );
+    // Ensure currentPage never goes out of bounds
+    currentPage = Math.max(1, Math.min(this.totalPages, currentPage)) || 1;
+    console.log('CurrentPage: ' + this.page);
+    // ✅ Update the page only if there's an actual change
+    if (this.page !== currentPage) {
+      this.page = currentPage;
+      this.addParams(currentPage);
+      // this.fetchCarriersContactList();
+    }
+
+    return currentPage;
+  }
     addParams(currentPage?:any){
       let newParams: {
         limit: number;

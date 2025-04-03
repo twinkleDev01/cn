@@ -8,15 +8,15 @@
         <mat-form-field class="date_range_filter">
           <mat-label>Accessed At</mat-label>
           <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate placeholder="Start date"  formControlName="fromPDate"  (dateChange)="checkDate()">
-            <input matEndDate placeholder="End date"  formControlName="toPDate"   (dateChange)="checkDate()">
+            <input matStartDate placeholder="Start date" formControlName="fromPDate" (dateChange)="checkDate()">
+            <input matEndDate placeholder="End date" formControlName="toPDate" (dateChange)="checkDate()">
           </mat-date-range-input>
           <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
       </div>
-    <!--  -->
+      <!--  -->
     </div>
     <div class="dco_box">
       <div class="row">
@@ -29,39 +29,27 @@
                     <div class="bar_hed">
                       <span class="bar_txt">Total Views </span>
                       <span class="bar_vlu">
-                        {{ carrierContactAnalyticsData?.totalViews }}</span
-                      >
+                        {{ carrierContactAnalyticsData?.totalViews }}</span>
                     </div>
-                    <mat-progress-bar
-                      mode="determinate"
-                      [value]="totalViewsPercentage"
-                    ></mat-progress-bar>
+                    <mat-progress-bar mode="determinate" [value]="totalViewsPercentage"></mat-progress-bar>
                   </div>
                   <div class="dco_bar">
                     <div class="bar_hed">
                       <span class="bar_txt">Unique Visitors </span>
                       <span class="bar_vlu">
-                        {{ carrierContactAnalyticsData?.uniqueVisiter }}</span
-                      >
+                        {{ carrierContactAnalyticsData?.uniqueVisiter }}</span>
                     </div>
-                    <mat-progress-bar
-                      mode="determinate"
-                      [value]="uniqueVisitorsPercentage"
-                    ></mat-progress-bar>
+                    <mat-progress-bar mode="determinate" [value]="uniqueVisitorsPercentage"></mat-progress-bar>
                   </div>
                   <div class="dco_bar">
                     <div class="bar_hed">
                       <span class="bar_txt">Repeat Visitors </span>
                       <span class="bar_vlu">
                         {{
-                          carrierContactAnalyticsData?.totalRepeatCount
-                        }}</span
-                      >
+                        carrierContactAnalyticsData?.totalRepeatCount
+                        }}</span>
                     </div>
-                    <mat-progress-bar
-                      mode="determinate"
-                      [value]="repeatVisitorsPercentage"
-                    ></mat-progress-bar>
+                    <mat-progress-bar mode="determinate" [value]="repeatVisitorsPercentage"></mat-progress-bar>
                   </div>
                 </div>
               </div>
@@ -79,18 +67,12 @@
         <div class="col-md-6 bar_crt_box">
           <div class="row">
             <div class="col-md-8">
-              <div
-                class="country_chart"
-                [ngClass]="{ 'd-none': selectedChart !== 'country' }"
-              >
+              <div class="country_chart" [ngClass]="{ 'd-none': selectedChart !== 'country' }">
                 <div class="">
                   <canvas id="topCountryChartC1"></canvas>
                 </div>
               </div>
-              <div
-                class="city_chart"
-                [ngClass]="{ 'd-none': selectedChart !== 'city' }"
-              >
+              <div class="city_chart" [ngClass]="{ 'd-none': selectedChart !== 'city' }">
                 <div class="">
                   <canvas id="cityDistributionChartC1"></canvas>
                 </div>
@@ -108,39 +90,27 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <div
-                  class="chart_info"
-                  [ngClass]="{ 'd-none': selectedChart !== 'country' }"
-                >
+                <div class="chart_info" [ngClass]="{ 'd-none': selectedChart !== 'country' }">
                   <p class="cif_lbl">Top Country Viewers</p>
 
                   <ul>
-                    <li
-                      *ngFor="
+                    <li *ngFor="
                         let item of carrierContactAnalyticsData?.topCountry
                           | keyvalue
-                      "
-                    >
-                      <span class="chart_txt"
-                        >In {{ item.key }}: {{ item.value }}
+                      ">
+                      <span class="chart_txt">In {{ item.key }}: {{ item.value }}
                       </span>
                     </li>
                   </ul>
                 </div>
-                <div
-                  class="chart_info"
-                  [ngClass]="{ 'd-none': selectedChart !== 'city' }"
-                >
+                <div class="chart_info" [ngClass]="{ 'd-none': selectedChart !== 'city' }">
                   <p class="cif_lbl">Top City Viewers</p>
                   <ul>
-                    <li
-                      *ngFor="
+                    <li *ngFor="
                         let item of carrierContactAnalyticsData?.topCity
                           | keyvalue
-                      "
-                    >
-                      <span class="chart_txt"
-                        >In {{ item.key }}: {{ item.value }}
+                      ">
+                      <span class="chart_txt">In {{ item.key }}: {{ item.value }}
                       </span>
                     </li>
                   </ul>
@@ -159,41 +129,26 @@
         <div class="btns_box">
           <div class="row">
             <div class="col-md-5">
-              <div
-                class="comn_fltr"
-                [ngClass]="{ 'd-none': showAdvancedFilter }"
-              >
+              <div class="comn_fltr" [ngClass]="{ 'd-none': showAdvancedFilter }">
                 <mat-form-field appearance="none">
                   <mat-label>Quick Search</mat-label>
-                  <mat-icon matTextPrefix class="material-symbols-outlined"
-                    >filter_list</mat-icon
-                  >
-                  <input
-                    type="text"
-                    matInput
-                    placeholder="Search by User"
-                    class="form-control cn_input ms-2"
-                    [formControl]="searchControl"
-                    (keyup)="applyFilter()"
-                  />
+                  <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
+                  <input type="text" matInput placeholder="Search by User" class="form-control cn_input ms-2"
+                    [formControl]="searchControl" (keyup)="applyFilter()" />
                 </mat-form-field>
               </div>
             </div>
             <div class="col-md-7">
               <div class="btn_r">
-                <span
-                  class="cn_btn icn_btn adv_filter_btn"
-                  (click)="toggleFilter()"
-                  [ngClass]="{
+                <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()" [ngClass]="{
                     'active-filter':
                       filterForm?.value &&
                       (filterForm.value.fromDate ||
                         filterForm.value.toDate ||
                         filterForm.value.postalCode ||
                         filterForm.value.userType || filterForm.value.contactType)
-                  }"
-                >
-              <i class="fa-solid fa-circle acrive_circle"></i>
+                  }">
+                  <i class="fa-solid fa-circle acrive_circle"></i>
                   <i class="fa-sharp fa-solid fa-filter"></i>
                   <!-- <i class="fa-duotone fa-solid fa-sliders"></i> -->
                 </span>
@@ -209,11 +164,9 @@
               <form class="cn_field" [formGroup]="filterForm">
                 <div class="row">
                   <div class="col-md-3">
-                    <mat-form-field
-                      [ngClass]="{
+                    <mat-form-field [ngClass]="{
                         highlighted: filterForm.get('userType')?.value
-                      }"
-                    >
+                      }">
                       <mat-label>User Type</mat-label>
                       <mat-select formControlName="userType">
                         <ng-container *ngFor="let data of uniqueUserTypes">
@@ -224,26 +177,24 @@
                   </div>
                   <!-- Location -->
                   <div class="col-md-3">
-                    <mat-form-field  [ngClass]="{'highlighted': filterForm.get('location')?.value}">
+                    <mat-form-field [ngClass]="{'highlighted': filterForm.get('location')?.value}">
                       <mat-label>Location</mat-label>
                       <input type="text" matInput placeholder="Enter Location" formControlName="location">
                     </mat-form-field>
-                  </div> 
-<!-- PageSource -->
-<div class="col-md-3">
-  <mat-form-field
-    [ngClass]="{
-      highlighted: filterForm.get('contactType')?.value
-    }"
-  >
-    <mat-label>Page Source</mat-label>
-    <mat-select formControlName="contactType">
-      <ng-container *ngFor="let data of (usertype === 'CARRIER' ? carrierList : brokerList)">
-      <mat-option value="data">{{data}}</mat-option>
-    </ng-container>
-    </mat-select>
-  </mat-form-field>
-</div>
+                  </div>
+                  <!-- PageSource -->
+                  <div class="col-md-3">
+                    <mat-form-field [ngClass]="{
+                      highlighted: filterForm.get('contactType')?.value
+                    }">
+                      <mat-label>Page Source</mat-label>
+                      <mat-select formControlName="contactType">
+                        <ng-container *ngFor="let data of (usertype === 'CARRIER' ? carrierList : brokerList)">
+                          <mat-option value="data">{{data}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
                   <!-- <div class="col-md-3">
                     <mat-form-field>
                       <mat-label>Country</mat-label>
@@ -275,59 +226,35 @@
                     </mat-form-field>
                   </div> -->
                   <div class="col-md-3">
-                    <mat-form-field
-                      [ngClass]="{
+                    <mat-form-field [ngClass]="{
                         highlighted: filterForm.get('postalCode')?.value
-                      }"
-                    >
+                      }">
                       <mat-label>Postal Code</mat-label>
-                      <input
-                        type="text"
-                        matInput
-                        placeholder="Search"
-                        formControlName="postalCode"
-                        (input)="onPostalCodeInput($event)"
-                      />
+                      <input type="text" matInput placeholder="Search" formControlName="postalCode"
+                        (input)="onPostalCodeInput($event)" />
                     </mat-form-field>
                   </div>
                   <div class="col-md-3">
-                    <mat-form-field
-                      class="date_range_filter"
-                      [ngClass]="{
+                    <mat-form-field class="date_range_filter" [ngClass]="{
                         highlighted:
                           filterForm.get('fromDate')?.value ||
                           filterForm.get('toDate')?.value
-                      }"
-                    >
+                      }">
                       <mat-label>Enter a Accessed Date Range</mat-label>
-                      <mat-date-range-input [rangePicker]="picker">
-                        <input
-                          matStartDate
-                          placeholder="Start date"
-                          formControlName="fromDate"
-                        />
-                        <input
-                          matEndDate
-                          placeholder="End date"
-                          formControlName="toDate"
-                        />
+                      <mat-date-range-input [rangePicker]="picker1">
+                        <input matStartDate placeholder="Start date" formControlName="fromDate" />
+                        <input matEndDate placeholder="End date" formControlName="toDate" />
                       </mat-date-range-input>
                       <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                      <mat-datepicker-toggle
-                        matIconSuffix
-                        [for]="picker"
-                      ></mat-datepicker-toggle>
-                      <mat-date-range-picker #picker></mat-date-range-picker>
+                      <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker1></mat-date-range-picker>
                     </mat-form-field>
                   </div>
                   <div class="col-md-3"></div>
 
                   <div class="col-md-12">
                     <div class="fltr_actn">
-                      <button
-                        class="cn_btn btn_bordered"
-                        (click)="resetFilters()"
-                      >
+                      <button class="cn_btn btn_bordered" (click)="resetFilters()">
                         Clear
                       </button>
                       <button class="cn_btn" (click)="applyAdvancedFilter()">
@@ -351,41 +278,40 @@
           <td mat-cell *matCellDef="let element">
             <div class="user_dtl sticky_boder">
               <div class="ud_l">
-                <img [src]="element.user?.profileImage" *ngIf="element.user?.profileImage" class="user_img" alt="User Image" width="50px" height="50px"/>
-                <i *ngIf="!element.user?.profileImage" class="fa-duotone fa-solid fa-circle-user user_icon" aria-hidden="true"></i>
+                <img [src]="element.user?.profileImage" *ngIf="element.user?.profileImage" class="user_img"
+                  alt="User Image" width="50px" height="50px" />
+                <i *ngIf="!element.user?.profileImage" class="fa-duotone fa-solid fa-circle-user user_icon"
+                  aria-hidden="true"></i>
                 <span class="user_Type">{{element.userType}}</span>
               </div>
               <div class="ud_r">
                 <div class="name_icn" *ngIf="element.user?.companyName">
-                  <a *ngIf="element.userType === 'CARRIER'" [href]="'/carrier-profile/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)" class="u_name" target="_blank">{{element?.user?.companyName}}</a>
-                  <a *ngIf="element.userType === 'BROKER'" [href]="'/freight-brokerage/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)" class="u_name" target="_blank">{{ element.user?.companyName }}</a>
-                  <a *ngIf="element.userType !== 'BROKER' && element.userType !== 'CARRIER' "  class="u_name"  target="_blank">{{ element.user?.companyName }}</a>
-                  <i *ngIf="!element?.user?.id" class="fa-duotone fa-badge-check verify_icon" matTooltip="Profile not Verified"></i>
-                  <i *ngIf="element?.user?.id" class="fa-duotone fa-badge-check verify_icon user_verified" matTooltip="Profile Verified"></i>
-                </div>
-                <div *ngIf="!element.user?.companyName">
-                  <a class="u_name">Guest User</a>
+                  <a *ngIf="element.userType === 'CARRIER'"
+                    [href]="'/carrier-profile/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)"
+                    class="u_name" target="_blank">{{element?.user?.companyName}}</a>
+                  <a *ngIf="element.userType === 'BROKER'"
+                    [href]="'/freight-brokerage/' + element.user?.id + '/' + formatCompanyName(element.user?.companyName)"
+                    class="u_name" target="_blank">{{ element.user?.companyName }}</a>
+                  <a *ngIf="element.userType !== 'BROKER' && element.userType !== 'CARRIER' " class="u_name"
+                    target="_blank">{{ element.user?.companyName }}</a>
+                  <i *ngIf="!element?.user?.id" class="fa-duotone fa-badge-check verify_icon"
+                    matTooltip="Profile not Verified"></i>
+                  <i *ngIf="element?.user?.id" class="fa-duotone fa-badge-check verify_icon user_verified"
+                    matTooltip="Profile Verified"></i>
                 </div>
                 <div class="loca_rtng">
-                  <span
-                    class="user_rtng"
-                    *ngIf="
+                  <span class="user_rtng" *ngIf="
                       element?.user?.averageRatingValue &&
                       element?.user?.averageRatingValue != 0 &&
                       element.user?.companyName
-                    "
-                    matTooltip="{{ element?.user?.averageRatingValue }} rating"
-                    >{{ element?.user?.averageRatingValue.toFixed(1) }}
+                    " matTooltip="{{ element?.user?.averageRatingValue }} rating">{{
+                    element?.user?.averageRatingValue.toFixed(1) }}
                     <i class="fa-solid fa-star"></i>
                   </span>
-                  <span
-                    class="user_rtng"
-                    *ngIf="
+                  <span class="user_rtng" *ngIf="
                       element?.user?.averageRatingValue == 0 &&
                       element.user?.companyName
-                    "
-                    matTooltip="{{ element?.user?.averageRatingValue }} rating"
-                    >0.0 <i class="fa-solid fa-star"></i>
+                    " matTooltip="{{ element?.user?.averageRatingValue }} rating">0.0 <i class="fa-solid fa-star"></i>
                   </span>
                   <!-- <span class="u_loca">
                     {{
@@ -401,7 +327,9 @@
                         : element.location || ""
                     }}</span
                   > -->
-                  <span class="u_loca">{{ (element.user?.city || element.user?.state) ? ((element.user?.city ? (element.user.city | titlecase) + ", " : "") + (element.user?.state ? (element.user.state) + ", " : "")).slice(0, -2) : element?.userType === 'GUEST'?'':(element.location || '').slice(0,-4) }}
+                  <span class="u_loca">{{ (element.user?.city || element.user?.state) ? ((element.user?.city ?
+                    (element.user.city | titlecase) + ", " : "") + (element.user?.state ? (element.user.state) + ", " :
+                    "")).slice(0, -2) : element?.userType === 'GUEST'?'':(element.location || '').slice(0,-4) }}
                   </span>
                 </div>
               </div>
@@ -437,10 +365,8 @@
                 }} platform_in"
                 matTooltip="Desktop Device"
               ></i> -->
-              <i
-              class="fa-regular {{ getPlatformDetails(element.platform).icon }} platform_in"
-              [matTooltip]="getPlatformDetails(element.platform).tooltip"
-            ></i>
+              <i class="fa-regular {{ getPlatformDetails(element.platform).icon }} platform_in"
+                [matTooltip]="getPlatformDetails(element.platform).tooltip"></i>
             </div>
           </td>
         </ng-container>
@@ -448,10 +374,7 @@
           <th mat-header-cell *matHeaderCellDef>OS</th>
           <td mat-cell *matCellDef="let element">
             <div class="comn_icn">
-              <img
-                src="{{ getOSImage(element.osPlatform) }}"
-                [matTooltip]="element.osPlatform"
-              />
+              <img src="{{ getOSImage(element.osPlatform) }}" [matTooltip]="element.osPlatform" />
             </div>
           </td>
         </ng-container>
@@ -459,10 +382,7 @@
           <th mat-header-cell *matHeaderCellDef>Browser</th>
           <td mat-cell *matCellDef="let element">
             <div class="comn_icn">
-              <img
-                src="{{ getBrowserImage(element.browser) }}"
-                [matTooltip]="getBrowserToolTip(element.browser)"
-              />
+              <img src="{{ getBrowserImage(element.browser) }}" [matTooltip]="getBrowserToolTip(element.browser)" />
               <!-- <p>{{getBrowserImage(element.browser)}}</p> -->
             </div>
           </td>
@@ -484,38 +404,26 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        <!-- <ng-container *ngIf="!spinnerLoader">
         <tr class="mat-row" *matNoDataRow style="text-align: center">
-           <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-            <div class="empty-state">
-              <div class="empty-state__content">
-            <div class="empty-state__icon">
-              <img src="./assets/images/no_data_found_img.jpg" alt="">
-            </div>
-            <div class="empty-state__message">List Empty</div>
-              <p class="empty-state__help">This is no Records</p>
-          </div></div>
-           </td> </tr>
-           </ng-container> -->
-           <ng-container >
-            <tr class="mat-row" *matNoDataRow style="text-align: center">
-              <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-                <div class="empty-state" *ngIf="!spinnerLoader">
-                  <div class="empty-state__content">
-                <div class="empty-state__icon">
-                  <img src="./assets/images/no_data_found_img.jpg" alt="">
-                </div>
-                <div class="empty-state__message">List Empty</div>
+          <ng-container *ngIf="!spinnerLoader">
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              <div class="empty-state">
+                <div class="empty-state__content">
+                  <div class="empty-state__icon">
+                    <img src="./assets/images/no_data_found_img.jpg" alt="">
+                  </div>
+                  <div class="empty-state__message">List Empty</div>
                   <p class="empty-state__help">This is no Records</p>
                 </div>
-                </div>
-              </td> </tr>
-            </ng-container>
+              </div>
+            </td>
+          </ng-container>
+        </tr>
       </table>
-                   <!-- 🔄 Loader for infinite scroll -->
-  <div class="text-center mt-3" *ngIf="spinnerLoader">
-    <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
-  </div>
+      <!-- 🔄 Loader for infinite scroll -->
+      <div class="text-center mt-3" *ngIf="spinnerLoader">
+        <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
+      </div>
     </div>
   </div>
 </div>

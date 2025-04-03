@@ -130,6 +130,7 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
        uri: this.commonService.getAPIUriFromParams(newParams),
      };
      console.log(APIparams,"123")
+     this.loaddedScreens = this.page;
      this.commonService.getList(APIparams).subscribe(
        (response) => {
         console.log(response,"140")
@@ -161,9 +162,9 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
        },
        (error) => {
         this.spinnerLoader = false;
+        this.loaddedScreens--;
         this.noDataFound = true;
          this.errorMessage = 'Failed to load recent carriers. Please try again.';
-         this.loading = false;
          console.error('Error fetching carriers:', error);
        }
      );
@@ -196,33 +197,83 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
     this.fetchBroker(true);
     
   } 
-   @HostListener('window:scroll', ['$event'])
-   onWindowScroll(event: Event) {
-     const scrollHeight = window.innerHeight + window.scrollY;
-     const documentHeight = document.documentElement.scrollHeight;
-     if (documentHeight - scrollHeight <= 1) {
-       if (this.page < this.totalPages && !this.spinnerLoader){
-         this.page += 1;
-         this.fetchBroker();
-        }
-      }
-      this.getCurrentPage();
-   }
+  //  @HostListener('window:scroll', ['$event'])
+  //  onWindowScroll(event: Event) {
+  //    const scrollHeight = window.innerHeight + window.scrollY;
+  //    const documentHeight = document.documentElement.scrollHeight;
+  //    if (documentHeight - scrollHeight <= 1) {
+  //      if (this.page < this.totalPages && !this.spinnerLoader){
+  //        this.page += 1;
+  //        this.fetchBroker();
+  //       }
+  //     }
+  //     this.getCurrentPage();
+  //  }
    
-  getCurrentPage() {
-      const tbody = document.querySelector("tbody");
-      const table = document.querySelector("table")
-      const itemsPerPage = 10; 
-      const scrollTop = $(window).scrollTop(); 
-      const rowHeight = tbody.querySelector("tr")?.clientHeight || 0;
-      if (rowHeight === 0) return 1;
-      const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1
-      const currentPage = Math.ceil(((scrollTop + table.offsetTop) + 1) / ((rowHeight * itemsPerPage) - (alreadyLoaded * rowHeight) ));
-      console.log(currentPage,"204")
-      this.addParams(currentPage)
-      return currentPage;
+  // getCurrentPage() {
+  //     const tbody = document.querySelector("tbody");
+  //     const table = document.querySelector("table")
+  //     const itemsPerPage = 10; 
+  //     const scrollTop = $(window).scrollTop(); 
+  //     const rowHeight = tbody.querySelector("tr")?.clientHeight || 0;
+  //     if (rowHeight === 0) return 1;
+  //     const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1
+  //     const currentPage = Math.ceil(((scrollTop + table.offsetTop) + 1) / ((rowHeight * itemsPerPage) - (alreadyLoaded * rowHeight) ));
+  //     console.log(currentPage,"204")
+  //     this.addParams(currentPage)
+  //     return currentPage;
+  // }
+  loaddedScreens = 0;
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll(event: Event) {
+    const scrollHeight = window.innerHeight + window.scrollY;
+    const documentHeight = document.documentElement.scrollHeight;
+    if ((documentHeight - scrollHeight) <= 1) {
+      if (this.page <= this.totalPages && !this.spinnerLoader) {
+        if(this.page <= this.loaddedScreens)
+          this.page += 1;
+        if((this.totalPages >= this.page) && (this.loaddedScreens < this.page))
+        this.fetchBroker();
+      }
+    }
+    this.getCurrentPage();
   }
+  
+  getCurrentPage() {
+    console.log('📌 Debugging Scroll Behavior');
 
+    const tbody = document.querySelector('tbody');
+    const table = document.querySelector('table');
+    const itemsPerPage = 10;
+
+    if (!tbody || !table) return 1; // Ensure elements exist
+
+    const scrollTop = window.scrollY; // Corrected scroll position
+    const rowHeight = tbody.querySelector('tr')?.clientHeight || 0;
+
+    if (rowHeight === 0) return 1; // Avoid division by zero
+
+    // Calculate how many rows are visible on the screen
+    const alreadyLoaded =
+      Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
+
+    // Calculate current page
+    let currentPage = Math.floor(
+      (scrollTop + table.offsetTop) /
+        (rowHeight * itemsPerPage - alreadyLoaded * rowHeight)
+    );
+    // Ensure currentPage never goes out of bounds
+    currentPage = Math.max(1, Math.min(this.totalPages, currentPage)) || 1;
+    console.log('CurrentPage: ' + this.page);
+    // ✅ Update the page only if there's an actual change
+    if (this.page !== currentPage) {
+      this.page = currentPage;
+      this.addParams(currentPage);
+      // this.fetchCarriersContactList();
+    }
+
+    return currentPage;
+  }
  addParams(currentPage?:any){
   
   let newParams: {
