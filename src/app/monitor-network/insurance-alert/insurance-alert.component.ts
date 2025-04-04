@@ -32,6 +32,7 @@ export class InsuranceAlertComponent implements OnInit {
      myControl = new FormControl('');
      AutoCompleteOptions: any[] = [];
      filteredOptions: Observable<any[]>;
+     loaddedScreens = 0;
   dateRanges = [
     { label: 'Created', start: 'createdStart', end: 'createdEnd', picker: 'picker1' },
     { label: 'Last Email Sent At', start: 'emailStart', end: 'emailEnd', picker: 'picker2' },
@@ -171,12 +172,23 @@ export class InsuranceAlertComponent implements OnInit {
       apiKey: apiKey,
       uri: this.commonService.getAPIUriFromParams(newParams),
     };
+    this.loaddedScreens = this.page;
       this.commonService.getList(APIparams).subscribe(
         (response) => {
           this.spinnerLoader = false;
           
           if (response && response.response && response.response.data ) {
-            const newData = response.response.data;
+            // const newData = response.response.data;
+
+            const newData = response.response.data.map((item:any)=>({
+              ...item,
+              
+              createdAt: this.formatDate(item.createdAt),
+              // emailExpiryDate:this.formatDate(item.emailExpiryDate),
+              lastEmailSendAt:this.formatDate(item.lastEmailSendAt),
+              updatedAt:this.formatDate(item.updatedAt)
+
+            }));
             if (resetData) {
               this.dataSource.data = newData;
             
@@ -196,6 +208,7 @@ export class InsuranceAlertComponent implements OnInit {
           }
         },
         (error) => {
+          this.loaddedScreens--;
           this.spinnerLoader = false;
           console.error('Error fetching carriers:', error);
         }
@@ -204,6 +217,7 @@ export class InsuranceAlertComponent implements OnInit {
   }
 
   applyFilters() {
+    this.showAdvancedFilter = false;
     this.isFilterApplied = true;
     this.page = 1;
     this.dataSource.data = [];
@@ -212,6 +226,12 @@ export class InsuranceAlertComponent implements OnInit {
   clearForm() {
     this.filterForm.reset();
     console.log('Filters cleared');
+  }
+
+  setupSearchFilter() {
+    this.searchControl.valueChanges.subscribe(() => {
+      this.applyFilter();
+    });
   }
 
   formatDateForAPI(date: any): string {
@@ -254,6 +274,9 @@ export class InsuranceAlertComponent implements OnInit {
   }
 
   formatDate(inputDate:string): string {
+    if(inputDate == null){
+      return
+    }
     // Parse the input date string
     let [datePart, timePart] = inputDate.split(' ');
     let [month, day, year] = datePart.split('/');
@@ -278,59 +301,136 @@ applyFilter() {
   this.isFilterApplied = filterValue.length > 0;
 } 
 
- @HostListener('window:scroll', ['$event'])
-  onWindowScroll(event: Event) {
-    const scrollHeight = window.innerHeight + window.scrollY;
-    const documentHeight = document.documentElement.scrollHeight;
-    if (documentHeight - scrollHeight <= 1) {
-      if (this.page < this.totalPages ){
+@HostListener('window:scroll', ['$event'])
+onWindowScroll(event: Event) {
+  const scrollHeight = window.innerHeight + window.scrollY;
+  const documentHeight = document.documentElement.scrollHeight;
+  if ((documentHeight - scrollHeight) <= 1) {
+    if (this.page <= this.totalPages && !this.spinnerLoader) {
+      if(this.page <= this.loaddedScreens)
         this.page += 1;
-        this.fetchChangeAlertInsurance();
-      }
+      if((this.totalPages >= this.page) && (this.loaddedScreens < this.page))
+      this.fetchChangeAlertInsurance();
     }
-    this.getCurrentPage()
   }
-  getCurrentPage() {
-    const tbody = document.querySelector("tbody");
-    const table = document.querySelector("table")
-    const itemsPerPage = 10; 
-    const scrollTop = $(window).scrollTop();
-    const rowHeight = tbody.querySelector("tr")?.clientHeight || 0; 
-    if (rowHeight === 0) return 1;
-    const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1
-    const currentPage = Math.ceil(((scrollTop + table.offsetTop) + 1) / ((rowHeight * itemsPerPage) - (alreadyLoaded * rowHeight) ));
-    if (currentPage > this.totalPages) return; 
-    console.log(currentPage,"219")
-  //   if (this.page !== currentPage) {
-  //     this.page = currentPage;
-  //     this.fetchCarriers();
-  // }
-  this.addParams(currentPage)
-    return currentPage;
+  this.getCurrentPage();
+}
+
+getCurrentPage() {
+  console.log('📌 Debugging Scroll Behavior');
+
+  const tbody = document.querySelector('tbody');
+  const table = document.querySelector('table');
+  const itemsPerPage = 10;
+
+  if (!tbody || !table) return 1; // Ensure elements exist
+
+  const scrollTop = window.scrollY; // Corrected scroll position
+  const rowHeight = tbody.querySelector('tr')?.clientHeight || 0;
+
+  if (rowHeight === 0) return 1; // Avoid division by zero
+
+  // Calculate how many rows are visible on the screen
+  const alreadyLoaded =
+    Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
+
+  // Calculate current page
+  let currentPage = Math.floor(
+    (scrollTop + table.offsetTop) /
+      (rowHeight * itemsPerPage - alreadyLoaded * rowHeight)
+  );
+  // Ensure currentPage never goes out of bounds
+  currentPage = Math.max(1, Math.min(this.totalPages, currentPage)) || 1;
+  console.log('CurrentPage: ' + this.page);
+  // ✅ Update the page only if there's an actual change
+  if (this.page !== currentPage) {
+    this.page = currentPage;
+    this.addParams(currentPage);
+    // this.fetchCarriersContactList();
+  }
+
+  return currentPage;
 }
 addParams(currentPage?:any){
-  
-  let newParams: {
-    limit: number;
-    page: number;
-    fromStartDate?: string;
-    toStartDate?: string;
-    postalCode?: string;
-    impressionType?: string;
-    position?: string;
-  } = {
-    limit: 10,
-    page: this.page,
-  };
-  const queryParams = new URLSearchParams();
-    if (currentPage) queryParams.set('page', currentPage.toString());
+
+let newParams: {
+  limit: number;
+  page: number;
+  fromStartDate?: string;
+  toStartDate?: string;
+  postalCode?: string;
+  teamIds?: string;
+  impressionType?: string;
+  position?: string;
+} = {
+  limit: 10,
+  page: this.page,
+};
+const queryParams = new URLSearchParams();
+  if (currentPage) queryParams.set('page', currentPage.toString());
 if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
 if (newParams.fromStartDate) queryParams.set('fromDate', newParams.fromStartDate);
 if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
 if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
 if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
 if (newParams.position) queryParams.set('position', newParams.position);
+if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
+
+history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
+}
+//  @HostListener('window:scroll', ['$event'])
+//   onWindowScroll(event: Event) {
+//     const scrollHeight = window.innerHeight + window.scrollY;
+//     const documentHeight = document.documentElement.scrollHeight;
+//     if (documentHeight - scrollHeight <= 1) {
+//       if (this.page < this.totalPages ){
+//         this.page += 1;
+//         this.fetchChangeAlertInsurance();
+//       }
+//     }
+//     this.getCurrentPage()
+//   }
+//   getCurrentPage() {
+//     const tbody = document.querySelector("tbody");
+//     const table = document.querySelector("table")
+//     const itemsPerPage = 10; 
+//     const scrollTop = $(window).scrollTop();
+//     const rowHeight = tbody.querySelector("tr")?.clientHeight || 0; 
+//     if (rowHeight === 0) return 1;
+//     const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1
+//     const currentPage = Math.ceil(((scrollTop + table.offsetTop) + 1) / ((rowHeight * itemsPerPage) - (alreadyLoaded * rowHeight) ));
+//     if (currentPage > this.totalPages) return; 
+//     console.log(currentPage,"219")
+//   //   if (this.page !== currentPage) {
+//   //     this.page = currentPage;
+//   //     this.fetchCarriers();
+//   // }
+//   this.addParams(currentPage)
+//     return currentPage;
+// }
+// addParams(currentPage?:any){
   
-  history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
- }
+//   let newParams: {
+//     limit: number;
+//     page: number;
+//     fromStartDate?: string;
+//     toStartDate?: string;
+//     postalCode?: string;
+//     impressionType?: string;
+//     position?: string;
+//   } = {
+//     limit: 10,
+//     page: this.page,
+//   };
+//   const queryParams = new URLSearchParams();
+//     if (currentPage) queryParams.set('page', currentPage.toString());
+// if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+// if (newParams.fromStartDate) queryParams.set('fromDate', newParams.fromStartDate);
+// if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
+// if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
+// if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
+// if (newParams.position) queryParams.set('position', newParams.position);
+  
+//   history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
+//  }
 }
