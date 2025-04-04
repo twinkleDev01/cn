@@ -190,7 +190,7 @@
                       <mat-label>Page Source</mat-label>
                       <mat-select formControlName="contactType">
                         <ng-container *ngFor="let data of (usertype === 'CARRIER' ? carrierList : brokerList)">
-                          <mat-option value="data">{{data}}</mat-option>
+                          <mat-option [value]="data">{{data}}</mat-option>
                         </ng-container>
                       </mat-select>
                     </mat-form-field>
@@ -351,7 +351,9 @@
             Location
           </th>
           <td mat-cell *matCellDef="let element" class="mob_txt_cntr">
-            <img src="/assets/country/us.png" class="flaf_icn" />
+            <!-- <img src="/assets/country/us.png" class="flaf_icn" /> -->
+            <img  [src]="getCountryFlag(element.country)" class="flaf_icn" />
+           
             {{ element.location }}
           </td>
         </ng-container>

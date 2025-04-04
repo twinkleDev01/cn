@@ -65,13 +65,15 @@
         <div class="col-md-6">
           <p class="cn_input_lbl">
             Contact Number
-            <img src="https://carriernetwork.ai/images/country/US.png" width="20px" />
+            <!-- <img src="https://carriernetwork.ai/images/country/US.png" width="20px" /> -->
+              <img [src]="countryFlagUrl"  width="20px" />
+         
             <span class="text-danger ms-1">*</span>
           </p>
           <div class="country_code_dropdown">
             <mat-form-field appearance="none" class="cn_inpt_drop">
               <div class="country_code_fld">
-                <mat-select formControlName="countryCode" placeholder="Select Country Code" [disabled]="true" class="form-control custom_input">
+                <!-- <mat-select formControlName="countryCode" placeholder="Select Country Code" [disabled]="true" class="form-control custom_input">
                   <mat-option value="US">
                     <img src="/assets/country/us.png" name="cla" class="flag_img" />
                     <span class="ms-1">+1</span>
@@ -83,6 +85,12 @@
                   <mat-option value="CA">
                     <img src="/assets/country/ca.png" name="cla" class="flag_img" />
                     <span class="ms-1">+1</span>
+                  </mat-option>
+                </mat-select> -->
+                <mat-select formControlName="countryCode" placeholder="Select Country Code" class="form-control custom_input" (selectionChange)="onCountryChange($event.value)">
+                  <mat-option *ngFor="let country of countryList" [value]="country.value">
+                    <img [src]="country.flag" class="flag_img" />
+                    <span class="ms-1">{{ country.code }}</span>
                   </mat-option>
                 </mat-select>
               </div>

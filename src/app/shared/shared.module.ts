@@ -43,6 +43,7 @@ import { ParkingLocationComponent } from './parking/parking-location/parking-loc
 import { ParkingMediaGalleryComponent } from './parking/parking-media-gallery/parking-media-gallery.component';
 import { ParkingOverviewComponent } from './parking/parking-overview/parking-overview.component';
 import { ParkingProfileComponent } from './parking/parking-profile/parking-profile.component';
+import { InfiniteScrollDirective } from './infinite-scroll.directive';
 
 // parking data component 
 
@@ -91,7 +92,8 @@ import { ParkingProfileComponent } from './parking/parking-profile/parking-profi
       BrokerReviewsComponent,
       // Pipe
       TimeAgoPipe,
-
+// directive
+InfiniteScrollDirective,
       // parking data componets 
       ParkingAmenitiesComponent,
       ParkingLocationComponent,
@@ -132,8 +134,8 @@ import { ParkingProfileComponent } from './parking/parking-profile/parking-profi
       BrokerReviewsComponent,
   //  Pipe
   TimeAgoPipe,
-
-
+// directive
+InfiniteScrollDirective,
       // parking data componets 
       ParkingAmenitiesComponent,
       ParkingLocationComponent,

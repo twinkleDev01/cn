@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarrierView } from 'src/app/commons/interface/browse-history';
@@ -49,8 +50,9 @@ export class TruckingCompaniesComponent implements OnInit {
   public spinnerLoader = false;
   filterForm: FormGroup;
   uniquePositions:any=[];
+  teamIdList :any=[];
   private previousScrollY: number = 0;
-  public noDataFound: boolean = false;
+  // public noDataFound: boolean = false;
 
 
   constructor(
@@ -73,7 +75,7 @@ export class TruckingCompaniesComponent implements OnInit {
         postalCode: [''],
         impressionType: [''],
         position: [''],
-        teamIds: [''],
+        teamIds: [],
         toggleControl: [null as boolean | null]
       });
       if (params && Object.keys(params).length) {
@@ -97,6 +99,7 @@ export class TruckingCompaniesComponent implements OnInit {
     this.getSubscriptionPlan();
     setTimeout(()=>{},100);
     this.fetchCarriers();
+    this.teamList();
   }
   getSubscriptionPlan(): void {
     const plan = localStorage.getItem('subscriptionPlanType');
@@ -129,8 +132,8 @@ export class TruckingCompaniesComponent implements OnInit {
     if (toDate) newParams.toStartDate = this.formatDateForAPI(toDate);
     if(impressionType) newParams.impressionType=impressionType
     if (postalCode) newParams.postalCode = postalCode;
-    if (teamIds) newParams.teamIds = teamIds;
-  if(position)  newParams.position = position
+    if (teamIds) newParams.teamIds = teamIds?.join(',');
+    if(position)  newParams.position = position
 
     console.log('Selected Filters:', newParams);
   
@@ -159,7 +162,7 @@ if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
             ...item,
             createdAt: this.formatDate(item.createdAt),
           }));
-          this.noDataFound = newData.length === 0;
+          // this.noDataFound = newData.length === 0;
           if (resetData) {
             this.dataSource.data = newData;
           } else {
@@ -176,13 +179,13 @@ if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
           this.skeletonLoader = false;
           this.cdRef.detectChanges();
         }else{
-          this.noDataFound = true;
+          // this.noDataFound = true;
         }
       },
       (error) => {
         this.loaddedScreens--;
         this.spinnerLoader = false;
-        this.noDataFound = true;
+        // this.noDataFound = true;
         this.errorMessage = 'Failed to load recent carriers. Please try again.';
         console.error('Error fetching carriers:', error);
       }
@@ -377,4 +380,123 @@ if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
     const numericInput = input.replace(/\D/g, '').slice(0, 9);
     this.filterForm.get('teamIds')?.setValue(numericInput, { emitEvent: false });
   }
+  // For team dropdown pagination
+teamPage = 1;
+teamLimit = 10; // Items per load
+totalTeams = 0;
+loadingMoreTeams = false;
+hasMoreTeams = true;
+teamList(loadMore: boolean = false): void {
+  if (loadMore) {
+    if (!this.hasMoreTeams || this.loadingMoreTeams) return;
+    this.teamPage++;
+  } else {
+    // Initial load - reset
+    this.teamPage = 1;
+    this.teamIdList = [];
+    this.hasMoreTeams = true;
+  }
+
+  this.loadingMoreTeams = true;
+  if (!loadMore) this.spinnerLoader = true;
+
+  const params = {
+    limit: this.teamLimit,
+    page: this.teamPage
+  };
+
+  const apiKey = AppSettings.APIsNameArray.TEAM.TEAMLIST;
+  if (apiKey) {
+    let APIparams = {
+      apiKey: apiKey,
+      uri: this.commonService.getAPIUriFromParams(params),
+    };
+    
+    this.commonService.getList(APIparams).subscribe(
+      (response) => {
+        this.loadingMoreTeams = false;
+        this.spinnerLoader = false;
+        
+        if (response?.response?.teamArray) {
+          this.teamIdList = [...this.teamIdList, ...response.response.teamArray];
+          // Check if more teams are available
+          this.hasMoreTeams = response.response.teamArray.length >= this.teamLimit;
+          this.totalTeams = response.response.totalCount || 0;
+        }
+      },
+      (error) => {
+        this.loadingMoreTeams = false;
+        this.spinnerLoader = false;
+        console.error('Error fetching teams:', error);
+      }
+    );
+  }
+}
+@ViewChild('teamSelect') teamSelect: MatSelect;
+
+onTeamDropdownOpened(): void {
+  // Initialize scroll listener when dropdown opens
+  setTimeout(() => {
+    if (this.teamSelect && this.teamSelect.panel) {
+      const panel = this.teamSelect.panel.nativeElement;
+      panel.addEventListener('scroll', this.onTeamDropdownScroll.bind(this));
+    }
+  });
+}
+
+onTeamDropdownScroll(event: Event): void {
+  const panel = event.target as HTMLElement;
+  const scrollThreshold = 50; // pixels from bottom
+  const atBottom = panel.scrollHeight - panel.scrollTop <= panel.clientHeight + scrollThreshold;
+  
+  if (atBottom && this.hasMoreTeams && !this.loadingMoreTeams) {
+    this.teamList(true); // Load more teams
+  }
+}
+
+ngOnDestroy(): void {
+  // Clean up scroll listener
+  if (this.teamSelect && this.teamSelect.panel) {
+    const panel = this.teamSelect.panel.nativeElement;
+    panel.removeEventListener('scroll', this.onTeamDropdownScroll);
+  }
+}
+   // TEamList
+//    teamList(resetData: boolean = false): void {
+     
+//     this.spinnerLoader=true
+//     let newParams: {
+//       limit: number;
+//       page: number;
+//     } = {
+//       limit: 10,
+//       page: this.page,
+//     };
+  
+
+// const queryParams = new URLSearchParams();
+// if (this.page) queryParams.set('page', this.page.toString());
+// if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+// history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
+// const apiKey = AppSettings.APIsNameArray.TEAM.TEAMLIST
+
+// if (apiKey) {
+//   let APIparams = {
+//     apiKey: apiKey,
+//     uri: this.commonService.getAPIUriFromParams(newParams),
+//   };
+//     this.commonService.getList(APIparams).subscribe(
+//       (response) => {
+//         this.spinnerLoader=false
+//         console.log(response, "394");
+//         if (response && response.response && response.response.teamArray ) {
+//               this.teamIdList = response.response.teamArray; 
+//         }
+//       },
+//       (error) => {
+//         this.spinnerLoader=false
+//         console.error('Error fetching carriers:', error);
+//       }
+//     );
+//   }}
 }

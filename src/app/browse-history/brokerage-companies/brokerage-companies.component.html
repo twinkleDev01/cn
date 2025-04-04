@@ -24,8 +24,8 @@
                       (filterForm.value.fromDate ||
                         filterForm.value.toDate ||
                         filterForm.value.postalCode ||
-                        filterForm.value.impressionType)
-                  }">
+                        filterForm.value.impressionType || filterForm.value.teamIds)
+                      }">
                   <i class="fa-solid fa-circle acrive_circle"></i>
                   <i class="fa-sharp fa-solid fa-filter"></i>
                 </span>
@@ -109,6 +109,33 @@
                   </mat-select>
                 </mat-form-field>
               </div>
+               <!-- TeamId filter -->
+                 <!-- <div class="col-md-3">
+              <mat-form-field  [ngClass]="{
+                highlighted: filterForm.get('teamIds')?.value
+              }">
+                <mat-select placeholder="TeamIds"  formControlName="teamIds" multiple>
+                  <mat-option *ngFor="let teamId of teamIdList" [value]="teamId.id">{{teamId.id}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              </div> -->
+              <div class="col-md-3">
+                <mat-form-field [ngClass]="{ highlighted: filterForm.get('teamIds')?.value }">
+                  <mat-select placeholder="TeamIds" formControlName="teamIds" multiple 
+                              (opened)="onTeamDropdownOpened()"
+                              #teamSelect>
+                    <mat-option *ngFor="let team of teamIdList" [value]="team.id">
+                      {{ team.id }}
+                    </mat-option>
+                    <mat-option *ngIf="loadingMoreTeams" disabled class="load-more-option">
+                      <div class="loading-spinner">
+                        <mat-spinner diameter="20"></mat-spinner>
+                      </div>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <!--  -->
               <div class="col-md-12">
                 <div class="fltr_actn">
                   <button class="cn_btn btn_bordered" (click)="resetFilters()">
@@ -139,7 +166,7 @@
                       alt="User profile image" width="50px" height="50px" />
                     <i *ngIf="!element.broker?.profileImage" class="fa-duotone fa-solid fa-circle-user user_icon"
                       aria-hidden="true"></i>
-                    <span class="user_Type">Carrier</span>
+                    <!-- <span class="user_Type">Carrier</span> -->
                   </div>
                 </div>
               </div>
@@ -225,8 +252,8 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        <ng-container *ngIf="!spinnerLoader">
-          <tr class="mat-row" *matNoDataRow style="text-align: center">
+        <tr class="mat-row" *matNoDataRow style="text-align: center">
+            <ng-container *ngIf="!spinnerLoader">
             <td class="mat-cell" [attr.colspan]="displayedColumns.length">
               <div class="empty-state">
                 <div class="empty-state__content">
@@ -237,8 +264,9 @@
                 <p class="empty-state__help">This is no Records</p>
               </div>
               </div>
-            </td> </tr>
+            </td>
           </ng-container>
+          </tr>
       </table>
     
       <!-- 🔄 Loader for infinite scroll -->

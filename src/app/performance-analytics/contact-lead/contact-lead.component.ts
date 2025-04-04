@@ -36,6 +36,13 @@ export class ContactLeadComponent implements OnInit {
    usertype:any
    carrierList = PAGE_SOURCE_CARRIER;
    brokerList = PAGE_SOURCE_BROKER;
+   countryName = ''; // This will be set dynamically from API
+
+   countryList = [
+     { value: 'US', name: 'United States', flag: './assets/country/us.png', code: '+1' },
+     { value: 'MX', name: 'Mexico', flag: './assets/country/mx.png', code: '+52' },
+     { value: 'CA', name: 'Canada', flag: './assets/country/ca.png', code: '+1' }
+   ];
   // Progress Bar Percentage calculation
   get totalViewsPercentage(): number {
     return 100;
@@ -344,6 +351,10 @@ formatDate(inputDate:string): string {
       return 'Other Browser';  // Fallback for unknown browsers
     }
   }
+  getCountryFlag(countryName: string): string {
+    const country = this.countryList.find(c => c.name?.toLowerCase() === countryName?.toLowerCase());
+    return country ? country.flag : null // Default flag if not found
+  } 
   // getRandomColors(length: number): string[] {
   //   const colors = [];
   //   for (let i = 0; i < length; i++) {
@@ -495,7 +506,7 @@ formatDate(inputDate:string): string {
   }
   
   getCurrentPage() {
-    console.log('📌 Debugging Scroll Behavior');
+    // console.log('📌 Debugging Scroll Behavior');
 
     const tbody = document.querySelector('tbody');
     const table = document.querySelector('table');
@@ -519,7 +530,7 @@ formatDate(inputDate:string): string {
     );
     // Ensure currentPage never goes out of bounds
     currentPage = Math.max(1, Math.min(this.totalPages, currentPage)) || 1;
-    console.log('CurrentPage: ' + this.page);
+    // console.log('CurrentPage: ' + this.page);
     // ✅ Update the page only if there's an actual change
     if (this.page !== currentPage) {
       this.page = currentPage;
@@ -622,34 +633,34 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams.toStri
     const lowerUA = uaString?.toLowerCase();
   
     if (lowerUA?.includes('google chrome')) {
-      return '/assets/images/chrome.png';
+      return './assets/images/chrome.png';
     } else if (lowerUA?.includes('safari') && !lowerUA?.includes('chrome')) {
-      return '/assets/images/safari.png';   // Safari doesn't include Chrome
+      return './assets/images/safari.png';   // Safari doesn't include Chrome
     } else if (lowerUA?.includes('firefox')) {
-      return '/assets/images/firefox.png';
+      return './assets/images/firefox.png';
     } else if (lowerUA?.includes('opera') || lowerUA?.includes('opr')) {
-      return '/assets/images/opera.png';
+      return './assets/images/opera.png';
     } else {
-      return '/assets/images/other_browser.png';  // Fallback for unknown browsers
+      return './assets/images/other_browser.png';  // Fallback for unknown browsers
     }
   }
 
   getOSImage(os: string): string {
     switch (os?.toLowerCase()) {
       case 'windows':
-        return '/assets/images/windows.png';
+        return './assets/images/windows.png';
       case 'android':
-        return '/assets/images/android.png';
+        return './assets/images/android.png';
       case 'ios':
-        return '/assets/images/ios.png';
+        return './assets/images/ios.png';
       case 'macos':
-        return '/assets/images/macOS.png';
+        return './assets/images/macOS.png';
       case 'linux':
-        return '/assets/images/linux.png';
+        return './assets/images/linux.png';
       case 'ubuntu':
-        return '/assets/images/ubuntu.png';
+        return './assets/images/ubuntu.png';
       default:
-        return '/assets/images/other_os.png'; 
+        return './assets/images/other_os.png'; 
     }
   }
 

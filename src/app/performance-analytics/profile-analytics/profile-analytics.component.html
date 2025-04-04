@@ -1,4 +1,12 @@
-<div class="td_card_con">
+
+<div appInfiniteScroll
+[(page)]="page"
+[(loaddedScreens)]="loaddedScreens"
+[totalPages]="totalPages"
+[spinnerLoader]="spinnerLoader"
+(updateParams)="addParams($event)"
+(fetchData)="fetchCarriersContactList()"
+class="td_card_con">
   <div class="dashboard_chat_overview">
     <div class="dco_head" [formGroup]="filterPForm">
       <div class="dcoh_l">
@@ -198,11 +206,12 @@
                       (filterForm.value.fromDate ||
                         filterForm.value.toDate ||
                         filterForm.value.postalCode ||
-                        filterForm.value.userType || filterForm.value.impressionType || filterForm.value.position
+                        filterForm.value.userType || filterForm.value.impressionType || filterForm.value.position || filterForm.value.toggleControl
                       )
                   }"
                 >
-                  <i class="fa-sharp fa-solid fa-filter"></i>
+                <i class="fa-solid fa-circle acrive_circle"></i>
+                <i class="fa-sharp fa-solid fa-filter"></i>
                   <!-- <i class="fa-duotone fa-solid fa-sliders"></i> -->
                 </span>
                 <span class="cn_btn icn_btn" (click)="refresh()">
@@ -264,9 +273,9 @@
                     }"
                   >
                     <mat-label>Page Source</mat-label>
-                    <mat-select>
+                    <mat-select formControlName="impressionType">
                     <ng-container *ngFor="let data of (usertype === 'CARRIER' ? carrierList : brokerList)">
-                      <mat-option value="data">{{data}}</mat-option>
+                      <mat-option [value]="data">{{data}}</mat-option>
                     </ng-container>
                     </mat-select>
                   </mat-form-field>
@@ -392,51 +401,23 @@
                   <i *ngIf="!element?.user?.id" class="fa-duotone fa-badge-check verify_icon" matTooltip="Profile not Verified"></i>
                   <i *ngIf="element?.user?.id" class="fa-duotone fa-badge-check verify_icon user_verified" matTooltip="Profile Verified"></i>
                 </div>
-                <div *ngIf="!element.user?.companyName">
-                  <a class="u_name">Guest User</a>
-                </div>
                 <div class="loca_rtng">
-                  <span
-                  class="user_rtng"
-                  *ngIf="
-                    element?.user?.averageRatingValue &&
-                    element?.user?.averageRatingValue != 0 &&
-                    element.user?.companyName
-                  "
-                  matTooltip="{{ element?.user?.averageRatingValue }} rating"
-                  >{{ element?.user?.averageRatingValue.toFixed(1) }}
-                  <i class="fa-solid fa-star"></i>
-                </span>
-                <span
-                class="user_rtng"
-                *ngIf="
-                  element?.user?.averageRatingValue == 0 &&
-                  element.user?.companyName
-                "
-                matTooltip="{{ element?.user?.averageRatingValue }} rating"
-                >0.0 <i class="fa-solid fa-star"></i>
-              </span>
+                  <span *ngIf="!element.user?.companyName">
+                    <a class="u_name">Guest User</a>
+                  </span>
+                  <span class="user_rtng" *ngIf="element?.user?.averageRatingValue && element?.user?.averageRatingValue != 0 && element.user?.companyName" matTooltip="{{ element?.user?.averageRatingValue }} rating">
+                    {{ element?.user?.averageRatingValue.toFixed(1) }}
+                    <i class="fa-solid fa-star"></i>
+                  </span>
+                  <span class="user_rtng" *ngIf=" element?.user?.averageRatingValue == 0 && element.user?.companyName" matTooltip="{{ element?.user?.averageRatingValue }} rating">
+                    0.0 <i class="fa-solid fa-star"></i>
+                  </span>
                  
-              <!-- <span class="u_loca">
-                {{
-                  element.user?.city || element.user?.state
-                    ? (
-                        (element.user?.city
-                          ? (element.user.city | titlecase) + ", "
-                          : "") +
-                        (element.user?.state
-                          ? (element.user.state | titlecase) + ", "
-                          : "")
-                      ).slice(0, -2)
-                    : element.location || ""
-                }}</span
-              > -->
-              <span class="u_loca">{{(element.user?.city || element.user?.state)
-                    ? ((element.user?.city ? (element.user.city | titlecase) + ", " : "") + 
-                       (element.user?.state ? (element.user.state) + ", " : "")).slice(0, -2)
-                    : element?.userType === 'GUEST'?'':(element.location || '').slice(0,-4)
-                }}
-              </span>
+                  <!-- <span class="u_loca">
+                    {{ element.user?.city || element.user?.state ? ( (element.user?.city ? (element.user.city | titlecase) + ", " : "") + (element.user?.state ? (element.user.state | titlecase) + ", " : "") ).slice(0, -2) : element.location || "" }}
+                  </span> -->
+                  <span class="u_loca">{{(element.user?.city || element.user?.state) ? ((element.user?.city ? (element.user.city | titlecase) + ", " : "") + (element.user?.state ? (element.user.state) + ", " : "")).slice(0, -2) : element?.userType === 'GUEST'?'':(element.location || '').slice(0,-4)}}
+                  </span>
                 </div>
               </div>
             </div>
@@ -473,7 +454,8 @@
             Location
           </th>
           <td mat-cell *matCellDef="let element" class="mob_txt_cntr">
-            <img src="/assets/country/us.png" class="flaf_icn" />
+            <!-- <img src="/assets/country/us.png" class="flaf_icn" /> -->
+            <img  [src]="getCountryFlag(element.country)" class="flaf_icn" />
             {{ element.location || '-' }}
           </td>
         </ng-container>

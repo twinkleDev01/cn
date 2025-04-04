@@ -12,6 +12,8 @@ import { PopupComponent } from 'src/app/shared/popup/popup.component';
   styleUrls: ['./manage-cpm.component.scss']
 })
 export class ManageCPMComponent implements OnInit {
+  showAdvancedFilter = false;
+  isChecked = true;
   calculatorData: any = [];
   id = 1;
   compareIdArray = []
@@ -179,5 +181,28 @@ export class ManageCPMComponent implements OnInit {
       indexes.push(i);
     }
     return indexes;
+  }
+
+  
+  // Profile analytics table
+  displayedColumns: string[] = ['name', 'revenue', 'totalMiles', 'totalDays', 'truckAverage', 'companyOfficeExpenses', 'truckExpenses', 'trailerExpenses', 'driveExpenses', 'onRoadExpenses', 'miscellaneousAndOther', 'action'];
+  dataSource = [
+    { name: 'rwe',
+      revenue: '0',
+      totalMiles: '100',
+      totalDays: '1',
+      truckAverage: '6',
+      companyOfficeExpenses: '$0.00',
+      truckExpenses: '$350.00',
+      trailerExpenses: '$0.00',
+      driveExpenses: '$0.00',
+      onRoadExpenses: '$0.00',
+      miscellaneousAndOther: '$0.00'
+    },
+  ];
+
+  // Advanced filter toggle
+  toggleFilter() {
+    this.showAdvancedFilter = !this.showAdvancedFilter;
   }
 }

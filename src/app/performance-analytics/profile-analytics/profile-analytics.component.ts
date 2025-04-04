@@ -37,6 +37,13 @@ export class ProfileAnalyticsComponent implements OnInit {
   usertype:any
   carrierList = PAGE_SOURCE_CARRIER;
     brokerList = PAGE_SOURCE_BROKER;
+    countryName = ''; // This will be set dynamically from API
+
+    countryList = [
+      { value: 'US', name: 'United States', flag: './assets/country/us.png', code: '+1' },
+      { value: 'MX', name: 'Mexico', flag: './assets/country/mx.png', code: '+52' },
+      { value: 'CA', name: 'Canada', flag: './assets/country/ca.png', code: '+1' }
+    ];
   // Progress Bar Percentage calculation
   get totalViewsPercentage(): number {
     return 100;
@@ -156,7 +163,7 @@ const apiKey = usertype === 'CARRIER'
   : usertype === 'BROKER' 
     ? AppSettings.APIsNameArray.RECENTVIEW.BROKERLIST
     : null;  // No default fallback
-
+console.log(apiKey,"166",usertype);
 // Only call the API if a valid API key is present
 if (apiKey) {
   let APIparams = {
@@ -164,6 +171,7 @@ if (apiKey) {
     uri: this.commonService.getAPIUriFromParams(newParams),
   };
     this.loaddedScreens = this.page;
+    console.log("174")
     this.commonService.getList(APIparams).subscribe(
       (response) => {
         
@@ -557,36 +565,40 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     const lowerUA = uaString?.toLowerCase();
   
     if (lowerUA?.includes('google chrome')) {
-      return '/assets/images/chrome.png';
+      return './assets/images/chrome.png';
     } else if (lowerUA?.includes('safari') && !lowerUA?.includes('chrome')) {
-      return '/assets/images/safari.png';   // Safari doesn't include Chrome
+      return './assets/images/safari.png';   // Safari doesn't include Chrome
     } else if (lowerUA?.includes('firefox')) {
-      return '/assets/images/firefox.png';
+      return './assets/images/firefox.png';
     } else if (lowerUA?.includes('opera') || lowerUA?.includes('opr')) {
-      return '/assets/images/opera.png';
+      return './assets/images/opera.png';
     } else {
-      return '/assets/images/other_browser.png';  // Fallback for unknown browsers
+      return './assets/images/other_browser.png';  // Fallback for unknown browsers
     }
   }
 
   getOSImage(os: string): string {
     switch (os?.toLowerCase()) {
       case 'windows':
-        return '/assets/images/windows.png';
+        return './assets/images/windows.png';
       case 'android':
-        return '/assets/images/android.png';
+        return './assets/images/android.png';
       case 'ios':
-        return '/assets/images/ios.png';
+        return './assets/images/ios.png';
       case 'macos':
-        return '/assets/images/macOS.png';
+        return './assets/images/macOS.png';
       case 'linux':
-        return '/assets/images/linux.png';
+        return './assets/images/linux.png';
       case 'ubuntu':
-        return '/assets/images/ubuntu.png';
+        return './assets/images/ubuntu.png';
       default:
-        return '/assets/images/other_os.png'; 
+        return './assets/images/other_os.png'; 
     }
   }
+  getCountryFlag(countryName: string): string {
+    const country = this.countryList.find(c => c.name?.toLowerCase() === countryName?.toLowerCase());
+    return country ? country.flag : null // Default flag if not found
+  } 
 
   getPlatformDetails(input: number): { icon: string; tooltip: string } {
     const platformMap = {
@@ -602,57 +614,57 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
 
   
   loaddedScreens = 0;
-  @HostListener('window:scroll', ['$event'])
-  onWindowScroll(event: Event) {
-    const scrollHeight = window.innerHeight + window.scrollY;
-    const documentHeight = document.documentElement.scrollHeight;
-    if ((documentHeight - scrollHeight) <= 1) {
-      if (this.page <= this.totalPages && !this.spinnerLoader) {
-        if(this.page <= this.loaddedScreens)
-          this.page += 1;
-        if((this.totalPages >= this.page) && (this.loaddedScreens < this.page))
-        this.fetchCarriersContactList();
-      }
-    }
-    this.getCurrentPage();
-  }
+  // @HostListener('window:scroll', ['$event'])
+  // onWindowScroll(event: Event) {
+  //   const scrollHeight = window.innerHeight + window.scrollY;
+  //   const documentHeight = document.documentElement.scrollHeight;
+  //   if ((documentHeight - scrollHeight) <= 1) {
+  //     if (this.page <= this.totalPages && !this.spinnerLoader) {
+  //       if(this.page <= this.loaddedScreens)
+  //         this.page += 1;
+  //       if((this.totalPages >= this.page) && (this.loaddedScreens < this.page))
+  //       this.fetchCarriersContactList();
+  //     }
+  //   }
+  //   this.getCurrentPage();
+  // }
   
-  getCurrentPage() {
-    console.log('📌 Debugging Scroll Behavior');
+  // getCurrentPage() {
+  //   console.log('📌 Debugging Scroll Behavior');
 
-    const tbody = document.querySelector('tbody');
-    const table = document.querySelector('table');
-    const itemsPerPage = 10;
+  //   const tbody = document.querySelector('tbody');
+  //   const table = document.querySelector('table');
+  //   const itemsPerPage = 10;
 
-    if (!tbody || !table) return 1; // Ensure elements exist
+  //   if (!tbody || !table) return 1; // Ensure elements exist
 
-    const scrollTop = window.scrollY; // Corrected scroll position
-    const rowHeight = tbody.querySelector('tr')?.clientHeight || 0;
+  //   const scrollTop = window.scrollY; // Corrected scroll position
+  //   const rowHeight = tbody.querySelector('tr')?.clientHeight || 0;
 
-    if (rowHeight === 0) return 1; // Avoid division by zero
+  //   if (rowHeight === 0) return 1; // Avoid division by zero
 
-    // Calculate how many rows are visible on the screen
-    const alreadyLoaded =
-      Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
+  //   // Calculate how many rows are visible on the screen
+  //   const alreadyLoaded =
+  //     Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
 
-    // Calculate current page
-    let currentPage = Math.floor(
-      (scrollTop + table.offsetTop) /
-        (rowHeight * itemsPerPage - alreadyLoaded * rowHeight)
-    );
-    // Ensure currentPage never goes out of bounds
-    currentPage = Math.max(1, Math.min(this.totalPages, currentPage)) || 1;
-    console.log('CurrentPage: ' + this.page);
-    // ✅ Update the page only if there's an actual change
-    if (this.page !== currentPage) {
-      this.page = currentPage;
-      this.addParams(currentPage);
-      // this.fetchCarriersContactList();
-    }
+  //   // Calculate current page
+  //   let currentPage = Math.floor(
+  //     (scrollTop + table.offsetTop) /
+  //       (rowHeight * itemsPerPage - alreadyLoaded * rowHeight)
+  //   );
+  //   // Ensure currentPage never goes out of bounds
+  //   currentPage = Math.max(1, Math.min(this.totalPages, currentPage)) || 1;
+  //   console.log('CurrentPage: ' + this.page);
+  //   // ✅ Update the page only if there's an actual change
+  //   if (this.page !== currentPage) {
+  //     this.page = currentPage;
+  //     this.addParams(currentPage);
+  //     // this.fetchCarriersContactList();
+  //   }
 
-    return currentPage;
-  }
-    addParams(currentPage?:any){
+  //   return currentPage;
+  // }
+    addParams(currentPage:any = this.page){
       let newParams: {
         limit: number;
         page: number;
@@ -666,10 +678,11 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
         impressionType?: string;
       } = {
         limit: 10,
-        page: this.page,
+        page: currentPage,
       };
       const queryParams = new URLSearchParams();
-if (this.page) queryParams.set('page', this.page.toString());
+// if (this.page) queryParams.set('page', this.page.toString());
+if (currentPage) queryParams.set('page', currentPage.toString());
 if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
 if (newParams.fromStartDate) queryParams.set('fromDate', newParams.fromStartDate);
 if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);

@@ -19,3 +19,14 @@
     .table_actions { margin: 0 0 1.5rem; }
     .btns_box { margin: 0 0 0rem; border-bottom: none; }
 }
+.load-more-option, .no-more-option {
+    justify-content: center;
+    display: flex;
+    padding: 8px 0;
+  }
+  
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

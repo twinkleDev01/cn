@@ -28,10 +28,7 @@
             </div>
             <div class="col-md-7">
               <div class="btn_r">
-                <a class="cn_btn txt_btn" [routerLink]="['add']">
-                  <!-- <i class="fa-solid fa-plus me-2"></i> -->
-                  <span>Add Member</span>
-                </a>
+               
                 <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()"  [ngClass]="{
                   'active-filter':
                     filterForm?.value &&
@@ -44,7 +41,8 @@
                       filterForm.value.updatedStart ||
                       filterForm.value.updatedEnd ||
                       filterForm.value.expireStart ||
-                      filterForm.value.expireEnd)
+                      filterForm.value.expireEnd || 
+                    filterForm.value.dotNumber)
                 }">
                   <i class="fa-sharp fa-solid fa-filter"></i>
                 </span>
@@ -206,7 +204,29 @@
                     <mat-date-range-picker #picker4></mat-date-range-picker>
                   </mat-form-field>
                 </div>
-              
+              <div class="col-md-3">
+                <mat-form-field class="example-full-width">
+                  <mat-label>DOT Number</mat-label>
+                  <input type="text"
+                  #dotInput
+                         placeholder="Enter DOT Number"
+                         aria-label="DOT Number"
+                         matInput
+                         formControlName="dotNumber"
+                         
+                         (focus)="onInputFocus(dotInput.value)"
+                         [matAutocomplete]="auto" [ngClass]="{
+                          highlighted:
+                            filterForm.get('dotNumber')?.value 
+                        }">
+                  
+                  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" >
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.dotNumber">
+                      {{ option.dotNumber }} - {{ option.companyName }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
                 <!-- Buttons -->
                
               </form>
@@ -229,7 +249,7 @@
           <td mat-cell *matCellDef="let element">{{element.carrier.id}}</td>
         </ng-container>
         <ng-container matColumnDef="policyNumber">
-          <th mat-header-cell *matHeaderCellDef> Policy Number </th>
+          <th mat-header-cell *matHeaderCellDef> DOT Number </th>
           <td mat-cell *matCellDef="let element">{{element.dotNumber}}</td>
         </ng-container>
         <ng-container matColumnDef="companyName">
@@ -269,19 +289,27 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow style="text-align: center">
+          <ng-container *ngIf="!spinnerLoader">
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              <div class="empty-state">
+                <div class="empty-state__content">
+                  <div class="empty-state__icon">
+                    <img src="./assets/images/no_data_found_img.jpg" alt="">
+                  </div>
+                  <div class="empty-state__message">List Empty</div>
+                  <p class="empty-state__help">This is no Records</p>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+        </tr>
       </table>
+       <!-- 🔄 Loader for infinite scroll -->
+       <div class="text-center spinner_loader my-4" *ngIf="spinnerLoader">
+        <span class="spinner-border" role="status"></span>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="skeletonloader" *ngIf="dataSource.data.length == 0" >
-  <div class="empty-state">
-    <div class="empty-state__content">
-    <div class="empty-state__icon">
-      <img src="./assets/images/no_data_found_img.jpg" alt="">
-    </div>
-    <div class="empty-state__message">Insurance List</div>
-      <p class="empty-state__help">This is no Insurance</p>
-    </div>
-  </div>
-</div>

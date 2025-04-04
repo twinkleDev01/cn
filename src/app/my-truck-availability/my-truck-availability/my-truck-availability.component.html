@@ -254,13 +254,13 @@
 
   
 
-  <div class="avalability_cards mt-5" *ngIf="skeletonLoader">
+  <div class="avalability_cards mt-5" *ngIf="spinnerLoader">
     <div style="display: block;">
       <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '25px', margin: '0px 0 0px' }"
         *ngFor="let fake of generateFakeSkeleton(3)"></ngx-skeleton-loader>
     </div>
   </div>
-  <div *ngIf="!skeletonLoader && loadAvailibilityData">
+  <div *ngIf="!spinnerLoader && loadAvailibilityData">
     <div class="mt-5 avalability_cards" *ngFor="let loadData of loadAvailibilityData;let i=index">
       <div class="inc_data_updt">
         <div class="row">
@@ -381,7 +381,7 @@
       <span class="spinner-border" role="status" style="color: #00B4FC;"></span>
     </div>
   </div>
-  <div class="skeleton_body" *ngIf="skeletonLoader">
+  <div class="skeleton_body" *ngIf="spinnerLoader">
         
     <div class="scl_row pt-3 px-3" *ngFor="let fake of generateFakeSkeleton(10)" style="display: block;">
       <ngx-skeleton-loader count="5"

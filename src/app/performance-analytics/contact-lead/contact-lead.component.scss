@@ -18,6 +18,11 @@
 .spinner-border { width: 20px; height: 20px; }
 .spinner_loader { min-height: 54px; padding: 13px 0px 0px; }
 
+.adv_filter_btn.active-filter { background: #0fc00f; }
+.adv_filter_btn { position: relative; }
+.acrive_circle { position: absolute; top: -4px; left: -5px; color: #818181; font-size: 13px;  opacity: 0; }
+.adv_filter_btn.active-filter .acrive_circle { opacity: 1; }
+
 @media screen and (max-width: 1640px) { 
     .chart_info_box { max-width: 100%; }
 }

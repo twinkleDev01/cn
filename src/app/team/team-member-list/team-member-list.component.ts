@@ -155,61 +155,6 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
     }
 
   }
-  
-  // @HostListener('window:scroll', ['$event'])
-  // onWindowScroll(event: Event) {
-  //   const scrollHeight = window.innerHeight + window.scrollY;
-  //   const documentHeight = document.documentElement.scrollHeight;
-  //   if (documentHeight - scrollHeight <= 1) {
-  //     console.log(this.totalPages, this.page, "203")
-  //     if (this.page < this.totalPages ){
-  //       console.log(this.totalPages, this.page, "205")
-  //       this.page += 1;
-  //       console.log(this.page, "537")
-  //       this.teamList();
-  //     }
-  //   }
-  //   // this.getCurrentPage();
-  // }
 
-//   getCurrentPage() {
-//     console.log("📌 Debugging Scroll Behavior");
-    
-//     const tbody = document.querySelector("tbody");
-//     const table = document.querySelector("table");
-//     const itemsPerPage = 5;
-    
-//     if (!tbody || !table) return 1; // Ensure elements exist
-
-//     const scrollTop = window.scrollY; // Corrected scroll position
-//     const rowHeight = tbody.querySelector("tr")?.clientHeight || 0;
-
-//     if (rowHeight === 0) return 1; // Avoid division by zero
-
-//     // Calculate how many rows are visible on the screen
-//     const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
-
-//     // Calculate current page
-//     let currentPage = Math.floor((scrollTop + table.offsetTop) / (rowHeight  itemsPerPage - alreadyLoaded  rowHeight));
-
-//     // Ensure currentPage never goes out of bounds
-//     currentPage = Math.max(1, Math.min(this.totalPages, currentPage));
-
-//     console.log({
-//         scrollTop,
-//         rowHeight,
-//         alreadyLoaded,
-//         calculatedPage: currentPage,
-//         currentPageBeforeUpdate: this.page,
-//     });
-
-//     // ✅ Update the page only if there's an actual change
-//     if (this.page !== currentPage) {
-//         this.page = currentPage;
-//         this.teamList();
-//     }
-
-//     return currentPage;
-// }
 
 }

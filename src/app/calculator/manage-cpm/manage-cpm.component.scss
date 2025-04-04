@@ -1,3 +1,18 @@
+.filtr_con { padding-top: 1rem; margin-top: 1rem; border-top: 1px solid #ededed; }
+.comn_fltr { display: flex; height: 100%; align-items: center; }
+
+.table_data_con {
+  .first_col { display: flex; align-items: center;
+    padding: 0.7rem 1.1rem 0.7rem 0;
+    max-width: 290px;
+    white-space: normal;
+}
+.expenses_mw { max-width: 225px;
+  white-space: normal;
+  padding: 0rem 1rem; }
+}
+
+
 
 .page_heading:before { width: calc(100% - 74%); }
 .page_heading:after { width: calc(100% - -7%); }

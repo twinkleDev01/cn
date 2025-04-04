@@ -18,6 +18,7 @@ import { ManageCpmonthComponent } from './manage-cpmonth/manage-cpmonth.componen
 import { CompareCalculatorsComponent } from './compare-calculators/compare-calculators.component';
 import { MatTableModule } from "@angular/material/table";
 import { NgxSkeletonLoaderModule } from "ngx-skeleton-loader";
+import { MaterialModule } from '../material.module';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { NgxSkeletonLoaderModule } from "ngx-skeleton-loader";
     MatTabsModule,
     MatButtonModule,
     MatIconModule,
-    HttpClientModule
+    HttpClientModule,
+    MaterialModule
  ],
   declarations: [
     CalculatorComponent,

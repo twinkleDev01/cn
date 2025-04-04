@@ -16,6 +16,12 @@ export class EditMemberComponent implements OnInit {
  memberForm: FormGroup;
  permissionList=[]
  public spinnerLoader = false;
+ countryFlagUrl = './assets/country/us.png'; // Default flag
+ countryList = [
+   { value: 'US', flag: './assets/country/us.png', code: '+1' },
+   { value: 'MX', flag: './assets/country/mx.png', code: '+52' },
+   { value: 'CA', flag: './assets/country/ca.png', code: '+1' }
+ ];
   constructor(private router: Router,private fb: FormBuilder,public commonService: CommonService,private cdRef: ChangeDetectorRef,private location: Location,private toastr: ToastrService) {
     this.createForm()
     
@@ -31,6 +37,8 @@ export class EditMemberComponent implements OnInit {
       countryCode: rowData.countryCode,
       status: rowData.activeStatus === 0 ? 0 : 2   // Mapping `activeStatus` to `status`
     });
+    this.onCountryChange(rowData.countryCode); 
+
     this.getTeamPermissionList();
     console.log(this.memberForm.value);
     this.memberForm.get('email')?.disable();
@@ -185,5 +193,11 @@ export class EditMemberComponent implements OnInit {
     isInvalid(controlName: string) {
       const control = this.getControl(controlName);
       return control?.invalid && (control?.touched || control?.dirty);
+    }
+    onCountryChange(selectedValue: string) {
+      const selectedCountry = this.countryList.find(country => country.value === selectedValue);
+      if (selectedCountry) {
+        this.countryFlagUrl = selectedCountry.flag;
+      }
     }
 }

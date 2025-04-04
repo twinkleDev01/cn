@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarrierView } from 'src/app/commons/interface/browse-history';
@@ -38,6 +39,7 @@ export class BrokerageCompaniesComponent implements OnInit {
    public spinnerLoader = false;
    filterForm: FormGroup;
    uniquePositions:any=[];
+   teamIdList :any=[];
    private previousScrollY: number = 0;
    public noDataFound: boolean = false;
 
@@ -58,6 +60,7 @@ export class BrokerageCompaniesComponent implements OnInit {
         impressionType: [''],
         postalCode: [''],
         position: [''],
+        teamIds: [[]],
         toggleControl:[null as boolean | null]
       });
       if (params && Object.keys(params).length) {
@@ -67,6 +70,7 @@ export class BrokerageCompaniesComponent implements OnInit {
               impressionType : params['impressionType'] || '',
               postalCode: params['postalCode'] || '',
               position:params['position'] || '',
+              teamIds: params['teamIds'] || '',
               toggleControl: params['isClick'] === 'true',
           });
           this.cdRef.detectChanges();
@@ -80,6 +84,7 @@ export class BrokerageCompaniesComponent implements OnInit {
     this.getSubscriptionPlan();
     setTimeout(()=>{},100);
     this.fetchBroker();
+    this.teamList();
   }
 
  getSubscriptionPlan(): void {
@@ -101,20 +106,22 @@ export class BrokerageCompaniesComponent implements OnInit {
        toStartDate?: string;
        postalCode?: string;
       position?: string;
+      teamIds?: string;
        impressionType?: string;
      } = {
        limit: 10,
        page: this.page,
      };
-     const { fromDate, toDate, postalCode, position, impressionType } = this.filterForm.value;
-     console.log(fromDate,toDate,114)
+     const { fromDate, toDate, postalCode, position,teamIds,impressionType } = this.filterForm.value;
+    //  console.log(fromDate,toDate,114)
 
      if (fromDate) newParams.fromStartDate =this.formatDateForAPI(fromDate);
      if (toDate) newParams.toStartDate =  this.formatDateForAPI(toDate);
      if (postalCode) newParams.postalCode = postalCode;
      if (position) newParams.position = position;
+     if (teamIds) newParams.teamIds = teamIds?.join(',');
      if (impressionType) newParams.impressionType=impressionType;
-     console.log(fromDate,toDate,121, newParams.toStartDate, newParams.fromStartDate)
+    //  console.log(fromDate,toDate,121, newParams.toStartDate, newParams.fromStartDate)
 const queryParams = new URLSearchParams();
 if (this.page) queryParams.set('page', this.page.toString());
 if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
@@ -123,6 +130,7 @@ if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
 if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
 if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
 if (newParams.position) queryParams.set('position', newParams.position);
+if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
 console.log(queryParams,131)
 history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
      let APIparams = {
@@ -284,6 +292,7 @@ history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
     postalCode?: string;
     impressionType?: string;
     position?: string;
+    teamIds?: string;
   } = {
     limit: 10,
     page: this.page,
@@ -296,7 +305,8 @@ if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
 if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
 if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
 if (newParams.position) queryParams.set('position', newParams.position);
-  
+if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
+
   history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
  }
    setupSearchFilter() {
@@ -323,6 +333,7 @@ if (newParams.position) queryParams.set('position', newParams.position);
      this.showAdvancedFilter = !this.showAdvancedFilter;
    }
    applyAdvancedFilter() {
+    console.log(this.filterForm.get('teamIds').value,"335")
     this.showAdvancedFilter = false;
      this.isFilterApplied = true;
      this.page = 1;
@@ -348,4 +359,129 @@ if (newParams.position) queryParams.set('position', newParams.position);
     const numericInput = input.replace(/\D/g, '').slice(0, 9);
     this.filterForm.get('postalCode')?.setValue(numericInput, { emitEvent: false });
   }
+  onteamIdsInput(event: Event): void {
+    const input = (event.target as HTMLInputElement).value;
+    // Allow only digits and trim to 9 characters
+    const numericInput = input.replace(/\D/g, '').slice(0, 9);
+    this.filterForm.get('teamIds')?.setValue(numericInput, { emitEvent: false });
+  }
+  // TEamList
+//   teamList(resetData: boolean = false): void {
+     
+//     this.spinnerLoader=true
+//     let newParams: {
+//       limit: number;
+//       page: number;
+//     } = {
+//       limit: 8,
+//       page: this.page,
+//     };
+  
+
+// const queryParams = new URLSearchParams();
+// if (this.page) queryParams.set('page', this.page.toString());
+// if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+// history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
+// const apiKey = AppSettings.APIsNameArray.TEAM.TEAMLIST
+
+// if (apiKey) {
+//   let APIparams = {
+//     apiKey: apiKey,
+//     uri: this.commonService.getAPIUriFromParams(newParams),
+//   };
+//     this.commonService.getList(APIparams).subscribe(
+//       (response) => {
+//         this.spinnerLoader=false
+//         console.log(response, "394");
+//         if (response && response.response && response.response.teamArray ) {
+//               this.teamIdList = response.response.teamArray; 
+//         }
+//       },
+//       (error) => {
+//         this.spinnerLoader=false
+//         console.error('Error fetching carriers:', error);
+//       }
+//     );
+//   }}
+  // For team dropdown pagination
+teamPage = 1;
+teamLimit = 10; // Items per load
+totalTeams = 0;
+loadingMoreTeams = false;
+hasMoreTeams = true;
+teamList(loadMore: boolean = false): void {
+  if (loadMore) {
+    if (!this.hasMoreTeams || this.loadingMoreTeams) return;
+    this.teamPage++;
+  } else {
+    // Initial load - reset
+    this.teamPage = 1;
+    this.teamIdList = [];
+    this.hasMoreTeams = true;
+  }
+
+  this.loadingMoreTeams = true;
+  if (!loadMore) this.spinnerLoader = true;
+
+  const params = {
+    limit: this.teamLimit,
+    page: this.teamPage
+  };
+
+  const apiKey = AppSettings.APIsNameArray.TEAM.TEAMLIST;
+  if (apiKey) {
+    let APIparams = {
+      apiKey: apiKey,
+      uri: this.commonService.getAPIUriFromParams(params),
+    };
+    
+    this.commonService.getList(APIparams).subscribe(
+      (response) => {
+        this.loadingMoreTeams = false;
+        this.spinnerLoader = false;
+        
+        if (response?.response?.teamArray) {
+          this.teamIdList = [...this.teamIdList, ...response.response.teamArray];
+          // Check if more teams are available
+          this.hasMoreTeams = response.response.teamArray.length >= this.teamLimit;
+          this.totalTeams = response.response.totalCount || 0;
+        }
+      },
+      (error) => {
+        this.loadingMoreTeams = false;
+        this.spinnerLoader = false;
+        console.error('Error fetching teams:', error);
+      }
+    );
+  }
+}
+@ViewChild('teamSelect') teamSelect: MatSelect;
+
+onTeamDropdownOpened(): void {
+  // Initialize scroll listener when dropdown opens
+  setTimeout(() => {
+    if (this.teamSelect && this.teamSelect.panel) {
+      const panel = this.teamSelect.panel.nativeElement;
+      panel.addEventListener('scroll', this.onTeamDropdownScroll.bind(this));
+    }
+  });
+}
+
+onTeamDropdownScroll(event: Event): void {
+  const panel = event.target as HTMLElement;
+  const scrollThreshold = 50; // pixels from bottom
+  const atBottom = panel.scrollHeight - panel.scrollTop <= panel.clientHeight + scrollThreshold;
+  
+  if (atBottom && this.hasMoreTeams && !this.loadingMoreTeams) {
+    this.teamList(true); // Load more teams
+  }
+}
+
+ngOnDestroy(): void {
+  // Clean up scroll listener
+  if (this.teamSelect && this.teamSelect.panel) {
+    const panel = this.teamSelect.panel.nativeElement;
+    panel.removeEventListener('scroll', this.onTeamDropdownScroll);
+  }
+}
 }
