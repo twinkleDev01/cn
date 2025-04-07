@@ -1,4 +1,6 @@
-<div class="content_box">
+
+<div >
+  <div class="content_box">
     <div class="contnt_hed mb-1">
       <div class="ch_l">
         <h3 class="ch_tlt">Authority Alert</h3>
@@ -12,172 +14,306 @@
     </p>
     <div class="table_data_con">
       <div class="table_actions">
-        <form class="cn_field">
+        <div class="cn_field">
           <div class="btns_box">
             <div class="row align-items-center">
               <div class="col-md-5">
                 <p class="txt_1 fw_6" [ngClass]="{'d-none': !showAdvancedFilter}">Advanced Filter</p>
                 <div class="comn_fltr" [ngClass]="{'d-none': showAdvancedFilter}">
                   <mat-form-field appearance="none">
-                    <mat-label>Table Search</mat-label>
+                    <mat-label>Quick Search</mat-label>
                     <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
-                    <input type="text" matInput placeholder="Search" class="form-control cn_input ms-2">
+                    <input type="text" matInput placeholder="Search" class="form-control cn_input ms-2" [formControl]="searchControl"
+                    (keyup)="applyFilter()">
                   </mat-form-field>
                 </div>
               </div>
               <div class="col-md-7">
                 <div class="btn_r">
-                  <a class="cn_btn txt_btn" [routerLink]="['add']">
-                    <!-- <i class="fa-solid fa-plus me-2"></i> -->
-                    <span>Add Member</span>
-                  </a>
-                  <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
+                 
+                  <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()"  [ngClass]="{
+                    'active-filter':
+                      filterForm?.value &&
+                      (filterForm.value.policyNumber ||
+                        filterForm.value.status ||
+                        filterForm.value.createdStart ||
+                        filterForm.value.createdEnd ||
+                        filterForm.value.emailStart ||
+                        filterForm.value.emailEnd ||
+                        filterForm.value.updatedStart ||
+                        filterForm.value.updatedEnd ||
+                        filterForm.value.expireStart ||
+                        filterForm.value.expireEnd || 
+                      filterForm.value.dotNumber)
+                  }">
                     <i class="fa-sharp fa-solid fa-filter"></i>
                   </span>
-                  <span class="cn_btn icn_btn">
-                    <i class="fa-duotone fa-solid fa-rotate-right"></i>
+                  <span class="cn_btn icn_btn" (click)="refresh()">
+                    <i class="fa-duotone fa-solid fa-rotate-right" *ngIf="!spinnerLoader"></i> 
+                    <i class="fa-solid fa-rotate fa-spin" *ngIf="spinnerLoader"></i> 
                   </span>
                 </div>
               </div>
             </div>
             <div class="filter_box" [ngClass]="{'d-none': !showAdvancedFilter}">
               <div class="filtr_con">
-                  <div class="row">
-                    <div class="col-md-3">
-                      <mat-form-field>
-                        <mat-label>DOT Number</mat-label>
-                        <input type="text" matInput placeholder="DOT Number">
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                      <mat-form-field>
-                        <mat-label>Status</mat-label>
-                        <mat-select>
-                          <mat-option value="carrier">Active</mat-option>
-                          <mat-option value="Expired">Expired</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-6"></div>
-                    <div class="col-md-3">
-                      <mat-form-field class="date_range_filter">
-                        <mat-label>Created</mat-label>
-                        <mat-date-range-input [rangePicker]="picker1">
-                          <input matStartDate placeholder="Start date">
-                          <input matEndDate placeholder="End date">
-                        </mat-date-range-input>
-                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-                        <mat-date-range-picker #picker1></mat-date-range-picker>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                      <mat-form-field class="date_range_filter">
-                        <mat-label>Last Email Send At</mat-label>
-                        <mat-date-range-input [rangePicker]="picker2">
-                          <input matStartDate placeholder="Start date">
-                          <input matEndDate placeholder="End date">
-                        </mat-date-range-input>
-                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
-                        <mat-date-range-picker #picker2></mat-date-range-picker>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                      <mat-form-field class="date_range_filter">
-                        <mat-label>Updated</mat-label>
-                        <mat-date-range-input [rangePicker]="picker3">
-                          <input matStartDate placeholder="Start date">
-                          <input matEndDate placeholder="End date">
-                        </mat-date-range-input>
-                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                        <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
-                        <mat-date-range-picker #picker3></mat-date-range-picker>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-3">
-                      <mat-form-field class="date_range_filter">
-                        <mat-label>Expire</mat-label>
-                        <mat-date-range-input [rangePicker]="picker4">
-                          <input matStartDate placeholder="Start date">
-                          <input matEndDate placeholder="End date">
-                        </mat-date-range-input>
-                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                        <mat-datepicker-toggle matIconSuffix [for]="picker4"></mat-datepicker-toggle>
-                        <mat-date-range-picker #picker4></mat-date-range-picker>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="fltr_actn">
-                        <button class="cn_btn btn_bordered">Clear</button>
-                        <button class="cn_btn">Apply</button>
-                      </div>
-                    </div>
+                <form class="row" [formGroup]="filterForm">
+  
+                  <!-- Policy Number -->
+                  <div class="col-md-3">
+                    <mat-form-field  [ngClass]="{
+                      highlighted:
+                        filterForm.get('policyNumber')?.value 
+                    }">
+                      <mat-label>Policy Number</mat-label>
+                      <input type="text" matInput placeholder="Policy Number" formControlName="policyNumber">
+                    </mat-form-field>
+                  </div>
+                
+                  <!-- Status -->
+                  <div class="col-md-3">
+                    <mat-form-field  [ngClass]="{
+                      highlighted:
+                        filterForm.get('status')?.value
+                    }">
+                      <mat-label>Status</mat-label>
+                      <mat-select formControlName="status">
+                        <mat-option value="true">Active</mat-option>
+                        <mat-option value="false">Expired</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                
+                  <div class="col-md-6"></div>
+                
+                  <!-- Date Range Filters -->
+                  <div class="col-md-3" >
+                    <mat-form-field
+                      class="date_range_filter"
+                      [ngClass]="{
+                        highlighted:
+                          filterForm.get('createdStart')?.value ||
+                          filterForm.get('createdEnd')?.value
+                      }"
+                    >
+                      <mat-label>Created</mat-label>
+                      <mat-date-range-input [rangePicker]="picker1">
+                        <input
+                          matStartDate
+                          placeholder="Start date"
+                          formControlName="createdStart"
+                        />
+                        <input
+                          matEndDate
+                          placeholder="End date"
+                          formControlName="createdEnd"
+                        />
+                      </mat-date-range-input>
+                      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                      <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="picker1"
+                      ></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker1></mat-date-range-picker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3" >
+                    <mat-form-field
+                      class="date_range_filter"
+                      [ngClass]="{
+                        highlighted:
+                          filterForm?.get('emailStart')?.value ||
+                          filterForm?.get('emailEnd')?.value
+                      }"
+                    >
+                      <mat-label>Last Email Sent At</mat-label>
+                      <mat-date-range-input [rangePicker]="picker2">
+                        <input
+                          matStartDate
+                          placeholder="Start date"
+                          formControlName="emailStart"
+                        />
+                        <input
+                          matEndDate
+                          placeholder="End date"
+                          formControlName="emailEnd"
+                        />
+                      </mat-date-range-input>
+                      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                      <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="picker2"
+                      ></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker2></mat-date-range-picker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3" >
+                    <mat-form-field
+                      class="date_range_filter"
+                      [ngClass]="{
+                        highlighted:
+                          filterForm?.get('updatedStart')?.value ||
+                          filterForm?.get('updatedEnd')?.value
+                      }"
+                    >
+                      <mat-label>Updated</mat-label>
+                      <mat-date-range-input [rangePicker]="picker3">
+                        <input
+                          matStartDate
+                          placeholder="Start date"
+                          formControlName="updatedStart"
+                        />
+                        <input
+                          matEndDate
+                          placeholder="End date"
+                          formControlName="updatedEnd"
+                        />
+                      </mat-date-range-input>
+                      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                      <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="picker3"
+                      ></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker3></mat-date-range-picker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3" >
+                    <mat-form-field
+                      class="date_range_filter"
+                      [ngClass]="{
+                        highlighted:
+                          filterForm?.get('expireStart')?.value ||
+                          filterForm?.get('expireEnd')?.value
+                      }"
+                    >
+                      <mat-label>Expire</mat-label>
+                      <mat-date-range-input [rangePicker]="picker4">
+                        <input
+                          matStartDate
+                          placeholder="Start date"
+                          formControlName="expireStart"
+                        />
+                        <input
+                          matEndDate
+                          placeholder="End date"
+                          formControlName="expireEnd"
+                        />
+                      </mat-date-range-input>
+                      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                      <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="picker4"
+                      ></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker4></mat-date-range-picker>
+                    </mat-form-field>
+                  </div>
+                <div class="col-md-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>DOT Number</mat-label>
+                    <input type="text"
+                    #dotInput
+                           placeholder="Enter DOT Number"
+                           aria-label="DOT Number"
+                           matInput
+                           formControlName="dotNumber"
+                           
+                           (focus)="onInputFocus(dotInput.value)"
+                           [matAutocomplete]="auto" [ngClass]="{
+                            highlighted:
+                              filterForm.get('dotNumber')?.value 
+                          }">
+                    
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" >
+                      <mat-option *ngFor="let option of filteredOptions | async" [value]="option.dotNumber">
+                        {{ option.dotNumber }} - {{ option.companyName }}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                  <!-- Buttons -->
+                 
+                </form>
+                <div class="col-md-12">
+                  <div class="fltr_actn">
+                    <button class="cn_btn btn_bordered" (click)="resetFilters()" type="submit">Clear</button>
+                    <button class="cn_btn" type="submit" (click)="applyFilters()">Apply</button>
                   </div>
               </div>
             </div>
           </div>
-        </form> 
+        </div> 
+       
+        </div>
       </div>
       <div class="table_data" tabindex="0">
         <table mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="alertID">
             <th mat-header-cell *matHeaderCellDef> Alert ID </th>
-            <td mat-cell *matCellDef="let element">{{element.alertID}}</td>
+            <td mat-cell *matCellDef="let element">{{element.carrier.id}}</td>
           </ng-container>
-          <ng-container matColumnDef="dotNumber">
-            <th mat-header-cell *matHeaderCellDef> Dot Number </th>
+          <ng-container matColumnDef="policyNumber">
+            <th mat-header-cell *matHeaderCellDef> DOT Number </th>
             <td mat-cell *matCellDef="let element">{{element.dotNumber}}</td>
           </ng-container>
           <ng-container matColumnDef="companyName">
             <th mat-header-cell *matHeaderCellDef> Company Name </th>
-            <td mat-cell *matCellDef="let element" class="fw_5" matTooltip="{{element.companyName}}">
-              <a class="company_name">{{element.companyName}}</a>
+            <td mat-cell *matCellDef="let element" class="fw_5" matTooltip="{{element.carrier.companyName}}">
+              <a class="company_name">{{element.carrier.companyName}}</a>
             </td>
           </ng-container>
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef> Status </th>
-            <td mat-cell *matCellDef="let element" class="{{element.status}} fw_5">{{element.status}}</td>
+            <td mat-cell *matCellDef="let element" class="{{checkExpiry(element.emailExpiryDate)=='Active' ? 'Active' : 'Expired'}} fw_5">{{checkExpiry(element.emailExpiryDate)}}</td>
           </ng-container>
           <ng-container matColumnDef="createdOn">
             <th mat-header-cell *matHeaderCellDef> Created On </th>
-            <td mat-cell *matCellDef="let element" matTooltip="1 months 1 days ago">{{element.createdOn}}</td>
+            <td mat-cell *matCellDef="let element" [matTooltip]="element.createdAt | timeAgo"
+            >{{element.createdAt | date : "MMM dd, yyyy hh:mm a" }}</td>
           </ng-container>
           <ng-container matColumnDef="lastEmailsendAt">
             <th mat-header-cell *matHeaderCellDef> Last Email Send At </th>
-            <td mat-cell *matCellDef="let element" matTooltip="2 days ago">{{element.lastEmailsendAt}}</td>
+            <td mat-cell *matCellDef="let element" [matTooltip]="element.lastEmailSendAt | timeAgo">{{element.lastEmailSendAt | date : "MMM dd, yyyy hh:mm a "}}</td>
           </ng-container>
           <ng-container matColumnDef="lastUpdated">
             <th mat-header-cell *matHeaderCellDef> Last Updated </th>
-            <td mat-cell *matCellDef="let element" matTooltip="1 months 1 days ago">{{element.lastUpdated}}</td>
+            <td mat-cell *matCellDef="let element"  [matTooltip]="element.updatedAt | timeAgo" matTooltip="1 months 1 days ago">{{element.updatedAt | date : "MMM dd, yyyy hh:mm a"}}</td>
           </ng-container>
           <ng-container matColumnDef="emailExpiryDate">
             <th mat-header-cell *matHeaderCellDef> Email ExpiryDate </th>
-            <td mat-cell *matCellDef="let element" matTooltip="2 days ago">{{element.emailExpiryDate}}</td>
+            <td mat-cell *matCellDef="let element"  [matTooltip]="element.emailExpiryDate | timeAgo">{{element.emailExpiryDate | date : "MMM dd, yyyy" }}</td>
           </ng-container>
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef class="text-center actin_col"> Action </th>
             <td mat-cell *matCellDef="let element" class="actin_td table_actions">
               <div class="actin_icon cus_slide_toggle">
-                <mat-slide-toggle [(ngModel)]="isChecked">{{element.action_vlu}}</mat-slide-toggle>
+                <mat-slide-toggle  [checked]="element.status === 0 ? false : true"></mat-slide-toggle>
               </div>
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr class="mat-row" *matNoDataRow style="text-align: center">
+            <ng-container *ngIf="!spinnerLoader">
+              <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                <div class="empty-state">
+                  <div class="empty-state__content">
+                    <div class="empty-state__icon">
+                      <img src="./assets/images/no_data_found_img.jpg" alt="">
+                    </div>
+                    <div class="empty-state__message">List Empty</div>
+                    <p class="empty-state__help">This is no Records</p>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+          </tr>
         </table>
+         <!-- 🔄 Loader for infinite scroll -->
+         <div class="text-center spinner_loader my-4" *ngIf="spinnerLoader">
+          <span class="spinner-border" role="status"></span>
+        </div>
       </div>
     </div>
   </div>
-  
-  <div class="skeletonloader">
-    <div class="empty-state">
-      <div class="empty-state__content">
-      <div class="empty-state__icon">
-        <img src="./assets/images/no_data_found_img.jpg" alt="">
-      </div>
-      <div class="empty-state__message">Authority List</div>
-        <p class="empty-state__help">This is no Authority</p>
-      </div>
-    </div>
+  </div>
   </div>

@@ -244,8 +244,10 @@ export class AppSettings {
 
     },
     CHANGEALTERT:{
-      INSURANCE:'change-alert/insurance', 
-      INSURANCEADD:'team/add', 
+      INSURANCE:'change-alert/insurance',
+      AUTHORITY:'change-alert/authority',
+      CARRIER:'change-alert/carrier',
+      BROKER:'change-alert/broker'
     },
   }
 }
