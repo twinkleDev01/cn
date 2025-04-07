@@ -1,11 +1,18 @@
-<div class="uploadEmptyTxt">
+<div appInfiniteScroll
+[(page)]="page"
+[(loaddedScreens)]="loaddedScreens"
+[totalPages]="totalPages"
+[spinnerLoader]="spinnerLoader"
+(updateParams)="addParams($event)"
+(fetchData)="getLoadAvailibility()"
+class="uploadEmptyTxt">
   <div class="content_box">
     <div class="contnt_hed">
       <div class="ch_l">
         <h3 class="ch_tlt">My Truck Availability List <span> ({{totalRecords ? totalRecords :0}})</span></h3>
       </div>
       <div class="ch_rl">
-        <a class="cn_btn" href="/my-truck-availability/post-new">Post Truck Availability</a>
+        <!-- <a class="cn_btn" href="/my-truck-availability/post-new">Post Truck Availability</a> -->
       </div>
     </div>
     
@@ -23,9 +30,12 @@
               <p class="txt_1 fw_6" [ngClass]="{'d-none': !showAdvancedFilter}">Advanced Filter</p>
               <div class="comn_fltr" [ngClass]="{'d-none': showAdvancedFilter}">
                 <mat-form-field appearance="none">
-                  <mat-label>Quick Search Search</mat-label>
+                  <mat-label>Quick Search</mat-label>
                   <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
-                  <input type="text" matInput placeholder="Search" class="form-control cn_input ms-2">
+                  <input type="text" matInput placeholder="Search" class="form-control cn_input ms-2"
+                  [formControl]="searchControl"
+                  (keyup)="applyFilter()"
+                  >
                 </mat-form-field>
               </div>
             </div>
@@ -39,10 +49,24 @@
                   <i class="fa-solid fa-plus me-2"></i>
                   <span>Add</span>
                 </span> -->
-                <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
+                <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()"  [ngClass]="{
+                  'active-filter':
+                    advanceFilterForm?.value &&
+                    (advanceFilterForm.value.shipmentTypes ||
+                    advanceFilterForm.value.equipmentType ||
+                    advanceFilterForm.value.frequency ||
+                    advanceFilterForm.value.sourceDate ||
+                    advanceFilterForm.value.destinationDate ||
+                    advanceFilterForm.value.length ||
+                    advanceFilterForm.value.weight ||
+                    advanceFilterForm.value.miles ||
+                    advanceFilterForm.value.costPerMile ||
+                    advanceFilterForm.value.destinationLocation || 
+                    advanceFilterForm.value.teamIds)
+                }">
                   <i class="fa-sharp fa-solid fa-filter"></i>
                 </span>
-                <span class="cn_btn icn_btn">
+                <span class="cn_btn icn_btn" (click)="refresh()">
                   <i class="fa-duotone fa-solid fa-rotate-right"></i>
                 </span>
               </div>
@@ -52,7 +76,10 @@
             <div class="filtr_con">
                 <div class="row" [formGroup]="advanceFilterForm">
                   <div class="col-md-3">
-                    <mat-form-field>
+                    <mat-form-field [ngClass]="{
+                      highlighted:
+                      advanceFilterForm.get('frequency')?.value 
+                    }">
                       <mat-label>Frequency</mat-label>
                       <mat-select formControlName="frequency">
                         <mat-option value="daily">Every Day</mat-option>
@@ -63,7 +90,10 @@
                     </mat-form-field>
                   </div>
                   <div class="col-md-3"> 
-                    <mat-form-field>
+                    <mat-form-field [ngClass]="{
+                      highlighted:
+                      advanceFilterForm.get('equipmentType')?.value 
+                    }">
                       <mat-label>Equipment Type</mat-label>
                       <mat-select formControlName="equipmentType">
                         <mat-option value="Box Truck">Box Truck</mat-option>
@@ -73,7 +103,10 @@
                     </mat-form-field>
                   </div>
                   <div class="col-md-3">
-                    <mat-form-field>
+                    <mat-form-field [ngClass]="{
+                      highlighted:
+                      advanceFilterForm.get('shipmentTypes')?.value 
+                    }">
                       <mat-label>Shipment Type</mat-label>
                       <mat-select formControlName="shipmentTypes">
                         <mat-option value="1">Less Than Truckload (LTL)</mat-option>
@@ -84,31 +117,46 @@
                     </mat-form-field>
                   </div>
                   <div class="col-md-3">
-                    <mat-form-field>
+                    <mat-form-field [ngClass]="{
+                      highlighted:
+                      advanceFilterForm.get('weight')?.value 
+                    }">
                       <mat-label>Weight (lbs)</mat-label>
                       <input type="text" formControlName="weight" matInput placeholder="Search">
                     </mat-form-field>
                   </div>
                   <div class="col-md-3">
-                    <mat-form-field>
+                    <mat-form-field [ngClass]="{
+                      highlighted:
+                      advanceFilterForm.get('length')?.value 
+                    }">>
                       <mat-label>Length (ft)</mat-label>
                       <input type="text" formControlName="length" matInput placeholder="Search">
                     </mat-form-field>
                   </div>
                   <div class="col-md-3">
-                    <mat-form-field>
+                    <mat-form-field [ngClass]="{
+                      highlighted:
+                      advanceFilterForm.get('miles')?.value 
+                    }">>
                       <mat-label>Miles</mat-label>
                       <input type="text" formControlName="miles" matInput placeholder="Search">
                     </mat-form-field>
                   </div>
                   <div class="col-md-3">
-                    <mat-form-field>
+                    <mat-form-field [ngClass]="{
+                      highlighted:
+                      advanceFilterForm.get('costPerMile')?.value 
+                    }">
                       <mat-label>CostPerMile</mat-label>
                       <input type="text" formControlName="costPerMile" matInput placeholder="Search">
                     </mat-form-field>
                   </div>
                   <div class="col-md-3">
-                    <mat-form-field>
+                    <mat-form-field [ngClass]="{
+                      highlighted:
+                      advanceFilterForm.get('destinationLocation')?.value 
+                    }">
                       <mat-label>DestinationLocation</mat-label>
                       <input type="text" formControlName="destinationLocation" matInput placeholder="Search">
                     </mat-form-field>
@@ -163,8 +211,8 @@
                   </div>
                   <div class="col-md-12">
                     <div class="fltr_actn">
-                      <button class="cn_btn btn_bordered">Clear</button>
-                      <button class="cn_btn">Apply</button>
+                      <button class="cn_btn btn_bordered" (click)="resetFilters()" type="submit">Clear</button>
+                      <button class="cn_btn" type="submit" (click)="applyFilters()">Apply</button>
                     </div>
                   </div>
                 </div>
@@ -301,13 +349,32 @@
         </ng-container> -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow style="text-align: center">
+          <ng-container *ngIf="!spinnerLoader">
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              <div class="empty-state">
+                <div class="empty-state__content">
+                  <div class="empty-state__icon">
+                    <img src="./assets/images/no_data_found_img.jpg" alt="">
+                  </div>
+                  <div class="empty-state__message">List Empty</div>
+                  <p class="empty-state__help">This is no Records</p>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+        </tr>
       </table>
+        <!-- 🔄 Loader for infinite scroll -->
+        <div class="text-center spinner_loader my-4" *ngIf="spinnerLoader">
+          <span class="spinner-border" role="status"></span>
+        </div>
     </div>
   </div>
 
-  
+  <!--  -->
 
-  <div class="avalability_cards mt-5" *ngIf="spinnerLoader">
+  <!-- <div class="avalability_cards mt-5" *ngIf="spinnerLoader">
     <div style="display: block;">
       <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '25px', margin: '0px 0 0px' }"
         *ngFor="let fake of generateFakeSkeleton(3)"></ngx-skeleton-loader>
@@ -320,7 +387,6 @@
           <div class="col-md-3 sepre_line">
             <div class="inc_locatn">
               <span class="txt_lb me-2">Source</span>
-              <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
               <p class="text_truncate pointer"
                 matTooltip="{{loadData?.sourceLocationCity + ', '+ loadData?.sourceLocationState + ', '+ loadData?.sourceLocationCountry}}">
                 <i class="fa-duotone fa-location-dot txt_p me-2"></i> {{loadData?.sourceLocationCity + ', '+
@@ -332,7 +398,6 @@
           </div>
           <div class="col-md-3 sepre_line">
             <div class="inc_locatn">
-              <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
               <span class="txt_lb me-2">Destination</span>
               <p class="text_truncate pointer"
                 matTooltip="{{loadData?.destinationLocationCity + ', '+ loadData?.destinationLocationState + ', '+ loadData?.destinationLocationCountry}} ">
@@ -345,20 +410,17 @@
           </div>
           <div class="col-md-3 sepre_line">
             <div class="inc_locatn">
-              <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
               <span class="txt_lb me-2">Shipment Type</span>
               <span class=""> {{loadData?.shipmentTypesLabel ? loadData?.shipmentTypesLabel : '-'}} </span>
             </div>
           </div>
           <div class="col-md-3">
             <div class="inc_locatn">
-              <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
               <span class="txt_lb me-2">Truck Types / Equipment Types</span>
               <span>
                 {{ loadData?.equipmentType?.[0]?.equipmentTypeName ?? '-' }}
               </span>
-              
-              <!-- <span class=""> {{loadData?.equipmentType[0]?.equipmentTypeName ? loadData?.equipmentType[0]?.equipmentTypeName : '-'}} </span> -->
+            
             </div>
           </div>
         </div>
@@ -368,21 +430,18 @@
           <div class="row">
             <div class="col-md-4 sepre_line2">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Miles </span>
                 <span class=""> {{loadData?.miles ? (loadData?.miles | integerPart) : '-'}} </span>
               </div>
             </div>
             <div class="col-md-4 sepre_line3">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Cost Per Mile </span>
                 <span class=""> {{loadData?.costPerMile ? (loadData?.costPerMile| customNumber) : '-'}} </span>
               </div>
             </div>
             <div class="col-md-4">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Notes </span>
                 <span class="notes_over" matTooltip="{{loadData?.notes ? loadData?.notes : '-'}}"> {{loadData?.notes ?
                   loadData?.notes : '-'}} </span>
@@ -444,4 +503,4 @@
   <div *ngIf="loadAvailibilityData.length > 0 && this.page >= this.totalPage && !spinnerLoader" style="background-color: white; margin-top: 15px;" class="noMore_record">
     <span>There are no more records to show.</span>
   </div>
-</div>   
+</div>    -->

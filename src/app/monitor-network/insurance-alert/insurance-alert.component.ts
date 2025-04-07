@@ -32,7 +32,7 @@ export class InsuranceAlertComponent implements OnInit {
      isFilterApplied = false;
      myControl = new FormControl('');
      AutoCompleteOptions: any[] = [];
-     filteredOptions: Observable<any[]>;
+     filteredOptions: any[] = [];
      loaddedScreens = 0;
   dateRanges = [
     { label: 'Created', start: 'createdStart', end: 'createdEnd', picker: 'picker1' },
@@ -44,19 +44,7 @@ export class InsuranceAlertComponent implements OnInit {
   public spinnerLoader = false;
   constructor(public commonService: CommonService,private fb: FormBuilder,private router: Router,
                 private route: ActivatedRoute,  private cdRef: ChangeDetectorRef,) {
-    // this.filterForm = this.fb.group({
-    //   policyNumber: [''],
-    //   status: [''],
-    //   createdStart: [''],
-    //   createdEnd: [''],
-    //   emailStart: [''],
-    //   emailEnd: [''],
-    //   updatedStart: [''],
-    //   updatedEnd: [''],
-    //   expireStart: [''],
-    //   expireEnd: [''],
-    //   dotNumber:['']
-    // });
+   
   }
   
   ngOnInit(): void {
@@ -94,26 +82,7 @@ export class InsuranceAlertComponent implements OnInit {
   });
     this.fetchChangeAlertInsurance();
     this.autocompleteSearchData();
-    this.filterForm.get('dotNumber')?.valueChanges.pipe(
-      startWith(''),
-    ).subscribe(value => {
-      const filterValue = typeof value === 'string' ? value.toLowerCase() : value?.dotNumber?.toLowerCase();
-      this.filteredOptions = of(
-        this.AutoCompleteOptions.filter(option =>
-          option.dotNumber.toLowerCase().includes(filterValue)
-        )
-      );
-    });
    
- 
-  }
-  onInputFocus(currentValue: string) {
-    const filterValue = currentValue?.toLowerCase() || '';
-    this.filteredOptions = of(
-      this.AutoCompleteOptions.filter(option =>
-        option.dotNumber.toLowerCase().includes(filterValue)
-      )
-    );
   }
  
   private _filter(value: string): any[] {
@@ -122,8 +91,10 @@ export class InsuranceAlertComponent implements OnInit {
       option.dotNumber.toLowerCase().includes(filterValue)
     );
   }
-  autocompleteSearchData(): void {
-    let newParams = {};
+  autocompleteSearchData(searchdata?:any): void {
+    let newParams = {
+      search: searchdata
+    };
     const apiKey = AppSettings.APIsNameArray.EXTRA.AUTOCOMPLETE;
 
     if (apiKey) {
@@ -135,6 +106,9 @@ export class InsuranceAlertComponent implements OnInit {
       this.commonService.getList(APIparams).subscribe(
         (response) => {
           this.AutoCompleteOptions = response.response.carrierData;
+          console.log(this.AutoCompleteOptions)
+         this.filteredOptions=this.AutoCompleteOptions
+         console.log('kkkkkkkkkkkk',this.filteredOptions)
         },
         (error) => {
           console.error('Error fetching carriers:', error);
@@ -333,6 +307,12 @@ applyFilter() {
   this.dataSource.filter = filterValue;
   this.isFilterApplied = filterValue.length > 0;
 } 
+
+
+onDotInputChange(value: string) {
+  console.log('Current DOT value:', value);
+  this.autocompleteSearchData(value);
+}
 
 addParams(currentPage:any = this.page){
 this.page = currentPage;

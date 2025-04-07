@@ -21,7 +21,7 @@ export class CarrierAlertComponent implements OnInit {
      isFilterApplied = false;
      myControl = new FormControl('');
      AutoCompleteOptions: any[] = [];
-     filteredOptions: Observable<any[]>;
+     filteredOptions: any[] = [];
      loaddedScreens = 0;
   dateRanges = [ 
     { label: 'Created', start: 'createdStart', end: 'createdEnd', picker: 'picker1' },
@@ -32,13 +32,12 @@ export class CarrierAlertComponent implements OnInit {
   totalPages: number = 0;
   public spinnerLoader = false;
   constructor(public commonService: CommonService,private fb: FormBuilder,private route: ActivatedRoute,) {
-    
    }
    
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.filterForm = this.fb.group({
-        policyNumber: [''],
+        
         status: [''],
         createdStart: [''],
         createdEnd: [''],
@@ -61,44 +60,22 @@ export class CarrierAlertComponent implements OnInit {
           emailEnd: params['toLastEmailSendDate'] ? new Date(params['toLastEmailSendDate']) : null,
           expireStart: params['fromExpireDate'] ? new Date(params['fromExpireDate']) : null,
           expireEnd: params['toExpireDate'] ? new Date(params['toExpireDate']) : null,
-          policyNumber: params['policyNo'] || '',
+         
           status: params['status'] || '',
           dotNumber: params['dotNumber'] || ''
         });
           this.filterForm.updateValueAndValidity();
       }
   });
-    this.fetchChangeAlertAuthority();
+    this.fetchChangeAlertCarrier();
     this.autocompleteSearchData();
-    this.filterForm.get('dotNumber')?.valueChanges.pipe(
-      startWith(''),
-    ).subscribe(value => {
-      const filterValue = typeof value === 'string' ? value.toLowerCase() : value?.dotNumber?.toLowerCase();
-      this.filteredOptions = of(
-        this.AutoCompleteOptions.filter(option =>
-          option.dotNumber.toLowerCase().includes(filterValue)
-        )
-      );
-    });
   }
 
-  onInputFocus(currentValue: string) {
-    const filterValue = currentValue?.toLowerCase() || '';
-    this.filteredOptions = of(
-      this.AutoCompleteOptions.filter(option =>
-        option.dotNumber.toLowerCase().includes(filterValue)
-      )
-    );
-  }
  
-  private _filter(value: string): any[] {
-    const filterValue = value.toLowerCase();
-    return this.AutoCompleteOptions.filter(option =>
-      option.dotNumber.toLowerCase().includes(filterValue)
-    );
-  }
-  autocompleteSearchData(): void {
-    let newParams = {};
+  autocompleteSearchData(searchdata?:any): void {
+    let newParams = {
+      search: searchdata
+    };
     const apiKey = AppSettings.APIsNameArray.EXTRA.AUTOCOMPLETE;
 
     if (apiKey) {
@@ -110,6 +87,7 @@ export class CarrierAlertComponent implements OnInit {
       this.commonService.getList(APIparams).subscribe(
         (response) => {
           this.AutoCompleteOptions = response.response.carrierData;
+          this.filteredOptions=this.AutoCompleteOptions
         },
         (error) => {
           console.error('Error fetching carriers:', error);
@@ -117,7 +95,11 @@ export class CarrierAlertComponent implements OnInit {
       );
     }
   }
-    fetchChangeAlertAuthority(resetData: boolean = false): void {
+  onDotInputChange(value: string) {
+    console.log('Current DOT value:', value);
+    this.autocompleteSearchData(value);
+  }
+  fetchChangeAlertCarrier(resetData: boolean = false): void {
       this.spinnerLoader = true;
       
       let newParams: {
@@ -130,7 +112,6 @@ export class CarrierAlertComponent implements OnInit {
         fromExpireDate?: string;
         toExpireDate?: string;
         status?: string;
-        policyNo?:string;
         limit: number;
         page: number;
         dotNumber?: string;
@@ -139,7 +120,7 @@ export class CarrierAlertComponent implements OnInit {
         page: this.page,
       };
     
-      const { policyNumber, status, createdStart, createdEnd,emailStart,emailEnd, updatedStart,updatedEnd,expireStart,expireEnd,dotNumber } = this.filterForm?.value;
+      const { status, createdStart, createdEnd,emailStart,emailEnd, updatedStart,updatedEnd,expireStart,expireEnd,dotNumber } = this.filterForm?.value;
     
       if (createdStart) newParams.fromCreatedAtDate = this.formatDateForAPI(createdStart);
       if (createdEnd) newParams.toCreatedAtDate = this.formatDateForAPI(createdEnd);
@@ -149,7 +130,6 @@ export class CarrierAlertComponent implements OnInit {
       if (emailEnd) newParams.toLastEmailSendDate = this.formatDateForAPI(emailEnd);
       if (expireStart) newParams.fromExpireDate = this.formatDateForAPI(expireStart);
       if (expireEnd) newParams.toExpireDate = this.formatDateForAPI(expireEnd);
-      if(policyNumber) newParams.policyNo=policyNumber
       if (status) newParams.status = status;
       if(dotNumber) newParams.dotNumber=dotNumber;
     
@@ -168,7 +148,6 @@ export class CarrierAlertComponent implements OnInit {
   if (newParams.toLastEmailSendDate) queryParams.set('toLastEmailSendDate', newParams.toLastEmailSendDate);
   if (newParams.fromExpireDate) queryParams.set('fromExpireDate', newParams.fromExpireDate);
   if (newParams.toExpireDate) queryParams.set('toExpireDate', newParams.toExpireDate);
-  if (newParams.policyNo) queryParams.set('policyNo', newParams.policyNo);
   if (newParams.status) queryParams.set('status', newParams.status);
   if (newParams.dotNumber) queryParams.set('dotNumber', newParams.dotNumber);
   
@@ -232,7 +211,7 @@ export class CarrierAlertComponent implements OnInit {
     this.isFilterApplied = true;
     this.page = 1;
     this.dataSource.data = [];
-    this.fetchChangeAlertAuthority(true);
+    this.fetchChangeAlertCarrier(true);
   }
   clearForm() {
     this.filterForm.reset();
@@ -269,7 +248,7 @@ export class CarrierAlertComponent implements OnInit {
     return current > expiry ? "Expired" : "Active";
   }
   refresh(){
-    this.fetchChangeAlertAuthority(true);
+    this.fetchChangeAlertCarrier(true);
   }
   resetFilters(): void {
     console.log('Reset Filters Clicked');
@@ -280,7 +259,7 @@ export class CarrierAlertComponent implements OnInit {
     this.page = 1;
     this.dataSource.data = [];
     this.filterForm.reset();
-    this.fetchChangeAlertAuthority(true);
+    this.fetchChangeAlertCarrier(true);
     
   }
 
@@ -311,58 +290,8 @@ applyFilter() {
   this.dataSource.filter = filterValue;
   this.isFilterApplied = filterValue.length > 0;
 } 
-
-@HostListener('window:scroll', ['$event'])
-onWindowScroll(event: Event) {
-  const scrollHeight = window.innerHeight + window.scrollY;
-  const documentHeight = document.documentElement.scrollHeight;
-  if ((documentHeight - scrollHeight) <= 1) {
-    if (this.page <= this.totalPages && !this.spinnerLoader) {
-      if(this.page <= this.loaddedScreens)
-        this.page += 1;
-      if((this.totalPages >= this.page) && (this.loaddedScreens < this.page))
-      this.fetchChangeAlertAuthority();
-    }
-  }
-  this.getCurrentPage();
-}
-
-getCurrentPage() {
-  
-
-  const tbody = document.querySelector('tbody');
-  const table = document.querySelector('table');
-  const itemsPerPage = 10;
-
-  if (!tbody || !table) return 1; // Ensure elements exist
-
-  const scrollTop = window.scrollY; // Corrected scroll position
-  const rowHeight = tbody.querySelector('tr')?.clientHeight || 0;
-
-  if (rowHeight === 0) return 1; // Avoid division by zero
-
-  // Calculate how many rows are visible on the screen
-  const alreadyLoaded =
-    Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
-
-  // Calculate current page
-  let currentPage = Math.floor(
-    (scrollTop + table.offsetTop) /
-      (rowHeight * itemsPerPage - alreadyLoaded * rowHeight)
-  );
-  // Ensure currentPage never goes out of bounds
-  currentPage = Math.max(1, Math.min(this.totalPages, currentPage)) || 1;
-
-  // ✅ Update the page only if there's an actual change
-  if (this.page !== currentPage) {
-    this.page = currentPage;
-    this.addParams(currentPage);
-    // this.fetchCarriersContactList();
-  }
-
-  return currentPage;
-}
-addParams(currentPage?:any){
+addParams(currentPage:any = this.page){
+  this.page = currentPage;
   let newParams: {
     fromCreatedAtDate?: string;
     toCreatedAtDate?: string;
@@ -373,33 +302,16 @@ addParams(currentPage?:any){
     fromExpireDate?: string;
     toExpireDate?: string;
     status?: string;
-    policyNo?:string;
     limit: number;
     page: number;
     dotNumber?: string;
   } = {
     limit: 10,
-    page: this.page,
+    page: currentPage,
   };
 
-  const { policyNumber, status, createdStart, createdEnd,emailStart,emailEnd, updatedStart,updatedEnd,expireStart,expireEnd,dotNumber } = this.filterForm?.value;
-
-  if (createdStart) newParams.fromCreatedAtDate = this.formatDateForAPI(createdStart);
-  if (createdEnd) newParams.toCreatedAtDate = this.formatDateForAPI(createdEnd);
-  if (updatedStart) newParams.fromUpdatedAtDate = this.formatDateForAPI(updatedStart);
-  if (updatedEnd) newParams.toUpdatedAtDate = this.formatDateForAPI(updatedEnd);
-  if (emailStart) newParams.fromLastEmailSendDate = this.formatDateForAPI(emailStart);
-  if (emailEnd) newParams.toLastEmailSendDate = this.formatDateForAPI(emailEnd);
-  if (expireStart) newParams.fromExpireDate = this.formatDateForAPI(expireStart);
-  if (expireEnd) newParams.toExpireDate = this.formatDateForAPI(expireEnd);
-  if(policyNumber) newParams.policyNo=policyNumber
-  if (status) newParams.status = status;
-  if(dotNumber) newParams.dotNumber=dotNumber;
-
-
- // ✅ Conditionally add parameters only if they have values
 const queryParams = new URLSearchParams();
-if (this.page) queryParams.set('page', this.page.toString());
+if (currentPage) queryParams.set('page', currentPage.toString());
 if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
 if (newParams.fromCreatedAtDate) queryParams.set('fromCreatedAtDate', newParams.fromCreatedAtDate);
 if (newParams.toCreatedAtDate) queryParams.set('toDate', newParams.toCreatedAtDate);
@@ -409,7 +321,6 @@ if (newParams.fromLastEmailSendDate) queryParams.set('fromLastEmailSendDate', ne
 if (newParams.toLastEmailSendDate) queryParams.set('toLastEmailSendDate', newParams.toLastEmailSendDate);
 if (newParams.fromExpireDate) queryParams.set('fromExpireDate', newParams.fromExpireDate);
 if (newParams.toExpireDate) queryParams.set('toExpireDate', newParams.toExpireDate);
-if (newParams.policyNo) queryParams.set('policyNo', newParams.policyNo);
 if (newParams.status) queryParams.set('status', newParams.status);
 if (newParams.dotNumber) queryParams.set('dotNumber', newParams.dotNumber);
 

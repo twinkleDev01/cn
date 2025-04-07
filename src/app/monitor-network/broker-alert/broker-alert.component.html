@@ -1,6 +1,13 @@
 
-<div >
-  <div class="content_box">
+
+  <div appInfiniteScroll
+  [(page)]="page"
+  [(loaddedScreens)]="loaddedScreens"
+  [totalPages]="totalPages"
+  [spinnerLoader]="spinnerLoader"
+  (updateParams)="addParams($event)"
+  (fetchData)="fetchChangeAlertBroker()"
+   class="content_box" >
     <div class="contnt_hed mb-1">
       <div class="ch_l">
         <h3 class="ch_tlt">Broker Alert</h3>
@@ -34,7 +41,7 @@
                   <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()"  [ngClass]="{
                     'active-filter':
                       filterForm?.value &&
-                      (filterForm.value.policyNumber ||
+                      (
                         filterForm.value.status ||
                         filterForm.value.createdStart ||
                         filterForm.value.createdEnd ||
@@ -59,16 +66,7 @@
               <div class="filtr_con">
                 <form class="row" [formGroup]="filterForm">
   
-                  <!-- Policy Number -->
-                  <div class="col-md-3">
-                    <mat-form-field  [ngClass]="{
-                      highlighted:
-                        filterForm.get('policyNumber')?.value 
-                    }">
-                      <mat-label>Policy Number</mat-label>
-                      <input type="text" matInput placeholder="Policy Number" formControlName="policyNumber">
-                    </mat-form-field>
-                  </div>
+                 
                 
                   <!-- Status -->
                   <div class="col-md-3">
@@ -78,13 +76,13 @@
                     }">
                       <mat-label>Status</mat-label>
                       <mat-select formControlName="status">
-                        <mat-option value="true">Active</mat-option>
-                        <mat-option value="false">Expired</mat-option>
+                        <mat-option value="true">true</mat-option>
+                        <mat-option value="false">false</mat-option>
                       </mat-select>
                     </mat-form-field>
                   </div>
                 
-                  <div class="col-md-6"></div>
+               
                 
                   <!-- Date Range Filters -->
                   <div class="col-md-3" >
@@ -216,15 +214,14 @@
                            aria-label="DOT Number"
                            matInput
                            formControlName="dotNumber"
-                           
-                           (focus)="onInputFocus(dotInput.value)"
+                           (input)="onDotInputChange(dotInput.value)"
                            [matAutocomplete]="auto" [ngClass]="{
                             highlighted:
                               filterForm.get('dotNumber')?.value 
                           }">
                     
                     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" >
-                      <mat-option *ngFor="let option of filteredOptions | async" [value]="option.dotNumber">
+                      <mat-option *ngFor="let option of filteredOptions " [value]="option.dotNumber">
                         {{ option.dotNumber }} - {{ option.companyName }}
                       </mat-option>
                     </mat-autocomplete>
@@ -286,7 +283,7 @@
             <th mat-header-cell *matHeaderCellDef class="text-center actin_col"> Action </th>
             <td mat-cell *matCellDef="let element" class="actin_td table_actions">
               <div class="actin_icon cus_slide_toggle">
-                <mat-slide-toggle  [checked]="element.status === 0 ? false : true"></mat-slide-toggle>
+                <mat-slide-toggle  [checked]="element.status === false ? false : true"></mat-slide-toggle>
               </div>
             </td>
           </ng-container>
@@ -316,4 +313,4 @@
     </div>
   </div>
   </div>
-  </div>
+  

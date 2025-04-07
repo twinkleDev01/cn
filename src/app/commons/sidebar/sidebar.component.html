@@ -262,12 +262,12 @@
           <span class="material-icons-outlined">expand_more</span>
         </a>
         <ul class="v_sub_menu">
-          <li [ngClass]="activeSubTab=='brokerAlert' ? 'active' :  ''">
+          <li *ngIf="userType !=='BROKER'" [ngClass]="activeSubTab=='brokerAlert' ? 'active' :  ''">
             <a [ngClass]="activeSubTab=='brokerAlert' ? 'sub_menu_a' :  ''" [routerLink]="['/monitor-network/broker-alert']">
               <span (click)="isMobile ? mobMenuToggleEvent() :null"> Broker Alert </span>
             </a>
           </li>
-          <li [ngClass]="activeSubTab=='carrierAlert' ? 'active' :  ''">
+          <li *ngIf="userType !=='CARRIER'" [ngClass]="activeSubTab=='carrierAlert' ? 'active' :  ''">
             <a [ngClass]="activeSubTab=='carrierAlert' ? 'sub_menu_a' :  ''" [routerLink]="['/monitor-network/carrier-alert']">
               <span (click)="isMobile ? mobMenuToggleEvent() :null"> Carrier Alert </span>
             </a>
