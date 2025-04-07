@@ -6,10 +6,11 @@ import { LoadQuoteRoutingModule } from './load-quote-routing.module';
 import { RequestedLoadComponent } from './requested-load/requested-load.component';
 import { MaterialModule } from '../material.module';
 import { ReceivedLoadComponent } from './received-load/received-load.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -25,7 +26,9 @@ import { MatInputModule } from '@angular/material/input';
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class LoadQuoteModule { }

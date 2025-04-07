@@ -51,6 +51,11 @@ export class AppSettings {
       CARRIERRECETVIEW : 'recently-viewed/carrier',
       BROKERVIEW : 'recently-viewed/broker',
 
+    // Load  Quote Analytics
+    CARRIERLOADQUOTE:'carrier/load-quotes/self-list',
+    BROKERLOADQUOTE:'broker/load-quotes/self-list',
+    COMMANQUOTELIST:'load-quotes/list',
+ 
     // Contact lead
     BROKERCONTACTLIST:'recent-view/broker-contact-list',
     CARRIERCONTACTLIST:'recent-view/carrier-contact-list',
@@ -244,10 +249,11 @@ export class AppSettings {
 
     },
     CHANGEALTERT:{
-      INSURANCE:'change-alert/insurance',
-      AUTHORITY:'change-alert/authority',
-      CARRIER:'change-alert/carrier',
-      BROKER:'change-alert/broker'
+      INSURANCE:'change-alert/insurance', 
+      INSURANCEADD:'team/add', 
+      BROKER: 'change-alert/broker',
+      CARRIER: 'change-alert/carrier',
+      AUTHORITY: 'change-alert/authority'
     },
   }
 }

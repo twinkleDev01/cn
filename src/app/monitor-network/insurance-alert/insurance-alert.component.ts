@@ -1,6 +1,7 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, of, startWith } from 'rxjs';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
@@ -41,23 +42,56 @@ export class InsuranceAlertComponent implements OnInit {
   ];
   totalPages: number = 0;
   public spinnerLoader = false;
-  constructor(public commonService: CommonService,private fb: FormBuilder) {
-    this.filterForm = this.fb.group({
-      policyNumber: [''],
-      status: [''],
-      createdStart: [''],
-      createdEnd: [''],
-      emailStart: [''],
-      emailEnd: [''],
-      updatedStart: [''],
-      updatedEnd: [''],
-      expireStart: [''],
-      expireEnd: [''],
-      dotNumber:['']
-    });
-   }
-   
+  constructor(public commonService: CommonService,private fb: FormBuilder,private router: Router,
+                private route: ActivatedRoute,  private cdRef: ChangeDetectorRef,) {
+    // this.filterForm = this.fb.group({
+    //   policyNumber: [''],
+    //   status: [''],
+    //   createdStart: [''],
+    //   createdEnd: [''],
+    //   emailStart: [''],
+    //   emailEnd: [''],
+    //   updatedStart: [''],
+    //   updatedEnd: [''],
+    //   expireStart: [''],
+    //   expireEnd: [''],
+    //   dotNumber:['']
+    // });
+  }
+  
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.filterForm = this.fb.group({
+        policyNumber: [''],
+        status: [''],
+        createdStart: [''],
+        createdEnd: [''],
+        emailStart: [''],
+        emailEnd: [''],
+        updatedStart: [''],
+        updatedEnd: [''],
+        expireStart: [''],
+        expireEnd: [''],
+        dotNumber:['']
+      });
+      if (params && Object.keys(params).length) {
+        console.log(params,"89");
+        this.filterForm.patchValue({
+          createdStart: params['fromCreatedAtDate'] ? new Date(params['fromCreatedAtDate']) : null,
+          createdEnd: params['toCreatedAtDate'] ? new Date(params['toCreatedAtDate']) : null,
+          updatedStart: params['fromUpdatedAtDate'] ? new Date(params['fromUpdatedAtDate']) : null,
+          updatedEnd: params['toUpdatedAtDate'] ? new Date(params['toUpdatedAtDate']) : null,
+          emailStart: params['fromLastEmailSendDate'] ? new Date(params['fromLastEmailSendDate']) : null,
+          emailEnd: params['toLastEmailSendDate'] ? new Date(params['toLastEmailSendDate']) : null,
+          expireStart: params['fromExpireDate'] ? new Date(params['fromExpireDate']) : null,
+          expireEnd: params['toExpireDate'] ? new Date(params['toExpireDate']) : null,
+          policyNumber: params['policyNo'] || '',
+          status: params['status'] || '',
+          dotNumber: params['dotNumber'] || ''
+        });
+          this.filterForm.updateValueAndValidity();
+      }
+  });
     this.fetchChangeAlertInsurance();
     this.autocompleteSearchData();
     this.filterForm.get('dotNumber')?.valueChanges.pipe(
@@ -70,8 +104,9 @@ export class InsuranceAlertComponent implements OnInit {
         )
       );
     });
+   
+ 
   }
-
   onInputFocus(currentValue: string) {
     const filterValue = currentValue?.toLowerCase() || '';
     this.filteredOptions = of(
@@ -160,7 +195,7 @@ export class InsuranceAlertComponent implements OnInit {
   if (newParams.toExpireDate) queryParams.set('toExpireDate', newParams.toExpireDate);
   if (newParams.policyNo) queryParams.set('policyNo', newParams.policyNo);
   if (newParams.status) queryParams.set('status', newParams.status);
-  
+ if (newParams.dotNumber) queryParams.set('dotNumber', newParams.dotNumber);
   
   history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
  
@@ -198,13 +233,11 @@ export class InsuranceAlertComponent implements OnInit {
               this.dataSource.data = [...this.dataSource.data, ...uniqueData];
             }
           
-          // this.uniqueUserTypes = Array.from(new Set([...this.uniqueUserTypes, ...newUserTypes]));
-          //   this.showScrollSpinner=false
-          //   console.log(this.dataSource, 'Updated DataSource');
-            this.totalPages = response.response.totalPages;
-            // this.totalRecords = response.response.totalRecords;
-          //   this.loading = false;
-          //   this.cdRef.detectChanges();
+       
+          this.totalPages = response.response.totalPages;
+          // this.totalRecords = response.response.totalRecords;
+            this.spinnerLoader = false;
+            this.cdRef.detectChanges();
           }
         },
         (error) => {
@@ -245,7 +278,7 @@ export class InsuranceAlertComponent implements OnInit {
 
   // Profile analytics table
   displayedColumns: string[] = ['alertID', 'policyNumber', 'companyName', 'status', 'createdOn', 'lastEmailsendAt', 'lastUpdated', 'emailExpiryDate', 'action'];
-  // Advanced filter toggle
+
   toggleFilter() {
     this.showAdvancedFilter = !this.showAdvancedFilter;
   }
@@ -301,136 +334,42 @@ applyFilter() {
   this.isFilterApplied = filterValue.length > 0;
 } 
 
-@HostListener('window:scroll', ['$event'])
-onWindowScroll(event: Event) {
-  const scrollHeight = window.innerHeight + window.scrollY;
-  const documentHeight = document.documentElement.scrollHeight;
-  if ((documentHeight - scrollHeight) <= 1) {
-    if (this.page <= this.totalPages && !this.spinnerLoader) {
-      if(this.page <= this.loaddedScreens)
-        this.page += 1;
-      if((this.totalPages >= this.page) && (this.loaddedScreens < this.page))
-      this.fetchChangeAlertInsurance();
-    }
-  }
-  this.getCurrentPage();
-}
+addParams(currentPage:any = this.page){
+this.page = currentPage;
+  let newParams: {
+    fromCreatedAtDate?: string;
+    toCreatedAtDate?: string;
+    fromUpdatedAtDate?: string;
+    toUpdatedAtDate?: string;
+    fromLastEmailSendDate?: string;
+    toLastEmailSendDate?: string;
+    fromExpireDate?: string;
+    toExpireDate?: string;
+    status?: string;
+    policyNo?:string;
+    limit: number;
+    page: number;
+    dotNumber?: string;
+  } = {
+    limit: 10,
+    page: currentPage,
+  };
 
-getCurrentPage() {
-  console.log('📌 Debugging Scroll Behavior');
-
-  const tbody = document.querySelector('tbody');
-  const table = document.querySelector('table');
-  const itemsPerPage = 10;
-
-  if (!tbody || !table) return 1; // Ensure elements exist
-
-  const scrollTop = window.scrollY; // Corrected scroll position
-  const rowHeight = tbody.querySelector('tr')?.clientHeight || 0;
-
-  if (rowHeight === 0) return 1; // Avoid division by zero
-
-  // Calculate how many rows are visible on the screen
-  const alreadyLoaded =
-    Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1;
-
-  // Calculate current page
-  let currentPage = Math.floor(
-    (scrollTop + table.offsetTop) /
-      (rowHeight * itemsPerPage - alreadyLoaded * rowHeight)
-  );
-  // Ensure currentPage never goes out of bounds
-  currentPage = Math.max(1, Math.min(this.totalPages, currentPage)) || 1;
-  console.log('CurrentPage: ' + this.page);
-  // ✅ Update the page only if there's an actual change
-  if (this.page !== currentPage) {
-    this.page = currentPage;
-    this.addParams(currentPage);
-    // this.fetchCarriersContactList();
-  }
-
-  return currentPage;
-}
-addParams(currentPage?:any){
-
-let newParams: {
-  limit: number;
-  page: number;
-  fromStartDate?: string;
-  toStartDate?: string;
-  postalCode?: string;
-  teamIds?: string;
-  impressionType?: string;
-  position?: string;
-} = {
-  limit: 10,
-  page: this.page,
-};
 const queryParams = new URLSearchParams();
   if (currentPage) queryParams.set('page', currentPage.toString());
-if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
-if (newParams.fromStartDate) queryParams.set('fromDate', newParams.fromStartDate);
-if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
-if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
-if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
-if (newParams.position) queryParams.set('position', newParams.position);
-if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
-
+  if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+  if (newParams.fromCreatedAtDate) queryParams.set('fromCreatedAtDate', newParams.fromCreatedAtDate);
+  if (newParams.toCreatedAtDate) queryParams.set('toDate', newParams.toCreatedAtDate);
+  if (newParams.fromUpdatedAtDate) queryParams.set('toCreatedAtDate', newParams.fromUpdatedAtDate);
+  if (newParams.toUpdatedAtDate) queryParams.set('toUpdatedAtDate', newParams.toUpdatedAtDate);
+  if (newParams.fromLastEmailSendDate) queryParams.set('fromLastEmailSendDate', newParams.fromLastEmailSendDate);
+  if (newParams.toLastEmailSendDate) queryParams.set('toLastEmailSendDate', newParams.toLastEmailSendDate);
+  if (newParams.fromExpireDate) queryParams.set('fromExpireDate', newParams.fromExpireDate);
+  if (newParams.toExpireDate) queryParams.set('toExpireDate', newParams.toExpireDate);
+  if (newParams.policyNo) queryParams.set('policyNo', newParams.policyNo);
+  if (newParams.status) queryParams.set('status', newParams.status);
+   if (newParams.dotNumber) queryParams.set('dotNumber', newParams.dotNumber);
 history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
 }
-//  @HostListener('window:scroll', ['$event'])
-//   onWindowScroll(event: Event) {
-//     const scrollHeight = window.innerHeight + window.scrollY;
-//     const documentHeight = document.documentElement.scrollHeight;
-//     if (documentHeight - scrollHeight <= 1) {
-//       if (this.page < this.totalPages ){
-//         this.page += 1;
-//         this.fetchChangeAlertInsurance();
-//       }
-//     }
-//     this.getCurrentPage()
-//   }
-//   getCurrentPage() {
-//     const tbody = document.querySelector("tbody");
-//     const table = document.querySelector("table")
-//     const itemsPerPage = 10; 
-//     const scrollTop = $(window).scrollTop();
-//     const rowHeight = tbody.querySelector("tr")?.clientHeight || 0; 
-//     if (rowHeight === 0) return 1;
-//     const alreadyLoaded = Math.floor((window.innerHeight - table.offsetTop) / rowHeight) - 1
-//     const currentPage = Math.ceil(((scrollTop + table.offsetTop) + 1) / ((rowHeight * itemsPerPage) - (alreadyLoaded * rowHeight) ));
-//     if (currentPage > this.totalPages) return; 
-//     console.log(currentPage,"219")
-//   //   if (this.page !== currentPage) {
-//   //     this.page = currentPage;
-//   //     this.fetchCarriers();
-//   // }
-//   this.addParams(currentPage)
-//     return currentPage;
-// }
-// addParams(currentPage?:any){
-  
-//   let newParams: {
-//     limit: number;
-//     page: number;
-//     fromStartDate?: string;
-//     toStartDate?: string;
-//     postalCode?: string;
-//     impressionType?: string;
-//     position?: string;
-//   } = {
-//     limit: 10,
-//     page: this.page,
-//   };
-//   const queryParams = new URLSearchParams();
-//     if (currentPage) queryParams.set('page', currentPage.toString());
-// if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
-// if (newParams.fromStartDate) queryParams.set('fromDate', newParams.fromStartDate);
-// if (newParams.toStartDate) queryParams.set('toDate', newParams.toStartDate);
-// if (newParams.postalCode) queryParams.set('postalCode', newParams.postalCode);
-// if (newParams.impressionType) queryParams.set('impressionType', newParams.impressionType);
-// if (newParams.position) queryParams.set('position', newParams.position);
-  
-//   history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
-//  }
+
 }

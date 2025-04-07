@@ -1,4 +1,12 @@
-<div class="dashboard_chat_overview">
+<div
+  appInfiniteScroll
+  [(page)]="page"
+  [(loaddedScreens)]="loaddedScreens"
+  [totalPages]="totalPages"
+  [spinnerLoader]="spinnerLoader"
+  (updateParams)="addParams($event)"
+  (fetchData)="fetchLoadQuoteList($event)"
+  class="dashboard_chat_overview">
   <div class="dco_head">
     <div class="dcoh_l">
       <p class="dco_h_tlt">Received Leads & Quotes Performance</p>
@@ -26,9 +34,9 @@
               <div class="lbl_1 w-100">
                 <div class="dco_bar">
                   <div class="bar_hed">
-                    <span class="bar_txt">Total Quotes</span> <span class="bar_vlu">{{totalRecoads ? totalRecoads : 0}}</span>
+                    <span class="bar_txt">Total Quotes</span> <span class="bar_vlu">{{totalQuotes ? totalQuotes : 0}}</span>
                   </div>
-                  <mat-progress-bar mode="determinate" [value]="totalQuotes"></mat-progress-bar>
+                  <mat-progress-bar mode="determinate" [value]="100 * (totalQuotes / totalQuotesLimit)"></mat-progress-bar>
                 </div>
                 <div class="dco_bar">
                   <div class="bar_hed">
@@ -127,17 +135,18 @@
               <mat-form-field appearance="none">
                 <mat-label>Table Search</mat-label>
                 <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
-                <input type="text" matInput placeholder="Search" class="form-control cn_input ms-2">
+                <input type="text" matInput placeholder="Search" 
+                (keyup)="applyFilter()"  [formControl]="searchControl" class="form-control cn_input ms-2">
               </mat-form-field>
             </div>
           </div>
           <div class="col-md-7">
             <div class="btn_r">
-              <span class="cn_btn txt_btn">
+              <span class="cn_btn txt_btn d-none">
                 <i class="fa-solid fa-plus me-2"></i>
                 <span>View All</span>
               </span>
-              <span class="cn_btn txt_btn">
+              <span class="cn_btn txt_btn d-none">
                 <i class="fa-solid fa-plus me-2"></i>
                 <span>Add</span>
               </span>
@@ -145,52 +154,48 @@
                 <i class="fa-sharp fa-solid fa-filter"></i>
               </span>
               <span class="cn_btn icn_btn">
-                <i class="fa-duotone fa-solid fa-rotate-right"></i>
+                <i class="fa-duotone fa-solid fa-rotate-right" (click)="refresh()"></i>
               </span>
             </div>
           </div>
         </div>
         <div class="filter_box" [ngClass]="{'d-none': !showAdvancedFilter}">
           <div class="filtr_con">
-              <div class="row">
-                <div class="col-md-3">
-                  <mat-form-field>
-                    <mat-label>Frequency</mat-label>
-                    <mat-select>
-                      <mat-option value="">Every Day</mat-option>
-                      <mat-option value="">Every Week</mat-option>
-                      <mat-option value="">Every Month</mat-option>
-                      <mat-option value="">Only One time</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
+              <div class="row" [formGroup]="advanceFilterForm">
                 <div class="col-md-3"> 
                   <mat-form-field>
                     <mat-label>Equipment Type</mat-label>
-                    <mat-select>
-                      <mat-option value="option_1">Option 1</mat-option>
-                      <mat-option value="option_2">Option 2</mat-option>
+                    <mat-select formControlName="equipmentType">
+                      <mat-option *ngFor="let equipment of equipmentTypesList" [value]="equipment.id">{{equipment.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div><div class="col-md-3"> 
+                  <mat-form-field>
+                    <mat-label>Shipment Type</mat-label>
+                    <mat-select formControlName="shipmentTypes">
+                      <mat-option *ngFor="let shipment of shipmentTypesList" [value]="shipment.id">{{shipment.name}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
                 <div class="col-md-3">
                   <mat-form-field>
                     <mat-label>Weight (lbs)</mat-label>
-                    <input type="text" matInput placeholder="Search">
+                    <input type="text" formControlName="weight" matInput placeholder="Search">
                   </mat-form-field>
                 </div>
                 <div class="col-md-3">
                   <mat-form-field>
                     <mat-label>Length (ft)</mat-label>
-                    <input type="text" matInput placeholder="Search">
+                    <input type="text" formControlName="length" matInput placeholder="Search">
                   </mat-form-field>
                 </div>
                 <div class="col-md-3">
                   <mat-form-field>
                     <mat-label>Carrier Information</mat-label>
-                    <input type="text" matInput placeholder="Search">
+                    <input type="text" matInput formControlName="userId" placeholder="Search">
                   </mat-form-field>
                 </div>
+                <div class="d-none">
                 <div class="col-md-12"></div>
                 <div class="col-md-3">
                   <p class="cn_input_lbl">Checkbox</p>
@@ -216,10 +221,11 @@
                     <mat-date-range-picker #picker></mat-date-range-picker>
                   </mat-form-field>
                 </div>
+                </div>
                 <div class="col-md-12">
                   <div class="fltr_actn">
-                    <button class="cn_btn btn_bordered">Clear</button>
-                    <button class="cn_btn">Apply</button>
+                    <button class="cn_btn btn_bordered" (click)="advanceFilterForm.reset()">Clear</button>
+                    <button class="cn_btn" (click)="applyAdvanceFilter()">Apply</button>
                   </div>
                 </div>
               </div>
@@ -235,7 +241,7 @@
           <div class="sticky_boder">Load ID</div>
         </th>
         <td mat-cell *matCellDef="let element">
-          <div class="user_dtl sticky_boder">{{element.loadId}}</div>
+          <div class="user_dtl sticky_boder">{{element.id}}</div>
         </td>
       </ng-container>
       <ng-container matColumnDef="requestedBy">
@@ -244,7 +250,7 @@
           <div class="user_dtl">
             <div class="ud_l">
               <i class="fa-duotone fa-solid fa-circle-user user_icon"></i>
-              <span class="user_Type">Carrier</span>
+              <span class="user_Type"> {{element.guestType}} </span>
             </div>
             <div class="ud_r">
               <div class="name_icn">
@@ -264,49 +270,53 @@
         <td mat-cell *matCellDef="let element" class="min_w_200" matTooltip="{{element.frequency}}">
           <div class="loca_col">
             <div class="loca_txt">
-              <!-- <img src="/assets/country/us.png" class="flaf_icn"> -->{{element.pickup}}
+              {{element.sourceLocationCity| titleCase}}, {{element.sourceLocationState}},
+              {{element.sourceLocationCountry}}
             </div>
-            <div class="frncy_txt {{formatFrequency(element.frequency)}}">
+            <div class="frncy_txt bg_{{frequency}}" *ngIf="(element.sourceDate | customDateTime : true) as frequency">
               <i class="fa-duotone fa-solid" [ngClass]="{
-                'fa-calendar-days': element.frequency === 'Every Day',
-                'fa-calendar-week': element.frequency === 'Every Week',
-                'fa-calendar-lines': element.frequency === 'Every Month',
-                'fa-calendar-clock': element.frequency === 'Only One time'
+                'fa-calendar-days': frequency === 'daily',
+                'fa-calendar-week': frequency === 'weekly',
+                'fa-calendar-lines': frequency === 'monthly',
+                'fa-calendar-clock': frequency === 'yearly'
               }"></i>
-              {{element.frequencyPicTime}}
+              {{element.sourceDate | customDateTime}}
             </div>
           </div>
-          
+
         </td>
       </ng-container>
       <ng-container matColumnDef="dropOff">
         <th mat-header-cell *matHeaderCellDef>DropOff</th>
         <td mat-cell *matCellDef="let element" class="min_w_200" matTooltip="{{element.frequency}}">
           <div class="loca_col">
-            <div class="loca_txt">{{element.dropOff}}</div>
-            <div class="frncy_txt {{formatFrequency(element.frequency)}}">
+            <div class="loca_txt">{{element.destinationLocationCity | titleCase}}, {{element.destinationLocationState}},
+              {{element.destinationLocationCountry}}</div>
+            <div class="frncy_txt bg_{{frequency}}"
+              *ngIf="(element.destinationDate | customDateTime : true) as frequency">
               <i class="fa-duotone fa-solid" [ngClass]="{
-                'fa-calendar-days': element.frequency === 'Every Day',
-                'fa-calendar-week': element.frequency === 'Every Week',
-                'fa-calendar-lines': element.frequency === 'Every Month',
-                'fa-calendar-clock': element.frequency === 'Only One time'
+                'fa-calendar-days': frequency === 'daily',
+                'fa-calendar-week': frequency === 'weekly',
+                'fa-calendar-lines': frequency === 'monthly',
+                'fa-calendar-clock': frequency === 'yearly'
               }"></i>
-              {{element.frequencyDropTime}}
+              {{element.destinationDate | customDateTime}}
             </div>
           </div>
         </td>
       </ng-container>
       <ng-container matColumnDef="distance">
         <th mat-header-cell *matHeaderCellDef>Distance</th>
-        <td mat-cell *matCellDef="let element">{{element.distance}} Miles</td>
+        <td mat-cell *matCellDef="let element">{{element.miles}} Miles</td>
       </ng-container>
       <ng-container matColumnDef="equipmentType">
         <th mat-header-cell *matHeaderCellDef>Equipment Type</th>
-        <td mat-cell *matCellDef="let element">{{element.equipmentType}}</td>
+        <td mat-cell *matCellDef="let element">{{element.equipmentType[0].equipmentTypeName}}</td>
       </ng-container>
       <ng-container matColumnDef="shipmentType">
         <th mat-header-cell *matHeaderCellDef>Shipment Type</th>
-        <td mat-cell *matCellDef="let element" matTooltip="{{element.shipmentTypeInfo}}">{{element.shipmentType}}</td>
+        <td mat-cell *matCellDef="let element" matTooltip="{{element.shipmentTypesLabel}}">
+          {{element.shipmentTypesLabel}}</td>
       </ng-container>
       <ng-container matColumnDef="weight">
         <th mat-header-cell *matHeaderCellDef>Weight (lbs)</th>
@@ -336,9 +346,13 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-      <div class="noMore_record">
-      <span>There are no more records to show.</span>
+
+    <div class="text-center my-5" *ngIf="showScrollSpinner">
+      <span class="spinner-border" role="status" style="color: #00b4fc"></span>
     </div>
+    <!-- <div class="noMore_record">
+      <span>There are no more records to show.</span>
+    </div> -->
   </div>
 </div>
 

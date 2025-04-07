@@ -18,7 +18,7 @@ import { TruckOnDemandComponent } from './truck-on-demand/truck-on-demand.compon
   declarations: [
     PostTruckAvailabilityComponent,
     MyTruckAvailabilityComponent,
-    TruckOnDemandComponent
+    TruckOnDemandComponent,
   ],
   imports: [
     MyTruckAvailabilityRoutingModule,

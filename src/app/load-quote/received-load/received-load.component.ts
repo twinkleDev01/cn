@@ -3,6 +3,8 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
 import { Chart, registerables } from 'chart.js';
+import { FormBuilder, FormControl } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-received-load',
@@ -30,44 +32,91 @@ export class ReceivedLoadComponent implements OnInit {
   repeatVisitors: number = 150;
   showAdvancedFilter = false;
   selectedChart: string = 'topEquipment';
+  
+  loaddedScreens = 0;
+  totalPages: number = 0;
+  showScrollSpinner: boolean = false;
+  dataSource = new MatTableDataSource([]);
+  searchControl = new FormControl('');
+  totalQuotes: number = 0;
+  totalQuotesLimit: number = 0;
+  isFilterApplied = false;
+  advanceFilterForm = this.fb.group({
+    shipmentTypes: new FormControl(''),
+    equipmentType: new FormControl(''),
+    weight: new FormControl(''),
+    length: new FormControl(''),
+    userId: new FormControl(''),
+  })
 
   constructor(
-    private commonService: CommonService,
+    private commonService: CommonService, private fb:FormBuilder
   ) { }
-  @HostListener('window:scroll', ['$event'])
-  onWindowScroll(event) {
-    this.getTotalHeight = window.innerHeight + window.scrollY;
-    if (
-      $(window).scrollTop() + 1 >=
-      $(document).height() - $(window).height()
-    ) {
-      if (
-        this.page !== this.totalPage &&
-        this.page >= 1 &&
-        this.totalPage &&
-        this.carrierUser.length > 0
-      ) {
-        this.page = this.page + 1;
-        this.spinnerLoader = true;
-        this.dataNotFound = false;
-        this.getMoreData(null);
-      } else if (this.spinnerLoader === false) {
-        this.dataNotFound = true;
-      }
-    }
-  }
 
 
   ngOnInit(): void {
     this.getCarrierUserData();
     this.createShipmentTypeBreakdownChart();
     this.createRecShipmentChart();
+    this.fetchLoadQuoteList(); 
+  }
+
+  fetchLoadQuoteList(currentPage: number = 1) {
+    const usertype = localStorage.getItem('user_type');
+
+    let newParams = this.addParams(currentPage);
+
+    // Conditionally set the API key for CARRIER or BROKER
+    const apiKey =
+      usertype === 'CARRIER'
+        ? AppSettings.APIsNameArray.RECENTVIEW.CARRIERLOADQUOTE
+        : AppSettings.APIsNameArray.RECENTVIEW.BROKERLOADQUOTE
+
+    // Only call the API if a valid API key is present
+    if (apiKey) {
+      let APIparams = {
+        apiKey: apiKey,
+        uri: this.commonService.getAPIUriFromParams(newParams),
+      };
+      this.showScrollSpinner = true;
+      this.loaddedScreens = this.page;
+      this.commonService.getList(APIparams).subscribe((response) => {
+        console.log('response', response);
+        this.showScrollSpinner = false;
+        this.totalPages = response.totalPages;
+        this.totalQuotes = response.total
+        this.totalQuotesLimit = this.getNearByLimit(response.total)
+        if (response && response.response) {
+          this.dataSource.data = this.dataSource.data.concat(response.response);
+        }
+      });
+    }
+  }
+
+  addParams(currentPage: number) {
+    const newParams = {
+      limit: 10,
+      page: currentPage,
+    };
+    const filters = this.advanceFilterForm.value;
+    const queryParams = new URLSearchParams();
+    queryParams.set('page', currentPage.toString());
+    queryParams.set('limit', newParams.limit.toString());
+    Object.keys(filters).filter((key) => filters[key] !== '').forEach((key) => {
+      newParams[key] = filters[key];
+      queryParams.set(key, filters[key]);
+    });
+
+    history.replaceState(
+      null,
+      '',
+      `${window.location.pathname}?${queryParams.toString()}`
+    );
+    return newParams;
   }
 
   // Progress Bar Percentage calculation
-  get totalQuotes(): number {
-    return 100;
-  }
+ 
   get totalMilesCovered(): number {
     return (this.uniqueVisitors / this.totalViews) * 100;
   }
@@ -250,87 +299,50 @@ export class ReceivedLoadComponent implements OnInit {
   
   // Profile analytics table
   displayedColumns: string[] = ['loadId', 'requestedBy', 'pickup', 'dropOff', 'distance', 'equipmentType', 'shipmentType', 'weight', 'length', 'notes', 'action'];
-  dataSource = [
-    { loadId: '001',
-      truckName: 'Truck Name',
-      carrierInformation: 'Carrier info',
-      pickup: 'Alachua, Florida, US',
-      dropOff: 'Alachua, Florida, US',
-      distance: '1234',
-      frequency: 'Every Day',
-      frequencyPicTime: '01 PM',
-      frequencyDropTime: '08 PM',
-      equipmentType: 'Auto Carrier Trailer',
-      shipmentType: 'LTL',
-      shipmentTypeInfo: 'Less Than Truckload',
-      costPerMile: '2',
-      weight: '1,750',
-      length: '44',
-      notes: 'Notes',
-      action: ''
-    },
-    { loadId: '002',
-      truckName: 'Truck Name',
-      carrierInformation: 'Carrier info',
-      pickup: 'Apple Valley, CA, US',
-      dropOff: 'Alachua, Florida, US',
-      distance: '1234',
-      frequency: 'Every Week',
-      frequencyPicTime: 'Monday 01 PM',
-      frequencyDropTime: 'Tuesday 04 PM',
-      equipmentType: 'Box Truck',
-      shipmentType: 'FTL',
-      shipmentTypeInfo: 'Full Truckload',
-      costPerMile: '2.270',
-      weight: '14,000',
-      length: '26',
-      notes: 'Notes',
-      action: ''
-    },
-    { loadId: '003',
-      truckName: 'Truck Name',
-      carrierInformation: 'Carrier info',
-      pickup: 'Alachua, Florida, US',
-      dropOff: 'Alachua, Florida, US',
-      distance: '1234',
-      frequency: 'Every Month',
-      frequencyPicTime: '12 Feb 01 PM',
-      frequencyDropTime: '15 Feb 05 PM',
-      equipmentType: 'Cargo Van',
-      shipmentType: 'Partial Shipments',
-      costPerMile: '2.86',
-      weight: '4,985',
-      length: '20',
-      notes: 'Notes',
-      action: ''
-    },
-    { loadId: '004',
-      truckName: 'Truck Name',
-      carrierInformation: 'Carrier info',
-      pickup: 'Alachua, Florida, US',
-      dropOff: 'Alachua, Florida, US',
-      distance: '1234',
-      frequency: 'Only One time',
-      frequencyPicTime: '12 Feb, 2025 01 PM',
-      frequencyDropTime: '13 Feb, 2025 05 PM',
-      equipmentType: 'Double Drop Trailer',
-      shipmentType: 'Partial Shipments',
-      costPerMile: '1.49',
-      weight: '5,200',
-      length: '30',
-      notes: 'Notes',
-      action: ''
-    },
-  ];
+ 
+  equipmentTypesList = []
+  shipmentTypesList = []
   
   toggleFilter() {
+    if((this.equipmentTypesList.length === 0 || this.shipmentTypesList.length === 0) && !this.showAdvancedFilter) {
+      let APIparams = {
+        apiKey: AppSettings.APIsNameArray.EXTRA.CONFIG,
+        uri: '',
+      };
+      
+      this.commonService.getList({apiKey: AppSettings.APIsNameArray.CARRIERS.GET, uri: ''}).subscribe((response) => {console.log(response)})
+      this.commonService.getList(APIparams).subscribe((response) => {
+        const {equipmentTypes, shipmentTypes} = response.response
+        this.equipmentTypesList = equipmentTypes;
+        this.shipmentTypesList = shipmentTypes;
+      })
+    }
     this.showAdvancedFilter = !this.showAdvancedFilter;
   }
   formatFrequency(frequency: string): string {
     if (!frequency) return '';
     return frequency.toLowerCase().replace(/\s+/g, '_');
   }
+  applyFilter() {
+    const filterValue = this.searchControl.value.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
+    this.isFilterApplied = filterValue.length > 0;
+  }
 
+  applyAdvanceFilter(){
+    this.loaddedScreens = 0;
+    this.page = 1;
+    this.dataSource.data = []; // Clear the existing data
+    this.fetchLoadQuoteList(1)
+  }
+  refresh(){
+    this.dataSource.data = []; // Clear the existing data
+    this.fetchLoadQuoteList(this.loaddedScreens)
+  }
+  getNearByLimit(d: number) {
+    const digitCount = (d).toString().length;
+    return Math.pow(10, digitCount);
+  }
   getCarrierUserData() {
     let uri = null;
     this.skeletonLoader = true;

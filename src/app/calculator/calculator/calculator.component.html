@@ -109,11 +109,12 @@
           <mat-panel-description class="txt_b">
             Total = <strong class="ms-1 me-1">{{companyOfficeTotal ? (companyOfficeTotal.toFixed(2)| currency:'USD':'symbol':'1.2-2'):'0.00'}}</strong> Per Trip
           </mat-panel-description>
+          <i class="fa-duotone fa-solid fa-angles-down fa-fade"></i>
         </mat-expansion-panel-header>
         <mat-card>
           <form [formGroup]="companyOfficeForm" (ngSubmit)="onSubmit()" class="cn_field">
-            <div  class="row" formArrayName="items">
-              <div  class="col-md-6" *ngFor="let item of companyOfficeControls; let i = index" [formGroupName]="i">
+            <div class="row" formArrayName="items">
+              <div class="col-md-6" *ngFor="let item of companyOfficeControls; let i = index" [formGroupName]="i">
                 <div class="row" style="position: relative;">
                   <div class="col-md-11" [style]="permitHide ? { display: 'none' }: ''">
                     <p class="cn_input_lbl">
@@ -160,14 +161,17 @@
                 </div>
               </div>
               <div class="col-md-12 text-end">
-                <button (click)="addItem('companyOffice')">Add More</button>
+                <button (click)="addItem('companyOffice')" class="cn_btn btn_bordered">
+                  <i class="fa-solid fa-plus"></i>
+                  Add More
+                </button>
               </div>
             </div>
           </form>
         </mat-card>
       </mat-expansion-panel>
 
-      <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
             Truck Expenses
@@ -177,71 +181,73 @@
               {{truckExpensesTotal ? (truckExpensesTotal.toFixed(2)| currency:'USD':'symbol':'1.2-2'): '0.00'}}
             </strong> Per Trip
           </mat-panel-description>
+          <i class="fa-duotone fa-solid fa-angles-down fa-fade"></i>
         </mat-expansion-panel-header>
         <mat-card>
           <form [formGroup]="truckExpensesForm" (ngSubmit)="onSubmit()" class="cn_field">
-            <div formArrayName="items">
-              <div *ngFor="let item of truckExpensesControls; let i = index" [formGroupName]="i">
-                <div class="col-md-6" [style]="permitHide ? { display: 'none' }: ''">
-                  <p class="cn_input_lbl">
-                    <span *ngIf="i<=5">{{truckExpensesInputs[i].name}}</span>
-                    <input *ngIf="i>=6" #inputField matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" placeholder="Expense type/Title"
-                      class="form-control cn_input" maxlength="64"
-                      (input)="onExpenseInput(i,truckExpensesInputs,inputField.value)">
-
-                    <span *ngIf="i<=5" class="material-icons info_icon" matTooltip={{truckExpensesInputs[i].description}}>
-                      info_outline </span>
-                  </p>
-                </div>
+            <div class="row" formArrayName="items">
+              <div class="col-md-6" *ngFor="let item of truckExpensesControls; let i = index" [formGroupName]="i">
                 <div class="row" style="position: relative;">
-                  <div class="col-md-3">
-                    <mat-form-field appearance="none" class="dropdown_menu">
-                      <input matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" formControlName="amount"
-                        (input)="onAmountInput(i,'truckExpensesForm')" placeholder="Enter Cost in $"
-                        class="form-control cn_input" maxlength="10" />
-                      <!-- validation error  -->
-                      <div
-                        *ngIf="truckExpensesControls[i].invalid && (truckExpensesControls[i].dirty || truckExpensesControls[i].touched)">
-                        <span *ngIf="truckExpensesControls[i].controls.amount.status=='INVALID'"
-                          class="errorMessage">Please enter a valid number.</span>
-                      </div>
-                    </mat-form-field>
+                  <div class="col-md-11" [style]="permitHide ? { display: 'none' }: ''">
+                    <p class="cn_input_lbl">
+                      <span *ngIf="i<=5">{{truckExpensesInputs[i].name}}</span>
+                      <input *ngIf="i>=6" #inputField matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" placeholder="Expense type/Title"
+                        class="form-control cn_input" maxlength="64"
+                        (input)="onExpenseInput(i,truckExpensesInputs,inputField.value)">
+  
+                      <span *ngIf="i<=5" class="material-icons info_icon" matTooltip={{truckExpensesInputs[i].description}}>
+                        info_outline </span>
+                    </p>
                   </div>
-                  <div class="col-md-3">
-                    <mat-form-field appearance="fill">
-                      <mat-label>Select a unit</mat-label>
-                      <mat-select formControlName="unit"
-                        (selectionChange)="onUnitSelection(i,$event,item,'truckExpensesForm')" [disabled]="i==2">
-                        <mat-option value="mile">Per Mile</mat-option>
-                        <mat-option value="trip">Per Trip</mat-option>
-                        <mat-option value="day">Per Day</mat-option>
-                        <mat-option value="month">Per Month</mat-option>
-                        <mat-option value="year">Yearly</mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                  <div class="col-md-6">
+                    <div class="combine_fields">
+                      <mat-form-field appearance="none" class="dropdown_menu">
+                        <input matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" formControlName="amount"
+                          (input)="onAmountInput(i,'truckExpensesForm')" placeholder="Enter Cost in $"
+                          class="form-control cn_input" maxlength="10" />
+                        <!-- validation error  -->
+                        <div
+                          *ngIf="truckExpensesControls[i].invalid && (truckExpensesControls[i].dirty || truckExpensesControls[i].touched)">
+                          <span *ngIf="truckExpensesControls[i].controls.amount.status=='INVALID'"
+                            class="errorMessage">Please enter a valid number.</span>
+                        </div>
+                      </mat-form-field>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Select a unit</mat-label>
+                        <mat-select formControlName="unit"
+                          (selectionChange)="onUnitSelection(i,$event,item,'truckExpensesForm')" [disabled]="i==2">
+                          <mat-option value="mile">Per Mile</mat-option>
+                          <mat-option value="trip">Per Trip</mat-option>
+                          <mat-option value="day">Per Day</mat-option>
+                          <mat-option value="month">Per Month</mat-option>
+                          <mat-option value="year">Yearly</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
                   </div>
-                  <div class="col-md-3">
-                    <p class="">Per Mile Value: <strong>{{ (item.get('perMile').value && totalMiles) ?
+                  <div class="col-md-6">
+                    <div class="calculated_value">
+                      <p class="">Per Mile Value: <strong>{{ (item.get('perMile').value && totalMiles) ?
                         (+item.get('perMile').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') :'-'}}</strong></p>
-                  </div>
-
-                  <div class="col-md-3 mb_1_sm">
-                    <p class="">Per Trip Value: <strong>{{ item.get('perTrip').value ?
-                        (+item.get('perTrip').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') : '-'}}</strong></p>
-                  .
+                        <p class="">Per Trip Value: <strong>{{ item.get('perTrip').value ? (+item.get('perTrip').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') : '-'}}</strong></p>
+                    </div>
                   </div>
                   <i *ngIf="i>=6" (click)="removeItem(i,truckExpensesInputs,'trailerExpenses')"
                     class="fa-solid fa-xmark remove_expenses pointer"></i>
                 </div>
-
               </div>
-              <button (click)="addItem('truckExpenses')">Add More</button>
+              <div class="col-md-12 text-end">
+                <button (click)="addItem('truckExpenses')" class="cn_btn btn_bordered">
+                  <i class="fa-solid fa-plus"></i>
+                  Add More
+                </button>
+              </div>              
             </div>
           </form>
         </mat-card>
       </mat-expansion-panel>
 
-      <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
             Trailer Expenses
@@ -250,68 +256,72 @@
             Total =<strong class="ms-1 me-1"> {{trailerExpensesTotal ? (trailerExpensesTotal.toFixed(2)| currency:'USD':'symbol':'1.2-2'):'0.00'}}</strong>
             Per Trip
           </mat-panel-description>
+          <i class="fa-duotone fa-solid fa-angles-down fa-fade"></i>
         </mat-expansion-panel-header>
         <mat-card>
           <form [formGroup]="trailerExpenseForm" (ngSubmit)="onSubmit()" class="cn_field">
-            <div formArrayName="items">
-              <div *ngFor="let item of trailerControls; let i = index" [formGroupName]="i">
-                <div class="col-md-6" [style]="permitHide ? { display: 'none' }: ''">
-                  <p class="cn_input_lbl">
-                    <span *ngIf="i<=6">{{trailerExpensesInputs[i].name}}</span>
-                    <input *ngIf="i>=7" #inputField matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" placeholder="Expense type/Title"
-                      class="form-control cn_input" maxlength="64"
-                      (input)="onExpenseInput(i,trailerExpensesInputs,inputField.value)">
-
-                    <span *ngIf="i<=6" class="material-icons info_icon"
-                      matTooltip={{trailerExpensesInputs[i].description}}> info_outline </span>
-                  </p>
-                </div>
+            <div class="row" formArrayName="items">
+              <div class="col-md-6" *ngFor="let item of trailerControls; let i = index" [formGroupName]="i">
                 <div class="row" style="position: relative;">
-                  <div class="col-md-3">
-                    <mat-form-field appearance="none" class="dropdown_menu">
-                      <input matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" formControlName="amount"
-                        (input)="onAmountInput(i,'trailerExpenseForm')" placeholder="Enter Cost in $"
-                        class="form-control cn_input" maxlength="10" />
-                      <!-- validation error  -->
-                      <div *ngIf="trailerControls[i].invalid && (trailerControls[i].dirty || trailerControls[i].touched)">
-                        <span *ngIf="trailerControls[i].controls.amount.status=='INVALID'" class="errorMessage">Please
-                          enter a valid number.</span>
-                      </div>
-                    </mat-form-field>
+                  <div class="col-md-11" [style]="permitHide ? { display: 'none' }: ''">
+                    <p class="cn_input_lbl">
+                      <span *ngIf="i<=6">{{trailerExpensesInputs[i].name}}</span>
+                      <input *ngIf="i>=7" #inputField matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" placeholder="Expense type/Title" class="form-control cn_input" maxlength="64" (input)="onExpenseInput(i,trailerExpensesInputs,inputField.value)">
+                      <span *ngIf="i<=6" class="material-icons info_icon" matTooltip={{trailerExpensesInputs[i].description}}> info_outline </span>
+                    </p>
                   </div>
-                  <div class="col-md-3">
-                    <mat-form-field appearance="fill">
-                      <mat-label>Select a unit</mat-label>
-                      <mat-select formControlName="unit"
-                        (selectionChange)="onUnitSelection(i,$event,item,'trailerExpenseForm')">
-                        <mat-option value="mile">Per Mile</mat-option>
-                        <mat-option value="trip">Per Trip</mat-option>
-                        <mat-option value="day">Per Day</mat-option>
-                        <mat-option value="month">Per Month</mat-option>
-                        <mat-option value="year">Yearly</mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                  <div class="col-md-6" style="position: relative;">
+                    <div class="combine_fields">
+                      <mat-form-field appearance="none" class="dropdown_menu">
+                        <input matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" formControlName="amount"
+                          (input)="onAmountInput(i,'trailerExpenseForm')" placeholder="Enter Cost in $"
+                          class="form-control cn_input" maxlength="10" />
+                        <!-- validation error  -->
+                        <div *ngIf="trailerControls[i].invalid && (trailerControls[i].dirty || trailerControls[i].touched)">
+                          <span *ngIf="trailerControls[i].controls.amount.status=='INVALID'" class="errorMessage">Please
+                            enter a valid number.</span>
+                        </div>
+                      </mat-form-field>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Select a unit</mat-label>
+                        <mat-select formControlName="unit"
+                          (selectionChange)="onUnitSelection(i,$event,item,'trailerExpenseForm')">
+                          <mat-option value="mile">Per Mile</mat-option>
+                          <mat-option value="trip">Per Trip</mat-option>
+                          <mat-option value="day">Per Day</mat-option>
+                          <mat-option value="month">Per Month</mat-option>
+                          <mat-option value="year">Yearly</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
                   </div>
-                  <div class="col-md-3">
-                    <p class="">Per Mile Value: <strong>{{ (item.get('perMile').value && totalMiles) ?
-                        (+item.get('perMile').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') :'-'}}</strong></p>
-                  </div>
-                  <div class="col-md-3 mb_1_sm">
-                    <p class="">Per Trip Value: <strong>{{ item.get('perTrip').value ?
-                        (+item.get('perTrip').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') : '-'}}</strong></p>
-                  
-                  </div>
-                  <i *ngIf="i>=7" (click)="removeItem(i,trailerExpensesInputs,'trailerExpenses')"
-                    class="fa-solid fa-xmark remove_expenses pointer"></i>
+                    <div class="col-md-6">
+                      <div class="calculated_value">
+                        <p>
+                          Per Mile Value: 
+                          <strong>{{ (item.get('perMile').value && totalMiles) ? (+item.get('perMile').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') :'-'}}</strong>
+                        </p>
+                        <p>
+                          Per Trip Value: 
+                          <strong>{{ item.get('perTrip').value ? (+item.get('perTrip').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') : '-'}}</strong>
+                        </p>
+                      </div>                      
+                    </div>
+                    <i *ngIf="i>=7" (click)="removeItem(i,trailerExpensesInputs,'trailerExpenses')" class="fa-solid fa-xmark remove_expenses pointer"></i>
                 </div>
               </div>
-              <button (click)="addItem('trailerExpenses')">Add More</button>
+              <div class="col-md-12 text-end">
+                <button (click)="addItem('trailerExpenses')" class="cn_btn btn_bordered">
+                  <i class="fa-solid fa-plus"></i>
+                  Add More
+                </button>
+              </div>
             </div>
           </form>
         </mat-card>
       </mat-expansion-panel>
 
-      <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
             Drive Expenses
@@ -320,69 +330,70 @@
             Total = <strong class="ms-1 me-1">{{driverExpensesTotal ? (driverExpensesTotal.toFixed(2)| currency:'USD':'symbol':'1.2-2'):'0.00'}}</strong>
             Per Trip
           </mat-panel-description>
+          <i class="fa-duotone fa-solid fa-angles-down fa-fade"></i>
         </mat-expansion-panel-header>
         <mat-card>
           <form [formGroup]="driverExpenseForm" (ngSubmit)="onSubmit()" class="cn_field">
-            <div formArrayName="items">
-              <div *ngFor="let item of driverControls; let i = index" [formGroupName]="i">
-                <div class="col-md-6" [style]="permitHide ? { display: 'none' }: ''">
-                  <p class="cn_input_lbl">
-                    <span *ngIf="i<=2">{{driverExpensesInputs[i].name}}</span>
-                    <input *ngIf="i>=3" #inputField matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" placeholder="Expense type/Title"
-                      class="form-control cn_input" maxlength="64"
-                      (input)="onExpenseInput(i,driverExpensesInputs,inputField.value)">
-
-                    <span *ngIf="i<=2" class="material-icons info_icon"
-                      matTooltip={{driverExpensesInputs[i].description}}> info_outline </span>
-                  </p>
-                </div>
+            <div class="row" formArrayName="items">
+              <div class="col-md-6" *ngFor="let item of driverControls; let i = index" [formGroupName]="i">
                 <div class="row" style="position: relative;">
-                  <div class="col-md-3">
-                    <mat-form-field appearance="none" class="dropdown_menu">
-                      <input matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" formControlName="amount"
-                        (input)="onAmountInput(i,'driverExpenseForm')" placeholder="Enter Cost in $"
-                        class="form-control cn_input" maxlength="10" />
-                      <!-- validation error  -->
-                      <div *ngIf="driverControls[i].invalid && (driverControls[i].dirty || driverControls[i].touched)">
-                        <span *ngIf="driverControls[i].controls.amount.status=='INVALID'" class="errorMessage">Please
-                          enter a valid number.</span>
-                      </div>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-3">
-                    <mat-form-field appearance="fill">
-                      <mat-label>Select a unit</mat-label>
-                      <mat-select formControlName="unit"
-                        (selectionChange)="onUnitSelection(i,$event,item,'driverExpenseForm')">
-                        <mat-option value="mile">Per Mile</mat-option>
-                        <mat-option value="trip">Per Trip</mat-option>
-                        <mat-option value="day">Per Day</mat-option>
-                        <mat-option value="month">Per Month</mat-option>
-                        <mat-option value="year">Yearly</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-3">
-                    <p class="">Per Mile Value: <strong>{{ (item.get('perMile').value && totalMiles) ?
-                        (+item.get('perMile').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') :'-'}}</strong></p>
-                  </div>
-                  <div class="col-md-3 mb_1_sm">
-                    <p class="">Per Trip Value: <strong>{{ item.get('perTrip').value ?
-                        (+item.get('perTrip').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') : '-'}}</strong></p>
-                  
-                  </div>
-                  <i *ngIf="i>=3" (click)="removeItem(i,driverExpensesInputs,'driverExpenses')"
-                    class="fa-solid fa-xmark remove_expenses pointer"></i>
-                </div>
+                  <div class="col-md-11" [style]="permitHide ? { display: 'none' }: ''">
+                    <p class="cn_input_lbl">
+                      <span *ngIf="i<=2">{{driverExpensesInputs[i].name}}</span>
+                      <input *ngIf="i>=3" #inputField matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" placeholder="Expense type/Title"
+                        class="form-control cn_input" maxlength="64"
+                        (input)="onExpenseInput(i,driverExpensesInputs,inputField.value)">
 
+                      <span *ngIf="i<=2" class="material-icons info_icon"
+                        matTooltip={{driverExpensesInputs[i].description}}> info_outline </span>
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="combine_fields">
+                      <mat-form-field appearance="none" class="dropdown_menu">
+                        <input matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" formControlName="amount"
+                          (input)="onAmountInput(i,'driverExpenseForm')" placeholder="Enter Cost in $"
+                          class="form-control cn_input" maxlength="10" />
+                        <!-- validation error  -->
+                        <div *ngIf="driverControls[i].invalid && (driverControls[i].dirty || driverControls[i].touched)">
+                          <span *ngIf="driverControls[i].controls.amount.status=='INVALID'" class="errorMessage">Please
+                            enter a valid number.</span>
+                        </div>
+                      </mat-form-field>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Select a unit</mat-label>
+                        <mat-select formControlName="unit"
+                          (selectionChange)="onUnitSelection(i,$event,item,'driverExpenseForm')">
+                          <mat-option value="mile">Per Mile</mat-option>
+                          <mat-option value="trip">Per Trip</mat-option>
+                          <mat-option value="day">Per Day</mat-option>
+                          <mat-option value="month">Per Month</mat-option>
+                          <mat-option value="year">Yearly</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="calculated_value">
+                      <p>Per Mile Value: <strong>{{ (item.get('perMile').value && totalMiles) ? (+item.get('perMile').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') :'-'}}</strong></p>
+                      <p>Per Trip Value: <strong>{{ item.get('perTrip').value ? (+item.get('perTrip').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') : '-'}}</strong></p>
+                    </div>
+                  </div>
+                  <i *ngIf="i>=3" (click)="removeItem(i,driverExpensesInputs,'driverExpenses')" class="fa-solid fa-xmark remove_expenses pointer"></i>
+                </div>
               </div>
-              <button (click)="addItem('driverExpenses')">Add More</button>
+              <div class="col-md-12 text-end">
+                <button (click)="addItem('driverExpenses')" class="cn_btn btn_bordered">
+                  <i class="fa-solid fa-plus"></i>
+                  Add More
+                </button>
+              </div>
             </div>
           </form>
         </mat-card>
       </mat-expansion-panel>
 
-      <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
             On Road Expenses
@@ -391,69 +402,66 @@
             Total = <strong class="ms-1 me-1">{{onRoadExpensesTotal ? (onRoadExpensesTotal.toFixed(2)| currency:'USD':'symbol':'1.2-2'):'0.00'}}</strong>
             Per Trip
           </mat-panel-description>
+          <i class="fa-duotone fa-solid fa-angles-down fa-fade"></i>
         </mat-expansion-panel-header>
         <mat-card>
           <form [formGroup]="onRoadExpenseForm" (ngSubmit)="onSubmit()" class="cn_field">
-            <div formArrayName="items">
-              <div *ngFor="let item of onRoadControls; let i = index" [formGroupName]="i">
-                <div class="col-md-6" [style]="permitHide ? { display: 'none' }: ''">
-                  <p class="cn_input_lbl">
-                    <span *ngIf="i<=5">{{onRoadExpensesInputs[i].name}}</span>
-                    <input *ngIf="i>=6" #inputField matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" placeholder="Expense type/Title"
-                      class="form-control cn_input" maxlength="64"
-                      (input)="onExpenseInput(i,onRoadExpensesInputs,inputField.value)">
-
-                    <span *ngIf="i<=5" class="material-icons info_icon"
-                      matTooltip={{onRoadExpensesInputs[i].description}}> info_outline </span>
-                  </p>
-                </div>
+            <div class="row" formArrayName="items" style="position: relative;">
+              <div class="col-md-6" *ngFor="let item of onRoadControls; let i = index" [formGroupName]="i">
                 <div class="row" style="position: relative;">
-                  <div class="col-md-3">
-                    <mat-form-field appearance="none" class="dropdown_menu">
-                      <input matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" formControlName="amount"
-                        (input)="onAmountInput(i,'onRoadExpenseForm')" placeholder="Enter Cost in $"
-                        class="form-control cn_input" maxlength="10" />
-                      <!-- validation error  -->
-                      <div *ngIf="onRoadControls[i].invalid && (onRoadControls[i].dirty || onRoadControls[i].touched)">
-                        <span *ngIf="onRoadControls[i].controls.amount.status=='INVALID'" class="errorMessage">Please
-                          enter a valid number.</span>
-                      </div>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-3">
-                    <mat-form-field appearance="fill">
-                      <mat-label>Select a unit</mat-label>
-                      <mat-select formControlName="unit"
-                        (selectionChange)="onUnitSelection(i,$event,item,'onRoadExpenseForm')">
-                        <mat-option value="mile">Per Mile</mat-option>
-                        <mat-option value="trip">Per Trip</mat-option>
-                        <mat-option value="day">Per Day</mat-option>
-                        <mat-option value="month">Per Month</mat-option>
-                        <mat-option value="year">Yearly</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-3">
-                    <p class="">Per Mile Value:<strong> {{ (item.get('perMile').value && totalMiles) ?
-                        (+item.get('perMile').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') :'-'}}</strong></p>
-                  </div>
-                  <div class="col-md-3 mb_1_sm">
-                    <p class="">Per Trip Value: <strong>{{ item.get('perTrip').value ?
-                        (+item.get('perTrip').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') : '-'}}</strong></p>
-                  
-                  </div>
-                  <i *ngIf="i>=6" (click)="removeItem(i,driverExpensesInputs,'onRoadExpenses')"
-                    class="fa-solid fa-xmark remove_expenses pointer"></i>
-                </div>
+                  <div class="col-md-11" [style]="permitHide ? { display: 'none' }: ''">
+                    <p class="cn_input_lbl">
+                      <span *ngIf="i<=5">{{onRoadExpensesInputs[i].name}}</span>
+                      <input *ngIf="i>=6" #inputField matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" placeholder="Expense type/Title"
+                        class="form-control cn_input" maxlength="64"
+                        (input)="onExpenseInput(i,onRoadExpensesInputs,inputField.value)">
 
+                      <span *ngIf="i<=5" class="material-icons info_icon"
+                        matTooltip={{onRoadExpensesInputs[i].description}}> info_outline </span>
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="combine_fields">
+                      <mat-form-field appearance="none" class="dropdown_menu">
+                        <input matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" formControlName="amount" (input)="onAmountInput(i,'onRoadExpenseForm')" placeholder="Enter Cost in $" class="form-control cn_input" maxlength="10" />
+                        <!-- validation error  -->
+                        <div *ngIf="onRoadControls[i].invalid && (onRoadControls[i].dirty || onRoadControls[i].touched)">
+                          <span *ngIf="onRoadControls[i].controls.amount.status=='INVALID'" class="errorMessage">Please enter a valid number.</span>
+                        </div>
+                      </mat-form-field>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Select a unit</mat-label>
+                        <mat-select formControlName="unit" (selectionChange)="onUnitSelection(i,$event,item,'onRoadExpenseForm')">
+                          <mat-option value="mile">Per Mile</mat-option>
+                          <mat-option value="trip">Per Trip</mat-option>
+                          <mat-option value="day">Per Day</mat-option>
+                          <mat-option value="month">Per Month</mat-option>
+                          <mat-option value="year">Yearly</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="calculated_value">
+                      <p class="">Per Mile Value:<strong> {{ (item.get('perMile').value && totalMiles) ? (+item.get('perMile').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') :'-'}}</strong></p>
+                      <p class="">Per Trip Value: <strong>{{ item.get('perTrip').value ? (+item.get('perTrip').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') : '-'}}</strong></p>
+                    </div>
+                  </div>
+                  <i *ngIf="i>=6" (click)="removeItem(i,driverExpensesInputs,'onRoadExpenses')" class="fa-solid fa-xmark remove_expenses pointer"></i>
+                </div>
               </div>
-              <button (click)="addItem('onRoadExpenses')">Add More</button>
+              <div class="col-md-12 text-end">
+                <button (click)="addItem('onRoadExpenses')" class="cn_btn btn_bordered">
+                  <i class="fa-solid fa-plus"></i>
+                  Add More
+                </button>
+              </div>
             </div>
           </form>
         </mat-card>
       </mat-expansion-panel>
 
-      <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
             Miscellaneous and other
@@ -462,91 +470,184 @@
             Total = <strong class="ms-1 me-1">{{miscellaneousTotal ? (miscellaneousTotal.toFixed(2)| currency:'USD':'symbol':'1.2-2'):'0.00'}}</strong> Per
             Trip
           </mat-panel-description>
+          <i class="fa-duotone fa-solid fa-angles-down fa-fade"></i>
         </mat-expansion-panel-header>
         <mat-card>
           <form [formGroup]="miscellaneousForm" (ngSubmit)="onSubmit()" class="cn_field">
-            <div formArrayName="items">
-              <div *ngFor="let item of miscellaneousControls; let i = index" [formGroupName]="i">
-                <div class="col-md-6" [style]="permitHide ? { display: 'none' }: ''">
-                  <p class="cn_input_lbl">
-                    <span *ngIf="i<=2">{{miscellaneousInputs[i]?.name}}</span>
-                    <input *ngIf="i>=3" #inputField matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$"
-                      value="{{miscellaneousInputs[i]?.name}}" placeholder="Expense type/Title"
-                      class="form-control cn_input" maxlength="64"
-                      (input)="onExpenseInput(i,miscellaneousInputs,inputField.value)">
-
-                    <span *ngIf="i<=2" class="material-icons info_icon" matTooltip={{miscellaneousInputs[i].description}}>
-                      info_outline </span>
-                  </p>
-                </div>
+            <div class="row" formArrayName="items">
+              <div class="col-md-6" *ngFor="let item of miscellaneousControls; let i = index" [formGroupName]="i">
                 <div class="row" style="position: relative;">
-                  <div class="col-md-3">
-                    <mat-form-field appearance="none" class="dropdown_menu">
-                      <input matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" formControlName="amount"
-                        (input)="onAmountInput(i,'miscellaneousForm')" placeholder="Enter Cost in $"
-                        class="form-control cn_input" maxlength="10" />
-                      <!-- validation error  -->
-                      <div
-                        *ngIf="miscellaneousControls[i].invalid && (miscellaneousControls[i].dirty || miscellaneousControls[i].touched)">
-                        <span *ngIf="miscellaneousControls[i].controls.amount.status=='INVALID'"
-                          class="errorMessage">Please enter a valid number.</span>
-                      </div>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-3">
-                    <mat-form-field appearance="fill">
-                      <mat-label>Select a unit</mat-label>
-                      <mat-select formControlName="unit"
-                        (selectionChange)="onUnitSelection(i,$event,item,'miscellaneousForm')">
-                        <mat-option value="mile">Per Mile</mat-option>
-                        <mat-option value="trip">Per Trip</mat-option>
-                        <mat-option value="day">Per Day</mat-option>
-                        <mat-option value="month">Per Month</mat-option>
-                        <mat-option value="year">Yearly</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-3">
-                    <p class="">Per Mile Value: <strong>{{ (item.get('perMile').value && totalMiles) ?
-                        (+item.get('perMile').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') :'-'}} </strong></p>
-                  </div>
-                  <div class="col-md-3 mb_1_sm">
-                    <p class="">Per Trip Value: <strong>{{ item.get('perTrip').value ?
-                        (+item.get('perTrip').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') : '-'}}</strong></p>
-                  
-                  </div>
-                  <i *ngIf="i>=3" (click)="removeItem(i,miscellaneousInputs,'miscellaneousExpenses')"
-                    class="fa-solid fa-xmark remove_expenses pointer"></i>
-                </div>
+                  <div class="col-md-11" [style]="permitHide ? { display: 'none' }: ''">
+                    <p class="cn_input_lbl">
+                      <span *ngIf="i<=2">{{miscellaneousInputs[i]?.name}}</span>
+                      <input *ngIf="i>=3" #inputField matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$"
+                        value="{{miscellaneousInputs[i]?.name}}" placeholder="Expense type/Title"
+                        class="form-control cn_input" maxlength="64"
+                        (input)="onExpenseInput(i,miscellaneousInputs,inputField.value)">
 
+                      <span *ngIf="i<=2" class="material-icons info_icon" matTooltip={{miscellaneousInputs[i].description}}>
+                        info_outline </span>
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="combine_fields">
+                      <mat-form-field appearance="none" class="dropdown_menu">
+                        <input matInput type="text" pattern="^[0-9]+(\.[0-9]+)?$" formControlName="amount"
+                          (input)="onAmountInput(i,'miscellaneousForm')" placeholder="Enter Cost in $"
+                          class="form-control cn_input" maxlength="10" />
+                        <!-- validation error  -->
+                        <div
+                          *ngIf="miscellaneousControls[i].invalid && (miscellaneousControls[i].dirty || miscellaneousControls[i].touched)">
+                          <span *ngIf="miscellaneousControls[i].controls.amount.status=='INVALID'"
+                            class="errorMessage">Please enter a valid number.</span>
+                        </div>
+                      </mat-form-field>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Select a unit</mat-label>
+                        <mat-select formControlName="unit"
+                          (selectionChange)="onUnitSelection(i,$event,item,'miscellaneousForm')">
+                          <mat-option value="mile">Per Mile</mat-option>
+                          <mat-option value="trip">Per Trip</mat-option>
+                          <mat-option value="day">Per Day</mat-option>
+                          <mat-option value="month">Per Month</mat-option>
+                          <mat-option value="year">Yearly</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="calculated_value">
+                      <p>Per Mile Value: <strong>{{ (item.get('perMile').value && totalMiles) ? (+item.get('perMile').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') :'-'}} </strong></p>
+                      <p>Per Trip Value: <strong>{{ item.get('perTrip').value ? (+item.get('perTrip').value.toFixed(2)| currency:'USD':'symbol':'1.2-2') : '-'}}</strong></p>
+                    </div>
+                  </div>
+                  <i *ngIf="i>=3" (click)="removeItem(i,miscellaneousInputs,'miscellaneousExpenses')" class="fa-solid fa-xmark remove_expenses pointer"></i>
+                </div>
               </div>
-              <button (click)="addItem('miscellaneousExpenses')">Add More</button>
+              <div class="col-md-12 text-end">
+                <button (click)="addItem('miscellaneousExpenses')" class="cn_btn btn_bordered">
+                  <i class="fa-solid fa-plus"></i>
+                  Add More
+                </button>
+              </div>
             </div>
           </form>
         </mat-card>
       </mat-expansion-panel>
     </mat-accordion>
   </div>
-  <div class="example-form-field overall-estimation">
-    <p class="mb-2">Total Trip Cost :<strong> {{this.overallTotal('trip')| currency:'USD':'symbol':'1.2-2'}}</strong></p>
-    <p>Overall cost per mile : <strong>{{this.overallTotal('mile')| currency:'USD':'symbol':'1.2-2'}}</strong></p>
-  </div>
-  <div class="text-end">
-    <button class="rounded-0 shadow-none mb-3" mat-raised-button color="primary" *ngIf="!isEditPage"
-    [disabled]="(miscellaneousTotal==0 && onRoadExpensesTotal==0 && driverExpensesTotal==0 && trailerExpensesTotal==0 &&truckExpensesTotal==0 && companyOfficeTotal==0)"
-    (click)='onSave()'>Save report</button>
-    <button class="rounded-0 shadow-none mb-3" mat-raised-button color="primary" *ngIf="isEditPage"
-    [disabled]="(miscellaneousTotal==0 && onRoadExpensesTotal==0 && driverExpensesTotal==0 && trailerExpensesTotal==0 &&truckExpensesTotal==0 && companyOfficeTotal==0)"
-    (click)='onUpdate()'>Update report</button>
-    <button class="rounded-0 shadow-none mb-3 ms-3" mat-raised-button color="primary"
-      [disabled]="(miscellaneousTotal==0 && onRoadExpensesTotal==0 && driverExpensesTotal==0 && trailerExpensesTotal==0 &&truckExpensesTotal==0 && companyOfficeTotal==0)"
-      (click)='onSubmit()'>View Analysis report</button>
+  <div class="content_box">
+    <div class="content_body">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="total_vue">Total Trip Cost: <strong class="txt_p fw_5"> {{this.overallTotal('trip') | currency:'USD':'symbol':'1.2-2'}}</strong></p>
+          <p class="total_vue">Overall cost per mile: <strong class="txt_p fw_5"> {{this.overallTotal('mile') | currency:'USD':'symbol':'1.2-2'}}</strong></p>
+        </div>
+        <div class="col-md-6 total_vue_actn">
+          <button class="cn_btn btn_bordered me-3" [disabled]="(miscellaneousTotal==0 && onRoadExpensesTotal==0 && driverExpensesTotal==0 && trailerExpensesTotal==0 &&truckExpensesTotal==0 && companyOfficeTotal==0)" (click)='onSubmit()'>View Analysis report</button>
+          <button class="cn_btn" *ngIf="!isEditPage" [disabled]="(miscellaneousTotal==0 && onRoadExpensesTotal==0 && driverExpensesTotal==0 && trailerExpensesTotal==0 &&truckExpensesTotal==0 && companyOfficeTotal==0)" (click)='onSave()'>Save report</button>
+          <button class="cn_btn" *ngIf="isEditPage" [disabled]="(miscellaneousTotal==0 && onRoadExpensesTotal==0 && driverExpensesTotal==0 && trailerExpensesTotal==0 &&truckExpensesTotal==0 && companyOfficeTotal==0)" (click)='onUpdate()'>Update report</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 
 <!-- //chart code start here -->
-<div [ngStyle]="isSubmitClicked ? '':{ display: 'none' }">
+<div class="content_box chart_analysis" [ngStyle]="isSubmitClicked ? '':{ display: 'none' }"><div class="contnt_hed mb-1">
+  <div class="ch_l">
+    <h3 class="ch_tlt">Calculator Analysis report</h3>
+  </div>
+  <div class="ch_rl"></div>
+</div>
+  <div class="content_body">
+    <div class="row" *ngIf="isSubmitClicked" id="calculator_box">
+      <div class="col-md-4">
+        <div class="ca_info">
+          <div style="margin-left: 2% " class="pie_chart_list">
+            <li class="office">Office and Company Expenses: <strong>{{companyOfficeTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+            <li class="truck">Truck Expeneses: <strong>{{truckExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+            <li class="trailer">Trailer Expeneses: <strong>{{trailerExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+            <li class="driver">Driver Expeneses: <strong>{{driverExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+            <li class="onroad">On-Road Expeneses: <strong>{{onRoadExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+            <li class="miscellaneous">Miscellaneous Expenses: <strong>{{miscellaneousTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <!-- <p class="ca_info_lbl">Bar Chart</p> -->
+        <div class="chart_box">
+          <canvas id="costPerMilesBarChart"></canvas>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="ca_info">
+          <!-- <p class="ca_info_lbl">Pie Chart</p> -->
+          <div class="chart_box">
+            <canvas id="costPerMilesPieChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="chart_analysis" [ngStyle]="isSubmitClicked ? '':{ display: 'none' }">
+  <div class="row" *ngIf="isSubmitClicked" id="calculator_box">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="ca_info">
+            <p class="ca_info_lbl">Bar Chart</p>
+            <div style="margin-left: 2% " class="pie_chart_list">
+              <li class="office">Office and Company Expenses: <strong>{{companyOfficeTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+              <li class="truck">Truck Expeneses: <strong>{{truckExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+              <li class="trailer">Trailer Expeneses: <strong>{{trailerExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+              <li class="driver">Driver Expeneses: <strong>{{driverExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+              <li class="onroad">On-Road Expeneses: <strong>{{onRoadExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+              <li class="miscellaneous">Miscellaneous Expenses: <strong>{{miscellaneousTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="chart_box">
+            <canvas id="costPerMilesBarChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="ca_info">
+            <p class="ca_info_lbl">Pie Chart</p>
+            <div style="margin-left: 2%;" class="pie_chart_list">
+              <li class="office">Office and Company Expenses: <strong>{{companyOfficeTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+              <li class="truck">Truck Expeneses: <strong>{{truckExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+              <li class="trailer">Trailer Expeneses: <strong>{{trailerExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+              <li class="driver">Driver Expeneses: <strong>{{driverExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+              <li class="onroad">On-Road Expeneses: <strong>{{onRoadExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+              <li class="miscellaneous">Miscellaneous Expenses: <strong>{{miscellaneousTotal| currency:'USD':'symbol':'1.2-2'}}</strong></li>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="chart_box">
+            <canvas id="costPerMilesPieChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="ca_info">
+        <p class="ca_info_lbl">AI analysis report</p>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- <div [ngStyle]="isSubmitClicked ? '':{ display: 'none' }">
   <mat-tab-group (selectedTabChange)="tabChangeEvent($event)" style="background-color: white;" *ngIf="isSubmitClicked"
     id="calculator_box">
     <mat-tab label="AI Report">
@@ -583,4 +684,4 @@
       </div>
     </mat-tab>
   </mat-tab-group>
-</div>
+</div> -->

@@ -17,7 +17,6 @@ import { SharedModule } from '../shared/shared.module';
   declarations: [
     ProfileAnalyticsComponent,
     ContactLeadComponent,
-    // TimeAgoPipe
   ],
   imports: [
     CommonModule,

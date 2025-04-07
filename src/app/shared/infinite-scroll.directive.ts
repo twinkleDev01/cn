@@ -28,9 +28,11 @@ export class InfiniteScrollDirective {
     if (documentHeight - scrollHeight <= 1) {
       if (this.page <= this.totalPages && !this.spinnerLoader) {
         if (this.page <= this.loaddedScreens) {
+          console.log("3222")
           this.page += 1;
           this.pageChange.emit(this.page);
         }
+        console.log(this.totalPages, this.page, this.loaddedScreens, "3444");
         if (this.totalPages >= this.page && this.loaddedScreens < this.page) {
           this.fetchData.emit();
           this.loaddedScreens += 1;
@@ -41,7 +43,7 @@ export class InfiniteScrollDirective {
     this.getCurrentPage()
   }
   getCurrentPage() {
-    // console.log('📌 Debugging Scroll Behavior');
+    console.log('📌 Debugging Scroll Behavior');
 
     const tbody = document.querySelector('tbody');
     const table = document.querySelector('table');

@@ -360,7 +360,7 @@
 
 
 			<!--Load qoute -->
-			<li class="lbl_1" *ngIf="userType ==='CARRIER' || userType ==='SELLER' || userType ==='BROKER' || userType ==='SHIPPER' || userType === 'DISPATCHER'" [routerLinkActive]="['active']">
+			<!-- <li class="lbl_1" *ngIf="userType ==='CARRIER' || userType ==='SELLER' || userType ==='BROKER' || userType ==='SHIPPER' || userType === 'DISPATCHER'" [routerLinkActive]="['active']">
 				<a class="main_menu_a" [routerLink]="['requested-load']">
 					<i class="fa-sharp-duotone fa-solid fa-comments-dollar"></i>
 					<span (click)="isMobile ? mobMenuToggleEvent() :null">Requested Leads & Quotes</span>
@@ -372,7 +372,22 @@
 					<i class="fa-sharp-duotone fa-solid fa-comments-dollar"></i>
 				<span (click)="isMobile ? mobMenuToggleEvent() :null"> Received Leads & Quotes</span>
 				</a>
-			</li>
+			</li> -->
+			<!--Load qoute -->
+			<li class="lbl_1" *ngIf="userType !== 'CARRIER'" [routerLinkActive]="['active']">
+				<a class="main_menu_a" [routerLink]="['requested-load']">
+				 <i class="fa-sharp-duotone fa-solid fa-comments-dollar"></i>
+				 <span (click)="isMobile ? mobMenuToggleEvent() :null">Requested Quote</span>
+				</a>
+			   </li>
+			
+			   <li class="lbl_1" *ngIf="userType ==='BROKER' || userType ==='CARRIER'" [routerLinkActive]="['active']">
+				<a class="main_menu_a" [routerLink]="['received-load']">
+				 <i class="fa-sharp-duotone fa-solid fa-comments-dollar"></i>
+				<span (click)="isMobile ? mobMenuToggleEvent() :null">Load Lead & Quote</span>
+				</a>
+			   </li>
+			 
 				
 			<!--carrier Search -->
 			<!-- <li class="lbl_2" *ngIf="userType !=='CARRIER'"

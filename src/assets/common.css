@@ -51,7 +51,7 @@ p { margin: 0px; }
 .mat-datepicker-toggle-active { color: #00B4FC; }
 .cn_btn:hover { background: #000; color: #FFFFFF; cursor: pointer; }
 
-.btn_bordered { color: #00B4FC; background: #FFF; border: 1px solid #00B4FC; padding: 9px 40px; }
+.btn_bordered { color: #00B4FC; background: #FFF; border: 1px solid #00B4FC; }
 .btn_bordered:hover { color: #000; background: #FFF; border: 1px solid #000; }
 
 .ope_6 { opacity: 0.6; }
@@ -584,7 +584,11 @@ calculator box */
 .calculator_accordion_box {
   .mat-expansion-panel { border-radius: 0px !important; box-shadow: none; border: 1px solid #ededed; margin: 0 0 0.5rem; }
   .mat-expansion-panel-header { padding: 0 1rem; }
+  .mat-expansion-panel-header .fa-angles-down { color: #00b4fc; }
+  .mat-expansion-panel-header.mat-expanded .fa-angles-down { color: #000; transform: rotate(180deg); }
   .mat-expansion-panel-header.mat-expanded { height: 46px; padding: 0 1rem; background: #e5e5e5; }
+  .mat-expansion-panel-header .mat-expansion-indicator::after,
+  .mat-expansion-panel-header.mat-expanded .mat-expansion-indicator { display: none; }
   .mat-expansion-panel-header-title { font-size: 1rem; font-weight: 500; }
   .mat-expansion-panel-header-description { justify-content: right; padding-right: 2rem; }
   .mat-expansion-panel-header.mat-expanded:focus,
@@ -802,6 +806,7 @@ border: 1px solid #ddd !important;}
   .cn_field .mat-form-field-infix { border: 1px solid #ededed; display: flex; align-items: center; height: 36px; }
   .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
   .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label { font-weight: 500; transform: translateY(-1.1em) scale(0.8); left: 0; color: #3c3c3c; }
+  .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label span { background: #fff; padding: 0 5px; margin: 0 2px; }
   .mat-form-field-label-wrapper { padding-top: 1.2em; }
   .mat-form-field-appearance-legacy .mat-form-field-underline { background-color: rgb(224 224 224); }
   .mat-form-field-label { left: 10px; top: 1.5em; max-width: calc(100% - 46px); }

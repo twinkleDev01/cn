@@ -44,6 +44,7 @@ import { ParkingMediaGalleryComponent } from './parking/parking-media-gallery/pa
 import { ParkingOverviewComponent } from './parking/parking-overview/parking-overview.component';
 import { ParkingProfileComponent } from './parking/parking-profile/parking-profile.component';
 import { InfiniteScrollDirective } from './infinite-scroll.directive';
+import { CustomDateTimePipe } from '../commons/pipe/customDateTime.pipe';
 
 // parking data component 
 
@@ -92,6 +93,7 @@ import { InfiniteScrollDirective } from './infinite-scroll.directive';
       BrokerReviewsComponent,
       // Pipe
       TimeAgoPipe,
+      CustomDateTimePipe,
 // directive
 InfiniteScrollDirective,
       // parking data componets 
@@ -134,6 +136,7 @@ InfiniteScrollDirective,
       BrokerReviewsComponent,
   //  Pipe
   TimeAgoPipe,
+  CustomDateTimePipe,
 // directive
 InfiniteScrollDirective,
       // parking data componets 

@@ -703,11 +703,13 @@ this.miscellaneousForm.value.items.forEach(element => {
 
   onSubmit() {
     this.isSubmitClicked = true;
-    if (this.selectedTabIndex == 1) {
-        this.createChart("myChart", "bar");
-    } else if (this.selectedTabIndex == 2) {
-        this.createChart("myChart2", "pie");
-    }
+    this.createChart("costPerMilesBarChart", "bar");
+    this.createChart("costPerMilesPieChart", "pie");
+    // if (this.selectedTabIndex == 1) {
+    //     this.createChart("myChart", "bar");
+    // } else if (this.selectedTabIndex == 2) {
+    //     this.createChart("myChart2", "pie");
+    // }
 }
 
 payloadOfAllData()
@@ -827,7 +829,11 @@ return allFormsData;
           datasets: [{
             label: 'Price of Various Expenses in $',
             data: [this.companyOfficeTotal, this.truckExpensesTotal, this.trailerExpensesTotal, this.driverExpensesTotal, this.onRoadExpensesTotal, this.miscellaneousTotal],
-            borderWidth: 10,
+            borderWidth: 1,
+            maxBarThickness: 40,
+            // categoryPercentage: 0.6,
+            // barPercentage: 0.7,
+
             backgroundColor: [
               'rgba(255, 99, 132)',
               'rgba(255, 159, 64)',
@@ -840,12 +846,68 @@ return allFormsData;
           }]
         },
         
+        // options: {
+        //   scales: {
+        //     y: {
+        //       beginAtZero: true
+        //     }
+        //   }
+        // }
+
         options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          aspectRatio: window.innerWidth < 576 ? 1 : 1,
+          plugins: {
+            legend: {
+              position: window.innerWidth < 576 ? 'bottom' : 'bottom',
+              align: 'center',
+              labels: {
+                usePointStyle: true,
+                pointStyle: 'rect',
+                padding: window.innerWidth < 576 ? 12 : window.innerWidth < 768 ? 8 : 14,
+                font: {
+                  size: window.innerWidth < 576 ? 11 : window.innerWidth < 768 ? 12 : 12,
+                  weight: 'bold'
+                },
+                boxWidth: window.innerWidth < 576 ? 8 : 12,
+                color: '#000',
+              }
+            },
+            tooltip: {
+              titleFont: {
+                size: window.innerWidth < 576 ? 10 : 12
+              },
+              bodyFont: {
+                size: window.innerWidth < 576 ? 9 : 11
+              },
+              callbacks: {
+                label: function(context) {
+                  return `${context.label}: ${context.raw}%`;
+                }
+              }
+            }
+          },
           scales: {
-            y: {
-              beginAtZero: true
+          y: {
+            // beginAtZero: true,
+            // max: 100,
+            grid: {
+              display: true
+            },
+            ticks: {
+              callback: function(value) {
+                return value + '%';
+              }
+            }
+          },
+          x: {
+            grid: {
+              display: false
             }
           }
+        },
+          radius: window.innerWidth < 576 ? '70%' : '100%'
         }
       });
     }
@@ -854,20 +916,20 @@ return allFormsData;
   }
   
 
-  tabChangeEvent(event:any)
-  {
-    this.selectedTabIndex = event.index
-    if(event.index == 1)
-      {
+  // tabChangeEvent(event:any)
+  // {
+  //   this.selectedTabIndex = event.index
+  //   if(event.index == 1)
+  //     {
         
-        this.createChart("myChart", "bar");
-      }
-    if (event.index == 2)
-      {
-          this.createChart("myChart2", "doughnut");
-      }
+  //       this.createChart("myChart", "bar");
+  //     }
+  //   if (event.index == 2)
+  //     {
+  //         this.createChart("myChart2", "doughnut");
+  //     }
 
-  }
+  // }
 
   overallTotal(type)
   {

@@ -60,7 +60,7 @@ export class BrokerageCompaniesComponent implements OnInit {
         impressionType: [''],
         postalCode: [''],
         position: [''],
-        teamIds: [[]],
+        teamIds: [],
         toggleControl:[null as boolean | null]
       });
       if (params && Object.keys(params).length) {

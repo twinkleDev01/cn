@@ -249,7 +249,7 @@ if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
 //   // }
 //   this.addParams(currentPage)
 //     return currentPage;
-// } 
+// }
 loaddedScreens = 0;
   @HostListener('window:scroll', ['$event'])
   onWindowScroll(event: Event) {

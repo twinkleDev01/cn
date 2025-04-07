@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { fakeJson } from 'src/app/commons/fakeDataService/fakeservice';
@@ -12,6 +13,8 @@ import { PopupComponent } from 'src/app/shared/popup/popup.component';
   styleUrls: ['./manage-cpmonth.component.scss']
 })
 export class ManageCpmonthComponent implements OnInit {
+  showAdvancedFilter = false;
+  isChecked = true;
   calculatorData: any =[];
   id = 1;
   compareIdArray = []
@@ -25,13 +28,12 @@ export class ManageCpmonthComponent implements OnInit {
   totalRecords: any;
   public skeletonLoader = false;
   public spinnerLoader = false;
+
   constructor(
     private router: Router,
     public fakeJson: fakeJson,
     public commonService: CommonService,
     public dialog: MatDialog
-
-
   ) { }
 
 
@@ -54,7 +56,6 @@ export class ManageCpmonthComponent implements OnInit {
     // this.calculatorData = this.fakeJson.fakeJson();
     this.getCalculatorList()
   }
-
 
 
   getCalculatorList() {
@@ -184,4 +185,14 @@ export class ManageCpmonthComponent implements OnInit {
     return indexes;
   }
 
+  // Profile analytics table
+  displayedColumns: string[] = ['name', 'revenue', 'totalMiles', 'totalDays', 'truckAverage', 'companyOfficeExpenses', 'truckExpenses', 'trailerExpenses', 'driveExpenses', 'onRoadExpenses', 'miscellaneousAndOther', 'action'];
+  dataSource = [
+    this.calculatorData
+  ];
+
+  // Advanced filter toggle
+  toggleFilter() {
+    this.showAdvancedFilter = !this.showAdvancedFilter;
+  }
 }

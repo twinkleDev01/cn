@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { fakeJson } from 'src/app/commons/fakeDataService/fakeservice';
@@ -51,14 +52,12 @@ export class ManageCPMComponent implements OnInit {
     }
   }
 
-
   ngOnInit(): void {
     this.getCalculatorList()
     // this.calculatorData = this.fakeJson.fakeJson();
   }
 
   getCalculatorList() {
-
     this.skeletonLoader = true;
     this.page = 1;
     let uri = null;
@@ -73,6 +72,7 @@ export class ManageCPMComponent implements OnInit {
         this.skeletonLoader = false;
 
       this.calculatorData = ServerRes.response;
+      console.log(this.calculatorData,'this.calculatorData')
       this.totalPage = ServerRes.totalPages
       this.totalRecords = ServerRes.total
       }else if(ServerRes.success === false){
@@ -121,14 +121,15 @@ export class ManageCPMComponent implements OnInit {
     this.router.navigate(['calculator/manage-cp-mile/edit', this.id]);
   }
 
-  addCompareId(id: any, event: any) {
-    const checkbox = event.target as HTMLInputElement;
-    if (checkbox.checked)
-      this.compareIdArray.push(id)
-    else {
-      if (this.compareIdArray.includes(id)) {
-        let index = this.compareIdArray.indexOf(id)
-        this.compareIdArray.splice(index, 1)
+  addCompareId(id: any, event: MatCheckboxChange) {
+    if (event.checked) {
+      // Add id to compareIdArray if checked
+      this.compareIdArray.push(id);
+    } else {
+      // Remove id from compareIdArray if unchecked
+      const index = this.compareIdArray.indexOf(id);
+      if (index !== -1) {
+        this.compareIdArray.splice(index, 1);
       }
     }
   }
@@ -187,18 +188,7 @@ export class ManageCPMComponent implements OnInit {
   // Profile analytics table
   displayedColumns: string[] = ['name', 'revenue', 'totalMiles', 'totalDays', 'truckAverage', 'companyOfficeExpenses', 'truckExpenses', 'trailerExpenses', 'driveExpenses', 'onRoadExpenses', 'miscellaneousAndOther', 'action'];
   dataSource = [
-    { name: 'rwe',
-      revenue: '0',
-      totalMiles: '100',
-      totalDays: '1',
-      truckAverage: '6',
-      companyOfficeExpenses: '$0.00',
-      truckExpenses: '$350.00',
-      trailerExpenses: '$0.00',
-      driveExpenses: '$0.00',
-      onRoadExpenses: '$0.00',
-      miscellaneousAndOther: '$0.00'
-    },
+    this.calculatorData
   ];
 
   // Advanced filter toggle

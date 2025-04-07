@@ -1,125 +1,222 @@
+<div class="content_box">
+  <div class="contnt_hed">
+    <div class="ch_l">
+      <h3 class="ch_tlt">Calculator for Cost Per Month</h3>
+    </div>
+    <!-- <div class="ch_rl">
+      <button [routerLink]="'/calculator/cost-per-miles'" class="cn_btn">Add Calculator</button>
+    </div> -->
+  </div>
+  <div class="content_body">
+    <p class="ch_dis">Trucking companies usually have so many expenses which makes complex the
+      analysis of profit or loss. Calculator makes it easy to fetch the rate per mile and based on this
+      calculation owner can estimate his bid/price on that trip.<br>
+      Here You will get the list of calculator (pre-filled) which will you rate per mile along with rate per trip
+      and various other analytical features like Bar chart and Pie chart which will help you to find best price
+      and plan for you business.</p>
+  </div>
+</div>
 
-    <div class="insurance_pg_con">
-      <div class="card_con mb-5">
-        <div class="uploadEmptyTxt">
-          <div class="d-flex align-items-center justify-content-between">
-            <h4 class="page_heading">Calculator for Cost Per Month</h4>
-            <span class="iub_btn">
-              <button [routerLink]="'/calculator/monthly-cost'" class="cn_btn">Add Calculator</button>
+<div class="table_data_con">
+  <div class="table_actions">
+    <form class="cn_field">
+      <div class="btns_box">
+        <div class="row align-items-center">
+          <div class="col-md-5">
+            <p class="txt_1 fw_6" [ngClass]="{'d-none': !showAdvancedFilter}">Advanced Filter</p>
+            <div class="comn_fltr" [ngClass]="{'d-none': showAdvancedFilter}">
+              <mat-form-field appearance="none">
+                <mat-label>Table Search</mat-label>
+                <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
+                <input type="text" matInput placeholder="Search" class="form-control cn_input ms-2">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-7">
+            <div class="btn_r">
+              <div *ngIf="calculatorData?.length > 0 && compareIdArray.length > 1">
+                <a class="cn_btn txt_btn" (click)="navigateToCompare()">
+                  <i class="fa-solid fa-code-compare fa-beat-fade txt_p me-1"></i>
+                  <span>Compare Calculator</span>
+                </a>
+              </div>
+              <a class="cn_btn txt_btn" [routerLink]="'/calculator/monthly-cost'">
+                <!-- <i class="fa-solid fa-plus me-2"></i> -->
+                <span>Add Calculator</span>
+              </a>
+              <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
+                <i class="fa-sharp fa-solid fa-filter"></i>
+              </span>
+              <span class="cn_btn icn_btn">
+                <i class="fa-duotone fa-solid fa-rotate-right"></i>
+                <i class="fa-solid fa-rotate fa-spin"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="filter_box" [ngClass]="{'d-none': !showAdvancedFilter}">
+          <div class="filtr_con">
+              <div class="row">
+                <div class="col-md-3">
+                  <mat-form-field>
+                    <mat-label>DOT Number</mat-label>
+                    <input type="text" matInput placeholder="DOT Number">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3 start_end_slide">
+                  <mat-slider min="200" max="500">
+                    <input value="300" matSliderStartThumb>
+                    <input value="400" matSliderEndThumb>
+                  </mat-slider>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field>
+                    <mat-label>Status</mat-label>
+                    <mat-select>
+                      <mat-option value="carrier">Active</mat-option>
+                      <mat-option value="Expired">Expired</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field class="date_range_filter">
+                    <mat-label>Created</mat-label>
+                    <mat-date-range-input [rangePicker]="picker1">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker1></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-12">
+                  <div class="fltr_actn">
+                    <button class="cn_btn btn_bordered">Clear</button>
+                    <button class="cn_btn">Apply</button>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </form> 
+  </div>
+
+  <div class="hint_mess" *ngIf="calculatorData?.length > 0 && compareIdArray.length === 1">
+    <p>Select one more to compare </p>
+  </div>
+  <div class="table_data" tabindex="0" *ngIf="calculatorData?.length > 0">
+    <table mat-table [dataSource]="calculatorData">
+      <ng-container matColumnDef="name" sticky>
+        <th mat-header-cell [attr.colspan]="1"></th>
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="sticky_boder">
+            Name
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="first_col sticky_boder">
+            <mat-checkbox type="checkbox" (change)="addCompareId(element.id, $event)" class="fw_5">{{element?.expenses?.calculatorName || '-'}}</mat-checkbox>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="revenue">
+        <th mat-header-cell [attr.colspan]="0"></th>
+        <th mat-header-cell *matHeaderCellDef> Revenue </th>
+        <td mat-cell *matCellDef="let element">{{element?.revenueUsd || '-'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="totalMiles">
+        <th mat-header-cell [attr.colspan]="0"></th>
+        <th mat-header-cell *matHeaderCellDef> Total Miles </th>
+        <td mat-cell *matCellDef="let element">{{element?.miles || '-'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="totalDays">
+        <th mat-header-cell [attr.colspan]="0"></th>
+        <th mat-header-cell *matHeaderCellDef> Total Days </th>
+        <td mat-cell *matCellDef="let element">{{element?.days || '-'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="truckAverage">
+        <th mat-header-cell [attr.colspan]="0"></th>
+        <th mat-header-cell *matHeaderCellDef> Truck Average </th>
+        <td mat-cell *matCellDef="let element" matTooltip="">{{element?.truckMileage || '-'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="companyOfficeExpenses">
+        <th mat-header-cell [attr.colspan]="5">121212121</th>
+        <th mat-header-cell *matHeaderCellDef class="expenses_mw"> Company & Office expenses </th>
+        <td mat-cell *matCellDef="let element">{{element?.expenses.total.companyOfficeTotal| currency:'USD':'symbol':'1.2-2'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="truckExpenses">
+        <th mat-header-cell [attr.colspan]="0"></th>
+        <th mat-header-cell *matHeaderCellDef class="expenses_mw"> Truck Expenses </th>
+        <td mat-cell *matCellDef="let element">{{element?.expenses.total.truckExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="trailerExpenses">
+        <th mat-header-cell [attr.colspan]="0"></th>
+        <th mat-header-cell *matHeaderCellDef class="expenses_mw"> Trailer Expenses </th>
+        <td mat-cell *matCellDef="let element">{{element?.expenses.total.trailerExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="driveExpenses">
+        <th mat-header-cell [attr.colspan]="0"></th>
+        <th mat-header-cell *matHeaderCellDef class="expenses_mw"> Drive Expenses </th>
+        <td mat-cell *matCellDef="let element">{{element?.expenses.total.driverExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="onRoadExpenses">
+        <th mat-header-cell [attr.colspan]="0"></th>
+        <th mat-header-cell *matHeaderCellDef class="expenses_mw"> On Road Expenses </th>
+        <td mat-cell *matCellDef="let element">{{element?.expenses.total.onRoadExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="miscellaneousAndOther">
+        <th mat-header-cell [attr.colspan]="0"></th>
+        <th mat-header-cell *matHeaderCellDef class="expenses_mw"> Miscellaneous and Other </th>
+        <td mat-cell *matCellDef="let element">{{element?.expenses.total.miscellaneousTotal| currency:'USD':'symbol':'1.2-2'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell [attr.colspan]="1"></th>
+        <th mat-header-cell *matHeaderCellDef class="text-center actin_col"> Action </th>
+        <td mat-cell *matCellDef="let element" class="actin_td table_actions">
+          <div class="row_actn">
+            <span matTooltip="Edit Calculator" class="cn_btn" (click)="navigateToEditPage(element.id)">
+              <i class="fa-sharp-duotone fa-solid fa-pen-to-square txt_p"></i>
+            </span>
+            <span matTooltip="Delete Calculator" class="cn_btn" (click)="deletePopup(element.id)">
+              <i class="fa-duotone fa-solid fa-trash txt_d"></i>
             </span>
           </div>
-          <div class="insu_uplod_box mt-5">
-            <div class="iub_l">
-              <p class="fs_14 fsn_4 txt_lb">Trucking companies usually have so many expenses which makes complex the
-                analysis of profit or loss. Calculator makes it easy to fetch the rate per mile and based on this
-                calculation owner can estimate his bid/price on that trip.<br>
-                Here You will get the list of calculator (pre-filled) which will you rate per mile along with rate per trip
-                and various other analytical features like Bar chart and Pie chart which will help you to find best price
-                and plan for you business. </p>
-            </div>
-    
-          </div>
-        </div>
-      </div>
-    
-      <div class="" *ngIf="calculatorData?.length">
-        <div class="inc_data_updt mt-4 mb-5" *ngFor="let item of calculatorData">
-          <div class="inc_head">
-            <div class="inc_head_l">
-              <div class="">
-                <span class="compny_nm">{{item.expenses.calculatorName}}</span>
-              </div>
-            </div>
-          </div>
-          <div class="inc_cntr mt-3">
-            <table>
-              <tr>
-                <th>Revenue: <i class="fa-solid fa-chart-simple" style=""></i></th>
-                <th>Total Miles: <i class="fa-solid fa-tornado"></i></th>
-                <th>Total Days: <i class="fa-regular fa-calendar-clock"></i></th>
-                <th>Truck Average: <i class="fa-duotone fa-truck-fast"></i></th>
-    
-              </tr>
-              <tr>
-                <td>{{item?.revenueUsd}}</td>
-                <td>{{item?.miles}}</td>
-                <td>{{item?.days}}</td>
-                <td>{{item?.truckMileage}}</td>
-    
-              </tr>
-               <button class="ed_edit_btn" matTooltip="Edit">
-                <span class="material-icons-outlined c_green" (click)="navigateToEditPage(item.id)"  >edit</span>
-              </button>
-            </table>
-            <table>
-              <tr>
-                <th>Company & Office expenses:<i class="fa-duotone fa-wallet"></i></th>
-                <th>Truck Expenses:<i class="fa-duotone fa-wallet"></i></th>
-                <th>Trailer Expenses:<i class="fa-duotone fa-wallet"></i></th>
-                <th>Drive Expenses:<i class="fa-duotone fa-wallet"></i></th>
-                <th>On Road Expenses:<i class="fa-duotone fa-wallet"></i></th>
-                <th>Miscellaneous and Other:<i class="fa-duotone fa-wallet"></i></th>
-    
-              </tr>
-              <tr>
-                <td>{{item?.expenses.total.companyOfficeTotal| currency:'USD':'symbol':'1.2-2'}}</td>
-                <td>{{item?.expenses.total.truckExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</td>
-                <td>{{item?.expenses.total.trailerExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</td>
-                <td>{{item?.expenses.total.driverExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</td>
-                <td>{{item?.expenses.total.onRoadExpensesTotal| currency:'USD':'symbol':'1.2-2'}}</td>
-                <td>{{item?.expenses.total.miscellaneousTotal| currency:'USD':'symbol':'1.2-2'}}</td>
-              </tr>
-              <button class="ed_edit_btn" matTooltip="Edit">
-                <span class="material-icons-outlined c_green" (click)="navigateToEditPage(item.id)">edit</span>
-              </button>
-            </table>
-           
-          </div> 
-          <div class="inc_fotr_r">
-            <span *ngIf="compareIdArray.length==1 && compareIdArray[0]==item.id" style="margin-right: 10px;">select one more to compare </span><button *ngIf="compareIdArray.length>1 && compareIdArray.includes(item.id)"  (click)="navigateToCompare()"class="com_edt" style="margin-right: 10px;">Compare</button><input  type="checkbox" (change)="addCompareId(item.id, $event)">
-            <div class="">
-             
-              <button class="ed_dtl_btn ed_del_buttons" matTooltip="Delete">
-                <i class="fa-solid fa-xmark" (click)="deletePopup(item.id)"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-    
-        <div class="empty-state" *ngIf="false">
-          <div class="empty-state__content">
-            <div class="empty-state__icon">
-              <img src="https://img.freepik.com/free-vector/upload-concept-illustration_114360-1343.jpg?size=626&ext=jpg"
-                alt="">
-            </div>
-            <div class="empty-state__message">Insurence</div>
-            <p class="empty-state__help">This is no insurence</p>
-          </div>
-        </div>
-      </div>
-
-    <div class="data_box  mt-4 emptyBox" *ngIf="calculatorData?.length == 0 && !skeletonLoader">
-      <p style="padding-top: 20px;">There is no saved calculator yet !</p>
-</div>
-
-
-
-<div class="saved_carrier_list_con" class="skt_eifr" *ngIf="skeletonLoader">
-  <div class="mb-3">
-      <ngx-skeleton-loader count="1"
-          [theme]="{ width: '100%', height: '24px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
   </div>
-  <div class="scl_row pt-3 px-3" *ngFor="let fake of generateFakeSkeleton(5)" style="display: block;">
-      <ngx-skeleton-loader count="1"
-          [theme]="{ width: '100%', height: '32px', margin: '0px 0 0px' }"></ngx-skeleton-loader>
-  </div>
-</div>
 
-<div class="text-center" *ngIf="calculatorData?.length > 0 && spinnerLoader">
-<span class="spinner-border" role="status" style="color: #00b4fc;"></span>
-</div>
-<!--  -->
-<div *ngIf="calculatorData?.length > 0 && dataNotFound && !skeletonLoader && !spinnerLoader" class="noMore_record">
-<span>There are no more records to show.</span>
-</div>
+  <div class="bg_w"  *ngIf="skeletonLoader">
+    <div class="scl_row py-2 px-3 d-block" *ngFor="let fake of generateFakeSkeleton(4)">
+      <ngx-skeleton-loader count="1" [theme]="{ width: '100%', height: '28px', margin: '0px' }"></ngx-skeleton-loader>
+    </div>
+  </div>
+
+  <!-- <div *ngIf="calculatorData?.length == 0 && !skeletonLoader" class="noMore_record">
+    <p>There is no saved calculator yet !</p>
+  </div> -->
+  
+  <div *ngIf="calculatorData?.length > 0 && spinnerLoader" class="noMore_record">
+    <span class="spinner-border" role="status"></span>
+  </div>
+  
+  <div *ngIf="calculatorData?.length > 0 && dataNotFound && !skeletonLoader && !spinnerLoader" class="noMore_record mt-3">
+    <p>There are no more records to show.</p>
+  </div>
+  
+  <div class="skeletonloader" *ngIf="!skeletonLoader && calculatorData?.length <= 0">
+    <div class="empty-state mt-0">
+      <div class="empty-state__content">
+      <div class="empty-state__icon">
+        <img src="./assets/images/no_data_found_img.jpg" alt="Dta Not Fount">
+      </div>
+      <div class="empty-state__message">Calculator for Cost Per Mile</div>
+        <p class="empty-state__help">There is no saved calculator yet!</p>
+      </div>
+    </div>
+  </div>
 </div>

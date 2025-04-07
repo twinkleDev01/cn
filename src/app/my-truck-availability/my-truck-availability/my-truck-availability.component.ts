@@ -1,6 +1,9 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from 'src/app/commons/service/alert.service';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
@@ -22,16 +25,43 @@ export class MyTruckAvailabilityComponent implements OnInit {
   public params: any = {};
   public orderDir = '';
   showAdvancedFilter = false;
+  teamIdList :any=[];
+  countryName = ''; // This will be set dynamically from API
+
+  countryList = [
+    { value: 'US', name: 'United States', flag: './assets/country/us.png', code: '+1' },
+    { value: 'MX', name: 'Mexico', flag: './assets/country/mx.png', code: '+52' },
+    { value: 'CA', name: 'Canada', flag: './assets/country/ca.png', code: '+1' }
+  ];
     dataSource: MatTableDataSource<any> = new MatTableDataSource();
+    advanceFilterForm: FormGroup;
 
   constructor(
     private commonService: CommonService,
     public dialog: MatDialog,
-    public alertService: AlertService
+    public alertService: AlertService,
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,  
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.getLoadAvailibility();
+    this.teamList();
+    this.advanceFilterForm = this.fb.group({
+      shipmentTypes: [''],
+      equipmentType: [''],
+      frequency: [''],
+      sourceDate: [''],
+      destinationDate: [''],
+      length: [''],
+      weight: [''],
+      miles: [''],
+      costPerMile: [''],
+      destinationLocation: [''],
+      teamIds:[]
+    });
   }
 
   getAPIParam(str) {
@@ -78,10 +108,9 @@ export class MyTruckAvailabilityComponent implements OnInit {
     };
     this.commonService.getList(APIparams).subscribe(
       (ServerRes) => {
-         const newData = ServerRes;
-        this.dataSource.data = newData;
-        console.log(ServerRes,"799", this.dataSource)
         if (ServerRes.success === true) {
+          this.dataSource.data = ServerRes.response;
+          console.log(ServerRes,"799", this.dataSource.data)
           this.totalRecords = ServerRes.total;
           this.totalPage = ServerRes.totalPages;
           this.loadAvailibilityData = ServerRes.response;
@@ -107,93 +136,93 @@ export class MyTruckAvailabilityComponent implements OnInit {
     return indexes;
   }
 
-  editLoadAvailibility(loadData: any, type: any) {
-    const dialogRef = this.dialog.open(PopupComponent, {
-      disableClose: true,
-      backdropClass: 'cn_custom_popup',
-      width: '460px',
-      data: {
-        openPop: type,
-        loadData: loadData,
-      },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result.event === 'Ok') {
-        this.loadAvailibilityData = [];
-        this.page = 1;
-        this.getLoadAvailibility();
-      }
-    });
-  }
-  removeloadAvailibilityPopup(loadAvailibilityID: any, type: any, index: any) {
-    const dialogRef = this.dialog.open(PopupComponent, {
-      disableClose: true,
-      backdropClass: 'cn_custom_popup',
-      width: '460px',
-      data: { openPop: type },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result.event === 'ok') {
-        this.removeloadAvailibility(loadAvailibilityID, index);
-      }
-    });
-  }
+  // editLoadAvailibility(loadData: any, type: any) {
+  //   const dialogRef = this.dialog.open(PopupComponent, {
+  //     disableClose: true,
+  //     backdropClass: 'cn_custom_popup',
+  //     width: '460px',
+  //     data: {
+  //       openPop: type,
+  //       loadData: loadData,
+  //     },
+  //   });
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result.event === 'Ok') {
+  //       this.loadAvailibilityData = [];
+  //       this.page = 1;
+  //       this.getLoadAvailibility();
+  //     }
+  //   });
+  // }
+  // removeloadAvailibilityPopup(loadAvailibilityID: any, type: any, index: any) {
+  //   const dialogRef = this.dialog.open(PopupComponent, {
+  //     disableClose: true,
+  //     backdropClass: 'cn_custom_popup',
+  //     width: '460px',
+  //     data: { openPop: type },
+  //   });
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result.event === 'ok') {
+  //       this.removeloadAvailibility(loadAvailibilityID, index);
+  //     }
+  //   });
+  // }
 
-  removeloadAvailibility(loadAvailibilityID, index) {
-    this.spinnerLoader = true;
-    let uri = null;
-    let newParams = {
-      id: loadAvailibilityID,
-    };
-    if (newParams) uri = this.commonService.getAPIUriFromParams(newParams);
-    let APIparams = {
-      apiKey: AppSettings.APIsNameArray.AVAILIBILITY.DELETE,
-      uri: uri,
-    };
-    this.commonService.delete(APIparams).subscribe(
-      (success) => {
-        if (success.success === true) {
-          this.spinnerLoader= true;
-          this.loadAvailibilityData.splice(index, 1);
-          this.loadAvailibilityData = [];
+  // removeloadAvailibility(loadAvailibilityID, index) {
+  //   this.spinnerLoader = true;
+  //   let uri = null;
+  //   let newParams = {
+  //     id: loadAvailibilityID,
+  //   };
+  //   if (newParams) uri = this.commonService.getAPIUriFromParams(newParams);
+  //   let APIparams = {
+  //     apiKey: AppSettings.APIsNameArray.AVAILIBILITY.DELETE,
+  //     uri: uri,
+  //   };
+  //   this.commonService.delete(APIparams).subscribe(
+  //     (success) => {
+  //       if (success.success === true) {
+  //         this.spinnerLoader= true;
+  //         this.loadAvailibilityData.splice(index, 1);
+  //         this.loadAvailibilityData = [];
 
-          this.page = 1;
-          this.getLoadAvailibility();
-          this.alertService.showNotificationMessage(
-            'success',
-            'bottom',
-            'left',
-            'txt_s',
-            'check_circle',
-            'Pending Review Invitation',
-            'You have successfully withdrawal Pending Review Invitation.'
-          );
-        } else if (success.success === false) {
-          this.alertService.showNotificationMessage(
-            'danger',
-            'bottom',
-            'left',
-            'txt_d',
-            'cancel',
-            'Pending Review Invitation',
-            'There is some issue, Please try again'
-          );
-        }
-      },
-      (error) => {
-        this.alertService.showNotificationMessage(
-          'danger',
-          'bottom',
-          'left',
-          'txt_g',
-          'error',
-          'Unexpected Error',
-          AppSettings.ERROR
-        );
-        this.spinnerLoader = false;
-      }
-    );
-  }
+  //         this.page = 1;
+  //         this.getLoadAvailibility();
+  //         this.alertService.showNotificationMessage(
+  //           'success',
+  //           'bottom',
+  //           'left',
+  //           'txt_s',
+  //           'check_circle',
+  //           'Pending Review Invitation',
+  //           'You have successfully withdrawal Pending Review Invitation.'
+  //         );
+  //       } else if (success.success === false) {
+  //         this.alertService.showNotificationMessage(
+  //           'danger',
+  //           'bottom',
+  //           'left',
+  //           'txt_d',
+  //           'cancel',
+  //           'Pending Review Invitation',
+  //           'There is some issue, Please try again'
+  //         );
+  //       }
+  //     },
+  //     (error) => {
+  //       this.alertService.showNotificationMessage(
+  //         'danger',
+  //         'bottom',
+  //         'left',
+  //         'txt_g',
+  //         'error',
+  //         'Unexpected Error',
+  //         AppSettings.ERROR
+  //       );
+  //       this.spinnerLoader = false;
+  //     }
+  //   );
+  // }
 
   // Profile analytics table
   displayedColumns: string[] = [
@@ -207,8 +236,7 @@ export class MyTruckAvailabilityComponent implements OnInit {
     'equipmentType',
     'shipmentType',
     'costPerMile',
-    'notes',
-    'action',
+    'notes'
   ];
 
   toggleFilter() {
@@ -217,5 +245,92 @@ export class MyTruckAvailabilityComponent implements OnInit {
   formatFrequency(frequency: string): string {
     if (!frequency) return '';
     return frequency.toLowerCase().replace(/\s+/g, '_');
+  }
+  getCountryFlag(countryCode: string): string {
+    const country = this.countryList.find(
+      c => c.value.toLowerCase() === countryCode?.toLowerCase()
+    );
+    return country ? country.flag : './assets/country/us.png';
+  }
+    // For team dropdown pagination
+  teamPage = 1;
+  teamLimit = 10; // Items per load
+  totalTeams = 0;
+  loadingMoreTeams = false;
+  hasMoreTeams = true;
+  teamList(loadMore: boolean = false): void {
+    if (loadMore) {
+      if (!this.hasMoreTeams || this.loadingMoreTeams) return;
+      this.teamPage++;
+    } else {
+      // Initial load - reset
+      this.teamPage = 1;
+      this.teamIdList = [];
+      this.hasMoreTeams = true;
+    }
+  
+    this.loadingMoreTeams = true;
+    if (!loadMore) this.spinnerLoader = true;
+  
+    const params = {
+      limit: this.teamLimit,
+      page: this.teamPage
+    };
+  
+    const apiKey = AppSettings.APIsNameArray.TEAM.TEAMLIST;
+    if (apiKey) {
+      let APIparams = {
+        apiKey: apiKey,
+        uri: this.commonService.getAPIUriFromParams(params),
+      };
+      
+      this.commonService.getList(APIparams).subscribe(
+        (response) => {
+          this.loadingMoreTeams = false;
+          this.spinnerLoader = false;
+          
+          if (response?.response?.teamArray) {
+            this.teamIdList = [...this.teamIdList, ...response.response.teamArray];
+            // Check if more teams are available
+            this.hasMoreTeams = response.response.teamArray.length >= this.teamLimit;
+            this.totalTeams = response.response.totalCount || 0;
+          }
+        },
+        (error) => {
+          this.loadingMoreTeams = false;
+          this.spinnerLoader = false;
+          console.error('Error fetching teams:', error);
+        }
+      );
+    }
+  }
+  @ViewChild('teamSelect') teamSelect: MatSelect;
+  
+  onTeamDropdownOpened(): void {
+    // Initialize scroll listener when dropdown opens
+    setTimeout(() => {
+      if (this.teamSelect && this.teamSelect.panel) {
+        const panel = this.teamSelect.panel.nativeElement;
+        panel.addEventListener('scroll', this.onTeamDropdownScroll.bind(this));
+      }
+    });
+  }
+  
+  onTeamDropdownScroll(event: Event): void {
+    const panel = event.target as HTMLElement;
+    const scrollThreshold = 50; // pixels from bottom
+    const atBottom = panel.scrollHeight - panel.scrollTop <= panel.clientHeight + scrollThreshold;
+    
+    if (atBottom && this.hasMoreTeams && !this.loadingMoreTeams) {
+      this.teamList(true); // Load more teams
+    }
+  }
+  
+  ngOnDestroy(): void {
+    // Clean up scroll listener
+    if (this.teamSelect && this.teamSelect.panel) {
+      const panel = this.teamSelect.panel.nativeElement;
+      panel.removeEventListener('scroll', this.onTeamDropdownScroll);
+    }
   }
 }

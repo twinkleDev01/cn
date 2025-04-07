@@ -1,133 +1,22 @@
 .filtr_con { padding-top: 1rem; margin-top: 1rem; border-top: 1px solid #ededed; }
 .comn_fltr { display: flex; height: 100%; align-items: center; }
 
+.contnt_hed { margin: 0 0 0rem; }
+.ch_dis { margin: 0 0 0rem; }
+
+
+.hint_mess { position: relative; }
+.hint_mess p { position: absolute; z-index: 4; top: -22px; left: 1rem; }
+
 .table_data_con {
-  .first_col { display: flex; align-items: center;
-    padding: 0.7rem 1.1rem 0.7rem 0;
-    max-width: 290px;
-    white-space: normal;
-}
-.expenses_mw { max-width: 225px;
-  white-space: normal;
-  padding: 0rem 1rem; }
+  .table_data { margin: 0 0 0rem; }
+  .btns_box { margin: 0 0 1.3rem; }
+  .first_col { display: flex; align-items: center; padding: 0.7rem 1.1rem 0.7rem 0; max-width: 290px; white-space: normal; }
+  .expenses_mw { min-width: 165px; max-width: 240px; white-space: normal; padding: 0rem 1rem; }
 }
 
+.noMore_record { text-align: center; margin: 0; padding: 1rem; background: #fff; }
 
-
-.page_heading:before { width: calc(100% - 74%); }
-.page_heading:after { width: calc(100% - -7%); }
-
-.insurance_pg_con { margin: 14px 0px; }
-.saved_carrier_list_con { background: #fff; padding: 24px; border-radius: 10px; margin: 14px 0; }
-.ed_dtl_btn { color: #fff; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #ddd0; border-radius: 10px; width: 20px; height: 20px; background: none; border: none; background: none; }
-// .ed_del_buttons button.ed_edit_btn { border: 1px solid #00b4fc; background: #eaf9ff; }
-// .ed_del_buttons button.ed_edit_btn:hover { color: #fff; background: #00b4fc; }
-// .ed_del_buttons button.ed_dtl_btn { border: 1px solid #DF0C0C; margin-left: 14px; background: #fce9e9; }
-// .ed_del_buttons button.ed_dtl_btn:hover { color: #fff; background: #DF0C0C; }
-.ed_del_buttons .material-icons-outlined { font-size: 20px; }
-.ed_edit_btn { position: absolute; top: -7px; right: -7px; background: #818181; border-radius: 100%; border: none; height: 20px; width: 20px; display: flex; align-items: center; justify-content: center; }
-.ed_edit_btn  .material-icons-outlined { font-size: 12px; color: #fff; }
-
-
-.inc_cntr .col-md-3, .col-md-4 { margin: 10px 0px; }
-.ctry_flag { margin-right: 6px; }
-.ctry_flag img { max-height: 16px; width: auto; }
-.ctry_flag span { margin: 0 5px; }
-
-.insu_uplod_box { display: flex; align-items: center; justify-content: space-between; margin: 0 0 32px; }
-.insu_uplod_box .iub_btn { padding: 10px 18px; }
-
-
-.inc_data_updt { border-radius: 10px; padding: 16px 18px; position: relative; background: #fff; margin: 20px 0px; }
-// .inc_data_updt:last-child { margin: 0px; }
-.inc_data_updt .inc_head { display: flex; justify-content: space-between; }
-/*.inc_data_updt .inc_head_l { display: flex; align-items: flex-start; }*/
-.inc_data_updt .compny_nm { font-size: 20px; line-height: 26px; font-weight: 500; background: #00b4fc; padding: 5px 10px; border-radius: 5px 5px 0px 0px; color: #fff; position: absolute; top: -17px; }
-// .inc_data_updt .inc_cntr { display: flex; align-items: center; }
-// margin-right: 14px; padding-right: 14px;
-.inc_row .label { font-size: 16px; color: #818181; }
-.inc_row { font-size: 14px; line-height: 20px; font-weight: 500; position: relative; display: flex; align-items: start; flex-direction: column; }
-.inc_data_updt .inc_row .txt_lb { font-weight: 400; margin-right: 2px; }
-.inc_data_updt .inc_row:after { position: absolute; content: '|'; font-size: 14px; font-weight: 200; right: 0; color: #c9c9c9; }
-.inc_data_updt .inc_row:last-child:after { display: none; }
-.inc_data_updt .chip_crd { font-size: 13px; line-height: 14px; font-weight: 500; border-radius: 20px; padding: 4px 12px; margin: 0 0 0 16px; display: inline-flex; align-items: center;  cursor: pointer; }
-.inc_data_updt .inc_type { border: 1px solid #00B4FC; color: #00B4FC; }
-.inc_data_updt .compny_status { color: #fff; background: #25D366; font-size: 14px; line-height: 16px; padding: 9px 24px; margin: 0; }
-.inc_data_updt .phone_no { display: flex; align-items: center; }
-.inc_data_updt .phone_no a { text-decoration: none; color: #00b4fc; }
-.inc_data_updt .inc_date { display: flex; align-items: center; font-size: 14px; line-height: 20px; margin: 0 20px 0px 0; color: #454545; font-weight: 500; }
-.inc_data_updt .inc_date .txt_lb { font-weight: 400; }
-.inc_data_updt .inc_date:last-child { margin-right: 6px; }
-.inc_data_updt .inc_date .mat-icon { font-size: 20px; line-height: 22px; color: #00b4fc; }
-.inc_data_updt .inc_locatn { display: flex; align-items: center; font-size: 14px; line-height: 20px; color: #454545; font-weight: 500; margin: 6px 0 0 -4px; }
-.inc_data_updt .inc_locatn .mat-icon { font-size: 20px; line-height: 22px; color: #00b4fc; width: auto; height: auto; margin: 0 2px 0 0; }
-.inc_fotr_r { display: flex; justify-content: end; align-items: center; margin-top: 20px; }
-/*.inc_fotr_l { margin: 8px 0 0; }*/
-.inc_date_box { display: flex; align-items: center; }
-.data_box { margin-top: 20px; }
-
-
-
-.expired_insurance .inc_row { color: #575757; }
-.expired_insurance .compny_nm { color: #575757; }
-.expired_insurance .inc_date { color: #575757; }
-.expired_insurance .inc_locatn { color: #575757; }
-.expired_insurance .inc_locatn .mat-icon { color: #8e8e8e; }
-.expired_insurance .inc_type { border: 1px solid #8e8e8e; color: #8e8e8e; }
-.expired_insurance .inc_date .mat-icon { color: #8e8e8e; }
-.expired_insurance .compny_status { background: #8d8d8d; }
-.expired_insurance .ctry_flag img { filter: grayscale(1); opacity: 0.7; }
-.expired_insurance .phone_no a { color: #575757; }
-.expired_insurance .inc_row .txt_lb { color: #939393 !important; }
-.inc_data_updt .compny_status { background: #e9fff1; color: #25D366; font-size: 14px; line-height: 16px; padding: 7px 24px; margin: 0; border: 1px solid #25D366; font-weight: 500; }
-.expired_insurance .compny_status { background: #f2f2f2; border: 1px solid #8d8d8d; color: #8d8d8d; }
-.com_edt { background: #00b4fc; border: none; border-radius: 10px; color: #fff; padding: 8px 30px; margin-right: 20px; }
-
-.inc_cntr table { margin-top: 20px; position: relative;} 
-.inc_fotr_r span { margin-right: 20px; }
-table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-  }
-  
-//   tr:nth-child(even) {
-//     background-color: #00b4fc94;
-//   }
-
-
-.inc_cntr table i { margin-left: 3px; }
-.inc_cntr table th { background: #F0F3FF; }
-
-
-.ed_del_buttons { position: ABSOLUTE; top: -7px; right: -7px; }
-.ed_del_buttons .fa-xmark { font-size: 26px; color: rgb(231, 9, 9); } 
-.emptyBox {
-  background-color: white;
-  text-align: center;
-  font-size: 20px;
-  min-height: 60px;
+mat-slider {
+  width: 300px;
 }
-
-
-
-@media (max-width: 767px) {
-  .insurance_pg_con .uploadEmptyTxt .d-flex.align-items-center.justify-content-between { flex-direction: column; align-items: start !important; }
-  .insurance_pg_con .uploadEmptyTxt .iub_btn { margin-top: 30px; }
-  .uploadEmptyTxt .insu_uplod_box { margin: 10px 0 0px !important; }
-  .inc_cntr table { overflow-x: auto; width: 100%; white-space: nowrap; display: inline-block; padding: 15px 0px; }
-  .inc_cntr table::-webkit-scrollbar { width: 1px; height: 2px; }
-  .ed_edit_btn { top: 6px; right: auto; left: 2px;  }
- 
-}
-
-
-
-
-
-.noMore_record { text-align: center; background: #fff; padding: 12px 16px; border-radius: 4px; }
