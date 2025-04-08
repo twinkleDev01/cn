@@ -1,5 +1,3 @@
-
-
   <div appInfiniteScroll
   [(page)]="page"
   [(loaddedScreens)]="loaddedScreens"
@@ -51,9 +49,9 @@
                         filterForm.value.updatedEnd ||
                         filterForm.value.expireStart ||
                         filterForm.value.expireEnd || 
-                      filterForm.value.dotNumber
-                      || filterForm.value.teamIds)
+                      filterForm.value.dotNumber  || filterForm.value.teamIds)
                   }">
+                    <i class="fa-solid fa-circle acrive_circle"></i>
                     <i class="fa-sharp fa-solid fa-filter"></i>
                   </span>
                   <span class="cn_btn icn_btn" (click)="refresh()">
@@ -228,24 +226,23 @@
                     </mat-autocomplete>
                   </mat-form-field>
                 </div>
-                <div class="col-md-3">
-                  <mat-form-field [ngClass]="{ highlighted: filterForm.get('teamIds')?.value }">
-                    <mat-select placeholder="TeamIds" formControlName="teamIds" multiple 
-                                (opened)="onTeamDropdownOpened()"
-                                #teamSelect>
-                      <mat-option *ngFor="let team of teamIdList" [value]="team.id">
-                        {{ team.id }}
-                      </mat-option>
-                      <mat-option *ngIf="loadingMoreTeams" disabled class="load-more-option">
-                        <div class="loading-spinner">
-                          <mat-spinner diameter="20"></mat-spinner>
-                        </div>
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
                   <!-- Buttons -->
-                 
+                  <div class="col-md-3">
+                    <mat-form-field [ngClass]="{ highlighted: filterForm.get('teamIds')?.value }">
+                      <mat-select placeholder="TeamIds" formControlName="teamIds" multiple 
+                                  (opened)="onTeamDropdownOpened()"
+                                  #teamSelect>
+                        <mat-option *ngFor="let team of teamIdList" [value]="team.id">
+                          {{ team.id }}
+                        </mat-option>
+                        <mat-option *ngIf="loadingMoreTeams" disabled class="load-more-option">
+                          <div class="loading-spinner">
+                            <mat-spinner diameter="20"></mat-spinner>
+                          </div>
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
                 </form>
                 <div class="col-md-12">
                   <div class="fltr_actn">
@@ -272,8 +269,7 @@
           <ng-container matColumnDef="companyName">
             <th mat-header-cell *matHeaderCellDef> Company Name </th>
             <td mat-cell *matCellDef="let element" class="fw_5" matTooltip="{{element.broker.companyName}}">
-              <!-- <a class="company_name" style="cursor: pointer;">{{element.broker.companyName}}</a> -->
-              <a [href]="'/freight-brokerage/' + element.dotNumber + '/' + formatCompanyName(element.broker?.companyName)" class="u_name" target="_blank">{{ element.broker?.companyName || element.dotType }}</a> 
+              <a [href]="'/freight-brokerage/' + element.dotNumber + '/' + formatCompanyName(element.broker?.companyName)" class="u_name" target="_blank" style="cursor: pointer;">{{ element.broker?.companyName || element.dotType }}</a>
             </td>
           </ng-container>
           <ng-container matColumnDef="status">

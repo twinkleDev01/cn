@@ -75,7 +75,9 @@ export class BrokerAlertComponent implements OnInit {
     this.autocompleteSearchData();
     this.teamList();
   }
-
+  formatCompanyName(name: string): string {
+    return name ? name.replace(/\s+/g, '-') : '';
+  }
   autocompleteSearchData(searchdata?:any): void {
     let newParams = {
       search: searchdata
@@ -98,9 +100,6 @@ export class BrokerAlertComponent implements OnInit {
         }
       );
     }
-  }
-  formatCompanyName(name: string): string {
-    return name ? name.replace(/\s+/g, '-') : '';
   }
   onDotInputChange(value: string) {
     console.log('Current DOT value:', value);
@@ -128,7 +127,7 @@ export class BrokerAlertComponent implements OnInit {
         page: this.page,
       };
     
-      const {  status, createdStart, createdEnd,emailStart,emailEnd, updatedStart,updatedEnd,expireStart,expireEnd,teamIds,dotNumber } = this.filterForm?.value;
+      const {  status, createdStart, createdEnd,emailStart,emailEnd, updatedStart,updatedEnd,teamIds,expireStart,expireEnd,dotNumber } = this.filterForm?.value;
     
       if (createdStart) newParams.fromCreatedAtDate = this.formatDateForAPI(createdStart);
       if (createdEnd) newParams.toCreatedAtDate = this.formatDateForAPI(createdEnd);
@@ -160,6 +159,7 @@ export class BrokerAlertComponent implements OnInit {
   if (newParams.status) queryParams.set('status', newParams.status);
   if (newParams.dotNumber) queryParams.set('dotNumber', newParams.dotNumber);
   if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
+  
   
   history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
  
@@ -299,36 +299,6 @@ applyFilter() {
   this.dataSource.filter = filterValue;
   this.isFilterApplied = filterValue.length > 0;
 } 
-onStatusToggle(newStatus: boolean, rowData: any): void {
-  console.log(newStatus, rowData
-  )
-  const inputDate = rowData.emailExpiryDate; // "2025-05-19"
-  const date = new Date(inputDate);
-  
-  // Format to MM-DD-YYYY
-  const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}-${date.getFullYear()}`;
-  
-  const payload = {
-    "status": newStatus,
-    "emailExpiryDate": formattedDate,
-    "dotNumber": rowData.dotNumber
-};
-console.log(payload)
-
-const APIparams = {
-  apiKey: AppSettings.APIsNameArray.CHANGEALTERT.BROKERADD,
-  postBody: payload
-};
-
-this.commonService.post(APIparams).subscribe({
-  next: (res) => {
-    console.log('Status updated successfully:', res);
-  },
-  error: (err) => {
-    console.error('Error updating status:', err);
-  }
-});
-}
 addParams(currentPage:any = this.page){
   this.page = currentPage;
   let newParams: {
@@ -365,7 +335,36 @@ if (newParams.dotNumber) queryParams.set('dotNumber', newParams.dotNumber);
 
 history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
 }
+onStatusToggle(newStatus: boolean, rowData: any): void {
+  console.log(newStatus, rowData
+  )
+  const inputDate = rowData.emailExpiryDate; // "2025-05-19"
+  const date = new Date(inputDate);
+  
+  // Format to MM-DD-YYYY
+  const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}-${date.getFullYear()}`;
+  
+  const payload = {
+    "status": newStatus,
+    "emailExpiryDate": formattedDate,
+    "dotNumber": rowData.dotNumber
+};
+console.log(payload)
 
+const APIparams = {
+  apiKey: AppSettings.APIsNameArray.CHANGEALTERT.BROKERADD,
+  postBody: payload
+};
+
+this.commonService.post(APIparams).subscribe({
+  next: (res) => {
+    console.log('Status updated successfully:', res);
+  },
+  error: (err) => {
+    console.error('Error updating status:', err);
+  }
+});
+}
 // For team dropdown pagination
 teamPage = 1;
 teamLimit = 10; // Items per load

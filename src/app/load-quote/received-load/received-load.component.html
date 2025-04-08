@@ -1,11 +1,5 @@
-<div
-  appInfiniteScroll
-  [(page)]="page"
-  [(loaddedScreens)]="loaddedScreens"
-  [totalPages]="totalPages"
-  [spinnerLoader]="spinnerLoader"
-  (updateParams)="addParams($event)"
-  (fetchData)="fetchLoadQuoteList($event)"
+<div appInfiniteScroll [(page)]="page" [(loaddedScreens)]="loaddedScreens" [totalPages]="totalPages"
+  [spinnerLoader]="showScrollSpinner" (updateParams)="addParams($event)" (fetchData)="fetchLoadQuoteList($event)"
   class="dashboard_chat_overview">
   <div class="dco_head">
     <div class="dcoh_l">
@@ -24,7 +18,7 @@
       </mat-form-field> -->
     </div>
   </div>
-  
+
   <div class="dco_box">
     <div class="row">
       <div class="col-md-6 pie_crt_box">
@@ -34,9 +28,11 @@
               <div class="lbl_1 w-100">
                 <div class="dco_bar">
                   <div class="bar_hed">
-                    <span class="bar_txt">Total Quotes</span> <span class="bar_vlu">{{totalQuotes ? totalQuotes : 0}}</span>
+                    <span class="bar_txt">Total Quotes</span> <span class="bar_vlu">{{totalQuotes ? totalQuotes :
+                      0}}</span>
                   </div>
-                  <mat-progress-bar mode="determinate" [value]="100 * (totalQuotes / totalQuotesLimit)"></mat-progress-bar>
+                  <mat-progress-bar mode="determinate"
+                    [value]="100 * (totalQuotes / totalQuotesLimit)"></mat-progress-bar>
                 </div>
                 <div class="dco_bar">
                   <div class="bar_hed">
@@ -135,8 +131,8 @@
               <mat-form-field appearance="none">
                 <mat-label>Table Search</mat-label>
                 <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
-                <input type="text" matInput placeholder="Search" 
-                (keyup)="applyFilter()"  [formControl]="searchControl" class="form-control cn_input ms-2">
+                <input type="text" matInput placeholder="Search" (keyup)="applyFilter()" [formControl]="searchControl"
+                  class="form-control cn_input ms-2">
               </mat-form-field>
             </div>
           </div>
@@ -153,49 +149,52 @@
               <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
                 <i class="fa-sharp fa-solid fa-filter"></i>
               </span>
-              <span class="cn_btn icn_btn">
-                <i class="fa-duotone fa-solid fa-rotate-right" (click)="refresh()"></i>
+              <span class="cn_btn icn_btn" (click)="refresh()">
+                <i class="fa-duotone fa-solid fa-rotate-right"></i>
               </span>
             </div>
           </div>
         </div>
         <div class="filter_box" [ngClass]="{'d-none': !showAdvancedFilter}">
           <div class="filtr_con">
-              <div class="row" [formGroup]="advanceFilterForm">
-                <div class="col-md-3"> 
-                  <mat-form-field>
-                    <mat-label>Equipment Type</mat-label>
-                    <mat-select formControlName="equipmentType">
-                      <mat-option *ngFor="let equipment of equipmentTypesList" [value]="equipment.id">{{equipment.name}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div><div class="col-md-3"> 
-                  <mat-form-field>
-                    <mat-label>Shipment Type</mat-label>
-                    <mat-select formControlName="shipmentTypes">
-                      <mat-option *ngFor="let shipment of shipmentTypesList" [value]="shipment.id">{{shipment.name}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-3">
-                  <mat-form-field>
-                    <mat-label>Weight (lbs)</mat-label>
-                    <input type="text" formControlName="weight" matInput placeholder="Search">
-                  </mat-form-field>
-                </div>
-                <div class="col-md-3">
-                  <mat-form-field>
-                    <mat-label>Length (ft)</mat-label>
-                    <input type="text" formControlName="length" matInput placeholder="Search">
-                  </mat-form-field>
-                </div>
-                <div class="col-md-3">
-                  <mat-form-field>
-                    <mat-label>Carrier Information</mat-label>
-                    <input type="text" matInput formControlName="userId" placeholder="Search">
-                  </mat-form-field>
-                </div>
-                <div class="d-none">
+            <div class="row" [formGroup]="advanceFilterForm">
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>Equipment Type</mat-label>
+                  <mat-select formControlName="equipmentType">
+                    <mat-option *ngFor="let equipment of equipmentTypesList"
+                      [value]="equipment.id">{{equipment.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>Shipment Type</mat-label>
+                  <mat-select formControlName="shipmentTypes">
+                    <mat-option *ngFor="let shipment of shipmentTypesList"
+                      [value]="shipment.id">{{shipment.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>Weight (lbs)</mat-label>
+                  <input type="text" formControlName="weight" matInput placeholder="Search">
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>Length (ft)</mat-label>
+                  <input type="text" formControlName="length" matInput placeholder="Search">
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>Carrier Information</mat-label>
+                  <input type="text" matInput formControlName="userId" placeholder="Search">
+                </mat-form-field>
+              </div>
+              <div class="d-none">
                 <div class="col-md-12"></div>
                 <div class="col-md-3">
                   <p class="cn_input_lbl">Checkbox</p>
@@ -221,14 +220,14 @@
                     <mat-date-range-picker #picker></mat-date-range-picker>
                   </mat-form-field>
                 </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="fltr_actn">
-                    <button class="cn_btn btn_bordered" (click)="advanceFilterForm.reset()">Clear</button>
-                    <button class="cn_btn" (click)="applyAdvanceFilter()">Apply</button>
-                  </div>
+              </div>
+              <div class="col-md-12">
+                <div class="fltr_actn">
+                  <button class="cn_btn btn_bordered" (click)="advanceFilterForm.reset(); applyAdvanceFilter()">Clear</button>
+                  <button class="cn_btn" (click)="applyAdvanceFilter()">Apply</button>
                 </div>
               </div>
+            </div>
           </div>
         </div>
       </div>
@@ -250,16 +249,17 @@
           <div class="user_dtl">
             <div class="ud_l">
               <i class="fa-duotone fa-solid fa-circle-user user_icon"></i>
-              <span class="user_Type"> {{element.guestType}} </span>
+              <span class="user_Type">{{element.guestType ? element.guestType :
+                element.inviterDetails?.userType}}</span>
             </div>
             <div class="ud_r">
               <div class="name_icn">
-                <a href="#" class="u_name">User Name {{element.name}}</a>
+                <a href="#" class="u_name">{{element.inviterDetails?.companyName}}</a>
                 <!-- <i class="fa-duotone fa-badge-check verify_icon" matTooltip="Account not Verified"></i> -->
               </div>
               <div class="loca_rtng">
                 <!-- <span class="user_rtng" matTooltip="Total 10 Reviews">4.5 <i class="fa-solid fa-star"></i> </span> -->
-                <span class="u_loca">Jacksonville, FL</span>
+                <!-- <span class="u_loca">{{element.inviterDetails.city}},{{element.inviterDetails.state}}</span> -->
               </div>
             </div>
           </div>
@@ -270,8 +270,7 @@
         <td mat-cell *matCellDef="let element" class="min_w_200" matTooltip="{{element.frequency}}">
           <div class="loca_col">
             <div class="loca_txt">
-              {{element.sourceLocationCity| titleCase}}, {{element.sourceLocationState}},
-              {{element.sourceLocationCountry}}
+              {{element.sourceLocation}}
             </div>
             <div class="frncy_txt bg_{{frequency}}" *ngIf="(element.sourceDate | customDateTime : true) as frequency">
               <i class="fa-duotone fa-solid" [ngClass]="{
@@ -290,8 +289,7 @@
         <th mat-header-cell *matHeaderCellDef>DropOff</th>
         <td mat-cell *matCellDef="let element" class="min_w_200" matTooltip="{{element.frequency}}">
           <div class="loca_col">
-            <div class="loca_txt">{{element.destinationLocationCity | titleCase}}, {{element.destinationLocationState}},
-              {{element.destinationLocationCountry}}</div>
+            <div class="loca_txt">{{element.destinationLocation}}</div>
             <div class="frncy_txt bg_{{frequency}}"
               *ngIf="(element.destinationDate | customDateTime : true) as frequency">
               <i class="fa-duotone fa-solid" [ngClass]="{
@@ -345,6 +343,22 @@
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <tr class="mat-row" *matNoDataRow style="text-align: center">
+        <ng-container *ngIf="!showScrollSpinner">
+          <td [attr.colspan]="displayedColumns.length">
+            <div class="empty-state">
+              <div class="empty-state__content">
+                <div class="empty-state__icon">
+                  <img src="./assets/images/no_data_found_img.jpg" alt="">
+                </div>
+                <div class="empty-state__message">Leads & Quotetion</div>
+                <p class="empty-state__help">This is no Leads & Quotetion</p>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+      </tr>
     </table>
 
     <div class="text-center my-5" *ngIf="showScrollSpinner">
@@ -356,12 +370,11 @@
   </div>
 </div>
 
-<div class="content_box" style="display: QWnone;">
+<!-- <div class="content_box" style="display: QWnone;">
   <div class="content_tlt">Requested Leads & Quotes</div>
   <div class="content_body">
     <div class="content_dis">Requested Leads refer to inquiries from shippers or brokers seeking carriers for specific loads, while Quotes are the price estimates or proposals provided by carriers in response, detailing the costs and terms for transporting the requested freight.</div>
     <div class="skeletonloader">
-      <!-- <div class="skeletonloader" *ngIf="nonCarrierUser?.length==0 && !skeletonLoader"> -->
       <div class="empty-state">
         <div class="empty-state__content">
           <div class="empty-state__icon">
@@ -373,14 +386,14 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 
 
 
 
 
-<div class="uploadEmptyTxt">
+<!-- <div class="uploadEmptyTxt">
   <div class="carrier_user_list_page">
     <div class="carrier_user_list_head">
       <h4 class="page_heading">Received Leads & Quotes <span>({{totalRecoads ? totalRecoads:0}})</span></h4>
@@ -400,7 +413,6 @@
             <div class="col-md-3 sepre_line">
               <div class="inc_locatn">
                 <span class="txt_lb me-2">Source Location</span>
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="text_truncate pointer"
                   matTooltip="{{(loadData?.sourceLocationCity | titleCase) + ', '+ loadData?.sourceLocationState + ', '+ loadData?.sourceLocationCountry}}"><i
                     class="fa-duotone fa-location-dot txt_p me-2"></i> {{(loadData?.sourceLocationCity | titleCase) + ', '+
@@ -412,7 +424,6 @@
             </div>
             <div class="col-md-3 sepre_line">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Destination Location</span>
                 <span class="text_truncate pointer"
                   matTooltip="{{(loadData?.destinationLocationCity|titleCase) + ', '+ loadData?.destinationLocationState + ', '+ loadData?.destinationLocationCountry}}">
@@ -426,7 +437,6 @@
             </div>
             <div class="col-md-3 sepre_line">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Shipment Type</span>
                 <span class=""> {{loadData?.shipmentTypesLabel ? loadData?.shipmentTypesLabel : '-'}} </span>
               </div>
@@ -434,7 +444,6 @@
 
             <div class="col-md-3">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Truck Types / Equipment Types</span>
                 <span class=""> {{loadData?.equipmentType[0]?.equipmentTypeName ?
                   loadData?.equipmentType[0]?.equipmentTypeName : '-'}} </span>
@@ -447,7 +456,6 @@
           <div class="row">
             <div class="col-md-4 sepre_line">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Miles </span>
                 <span class=""> {{loadData?.miles ? (loadData?.miles | numberFormat) : '-'}} </span>
               </div>
@@ -455,7 +463,6 @@
            
             <div class="col-md-4 sepre_line" >
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Company Name </span>
                 <span class=""> {{loadData?.inviterDetails?.companyName ? (loadData?.inviterDetails?.companyName |titleCase | convertEnd) : '-'}}
                 </span>
@@ -463,7 +470,6 @@
             </div>
             <div class="col-md-4 ">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Notes </span>
                 <span class=""> {{loadData?.notes ? loadData?.notes : '-'}} </span>
               </div>
@@ -515,5 +521,5 @@
     </div>
   </div>
 
-</div>
+</div> -->
 <!-- <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading> -->

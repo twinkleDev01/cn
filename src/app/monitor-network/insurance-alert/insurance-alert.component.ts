@@ -1,12 +1,11 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, of, startWith } from 'rxjs';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
-import { PopupComponent } from 'src/app/shared/popup/popup.component';
 interface Carrier {
   id: string;
   dotNumber: string;
@@ -36,6 +35,7 @@ export class InsuranceAlertComponent implements OnInit {
      AutoCompleteOptions: any[] = [];
      filteredOptions: any[] = [];
      loaddedScreens = 0;
+     teamIdList :any=[];
   dateRanges = [
     { label: 'Created', start: 'createdStart', end: 'createdEnd', picker: 'picker1' },
     { label: 'Last Email Sent At', start: 'emailStart', end: 'emailEnd', picker: 'picker2' },
@@ -45,7 +45,7 @@ export class InsuranceAlertComponent implements OnInit {
   totalPages: number = 0;
   public spinnerLoader = false;
   constructor(public commonService: CommonService,private fb: FormBuilder,private router: Router,
-                private route: ActivatedRoute,  private cdRef: ChangeDetectorRef,public dialogRef: MatDialogRef<PopupComponent>,) {
+                private route: ActivatedRoute,  private cdRef: ChangeDetectorRef,) {
    
   }
   
@@ -62,7 +62,8 @@ export class InsuranceAlertComponent implements OnInit {
         updatedEnd: [''],
         expireStart: [''],
         expireEnd: [''],
-        dotNumber:['']
+        dotNumber:[''],
+        teamIds: [],
       });
       if (params && Object.keys(params).length) {
         console.log(params,"89");
@@ -77,6 +78,7 @@ export class InsuranceAlertComponent implements OnInit {
           expireEnd: params['toExpireDate'] ? new Date(params['toExpireDate']) : null,
           policyNumber: params['policyNo'] || '',
           status: params['status'] || '',
+          teamIds: params['teamIds'] || '',
           dotNumber: params['dotNumber'] || ''
         });
           this.filterForm.updateValueAndValidity();
@@ -84,7 +86,7 @@ export class InsuranceAlertComponent implements OnInit {
   });
     this.fetchChangeAlertInsurance();
     this.autocompleteSearchData();
-   
+    this.teamList();
   }
  
   private _filter(value: string): any[] {
@@ -135,12 +137,13 @@ export class InsuranceAlertComponent implements OnInit {
         limit: number;
         page: number;
         dotNumber?: string;
+        teamIds?: string;
       } = {
         limit: 10,
         page: this.page,
       };
     
-      const { policyNumber, status, createdStart, createdEnd,emailStart,emailEnd, updatedStart,updatedEnd,expireStart,expireEnd,dotNumber } = this.filterForm?.value;
+      const { policyNumber, status,teamIds, createdStart, createdEnd,emailStart,emailEnd, updatedStart,updatedEnd,expireStart,expireEnd,dotNumber } = this.filterForm?.value;
     
       if (createdStart) newParams.fromCreatedAtDate = this.formatDateForAPI(createdStart);
       if (createdEnd) newParams.toCreatedAtDate = this.formatDateForAPI(createdEnd);
@@ -153,7 +156,7 @@ export class InsuranceAlertComponent implements OnInit {
       if(policyNumber) newParams.policyNo=policyNumber
       if (status) newParams.status = status;
       if(dotNumber) newParams.dotNumber=dotNumber;
-    
+      if (teamIds) newParams.teamIds = teamIds?.join(',');
   
       console.log('Selected Filters:', newParams);
     
@@ -172,7 +175,8 @@ export class InsuranceAlertComponent implements OnInit {
   if (newParams.policyNo) queryParams.set('policyNo', newParams.policyNo);
   if (newParams.status) queryParams.set('status', newParams.status);
  if (newParams.dotNumber) queryParams.set('dotNumber', newParams.dotNumber);
-  
+ if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
+ 
   history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
  
   
@@ -224,38 +228,6 @@ export class InsuranceAlertComponent implements OnInit {
       );
     }
   }
-
-  onNoClick(): void {
-    this.dialogRef.close({ event: 'fail' });
-  }
-
-  onStatusToggle(newStatus: boolean, rowData: any): void {
-    console.log(newStatus, rowData
-    )
-    const payload = {
-      "policyNo": rowData.policyNo,
-      "status": newStatus,
-      "emailExpiryDate": rowData.emailExpiryDate,
-      "dotType": rowData.dotType,
-      "dotNumber": rowData.dotNumber
-  };
-  console.log(payload)
-  
-  const APIparams = {
-    apiKey: AppSettings.APIsNameArray.CHANGEALTERT.INSURANCEADD,
-    postBody: payload
-  };
-
-  this.commonService.post(APIparams).subscribe({
-    next: (res) => {
-      console.log('Status updated successfully:', res);
-    },
-    error: (err) => {
-      console.error('Error updating status:', err);
-    }
-  });
-  }
-  
 
   applyFilters() {
     this.showAdvancedFilter = false;
@@ -312,9 +284,6 @@ export class InsuranceAlertComponent implements OnInit {
     this.filterForm.reset();
     this.fetchChangeAlertInsurance(true);
     
-  }
-  formatCompanyName(name: string): string {
-    return name ? name.replace(/\s+/g, '-') : '';
   }
 
   formatDate(inputDate:string): string {
@@ -388,5 +357,114 @@ const queryParams = new URLSearchParams();
    if (newParams.dotNumber) queryParams.set('dotNumber', newParams.dotNumber);
 history.replaceState(null, '', `${window.location.pathname}?${queryParams}`);
 }
+onStatusToggle(newStatus: boolean, rowData: any): void {
+  console.log(newStatus, rowData
+  )
+  const payload = {
+    "policyNo": rowData.policyNo,
+    "status": newStatus,
+    "emailExpiryDate": rowData.emailExpiryDate,
+    "dotType": rowData.dotType,
+    "dotNumber": rowData.dotNumber
+};
+console.log(payload)
 
+const APIparams = {
+  apiKey: AppSettings.APIsNameArray.CHANGEALTERT.INSURANCEADD,
+  postBody: payload
+};
+
+this.commonService.post(APIparams).subscribe({
+  next: (res) => {
+    console.log('Status updated successfully:', res);
+  },
+  error: (err) => {
+    console.error('Error updating status:', err);
+  }
+});
+}
+formatCompanyName(name: string): string {
+  return name ? name.replace(/\s+/g, '-') : '';
+}
+// For team dropdown pagination
+teamPage = 1;
+teamLimit = 10; // Items per load
+totalTeams = 0;
+loadingMoreTeams = false;
+hasMoreTeams = true;
+teamList(loadMore: boolean = false): void {
+  if (loadMore) {
+    if (!this.hasMoreTeams || this.loadingMoreTeams) return;
+    this.teamPage++;
+  } else {
+    // Initial load - reset
+    this.teamPage = 1;
+    this.teamIdList = [];
+    this.hasMoreTeams = true;
+  }
+
+  this.loadingMoreTeams = true;
+  if (!loadMore) this.spinnerLoader = true;
+
+  const params = {
+    limit: this.teamLimit,
+    page: this.teamPage
+  };
+
+  const apiKey = AppSettings.APIsNameArray.TEAM.TEAMLIST;
+  if (apiKey) {
+    let APIparams = {
+      apiKey: apiKey,
+      uri: this.commonService.getAPIUriFromParams(params),
+    };
+    
+    this.commonService.getList(APIparams).subscribe(
+      (response) => {
+        this.loadingMoreTeams = false;
+        this.spinnerLoader = false;
+        
+        if (response?.response?.teamArray) {
+          this.teamIdList = [...this.teamIdList, ...response.response.teamArray];
+          // Check if more teams are available
+          this.hasMoreTeams = response.response.teamArray.length >= this.teamLimit;
+          this.totalTeams = response.response.totalCount || 0;
+        }
+      },
+      (error) => {
+        this.loadingMoreTeams = false;
+        this.spinnerLoader = false;
+        console.error('Error fetching teams:', error);
+      }
+    );
+  }
+}
+@ViewChild('teamSelect') teamSelect: MatSelect;
+
+onTeamDropdownOpened(): void {
+  // Initialize scroll listener when dropdown opens
+  setTimeout(() => {
+    if (this.teamSelect && this.teamSelect.panel) {
+      const panel = this.teamSelect.panel.nativeElement;
+      panel.addEventListener('scroll', this.onTeamDropdownScroll.bind(this));
+    }
+  });
+}
+
+onTeamDropdownScroll(event: Event): void {
+  const panel = event.target as HTMLElement;
+  const scrollThreshold = 50; // pixels from bottom
+  const atBottom = panel.scrollHeight - panel.scrollTop <= panel.clientHeight + scrollThreshold;
+  
+  if (atBottom && this.hasMoreTeams && !this.loadingMoreTeams) {
+    this.teamList(true); // Load more teams
+  }
+}
+
+ngOnDestroy(): void {
+  // Clean up scroll listener
+  if (this.teamSelect && this.teamSelect.panel) {
+    const panel = this.teamSelect.panel.nativeElement;
+    panel.removeEventListener('scroll', this.onTeamDropdownScroll);
+  }
+}
 }

@@ -34,6 +34,7 @@ export class MyTruckAvailabilityComponent implements OnInit {
   advanceFilterForm: FormGroup;
   loaddedScreens = 0;
   totalPages: number = 0;
+  usertype:any;
 
   countryList = [
     { value: 'US', name: 'United States', flag: './assets/country/us.png', code: '+1' },
@@ -52,6 +53,11 @@ export class MyTruckAvailabilityComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.usertype = localStorage.getItem('user_type');
+if (this.usertype === 'CARRIER') {
+  this.displayedColumns = this.displayedColumns.filter(col => col !== 'carrierInformation');
+}
+// 
     this.route.queryParams.subscribe((params) => {
     this.advanceFilterForm = this.fb.group({
       shipmentTypes: [''],
@@ -139,7 +145,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
   }
 
   refresh(){
-    // this.getLoadAvailibility(true);
+    this.getLoadAvailibility(true);
   }
   resetFilters(): void {
     console.log('Reset Filters Clicked');
@@ -150,7 +156,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     this.page = 1;
     this.dataSource.data = [];
     this.advanceFilterForm.reset();
-    // this.getLoadAvailibility(true);
+    this.getLoadAvailibility(true);
     
   } 
 
@@ -159,9 +165,9 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     this.isFilterApplied = true;
     this.page = 1;
     this.dataSource.data = [];
-    // this.getLoadAvailibility(true);
+    this.getLoadAvailibility(true);
   }
-  getLoadAvailibility() {
+  getLoadAvailibility(resetData: boolean = false) {
     // let uri = null;
 
     this.spinnerLoader = true;
@@ -241,15 +247,24 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     this.commonService.getList(APIparams).subscribe(
       (ServerRes) => {
         if (ServerRes.success === true) {
-          this.dataSource.data = ServerRes.response;
+          const newData = ServerRes.response;
+          // this.dataSource.data = ServerRes.response;
+          if (resetData) {
+            this.dataSource.data = newData;
+          } else {
+            const existingIds = new Set(this.dataSource.data.map(item => item.id));
+            const uniqueData = newData.filter(item => !existingIds.has(item.id));
+            this.dataSource.data = [...this.dataSource.data, ...uniqueData];
+          }
+  
           console.log(ServerRes,"799", this.dataSource.data)
           this.totalRecords = ServerRes.total;
           this.totalPages = ServerRes.totalPages;
           this.loadAvailibilityData = ServerRes.response;
           this.spinnerLoader = false;
         } else {
-          this.loadAvailibilityData = [];
-          this.spinnerLoader = false;
+          // this.loadAvailibilityData = [];
+          // this.spinnerLoader = false;
         }
       },
       (error) => {
@@ -266,7 +281,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     this.isFilterApplied = true;
     this.page = 1;
     this.dataSource.data = [];
-    // this.getLoadAvailibility(true);
+    this.getLoadAvailibility(true);
   }
   addParams(currentPage: any = this.page) {
     this.page = currentPage;

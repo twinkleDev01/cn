@@ -3,7 +3,7 @@
   [(page)]="page"
   [(loaddedScreens)]="loaddedScreens"
   [totalPages]="totalPages"
-  [spinnerLoader]="spinnerLoader"
+  [spinnerLoader]="showScrollSpinner"
   (updateParams)="addParams($event)"
   (fetchData)="fetchLoadQuoteList($event)"
   class="dashboard_chat_overview">
@@ -156,8 +156,8 @@
               <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
                 <i class="fa-sharp fa-solid fa-filter"></i>
               </span>
-              <span class="cn_btn icn_btn">
-                <i class="fa-duotone fa-solid fa-rotate-right"  (click)="refresh()"></i>
+              <span class="cn_btn icn_btn" (click)="refresh()">
+                <i class="fa-duotone fa-solid fa-rotate-right" ></i>
               </span>
             </div>
           </div>
@@ -252,16 +252,16 @@
           <div class="user_dtl">
             <div class="ud_l">
               <i class="fa-duotone fa-solid fa-circle-user user_icon"></i>
-              <span class="user_Type"> {{element.guestType}} </span>
+              <span class="user_Type"> {{element.guestType ? element.guestType : 'Guest'}} </span>
             </div>
             <div class="ud_r">
               <div class="name_icn">
-                <a href="#" class="u_name">User Name {{element.name}}</a>
+                <a href="#" class="u_name">{{element.carrier.companyName}}</a>
                 <!-- <i class="fa-duotone fa-badge-check verify_icon" matTooltip="Account not Verified"></i> -->
               </div>
               <div class="loca_rtng">
                 <!-- <span class="user_rtng" matTooltip="Total 10 Reviews">4.5 <i class="fa-solid fa-star"></i> </span> -->
-                <span class="u_loca">Jacksonville, FL</span>
+                <span class="u_loca">{{element.carrier.city}},{{element.carrier.state}}</span>
               </div>
             </div>
           </div>
@@ -272,8 +272,7 @@
         <td mat-cell *matCellDef="let element" class="min_w_200" matTooltip="{{element.frequency}}">
           <div class="loca_col">
             <div class="loca_txt">
-              {{element.sourceLocationCity| titleCase}}, {{element.sourceLocationState}},
-              {{element.sourceLocationCountry}}
+              {{element.sourceLocation}}
             </div>
             <div class="frncy_txt bg_{{frequency}}" *ngIf="(element.sourceDate | customDateTime : true) as frequency">
               <i class="fa-duotone fa-solid" [ngClass]="{
@@ -292,8 +291,7 @@
         <th mat-header-cell *matHeaderCellDef>DropOff</th>
         <td mat-cell *matCellDef="let element" class="min_w_200" matTooltip="{{element.frequency}}">
           <div class="loca_col">
-            <div class="loca_txt">{{element.destinationLocationCity | titleCase}}, {{element.destinationLocationState}},
-              {{element.destinationLocationCountry}}</div>
+            <div class="loca_txt">{{element.destinationLocation}}</div>
             <div class="frncy_txt bg_{{frequency}}"
               *ngIf="(element.destinationDate | customDateTime : true) as frequency">
               <i class="fa-duotone fa-solid" [ngClass]="{
@@ -347,6 +345,21 @@
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr class="mat-row" *matNoDataRow style="text-align: center">
+        <ng-container *ngIf="!showScrollSpinner">
+          <td [attr.colspan]="displayedColumns.length">
+            <div class="empty-state">
+              <div class="empty-state__content">
+                <div class="empty-state__icon">
+                  <img src="./assets/images/no_data_found_img.jpg" alt="">
+                </div>
+                <div class="empty-state__message">Leads & Quotetion</div>
+                <p class="empty-state__help">This is no Leads & Quotetion</p>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+    </tr>
     </table>
 
     <div class="text-center my-5" *ngIf="showScrollSpinner">
@@ -358,12 +371,11 @@
   </div>
 </div>
 
-<div class="content_box">
+<!-- <div class="content_box">
   <div class="content_tlt">Requested Leads & Quotes</div>
   <div class="content_body">
     <div class="content_dis">Requested Leads refer to inquiries from shippers or brokers seeking carriers for specific loads, while Quotes are the price estimates or proposals provided by carriers in response, detailing the costs and terms for transporting the requested freight.</div>
     <div class="skeletonloader">
-      <!-- <div class="skeletonloader" *ngIf="nonCarrierUser?.length==0 && !skeletonLoader"> -->
       <div class="empty-state">
         <div class="empty-state__content">
           <div class="empty-state__icon">
@@ -375,11 +387,11 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 
 
-<div class="uploadEmptyTxt">
+<!-- <div class="uploadEmptyTxt">
   <div class="manage_availability_page">
     <h4 class="page_heading">Requested Leads & Quotes <span>({{totalRecoads ? totalRecoads : 0}})</span></h4>
     <div class="insu_uplod_box">
@@ -392,19 +404,12 @@
 
     <div class="" *ngIf="!skeletonLoader && nonCarrierUser">
       <div class="inc_data_updt mt-3 d-none" *ngFor="let loadData of nonCarrierUser;let i=index">
-        <!-- <div class="inc_head">
-              <div class="inc_head_l">
-    
-    
-              </div> 
-            </div> -->
         <div class="inc_head_l">
           <div class="row">
             <div class="col-md-2">
               <div class="inc_locatn">
 
                 <span class="txt_lb me-2">Source Location</span>
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="text_truncate pointer"
                   matTooltip="{{(loadData?.sourceLocationCity | titleCase) + ', '+ loadData?.sourceLocationState + ', '+ loadData?.sourceLocationCountry}}"><i
                     class="fa-duotone fa-location-dot txt_p me-2"></i> {{(loadData?.sourceLocationCity | titleCase) + ', '+
@@ -413,7 +418,6 @@
             </div>
             <div class="col-md-2">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Destination Location</span>
                 <span class="text_truncate pointer" matTooltip="{{(loadData?.destinationLocationCity | titleCase)
                       + ', '+ loadData?.destinationLocationState + ', '+ loadData?.destinationLocationCountry}} "><i
@@ -424,7 +428,6 @@
             </div>
             <div class="col-md-1">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Miles </span>
                 <span class="">{{ loadData?.miles ? (loadData.miles | numberFormat) : '-' }}</span>
 
@@ -432,7 +435,6 @@
             </div>
             <div class="col-md-2">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Company Name </span>
                 <span class=""> {{loadData?.carrierCompany ? (loadData?.carrierCompany | titleCase | convertEnd) : '-'}} </span>
               </div>
@@ -441,14 +443,12 @@
 
             <div class="col-md-3">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Shipment Type</span>
                 <span class=""> {{loadData?.shipmentTypesLabel ? loadData?.shipmentTypesLabel : '-'}} </span>
               </div>
             </div>
             <div class="col-md-2">
               <div class="inc_locatn">
-                <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
                 <span class="txt_lb me-2">Truck Types / Equipment Types</span>
                 <span class=""> {{loadData?.equipmentType[0]?.equipmentTypeName ?
                   loadData?.equipmentType[0]?.equipmentTypeName : '-'}} </span>
@@ -474,15 +474,6 @@
               <span class=""> {{loadData?.notes ? loadData?.notes : '-'}} </span>
             </div>
           </div>
-          <!-- <div class="inc_fotr">
-                <div class="inc_fotr_r">
-                  <div class="ed_del_buttons">
-                    <button class="ed_edit_btn" (click)="editLoadAvailibility(loadData,'editLoadAvailList')" matTooltip="Edit">
-                      <span class="material-icons-outlined c_green">edit</span>
-                    </button>
-                  </div>
-                </div>
-              </div> -->
 
         </div>
 
@@ -495,7 +486,6 @@
           <div class="w-40">
             <div class="data_box">
               <span class="txt_lb me-2">Source Location</span>
-              <!-- <mat-icon class="material-icon">location_on</mat-icon> -->
               <span class="text_truncate pointer"
                 matTooltip="{{(loadData?.sourceLocationCity |titleCase) + ', '+ loadData?.sourceLocationState + ', '+ loadData?.sourceLocationCountry}}">
                 <i class="fa-duotone fa-location-dot txt_p me-2"></i> 
@@ -544,36 +534,12 @@
               <span class=""> {{loadData?.notes ? loadData?.notes : '-'}} </span>
             </div>
           </div>
-          <!-- <div class="inc_fotr">
-                <div class="inc_fotr_r">
-                  <div class="ed_del_buttons">
-                    <button class="ed_edit_btn" (click)="editLoadAvailibility(loadData,'editLoadAvailList')" matTooltip="Edit">
-                      <span class="material-icons-outlined c_green">edit</span>
-                    </button>
-                  </div>
-                </div>
-              </div> -->
-
         </div>
 
       </div>
 
     </div>
     
-    <!-- <div class="skeletonloader" *ngIf="nonCarrierUser?.length==0 && !skeletonLoader">
-      <div class="empty-state">
-        <div class="empty-state__content">
-          <div class="empty-state__icon">
-            <img src="./assets/images/no_data_found_img.jpg" alt="">
-          </div>
-          <div class="empty-state__message">Leads & Quotetion</div>
-          <p class="empty-state__help">This is no Leads & Quotetion</p>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="nonCarrierUser?.length > 0 && dataNotFound && !skeletonLoader" class="noMore_record">
-      <span>There are no more records to show.</span>
-    </div> -->
     <div class="skt_eifr" *ngIf="skeletonLoader">
       <div *ngFor="let fake of generateFakeSkeleton(8)">
         <ngx-skeleton-loader count="1"
@@ -587,5 +553,5 @@
       <span class="spinner-border" role="status" style="color: #00b4fc;"></span>
     </div>
   </div>
-</div>
+</div> -->
 <!-- <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px',fullScreenBackdrop:true }"></ngx-loading> -->

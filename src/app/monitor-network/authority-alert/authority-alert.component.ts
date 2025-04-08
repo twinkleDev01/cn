@@ -1,5 +1,6 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, of, startWith } from 'rxjs';
@@ -23,6 +24,7 @@ export class AuthorityAlertComponent implements OnInit {
      AutoCompleteOptions: any[] = [];
      filteredOptions:  any[] = [];
      loaddedScreens = 0;
+     teamIdList :any=[];
   dateRanges = [ 
     { label: 'Created', start: 'createdStart', end: 'createdEnd', picker: 'picker1' },
     { label: 'Last Email Sent At', start: 'emailStart', end: 'emailEnd', picker: 'picker2' },
@@ -47,7 +49,8 @@ export class AuthorityAlertComponent implements OnInit {
         updatedEnd: [''],
         expireStart: [''],
         expireEnd: [''],
-        dotNumber:['']
+        dotNumber:[''],
+        teamIds: [],
       });
       if (params && Object.keys(params).length) {
         console.log(params,"89");
@@ -61,14 +64,15 @@ export class AuthorityAlertComponent implements OnInit {
           expireStart: params['fromExpireDate'] ? new Date(params['fromExpireDate']) : null,
           expireEnd: params['toExpireDate'] ? new Date(params['toExpireDate']) : null,
           status: params['status'] || '',
-          dotNumber: params['dotNumber'] || ''
+          dotNumber: params['dotNumber'] || '',
+          teamIds: params['teamIds'] || '',
         });
           this.filterForm.updateValueAndValidity();
       }
   });
     this.fetchChangeAlertAuthority();
     this.autocompleteSearchData();
-   
+    this.teamList();
   }
 
   autocompleteSearchData(searchdata?:any): void {
@@ -94,31 +98,6 @@ export class AuthorityAlertComponent implements OnInit {
       );
     }
   }
-  onStatusToggle(newStatus: boolean, rowData: any): void {
-    console.log(newStatus, rowData
-    )
-    const payload = {
-      "dotType": rowData.dotType,
-      "dotNumber": rowData.dotNumber,
-      "status": newStatus,
-      "emailExpiryDate": rowData.emailExpiryDate,
-  };
-  console.log(payload)
-  
-  const APIparams = {
-    apiKey: AppSettings.APIsNameArray.CHANGEALTERT.AUTHORITYADD,
-    postBody: payload
-  };
-
-  this.commonService.post(APIparams).subscribe({
-    next: (res) => {
-      console.log('Status updated successfully:', res);
-    },
-    error: (err) => {
-      console.error('Error updating status:', err);
-    }
-  });
-  }
   onDotInputChange(value: string) {
     console.log('Current DOT value:', value);
     this.autocompleteSearchData(value);
@@ -139,12 +118,13 @@ export class AuthorityAlertComponent implements OnInit {
         limit: number;
         page: number;
         dotNumber?: string;
+        teamIds?: string;
       } = {
         limit: 10,
         page: this.page,
       };
     
-      const {  status, createdStart, createdEnd,emailStart,emailEnd, updatedStart,updatedEnd,expireStart,expireEnd,dotNumber } = this.filterForm?.value;
+      const {  status, createdStart, teamIds,createdEnd,emailStart,emailEnd, updatedStart,updatedEnd,expireStart,expireEnd,dotNumber } = this.filterForm?.value;
     
       if (createdStart) newParams.fromCreatedAtDate = this.formatDateForAPI(createdStart);
       if (createdEnd) newParams.toCreatedAtDate = this.formatDateForAPI(createdEnd);
@@ -156,6 +136,7 @@ export class AuthorityAlertComponent implements OnInit {
       if (expireEnd) newParams.toExpireDate = this.formatDateForAPI(expireEnd);
       if (status) newParams.status = status;
       if(dotNumber) newParams.dotNumber=dotNumber;
+      if (teamIds) newParams.teamIds = teamIds?.join(',');
     
   
       console.log('Selected Filters:', newParams);
@@ -174,7 +155,7 @@ export class AuthorityAlertComponent implements OnInit {
   if (newParams.toExpireDate) queryParams.set('toExpireDate', newParams.toExpireDate);
   if (newParams.status) queryParams.set('status', newParams.status);
   if (newParams.dotNumber) queryParams.set('dotNumber', newParams.dotNumber);
-  
+  if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
   
   history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
  
@@ -228,9 +209,6 @@ export class AuthorityAlertComponent implements OnInit {
         }
       );
     }
-  }
-  formatCompanyName(name: string): string {
-    return name ? name.replace(/\s+/g, '-') : '';
   }
 
   applyFilters() {
@@ -407,6 +385,115 @@ if (newParams.status) queryParams.set('status', newParams.status);
 if (newParams.dotNumber) queryParams.set('dotNumber', newParams.dotNumber);
 
 history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
+}
+onStatusToggle(newStatus: boolean, rowData: any): void {
+  console.log(newStatus, rowData
+  )
+  const payload = {
+    "dotType": rowData.dotType,
+    "dotNumber": rowData.dotNumber,
+    "status": newStatus,
+    "emailExpiryDate": rowData.emailExpiryDate,
+};
+console.log(payload)
+
+const APIparams = {
+  apiKey: AppSettings.APIsNameArray.CHANGEALTERT.AUTHORITYADD,
+  postBody: payload
+};
+
+this.commonService.post(APIparams).subscribe({
+  next: (res) => {
+    console.log('Status updated successfully:', res);
+  },
+  error: (err) => {
+    console.error('Error updating status:', err);
+  }
+});
+}
+formatCompanyName(name: string): string {
+  return name ? name.replace(/\s+/g, '-') : '';
+}
+// For team dropdown pagination
+teamPage = 1;
+teamLimit = 10; // Items per load
+totalTeams = 0;
+loadingMoreTeams = false;
+hasMoreTeams = true;
+teamList(loadMore: boolean = false): void {
+  if (loadMore) {
+    if (!this.hasMoreTeams || this.loadingMoreTeams) return;
+    this.teamPage++;
+  } else {
+    // Initial load - reset
+    this.teamPage = 1;
+    this.teamIdList = [];
+    this.hasMoreTeams = true;
+  }
+
+  this.loadingMoreTeams = true;
+  if (!loadMore) this.spinnerLoader = true;
+
+  const params = {
+    limit: this.teamLimit,
+    page: this.teamPage
+  };
+
+  const apiKey = AppSettings.APIsNameArray.TEAM.TEAMLIST;
+  if (apiKey) {
+    let APIparams = {
+      apiKey: apiKey,
+      uri: this.commonService.getAPIUriFromParams(params),
+    };
+    
+    this.commonService.getList(APIparams).subscribe(
+      (response) => {
+        this.loadingMoreTeams = false;
+        this.spinnerLoader = false;
+        
+        if (response?.response?.teamArray) {
+          this.teamIdList = [...this.teamIdList, ...response.response.teamArray];
+          // Check if more teams are available
+          this.hasMoreTeams = response.response.teamArray.length >= this.teamLimit;
+          this.totalTeams = response.response.totalCount || 0;
+        }
+      },
+      (error) => {
+        this.loadingMoreTeams = false;
+        this.spinnerLoader = false;
+        console.error('Error fetching teams:', error);
+      }
+    );
+  }
+}
+@ViewChild('teamSelect') teamSelect: MatSelect;
+
+onTeamDropdownOpened(): void {
+  // Initialize scroll listener when dropdown opens
+  setTimeout(() => {
+    if (this.teamSelect && this.teamSelect.panel) {
+      const panel = this.teamSelect.panel.nativeElement;
+      panel.addEventListener('scroll', this.onTeamDropdownScroll.bind(this));
+    }
+  });
+}
+
+onTeamDropdownScroll(event: Event): void {
+  const panel = event.target as HTMLElement;
+  const scrollThreshold = 50; // pixels from bottom
+  const atBottom = panel.scrollHeight - panel.scrollTop <= panel.clientHeight + scrollThreshold;
+  
+  if (atBottom && this.hasMoreTeams && !this.loadingMoreTeams) {
+    this.teamList(true); // Load more teams
+  }
+}
+
+ngOnDestroy(): void {
+  // Clean up scroll listener
+  if (this.teamSelect && this.teamSelect.panel) {
+    const panel = this.teamSelect.panel.nativeElement;
+    panel.removeEventListener('scroll', this.onTeamDropdownScroll);
+  }
 }
 }
 

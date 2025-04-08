@@ -821,6 +821,7 @@ border: 1px solid #ddd !important;}
   .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label mat-label,
   .mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label mat-label { background: #fff; padding: 0 5px; margin: 0 2px; }
   .date_range_filter {
+    margin: 0 0 1rem;
     .mat-icon-button, .mat-button-wrapper { height: 36px; width: 36px; display: inline-flex; align-items: center; justify-content: center; margin: 0 -5px 0 0; }
     .mat-button-ripple.mat-ripple, .mat-button-focus-overlay { display: none; }
   }
@@ -1004,6 +1005,38 @@ border: 1px solid #ddd !important;}
   .mat-slide-toggle.mat-checked .mat-ripple-element { background-color: #4fd366; }
 }
 
+.cus_tree_view {
+  .mat-expansion-panel { border-radius: 0px !important; box-shadow: none; margin: 0 0 0.5rem; }
+  .mat-expansion-panel .mat-expansion-panel-header.cdk-keyboard-focused:not([aria-disabled=true]), 
+  .mat-expansion-panel .mat-expansion-panel-header.cdk-program-focused:not([aria-disabled=true]), 
+  .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled=true]) { background: transparent; }
+  .mat-expansion-panel-header { padding: 0rem; }
+  .mat-expansion-panel-header .fa-angles-right { color: #00b4fc; }
+  .mat-expansion-panel-header.mat-expanded .fa-angles-right { transform: rotate(-90deg); }
+  .mat-expansion-panel-header.mat-expanded .mat-expansion-panel-header-title { color: #00b4fc; }
+  .mat-expansion-panel-header.mat-expanded { height: 46px; padding: 0rem; }
+  .mat-expansion-panel-header .mat-expansion-indicator::after,
+  .mat-expansion-panel-header.mat-expanded .mat-expansion-indicator { display: none; }
+  .mat-expansion-panel-header-title { font-size: 1.1rem; font-weight: 500; line-height: normal; }
+  .mat-expansion-panel-header-description { justify-content: right; }
+  .mat-expansion-panel-body { padding: 0 0 0 2rem; }
+  .mat-card { padding: 0; border-radius: 0; box-shadow: none; }
+  .mat-form-field-wrapper { padding-bottom: 0.6rem; }
+  .cus_slide_toggle {
+    .mat-checked .mat-slide-toggle-content { color: #333; }
+  }
+  .cn_radio_btn .mat-radio-checked .mat-radio-label-content,
+  .cn_mlti_selct .mat-checkbox-checked .mat-checkbox-label { color: #333; font-weight: 500; }
 
+  @media screen and (max-width: 1680px) {
+    .cn_field .mat-select-value-text { font-size: 12px; }
+    .cn_field .cn_input { font-size: 12px; line-height: 18px; }
+    .calculated_value { font-size: 12px; }
+  }
+}
 
-
+/* for the advance filter active dot */
+.adv_filter_btn.active-filter { background: #0fc00f; }
+.adv_filter_btn { position: relative; }
+.acrive_circle { position: absolute; top: -4px; left: -5px; color: #818181; font-size: 13px;  opacity: 0; }
+.adv_filter_btn.active-filter .acrive_circle { opacity: 1; }

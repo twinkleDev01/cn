@@ -1,0 +1,272 @@
+<div class="content_box add_team_member">
+    <div class="contnt_hed mb-1">
+      <div class="ch_l">
+        <h3 class="ch_tlt">Notifications</h3>
+      </div>
+      <div class="ch_rl"></div>
+    </div>
+  
+    <div class="content_body">
+      <p class="content_dis mb-4">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+      </p>
+      <div class="cus_tree_view">
+        <mat-accordion [multi]="true">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
+                📌 Profile & Account Management
+              </mat-panel-title>
+              <mat-panel-description></mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row cus_slide_toggle">
+              <div class="col-md-3">
+                <p class="tgle_tlt">Profile Updated Successfully</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Profile Views Alert</p>
+                <mat-radio-group appearance="none" class="cn_radio_btn">
+                  <mat-radio-button [value]="0">Instant</mat-radio-button>
+                  <mat-radio-button [value]="2">Daily</mat-radio-button>
+                  <mat-radio-button [value]="3">Weekly</mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Team Member Added or Removed</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Subscription Expiry Alert</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <!-- This is extra field If you needed -->
+              <div class="col-md-3">
+                <p class="tgle_tlt">This is extra field If you needed</p>
+                <div class="cn_mlti_selct">
+                  <mat-checkbox>Instant</mat-checkbox>
+                  <mat-checkbox>Daily</mat-checkbox>
+                  <mat-checkbox>Weekly</mat-checkbox>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
+                🚛 Load Leads & Quotes 
+              </mat-panel-title>
+              <mat-panel-description></mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row cus_slide_toggle">
+              <div class="col-md-3">
+                <p class="tgle_tlt">New Load Lead Available</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Load Lead Expiring Soon</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
+                ⭐ Reviews & Reputation
+              </mat-panel-title>
+              <mat-panel-description></mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row cus_slide_toggle">
+              <div class="col-md-3">
+                <p class="tgle_tlt">New Review Received</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">New Review Received - Reminder</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Geather Reviews Reminder</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Got a new Review</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Respond to Review Reminder</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
+                📢 Marketing & Growth
+              </mat-panel-title>
+              <mat-panel-description></mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row cus_slide_toggle">
+              <div class="col-md-3">
+                <p class="tgle_tlt">Special Promotional Opportunities</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
+                🛠 Truck Availability
+              </mat-panel-title>
+              <mat-panel-description></mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row cus_slide_toggle">
+              <div class="col-md-3">
+                <p class="tgle_tlt">Truck Availability Expiring Soon</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Truck Availability Request from Broker</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
+                📊 Performance & Analytics
+              </mat-panel-title>
+              <mat-panel-description></mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row cus_slide_toggle">
+              <div class="col-md-3">
+                <p class="tgle_tlt">Monthly Performance Summary</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Quarterly Revenue Insights</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
+                ⚠️ Compliance & Regulations
+              </mat-panel-title>
+              <mat-panel-description></mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row cus_slide_toggle">
+              <div class="col-md-3">
+                <p class="tgle_tlt">Insurance Expiry Alert</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">FMCSA Authority Change Alert</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Authority Renewal Reminder</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
+                🎁 Referral & Engagement
+              </mat-panel-title>
+              <mat-panel-description></mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row cus_slide_toggle">
+              <div class="col-md-3">
+                <p class="tgle_tlt">Referral Bonus Earned</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Referral Program Updates</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
+                📣 Platform Updates
+              </mat-panel-title>
+              <mat-panel-description></mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row cus_slide_toggle">
+              <div class="col-md-3">
+                <p class="tgle_tlt">New Features & Enhancements</p>
+                <mat-slide-toggle>Email</mat-slide-toggle>
+                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+      
+
+
+      <!-- <form class="cn_field">
+        <div class="row">
+          <div class="col-md-6">
+            <p class="cn_input_lbl">Profile Incomplete Reminder</p>
+            <mat-radio-group appearance="none" class="cn_radio_btn">
+              <mat-radio-button [value]="0">Active</mat-radio-button>
+              <mat-radio-button [value]="2">In-active</mat-radio-button>
+              <mat-error class="error_mess"></mat-error>
+            </mat-radio-group>
+          </div>
+          <div class="col-md-12">
+            <p class="cn_input_lbl">Member Permission</p>
+            <div class="cn_mlti_selct">
+              <mat-checkbox></mat-checkbox>
+              <mat-error class="error_mess"></mat-error>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form_action">
+              <button type="button" class="cn_btn btn_bordered">Cancel</button>
+              <button type="submit" class="cn_btn ms-4">
+                <span class="me-1 spinner-border" role="status"></span>
+                Add Member
+              </button>
+            </div>
+          </div>
+        </div>
+      </form> -->
+    </div>
+  
+  </div>
+  
