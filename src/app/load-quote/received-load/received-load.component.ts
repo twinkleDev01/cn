@@ -42,6 +42,26 @@ export class ReceivedLoadComponent implements OnInit {
   totalQuotes: number = 0;
   totalQuotesLimit: number = 0;
   isFilterApplied = false;
+  countryList = [
+    {
+      value: 'US',
+      name: 'United States',
+      flag: './assets/country/us.png',
+      code: '+1',
+    },
+    {
+      value: 'MX',
+      name: 'Mexico',
+      flag: './assets/country/mx.png',
+      code: '+52',
+    },
+    {
+      value: 'CA',
+      name: 'Canada',
+      flag: './assets/country/ca.png',
+      code: '+1',
+    },
+  ];
   advanceFilterForm = this.fb.group({
     shipmentTypes: [''],
     equipmentType: [''],
@@ -62,6 +82,7 @@ export class ReceivedLoadComponent implements OnInit {
     this.createShipmentTypeBreakdownChart();
     this.createRecShipmentChart();
     this.fetchLoadQuoteList();
+    this.setupSearchFilter();
   }
   patchFilterValues() {
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -122,7 +143,7 @@ export class ReceivedLoadComponent implements OnInit {
             this.dataSource.data = this.dataSource.data.concat(newData);
           }
           const titleCase = (str: string) =>
-            str.charAt(0).toUpperCase() + str.slice(1);
+            str?.charAt(0)?.toUpperCase() + str?.slice(1);
           this.dataSource.data = this.dataSource.data.map((d) => ({
             ...d,
             sourceLocation: [
@@ -141,6 +162,8 @@ export class ReceivedLoadComponent implements OnInit {
               .join(', '),
           }));
         }
+      },(error:any)=>{
+        this.showScrollSpinner = false;
       });
     }
   }
@@ -407,9 +430,11 @@ export class ReceivedLoadComponent implements OnInit {
   }
   applyFilter() {
     const filterValue = this.searchControl.value.trim().toLowerCase();
+
     this.dataSource.filterPredicate = (data: any, filter: string) => {
       return data.inviterDetails?.companyName?.toLowerCase().includes(filter);
     };
+
     this.dataSource.filter = filterValue;
     this.isFilterApplied = filterValue.length > 0;
   }
@@ -417,8 +442,9 @@ export class ReceivedLoadComponent implements OnInit {
   applyAdvanceFilter() {
     this.loaddedScreens = 0;
     this.page = 1;
-    this.fetchLoadQuoteList(1, true);
+    this.dataSource.data = [];
     this.showAdvancedFilter = false;
+    this.fetchLoadQuoteList(1, true);
   }
   refresh() {
     this.fetchLoadQuoteList(this.loaddedScreens);
@@ -506,6 +532,18 @@ export class ReceivedLoadComponent implements OnInit {
           if (result[v]) this.carrierUser.push(result[v]);
         }
       }
+    });
+  }
+  getCountryFlag(countryCode: string): string {
+    const country = this.countryList.find(
+      (c) => c.value.toLowerCase() === countryCode?.toLowerCase()
+    );
+    return country ? country.flag : './assets/country/us.png';
+  }
+
+  setupSearchFilter() {
+    this.searchControl.valueChanges.subscribe(() => {
+      this.applyFilter();
     });
   }
 }

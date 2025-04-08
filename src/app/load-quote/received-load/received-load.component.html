@@ -1,6 +1,13 @@
-<div appInfiniteScroll [(page)]="page" [(loaddedScreens)]="loaddedScreens" [totalPages]="totalPages"
-  [spinnerLoader]="showScrollSpinner" (updateParams)="addParams($event)" (fetchData)="fetchLoadQuoteList($event)"
-  class="dashboard_chat_overview">
+<div
+  appInfiniteScroll
+  [(page)]="page"
+  [(loaddedScreens)]="loaddedScreens"
+  [totalPages]="totalPages"
+  [spinnerLoader]="showScrollSpinner"
+  (updateParams)="addParams($event)"
+  (fetchData)="fetchLoadQuoteList($event)"
+  class="dashboard_chat_overview"
+>
   <div class="dco_head">
     <div class="dcoh_l">
       <p class="dco_h_tlt">Received Leads & Quotes Performance</p>
@@ -28,17 +35,25 @@
               <div class="lbl_1 w-100">
                 <div class="dco_bar">
                   <div class="bar_hed">
-                    <span class="bar_txt">Total Quotes</span> <span class="bar_vlu">{{totalQuotes ? totalQuotes :
-                      0}}</span>
+                    <span class="bar_txt">Total Quotes</span>
+                    <span class="bar_vlu">{{
+                      totalQuotes ? totalQuotes : 0
+                    }}</span>
                   </div>
-                  <mat-progress-bar mode="determinate"
-                    [value]="100 * (totalQuotes / totalQuotesLimit)"></mat-progress-bar>
+                  <mat-progress-bar
+                    mode="determinate"
+                    [value]="100 * (totalQuotes / totalQuotesLimit)"
+                  ></mat-progress-bar>
                 </div>
                 <div class="dco_bar">
                   <div class="bar_hed">
-                    <span class="bar_txt">Total Miles Covered </span> <span class="bar_vlu"> 20,286</span>
+                    <span class="bar_txt">Total Miles Covered </span>
+                    <span class="bar_vlu"> 20,286</span>
                   </div>
-                  <mat-progress-bar mode="determinate" [value]="totalMilesCovered"></mat-progress-bar>
+                  <mat-progress-bar
+                    mode="determinate"
+                    [value]="totalMilesCovered"
+                  ></mat-progress-bar>
                 </div>
                 <!-- <div class="dco_bar">
                   <div class="bar_hed">
@@ -62,10 +77,16 @@
       <div class="col-md-6 bar_crt_box">
         <div class="row">
           <div class="col-md-8">
-            <div class="country_chart" [ngClass]="{'d-none': selectedChart !== 'topEquipment'}">
+            <div
+              class="country_chart"
+              [ngClass]="{ 'd-none': selectedChart !== 'topEquipment' }"
+            >
               <canvas id="recTopEquipmentShipmentsChart"></canvas>
             </div>
-            <div class="city_chart" [ngClass]="{'d-none': selectedChart !== 'shipments'}">
+            <div
+              class="city_chart"
+              [ngClass]="{ 'd-none': selectedChart !== 'shipments' }"
+            >
               <canvas id="recBrokeredCarrierShipmentsChart"></canvas>
             </div>
           </div>
@@ -75,17 +96,24 @@
                 <div class="ic_dropdown">
                   <mat-form-field appearance="none" class="cn_inpt_drop">
                     <mat-select [(ngModel)]="selectedChart" name="chartType">
-                      <mat-option value="topEquipment">Top Equipment</mat-option>
+                      <mat-option value="topEquipment"
+                        >Top Equipment</mat-option
+                      >
                       <mat-option value="shipments">Shipments</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
               </div>
-              <div class="chart_info" [ngClass]="{'d-none': selectedChart !== 'topEquipment'}">
+              <div
+                class="chart_info"
+                [ngClass]="{ 'd-none': selectedChart !== 'topEquipment' }"
+              >
                 <p class="cif_lbl">Top Equipment Used:</p>
                 <ul>
                   <li>
-                    <span class="chart_txt">Auto Carrier Trailer: 3 quotes</span>
+                    <span class="chart_txt"
+                      >Auto Carrier Trailer: 3 quotes</span
+                    >
                   </li>
                   <li>
                     <span class="chart_txt">Drayage Trailer: 1 quote</span>
@@ -101,7 +129,10 @@
                   </li>
                 </ul>
               </div>
-              <div class="chart_info" [ngClass]="{'d-none': selectedChart !== 'shipments'}">
+              <div
+                class="chart_info"
+                [ngClass]="{ 'd-none': selectedChart !== 'shipments' }"
+              >
                 <p class="cif_lbl">Brokered vs Carrier Shipments:</p>
                 <ul>
                   <li>
@@ -120,19 +151,29 @@
   </div>
 </div>
 
-<div class="table_data_con" style="display: QWnone;">
+<div class="table_data_con" style="display: QWnone">
   <div class="table_actions">
     <form class="cn_field">
       <div class="btns_box">
         <div class="row align-items-center">
           <div class="col-md-5">
-            <p class="txt_1 fw_6" [ngClass]="{'d-none': !showAdvancedFilter}">Advanced Filter</p>
-            <div class="comn_fltr" [ngClass]="{'d-none': showAdvancedFilter}">
+            <p class="txt_1 fw_6" [ngClass]="{ 'd-none': !showAdvancedFilter }">
+              Advanced Filter
+            </p>
+            <div class="comn_fltr" [ngClass]="{ 'd-none': showAdvancedFilter }">
               <mat-form-field appearance="none">
-                <mat-label>Table Search</mat-label>
-                <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
-                <input type="text" matInput placeholder="Search" (keyup)="applyFilter()" [formControl]="searchControl"
-                  class="form-control cn_input ms-2">
+                <mat-label>Quick Search</mat-label>
+                <mat-icon matTextPrefix class="material-symbols-outlined"
+                  >filter_list</mat-icon
+                >
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Search"
+                  (keyup)="applyFilter()"
+                  [formControl]="searchControl"
+                  class="form-control cn_input ms-2"
+                />
               </mat-form-field>
             </div>
           </div>
@@ -146,7 +187,19 @@
                 <i class="fa-solid fa-plus me-2"></i>
                 <span>Add</span>
               </span>
-              <span class="cn_btn icn_btn adv_filter_btn" (click)="toggleFilter()">
+              <span
+                class="cn_btn icn_btn adv_filter_btn"
+                (click)="toggleFilter()"
+                [ngClass]="{
+                  'active-filter':
+                    advanceFilterForm?.value &&
+                    (advanceFilterForm.value.shipmentTypes ||
+                      advanceFilterForm.value.equipmentType ||
+                      advanceFilterForm.value.weight ||
+                      advanceFilterForm.value.length ||
+                      advanceFilterForm.value.userId)
+                }"
+              >
                 <i class="fa-sharp fa-solid fa-filter"></i>
               </span>
               <span class="cn_btn icn_btn" (click)="refresh()">
@@ -155,43 +208,79 @@
             </div>
           </div>
         </div>
-        <div class="filter_box" [ngClass]="{'d-none': !showAdvancedFilter}">
+        <div class="filter_box" [ngClass]="{ 'd-none': !showAdvancedFilter }">
           <div class="filtr_con">
             <div class="row" [formGroup]="advanceFilterForm">
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field [ngClass]="{
+                  highlighted:
+                  advanceFilterForm.get('equipmentType')?.value
+                }">
                   <mat-label>Equipment Type</mat-label>
                   <mat-select formControlName="equipmentType">
-                    <mat-option *ngFor="let equipment of equipmentTypesList"
-                      [value]="equipment.id">{{equipment.name}}</mat-option>
+                    <mat-option
+                      *ngFor="let equipment of equipmentTypesList"
+                      [value]="equipment.id"
+                      >{{ equipment.name }}</mat-option
+                    >
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div class="col-md-3">
-                <mat-form-field>
+              <div class="col-md-3" >
+                <mat-form-field [ngClass]="{
+                  highlighted:
+                  advanceFilterForm.get('shipmentTypes')?.value
+                }">
                   <mat-label>Shipment Type</mat-label>
                   <mat-select formControlName="shipmentTypes">
-                    <mat-option *ngFor="let shipment of shipmentTypesList"
-                      [value]="shipment.id">{{shipment.name}}</mat-option>
+                    <mat-option
+                      *ngFor="let shipment of shipmentTypesList"
+                      [value]="shipment.id"
+                      >{{ shipment.name }}</mat-option
+                    >
                   </mat-select>
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field [ngClass]="{
+                  highlighted:
+                  advanceFilterForm.get('weight')?.value
+                }">
                   <mat-label>Weight (lbs)</mat-label>
-                  <input type="text" formControlName="weight" matInput placeholder="Search">
+                  <input
+                    type="text"
+                    formControlName="weight"
+                    matInput
+                    placeholder="Search"
+                  />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field [ngClass]="{
+                  highlighted:
+                  advanceFilterForm.get('length')?.value
+                }">
                   <mat-label>Length (ft)</mat-label>
-                  <input type="text" formControlName="length" matInput placeholder="Search">
+                  <input
+                    type="text"
+                    formControlName="length"
+                    matInput
+                    placeholder="Search"
+                  />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field [ngClass]="{
+                  highlighted:
+                  advanceFilterForm.get('userId')?.value
+                }">
                   <mat-label>Carrier Information</mat-label>
-                  <input type="text" matInput formControlName="userId" placeholder="Search">
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="userId"
+                    placeholder="Search"
+                  />
                 </mat-form-field>
               </div>
               <div class="d-none">
@@ -203,7 +292,11 @@
                 </div>
                 <div class="col-md-3">
                   <p class="cn_input_lbl">Toggle</p>
-                  <mat-button-toggle-group class="toggle_switch" name="fontStyle" aria-label="Font Style">
+                  <mat-button-toggle-group
+                    class="toggle_switch"
+                    name="fontStyle"
+                    aria-label="Font Style"
+                  >
                     <mat-button-toggle value="yes">Yes</mat-button-toggle>
                     <mat-button-toggle value="no">NO</mat-button-toggle>
                   </mat-button-toggle-group>
@@ -212,19 +305,29 @@
                   <mat-form-field class="date_range_filter">
                     <mat-label>Accessed At</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
-                      <input matStartDate placeholder="Start date">
-                      <input matEndDate placeholder="End date">
+                      <input matStartDate placeholder="Start date" />
+                      <input matEndDate placeholder="End date" />
                     </mat-date-range-input>
                     <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker-toggle
+                      matIconSuffix
+                      [for]="picker"
+                    ></mat-datepicker-toggle>
                     <mat-date-range-picker #picker></mat-date-range-picker>
                   </mat-form-field>
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="fltr_actn">
-                  <button class="cn_btn btn_bordered" (click)="advanceFilterForm.reset(); applyAdvanceFilter()">Clear</button>
-                  <button class="cn_btn" (click)="applyAdvanceFilter()">Apply</button>
+                  <button
+                    class="cn_btn btn_bordered"
+                    (click)="advanceFilterForm.reset(); applyAdvanceFilter()"
+                  >
+                    Clear
+                  </button>
+                  <button class="cn_btn" (click)="applyAdvanceFilter()">
+                    Apply
+                  </button>
                 </div>
               </div>
             </div>
@@ -249,12 +352,17 @@
           <div class="user_dtl">
             <div class="ud_l">
               <i class="fa-duotone fa-solid fa-circle-user user_icon"></i>
-              <span class="user_Type">{{element.guestType ? element.guestType :
-                element.inviterDetails?.userType}}</span>
+              <span class="user_Type">{{
+                element.guestType
+                  ? element.guestType
+                  : element.inviterDetails?.userType
+              }}</span>
             </div>
             <div class="ud_r">
               <div class="name_icn">
-                <a href="#" class="u_name">{{element.inviterDetails?.companyName}}</a>
+                <a href="#" class="u_name">{{
+                  element.inviterDetails?.companyName
+                }}</a>
                 <!-- <i class="fa-duotone fa-badge-check verify_icon" matTooltip="Account not Verified"></i> -->
               </div>
               <div class="loca_rtng">
@@ -267,82 +375,159 @@
       </ng-container>
       <ng-container matColumnDef="pickup">
         <th mat-header-cell *matHeaderCellDef>Pickup</th>
-        <td mat-cell *matCellDef="let element" class="min_w_200" matTooltip="{{element.frequency}}">
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="min_w_200"
+          matTooltip="{{ element.frequency }}"
+        >
           <div class="loca_col">
             <div class="loca_txt">
-              {{element.sourceLocation}}
+              <img
+                [src]="getCountryFlag(element.sourceLocationCountry)"
+                class="flaf_icn"
+                *ngIf="element.sourceLocationCountry"
+              />
+              {{
+                element.sourceLocationCity
+                  ? (element.sourceLocationCity | titleCase)
+                  : ""
+              }}
+              {{
+                element.sourceLocationState
+                  ? ", " + element.sourceLocationState
+                  : ""
+              }}
+              {{
+                element.sourceLocationCountry
+                  ? ", " + element.sourceLocationCountry
+                  : ""
+              }}
             </div>
-            <div class="frncy_txt bg_{{frequency}}" *ngIf="(element.sourceDate | customDateTime : true) as frequency">
-              <i class="fa-duotone fa-solid" [ngClass]="{
-                'fa-calendar-days': frequency === 'daily',
-                'fa-calendar-week': frequency === 'weekly',
-                'fa-calendar-lines': frequency === 'monthly',
-                'fa-calendar-clock': frequency === 'yearly'
-              }"></i>
-              {{element.sourceDate | customDateTime}}
+            <div
+              class="frncy_txt bg_{{ frequency }}"
+              *ngIf="element.sourceDate | customDateTime : true as frequency"
+            >
+              <i
+                class="fa-duotone fa-solid"
+                [ngClass]="{
+                  'fa-calendar-days': frequency === 'daily',
+                  'fa-calendar-week': frequency === 'weekly',
+                  'fa-calendar-lines': frequency === 'monthly',
+                  'fa-calendar-clock': frequency === 'yearly'
+                }"
+              ></i>
+              {{ element.sourceDate | customDateTime }}
             </div>
           </div>
-
         </td>
       </ng-container>
       <ng-container matColumnDef="dropOff">
         <th mat-header-cell *matHeaderCellDef>DropOff</th>
-        <td mat-cell *matCellDef="let element" class="min_w_200" matTooltip="{{element.frequency}}">
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="min_w_200"
+          matTooltip="{{ element.frequency }}"
+        >
           <div class="loca_col">
-            <div class="loca_txt">{{element.destinationLocation}}</div>
-            <div class="frncy_txt bg_{{frequency}}"
-              *ngIf="(element.destinationDate | customDateTime : true) as frequency">
-              <i class="fa-duotone fa-solid" [ngClass]="{
-                'fa-calendar-days': frequency === 'daily',
-                'fa-calendar-week': frequency === 'weekly',
-                'fa-calendar-lines': frequency === 'monthly',
-                'fa-calendar-clock': frequency === 'yearly'
-              }"></i>
-              {{element.destinationDate | customDateTime}}
+            <div class="loca_txt">
+              <img
+                [src]="getCountryFlag(element.destinationLocationCountry)"
+                class="flaf_icn"
+                *ngIf="element.destinationLocationCountry"
+              />
+              {{
+                element.destinationLocationCity
+                  ? (element.destinationLocationCity | titleCase)
+                  : ""
+              }}
+              {{
+                element.destinationLocationState
+                  ? ", " + element.destinationLocationState
+                  : ""
+              }}
+              {{
+                element.destinationLocationCountry
+                  ? ", " + element.destinationLocationCountry
+                  : ""
+              }}
+            </div>
+            <div
+              class="frncy_txt bg_{{ frequency }}"
+              *ngIf="
+                element.destinationDate | customDateTime : true as frequency
+              "
+            >
+              <i
+                class="fa-duotone fa-solid"
+                [ngClass]="{
+                  'fa-calendar-days': frequency === 'daily',
+                  'fa-calendar-week': frequency === 'weekly',
+                  'fa-calendar-lines': frequency === 'monthly',
+                  'fa-calendar-clock': frequency === 'yearly'
+                }"
+              ></i>
+              {{ element.destinationDate | customDateTime }}
             </div>
           </div>
         </td>
       </ng-container>
       <ng-container matColumnDef="distance">
         <th mat-header-cell *matHeaderCellDef>Distance</th>
-        <td mat-cell *matCellDef="let element">{{element.miles}} Miles</td>
+        <td mat-cell *matCellDef="let element">{{ element.miles }} Miles</td>
       </ng-container>
       <ng-container matColumnDef="equipmentType">
         <th mat-header-cell *matHeaderCellDef>Equipment Type</th>
-        <td mat-cell *matCellDef="let element">{{element.equipmentType[0].equipmentTypeName}}</td>
+        <td mat-cell *matCellDef="let element">
+          {{ element.equipmentType[0].equipmentTypeName }}
+        </td>
       </ng-container>
       <ng-container matColumnDef="shipmentType">
         <th mat-header-cell *matHeaderCellDef>Shipment Type</th>
-        <td mat-cell *matCellDef="let element" matTooltip="{{element.shipmentTypesLabel}}">
-          {{element.shipmentTypesLabel}}</td>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          matTooltip="{{ element.shipmentTypesLabel }}"
+        >
+          {{ element.shipmentTypesLabel }}
+        </td>
       </ng-container>
       <ng-container matColumnDef="weight">
         <th mat-header-cell *matHeaderCellDef>Weight (lbs)</th>
-        <td mat-cell *matCellDef="let element">{{element.weight}}</td>
+        <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
       </ng-container>
       <ng-container matColumnDef="length">
         <th mat-header-cell *matHeaderCellDef>Length (ft)</th>
-        <td mat-cell *matCellDef="let element">{{element.length}}</td>
+        <td mat-cell *matCellDef="let element">{{ element.length }}</td>
       </ng-container>
       <ng-container matColumnDef="notes">
         <th mat-header-cell *matHeaderCellDef>Notes</th>
-        <td mat-cell *matCellDef="let element" class="min_w_200">{{element.notes}}</td>
+        <td mat-cell *matCellDef="let element" class="min_w_200">
+          {{ element.notes }}
+        </td>
       </ng-container>
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef class="text-center">Action</th>
         <td mat-cell *matCellDef="let element">
           <div class="row_actn">
-            <span class="cn_btn edt_btn btnActive" matTooltip="Edit Availability">
+            <span
+              class="cn_btn edt_btn btnActive"
+              matTooltip="Edit Availability"
+            >
               <i class="fa-sharp-duotone fa-solid fa-pen-to-square txt_p"></i>
             </span>
-            <span class="cn_btn comnt_btn btnUnActive" matTooltip="Delete Availability">
+            <span
+              class="cn_btn comnt_btn btnUnActive"
+              matTooltip="Delete Availability"
+            >
               <i class="fa-duotone fa-solid fa-trash txt_d"></i>
             </span>
           </div>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
       <tr class="mat-row" *matNoDataRow style="text-align: center">
         <ng-container *ngIf="!showScrollSpinner">
@@ -350,10 +535,10 @@
             <div class="empty-state">
               <div class="empty-state__content">
                 <div class="empty-state__icon">
-                  <img src="./assets/images/no_data_found_img.jpg" alt="">
+                  <img src="./assets/images/no_data_found_img.jpg" alt="" />
                 </div>
-                <div class="empty-state__message">Leads & Quotetion</div>
-                <p class="empty-state__help">This is no Leads & Quotetion</p>
+                <div class="empty-state__message">Leads & Quotation</div>
+                <p class="empty-state__help">This is no Leads & Quotation</p>
               </div>
             </div>
           </td>
@@ -387,11 +572,6 @@
     </div>
   </div>
 </div> -->
-
-
-
-
-
 
 <!-- <div class="uploadEmptyTxt">
   <div class="carrier_user_list_page">

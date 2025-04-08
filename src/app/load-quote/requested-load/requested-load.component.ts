@@ -113,9 +113,9 @@ export class RequestedLoadComponent implements OnInit {
             );
             this.dataSource.data = this.dataSource.data.concat(newData);
           }
-          const titleCase = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
-          this.dataSource.data = this.dataSource.data
-          .map((d) => ({
+          const titleCase = (str: string) =>
+            str.charAt(0).toUpperCase() + str.slice(1);
+          this.dataSource.data = this.dataSource.data.map((d) => ({
             ...d,
             sourceLocation: [
               titleCase(d.sourceLocationCity),
@@ -408,7 +408,9 @@ export class RequestedLoadComponent implements OnInit {
       this.commonService.getList(APIparams).subscribe((response) => {
         const { equipmentTypes, shipmentTypes } = response.response;
         this.equipmentTypesList = equipmentTypes;
-        this.shipmentTypesList = shipmentTypes.filter((d)=> d.name.toLowerCase() != 'parcel');
+        this.shipmentTypesList = shipmentTypes.filter(
+          (d) => d.name.toLowerCase() != 'parcel'
+        );
         this.patchFilterValues();
       });
     }
@@ -487,5 +489,17 @@ export class RequestedLoadComponent implements OnInit {
       indexes.push(i);
     }
     return indexes;
+  }
+
+  resetFilters(): void {
+    console.log('Reset Filters Clicked');
+    this.showAdvancedFilter = false;
+    this.searchControl.setValue('');
+    this.isFilterApplied = false;
+    this.dataSource.filter = '';
+    this.page = 1;
+    this.dataSource.data = [];
+    this.advanceFilterForm.reset();
+    this.fetchLoadQuoteList(1, true);
   }
 }
