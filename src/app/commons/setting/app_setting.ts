@@ -250,10 +250,13 @@ export class AppSettings {
     },
     CHANGEALTERT:{
       INSURANCE:'change-alert/insurance', 
-      INSURANCEADD:'team/add', 
+      INSURANCEADD:'change-alert/insurance', 
       BROKER: 'change-alert/broker',
+      BROKERADD:'change-alert/broker',
       CARRIER: 'change-alert/carrier',
-      AUTHORITY: 'change-alert/authority'
+      CARRIERADD:'change-alert/carrier',
+      AUTHORITY: 'change-alert/authority',
+      AUTHORITYADD:'change-alert/authority'
     },
   }
 }

@@ -51,7 +51,8 @@
                         filterForm.value.updatedEnd ||
                         filterForm.value.expireStart ||
                         filterForm.value.expireEnd || 
-                      filterForm.value.dotNumber)
+                      filterForm.value.dotNumber
+                      || filterForm.value.teamIds)
                   }">
                     <i class="fa-sharp fa-solid fa-filter"></i>
                   </span>
@@ -227,6 +228,22 @@
                     </mat-autocomplete>
                   </mat-form-field>
                 </div>
+                <div class="col-md-3">
+                  <mat-form-field [ngClass]="{ highlighted: filterForm.get('teamIds')?.value }">
+                    <mat-select placeholder="TeamIds" formControlName="teamIds" multiple 
+                                (opened)="onTeamDropdownOpened()"
+                                #teamSelect>
+                      <mat-option *ngFor="let team of teamIdList" [value]="team.id">
+                        {{ team.id }}
+                      </mat-option>
+                      <mat-option *ngIf="loadingMoreTeams" disabled class="load-more-option">
+                        <div class="loading-spinner">
+                          <mat-spinner diameter="20"></mat-spinner>
+                        </div>
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
                   <!-- Buttons -->
                  
                 </form>
@@ -245,8 +262,8 @@
       <div class="table_data" tabindex="0">
         <table mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="alertID">
-            <th mat-header-cell *matHeaderCellDef> Alert ID </th>
-            <td mat-cell *matCellDef="let element">{{element.broker.id}}</td>
+            <th mat-header-cell *matHeaderCellDef> Broker ID </th>
+            <td mat-cell *matCellDef="let element">{{element.id}}</td>
           </ng-container>
           <ng-container matColumnDef="policyNumber">
             <th mat-header-cell *matHeaderCellDef> DOT Number </th>
@@ -255,7 +272,8 @@
           <ng-container matColumnDef="companyName">
             <th mat-header-cell *matHeaderCellDef> Company Name </th>
             <td mat-cell *matCellDef="let element" class="fw_5" matTooltip="{{element.broker.companyName}}">
-              <a class="company_name">{{element.broker.companyName}}</a>
+              <!-- <a class="company_name" style="cursor: pointer;">{{element.broker.companyName}}</a> -->
+              <a [href]="'/freight-brokerage/' + element.dotNumber + '/' + formatCompanyName(element.broker?.companyName)" class="u_name" target="_blank">{{ element.broker?.companyName || element.dotType }}</a> 
             </td>
           </ng-container>
           <ng-container matColumnDef="status">
@@ -264,26 +282,34 @@
           </ng-container>
           <ng-container matColumnDef="createdOn">
             <th mat-header-cell *matHeaderCellDef> Created On </th>
-            <td mat-cell *matCellDef="let element" [matTooltip]="element.createdAt | timeAgo"
-            >{{element.createdAt | date : "MMM dd, yyyy hh:mm a" }}</td>
+            <td mat-cell *matCellDef="let element" [matTooltip]="element.createdAt ? (element.createdAt | timeAgo) : ''"
+
+            >{{ element.createdAt ? (element.createdAt | date: 'MMM dd, yyyy hh:mm a') : '-' }}</td>
           </ng-container>
           <ng-container matColumnDef="lastEmailsendAt">
             <th mat-header-cell *matHeaderCellDef> Last Email Send At </th>
-            <td mat-cell *matCellDef="let element" [matTooltip]="element.lastEmailSendAt | timeAgo">{{element.lastEmailSendAt | date : "MMM dd, yyyy hh:mm a "}}</td>
+            <td mat-cell *matCellDef="let element" [matTooltip]="element.lastEmailSendAt ? (element.lastEmailSendAt | timeAgo) : ''"
+            >{{ element.lastEmailSendAt ? (element.lastEmailSendAt | date: 'MMM dd, yyyy hh:mm a') : '-' }}
+            </td>
           </ng-container>
           <ng-container matColumnDef="lastUpdated">
             <th mat-header-cell *matHeaderCellDef> Last Updated </th>
-            <td mat-cell *matCellDef="let element"  [matTooltip]="element.updatedAt | timeAgo" matTooltip="1 months 1 days ago">{{element.updatedAt | date : "MMM dd, yyyy hh:mm a"}}</td>
+            <td mat-cell *matCellDef="let element"  [matTooltip]="element.updatedAt ? (element.updatedAt | timeAgo) : ''"
+            >{{ element.updatedAt ? (element.updatedAt | date: 'MMM dd, yyyy hh:mm a') : '-' }}</td>
           </ng-container>
           <ng-container matColumnDef="emailExpiryDate">
             <th mat-header-cell *matHeaderCellDef> Email ExpiryDate </th>
-            <td mat-cell *matCellDef="let element"  [matTooltip]="element.emailExpiryDate | timeAgo">{{element.emailExpiryDate | date : "MMM dd, yyyy" }}</td>
+            <td mat-cell *matCellDef="let element"  [matTooltip]="element.emailExpiryDate ? (element.emailExpiryDate | timeAgo) : ''"
+            >{{element.emailExpiryDate ? (element.emailExpiryDate | date : "MMM dd, yyyy") : '-' }}</td>
           </ng-container>
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef class="text-center actin_col"> Action </th>
             <td mat-cell *matCellDef="let element" class="actin_td table_actions">
               <div class="actin_icon cus_slide_toggle">
-                <mat-slide-toggle  [checked]="element.status === false ? false : true"></mat-slide-toggle>
+                <mat-slide-toggle
+                [checked]="element.status"
+                (change)="onStatusToggle($event.checked, element)">
+              </mat-slide-toggle>
               </div>
             </td>
           </ng-container>

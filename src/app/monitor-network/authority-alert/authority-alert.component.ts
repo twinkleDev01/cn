@@ -94,6 +94,31 @@ export class AuthorityAlertComponent implements OnInit {
       );
     }
   }
+  onStatusToggle(newStatus: boolean, rowData: any): void {
+    console.log(newStatus, rowData
+    )
+    const payload = {
+      "dotType": rowData.dotType,
+      "dotNumber": rowData.dotNumber,
+      "status": newStatus,
+      "emailExpiryDate": rowData.emailExpiryDate,
+  };
+  console.log(payload)
+  
+  const APIparams = {
+    apiKey: AppSettings.APIsNameArray.CHANGEALTERT.AUTHORITYADD,
+    postBody: payload
+  };
+
+  this.commonService.post(APIparams).subscribe({
+    next: (res) => {
+      console.log('Status updated successfully:', res);
+    },
+    error: (err) => {
+      console.error('Error updating status:', err);
+    }
+  });
+  }
   onDotInputChange(value: string) {
     console.log('Current DOT value:', value);
     this.autocompleteSearchData(value);
@@ -203,6 +228,9 @@ export class AuthorityAlertComponent implements OnInit {
         }
       );
     }
+  }
+  formatCompanyName(name: string): string {
+    return name ? name.replace(/\s+/g, '-') : '';
   }
 
   applyFilters() {

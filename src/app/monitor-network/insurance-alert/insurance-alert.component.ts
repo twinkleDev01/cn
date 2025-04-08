@@ -1,10 +1,12 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, of, startWith } from 'rxjs';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
+import { PopupComponent } from 'src/app/shared/popup/popup.component';
 interface Carrier {
   id: string;
   dotNumber: string;
@@ -43,7 +45,7 @@ export class InsuranceAlertComponent implements OnInit {
   totalPages: number = 0;
   public spinnerLoader = false;
   constructor(public commonService: CommonService,private fb: FormBuilder,private router: Router,
-                private route: ActivatedRoute,  private cdRef: ChangeDetectorRef,) {
+                private route: ActivatedRoute,  private cdRef: ChangeDetectorRef,public dialogRef: MatDialogRef<PopupComponent>,) {
    
   }
   
@@ -223,6 +225,38 @@ export class InsuranceAlertComponent implements OnInit {
     }
   }
 
+  onNoClick(): void {
+    this.dialogRef.close({ event: 'fail' });
+  }
+
+  onStatusToggle(newStatus: boolean, rowData: any): void {
+    console.log(newStatus, rowData
+    )
+    const payload = {
+      "policyNo": rowData.policyNo,
+      "status": newStatus,
+      "emailExpiryDate": rowData.emailExpiryDate,
+      "dotType": rowData.dotType,
+      "dotNumber": rowData.dotNumber
+  };
+  console.log(payload)
+  
+  const APIparams = {
+    apiKey: AppSettings.APIsNameArray.CHANGEALTERT.INSURANCEADD,
+    postBody: payload
+  };
+
+  this.commonService.post(APIparams).subscribe({
+    next: (res) => {
+      console.log('Status updated successfully:', res);
+    },
+    error: (err) => {
+      console.error('Error updating status:', err);
+    }
+  });
+  }
+  
+
   applyFilters() {
     this.showAdvancedFilter = false;
     this.isFilterApplied = true;
@@ -251,7 +285,7 @@ export class InsuranceAlertComponent implements OnInit {
   }
 
   // Profile analytics table
-  displayedColumns: string[] = ['alertID', 'policyNumber', 'companyName', 'status', 'createdOn', 'lastEmailsendAt', 'lastUpdated', 'emailExpiryDate', 'action'];
+  displayedColumns: string[] = ['alertID','DOTnumber', 'policyNumber', 'companyName', 'status', 'createdOn', 'lastEmailsendAt', 'lastUpdated', 'emailExpiryDate', 'action'];
 
   toggleFilter() {
     this.showAdvancedFilter = !this.showAdvancedFilter;
@@ -278,6 +312,9 @@ export class InsuranceAlertComponent implements OnInit {
     this.filterForm.reset();
     this.fetchChangeAlertInsurance(true);
     
+  }
+  formatCompanyName(name: string): string {
+    return name ? name.replace(/\s+/g, '-') : '';
   }
 
   formatDate(inputDate:string): string {

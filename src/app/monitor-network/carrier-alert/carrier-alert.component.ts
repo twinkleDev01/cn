@@ -99,6 +99,36 @@ export class CarrierAlertComponent implements OnInit {
     console.log('Current DOT value:', value);
     this.autocompleteSearchData(value);
   }
+  onStatusToggle(newStatus: boolean, rowData: any): void {
+    console.log(newStatus, rowData
+    )
+    const inputDate = rowData.emailExpiryDate; // "2025-05-19"
+const date = new Date(inputDate);
+
+// Format to MM-DD-YYYY
+const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}-${date.getFullYear()}`;
+
+    const payload = {
+      "status": newStatus,
+      "emailExpiryDate": formattedDate,
+      "dotNumber": rowData.dotNumber
+  };
+  console.log(payload)
+  
+  const APIparams = {
+    apiKey: AppSettings.APIsNameArray.CHANGEALTERT.CARRIERADD,
+    postBody: payload
+  };
+
+  this.commonService.post(APIparams).subscribe({
+    next: (res) => {
+      console.log('Status updated successfully:', res);
+    },
+    error: (err) => {
+      console.error('Error updating status:', err);
+    }
+  });
+  }
   fetchChangeAlertCarrier(resetData: boolean = false): void {
       this.spinnerLoader = true;
       
@@ -222,6 +252,9 @@ export class CarrierAlertComponent implements OnInit {
     this.searchControl.valueChanges.subscribe(() => {
       this.applyFilter();
     });
+  }
+  formatCompanyName(name: string): string {
+    return name ? name.replace(/\s+/g, '-') : '';
   }
 
   formatDateForAPI(date: any): string {
