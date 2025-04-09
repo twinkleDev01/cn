@@ -8,6 +8,7 @@ import { AuthorityAlertComponent } from './authority-alert/authority-alert.compo
 import { InsuranceAlertComponent } from './insurance-alert/insurance-alert.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { SharedModule } from '../shared/shared.module';
     MonitorNetworkRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    MatDialogModule
   ]
 })
 export class MonitorNetworkModule { }

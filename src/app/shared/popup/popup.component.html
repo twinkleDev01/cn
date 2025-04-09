@@ -1624,9 +1624,26 @@
   <div class="cn_popup_footer">
     <div class="cn_f_acn" style="justify-content: end;">
       <button type="button" class="cn_btn btn_b" (click)="onNoClick()">Cancel</button>
-      <button type="button" class="cn_btn" (click)="onNoClick()">Remove</button>
+      <button type="button" class="cn_btn" (click)="onYesClick()">Remove</button>
     </div>
   </div>
 </div>
+
+
+<!-- Monitor Network Alert -->
+<div class="cn_popup_box" *ngIf="data.openPop=='changeNetworkAlert' && !loading">
+  <div class="cn_popup_head">
+    <p class="cn_ph_tlt">Monitor Network Alert</p>
+    <span class="material-icons cn_close_icn" (click)="onNoClick()">close</span>
+  </div>
+  <div class="cn_popup_body">
+    <p class="cn_input_lbl text-center">Do you want to change Active/Un-active Alert?</p>
+  </div>
+  <div class="cn_popup_footer d-flex justify-content-between">
+    <button (click)="onNoClick()" class="cn_btn btn_bordered" style="width: 40%;">No</button>
+    <button (click)="onYesClick()" type="submit" class="cn_btn" style="width: 40%;">Yes</button>
+  </div>
+</div>
+
 
 <ngx-loading [show]="loading" [config]="{ fullScreenBackdrop:true }"></ngx-loading>

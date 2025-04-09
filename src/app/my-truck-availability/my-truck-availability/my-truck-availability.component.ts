@@ -1,9 +1,16 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AlertService } from 'src/app/commons/service/alert.service';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
@@ -26,20 +33,35 @@ export class MyTruckAvailabilityComponent implements OnInit {
   public orderDir = '';
   showAdvancedFilter = false;
   subscriptionPlanType: number | null = null;
-  teamIdList :any=[];
+  teamIdList: any = [];
   isFilterApplied = false;
-   searchControl = new FormControl('');
+  searchControl = new FormControl('');
   countryName = ''; // This will be set dynamically from API
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   advanceFilterForm: FormGroup;
   loaddedScreens = 0;
   totalPages: number = 0;
-  usertype:any;
+  usertype: any;
 
   countryList = [
-    { value: 'US', name: 'United States', flag: './assets/country/us.png', code: '+1' },
-    { value: 'MX', name: 'Mexico', flag: './assets/country/mx.png', code: '+52' },
-    { value: 'CA', name: 'Canada', flag: './assets/country/ca.png', code: '+1' }
+    {
+      value: 'US',
+      name: 'United States',
+      flag: './assets/country/us.png',
+      code: '+1',
+    },
+    {
+      value: 'MX',
+      name: 'Mexico',
+      flag: './assets/country/mx.png',
+      code: '+52',
+    },
+    {
+      value: 'CA',
+      name: 'Canada',
+      flag: './assets/country/ca.png',
+      code: '+1',
+    },
   ];
 
   constructor(
@@ -48,51 +70,58 @@ export class MyTruckAvailabilityComponent implements OnInit {
     public alertService: AlertService,
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,  
-    private cdRef: ChangeDetectorRef
+    private route: ActivatedRoute,
+    private cdRef: ChangeDetectorRef,
+     private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
     this.usertype = localStorage.getItem('user_type');
-if (this.usertype === 'CARRIER') {
-  this.displayedColumns = this.displayedColumns.filter(col => col !== 'carrierInformation');
-}
-// 
+    if (this.usertype === 'CARRIER') {
+      this.displayedColumns = this.displayedColumns.filter(
+        (col) => col !== 'carrierInformation'
+      );
+    }
+    //
     this.route.queryParams.subscribe((params) => {
-    this.advanceFilterForm = this.fb.group({
-      shipmentTypes: [''],
-      equipmentType: [''],
-      frequency: [''],
-      sourceDate: [''],
-      destinationDate: [''],
-      length: [''],
-      weight: [''],
-      miles: [''],
-      costPerMile: [''],
-      destinationLocation: [''],
-      teamIds:[]
-    });
-    if (params && Object.keys(params).length) {
-      this.advanceFilterForm.patchValue({
-        sourceDate: params['sourceDate'] ? new Date(params['sourceDate']) : null,
-        destinationDate: params['destinationDate'] ? new Date(params['destinationDate']) : null,
-        shipmentTypes: params['shipmentTypes'] || '',
-        equipmentType: params['equipmentType'] || '',
-        frequency: params['frequency'] || '',
-        length: params['length'] || '',
-        weight: params['weight'] || '',
-        miles: params['miles'] || '',
-        costPerMile: params['costPerMile'] || '',
-        destinationLocation: params['destinationLocation'] || '',
-        teamIds: params['teamIds'] || '',
+      this.advanceFilterForm = this.fb.group({
+        shipmentTypes: [''],
+        equipmentType: [''],
+        frequency: [''],
+        sourceDate: [''],
+        destinationDate: [''],
+        length: [''],
+        weight: [''],
+        miles: [''],
+        costPerMile: [''],
+        destinationLocation: [''],
+        teamIds: [],
       });
-         // ✅ Restore sort direction if available
+      if (params && Object.keys(params).length) {
+        this.advanceFilterForm.patchValue({
+          sourceDate: params['sourceDate']
+            ? new Date(params['sourceDate'])
+            : null,
+          destinationDate: params['destinationDate']
+            ? new Date(params['destinationDate'])
+            : null,
+          shipmentTypes: params['shipmentTypes'] || '',
+          equipmentType: params['equipmentType'] || '',
+          frequency: params['frequency'] || '',
+          length: params['length'] || '',
+          weight: params['weight'] || '',
+          miles: params['miles'] || '',
+          costPerMile: params['costPerMile'] || '',
+          destinationLocation: params['destinationLocation'] || '',
+          teamIds: params['teamIds'] || '',
+        });
+        // ✅ Restore sort direction if available
         //  if (params['sort']) {
         //   this.orderDir = params['sort'];
         // }
-      this.cdRef.detectChanges();
-    }
-  });
+        this.cdRef.detectChanges();
+      }
+    });
     this.getLoadAvailibility();
     this.teamList();
     this.getSubscriptionPlan();
@@ -134,9 +163,13 @@ if (this.usertype === 'CARRIER') {
   }
   applyFilter() {
     const filterValue = this.searchControl.value.trim().toLowerCase();
-console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
+    console.log(
+      filterValue,
+      this.dataSource.filterPredicate,
+      'llllllllllllllllll'
+    );
     this.dataSource.filterPredicate = (data: any, filter: string) => {
-      console.log(data, data.userId,"99")
+      console.log(data, data.userId, '99');
       return data.truckName?.toLowerCase().includes(filter);
     };
 
@@ -144,7 +177,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     this.isFilterApplied = filterValue.length > 0;
   }
 
-  refresh(){
+  refresh() {
     this.getLoadAvailibility(true);
   }
   resetFilters(): void {
@@ -157,8 +190,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     this.dataSource.data = [];
     this.advanceFilterForm.reset();
     this.getLoadAvailibility(true);
-    
-  } 
+  }
 
   applyAdvancedFilter() {
     this.showAdvancedFilter = false;
@@ -187,7 +219,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
       miles,
       costPerMile,
       destinationLocation,
-      teamIds
+      teamIds,
     } = this.advanceFilterForm.value;
     let newParams: any = {
       page: this.page,
@@ -201,49 +233,54 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     if (weight) newParams.weight = weight;
     if (miles) newParams.miles = miles;
     if (costPerMile) newParams.costPerMile = costPerMile;
-    if (destinationLocation) newParams.destinationLocation = destinationLocation;
+    if (destinationLocation)
+      newParams.destinationLocation = destinationLocation;
     if (teamIds) newParams.teamIds = teamIds;
     if (sourceDate) newParams.sourceDate = this.formatDateForAPI(sourceDate);
-    if (destinationDate) newParams.destinationDate = this.formatDateForAPI(destinationDate);
-  
-    console.log('Selected Filters:', newParams)
-     // Step 3: Build URLSearchParams
-  // const queryParams = new URLSearchParams();
-  // if (newParams.page) queryParams.set('page', newParams.page.toString());
-  // if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
-  // if (newParams.shipmentTypes) queryParams.set('shipmentTypes', newParams.shipmentTypes);
-  // if (newParams.equipmentType) queryParams.set('equipmentType', newParams.equipmentType);
-  // if (newParams.frequency) queryParams.set('frequency', newParams.frequency);
-  // if (newParams.length) queryParams.set('length', newParams.length);
-  // if (newParams.weight) queryParams.set('weight', newParams.weight);
-  // if (newParams.miles) queryParams.set('miles', newParams.miles);
-  // if (newParams.costPerMile) queryParams.set('costPerMile', newParams.costPerMile);
-  // if (newParams.destinationLocation) queryParams.set('destinationLocation', newParams.destinationLocation);
-  // if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
-  // if (newParams.sourceDate) queryParams.set('sourceDate', newParams.sourceDate);
-  // if (newParams.destinationDate) queryParams.set('destinationDate', newParams.destinationDate);
-  const queryParams = new URLSearchParams();
-  for (let key in newParams) {
-    if (newParams[key]) {
-      queryParams.set(key, newParams[key]);
-    }
-  }
-  // Step 4: Replace browser URL with new query params
-  history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
+    if (destinationDate)
+      newParams.destinationDate = this.formatDateForAPI(destinationDate);
 
+    console.log('Selected Filters:', newParams);
+    // Step 3: Build URLSearchParams
+    // const queryParams = new URLSearchParams();
+    // if (newParams.page) queryParams.set('page', newParams.page.toString());
+    // if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+    // if (newParams.shipmentTypes) queryParams.set('shipmentTypes', newParams.shipmentTypes);
+    // if (newParams.equipmentType) queryParams.set('equipmentType', newParams.equipmentType);
+    // if (newParams.frequency) queryParams.set('frequency', newParams.frequency);
+    // if (newParams.length) queryParams.set('length', newParams.length);
+    // if (newParams.weight) queryParams.set('weight', newParams.weight);
+    // if (newParams.miles) queryParams.set('miles', newParams.miles);
+    // if (newParams.costPerMile) queryParams.set('costPerMile', newParams.costPerMile);
+    // if (newParams.destinationLocation) queryParams.set('destinationLocation', newParams.destinationLocation);
+    // if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
+    // if (newParams.sourceDate) queryParams.set('sourceDate', newParams.sourceDate);
+    // if (newParams.destinationDate) queryParams.set('destinationDate', newParams.destinationDate);
+    const queryParams = new URLSearchParams();
+    for (let key in newParams) {
+      if (newParams[key]) {
+        queryParams.set(key, newParams[key]);
+      }
+    }
+    // Step 4: Replace browser URL with new query params
+    history.replaceState(
+      null,
+      '',
+      `${window.location.pathname}?${queryParams.toString()}`
+    );
 
     // if (this.params) uri = this.commonService.getAPIUriFromParams(this.params);
     // APIparams = {
     //   apiKey: AppSettings.APIsNameArray.AVAILIBILITY.LIST,
     //   uri: uri,
     // };
-     // Step 5: Call API
-  const uri = this.commonService.getAPIUriFromParams(newParams);
-  const APIparams = {
-    apiKey: AppSettings.APIsNameArray.AVAILIBILITY.LIST,
-    uri: uri,
-  };
-  this.loaddedScreens = this.page;
+    // Step 5: Call API
+    const uri = this.commonService.getAPIUriFromParams(newParams);
+    const APIparams = {
+      apiKey: AppSettings.APIsNameArray.AVAILIBILITY.LIST,
+      uri: uri,
+    };
+    this.loaddedScreens = this.page;
     this.commonService.getList(APIparams).subscribe(
       (ServerRes) => {
         if (ServerRes.success === true) {
@@ -252,12 +289,16 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
           if (resetData) {
             this.dataSource.data = newData;
           } else {
-            const existingIds = new Set(this.dataSource.data.map(item => item.id));
-            const uniqueData = newData.filter(item => !existingIds.has(item.id));
+            const existingIds = new Set(
+              this.dataSource.data.map((item) => item.id)
+            );
+            const uniqueData = newData.filter(
+              (item) => !existingIds.has(item.id)
+            );
             this.dataSource.data = [...this.dataSource.data, ...uniqueData];
           }
-  
-          console.log(ServerRes,"799", this.dataSource.data)
+
+          console.log(ServerRes, '799', this.dataSource.data);
           this.totalRecords = ServerRes.total;
           this.totalPages = ServerRes.totalPages;
           this.loadAvailibilityData = ServerRes.response;
@@ -275,7 +316,7 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
       }
     );
   }
-  
+
   applyFilters() {
     this.showAdvancedFilter = false;
     this.isFilterApplied = true;
@@ -296,15 +337,15 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
       miles,
       costPerMile,
       destinationLocation,
-      teamIds
+      teamIds,
     } = this.advanceFilterForm.value;
-  
+
     const newParams: any = {
       page: currentPage,
       limit: 10,
       // sort: this.orderDir || 'desc',
     };
-  
+
     if (shipmentTypes) newParams.shipmentTypes = shipmentTypes;
     if (equipmentType) newParams.equipmentType = equipmentType;
     if (frequency) newParams.frequency = frequency;
@@ -312,22 +353,32 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     if (weight) newParams.weight = weight;
     if (miles) newParams.miles = miles;
     if (costPerMile) newParams.costPerMile = costPerMile;
-    if (destinationLocation) newParams.destinationLocation = destinationLocation;
+    if (destinationLocation)
+      newParams.destinationLocation = destinationLocation;
     if (teamIds) newParams.teamIds = teamIds;
     if (sourceDate) newParams.sourceDate = this.formatDateForAPI(sourceDate);
-    if (destinationDate) newParams.destinationDate = this.formatDateForAPI(destinationDate);
-  
+    if (destinationDate)
+      newParams.destinationDate = this.formatDateForAPI(destinationDate);
+
     const queryParams = new URLSearchParams();
-  
+
     for (const key in newParams) {
-      if (newParams[key] !== undefined && newParams[key] !== null && newParams[key] !== '') {
+      if (
+        newParams[key] !== undefined &&
+        newParams[key] !== null &&
+        newParams[key] !== ''
+      ) {
         queryParams.set(key, newParams[key]);
       }
     }
-  
-    history.replaceState(null, '', `${window.location.pathname}?${queryParams.toString()}`);
+
+    history.replaceState(
+      null,
+      '',
+      `${window.location.pathname}?${queryParams.toString()}`
+    );
   }
-  
+
   generateFakeSkeleton(count: number): Array<number> {
     const indexes = [];
     for (let i = 0; i < count; i++) {
@@ -335,94 +386,6 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     }
     return indexes;
   }
-
-  // editLoadAvailibility(loadData: any, type: any) {
-  //   const dialogRef = this.dialog.open(PopupComponent, {
-  //     disableClose: true,
-  //     backdropClass: 'cn_custom_popup',
-  //     width: '460px',
-  //     data: {
-  //       openPop: type,
-  //       loadData: loadData,
-  //     },
-  //   });
-  //   dialogRef.afterClosed().subscribe((result) => {
-  //     if (result.event === 'Ok') {
-  //       this.loadAvailibilityData = [];
-  //       this.page = 1;
-  //       this.getLoadAvailibility();
-  //     }
-  //   });
-  // }
-  // removeloadAvailibilityPopup(loadAvailibilityID: any, type: any, index: any) {
-  //   const dialogRef = this.dialog.open(PopupComponent, {
-  //     disableClose: true,
-  //     backdropClass: 'cn_custom_popup',
-  //     width: '460px',
-  //     data: { openPop: type },
-  //   });
-  //   dialogRef.afterClosed().subscribe((result) => {
-  //     if (result.event === 'ok') {
-  //       this.removeloadAvailibility(loadAvailibilityID, index);
-  //     }
-  //   });
-  // }
-
-  // removeloadAvailibility(loadAvailibilityID, index) {
-  //   this.spinnerLoader = true;
-  //   let uri = null;
-  //   let newParams = {
-  //     id: loadAvailibilityID,
-  //   };
-  //   if (newParams) uri = this.commonService.getAPIUriFromParams(newParams);
-  //   let APIparams = {
-  //     apiKey: AppSettings.APIsNameArray.AVAILIBILITY.DELETE,
-  //     uri: uri,
-  //   };
-  //   this.commonService.delete(APIparams).subscribe(
-  //     (success) => {
-  //       if (success.success === true) {
-  //         this.spinnerLoader= true;
-  //         this.loadAvailibilityData.splice(index, 1);
-  //         this.loadAvailibilityData = [];
-
-  //         this.page = 1;
-  //         this.getLoadAvailibility();
-  //         this.alertService.showNotificationMessage(
-  //           'success',
-  //           'bottom',
-  //           'left',
-  //           'txt_s',
-  //           'check_circle',
-  //           'Pending Review Invitation',
-  //           'You have successfully withdrawal Pending Review Invitation.'
-  //         );
-  //       } else if (success.success === false) {
-  //         this.alertService.showNotificationMessage(
-  //           'danger',
-  //           'bottom',
-  //           'left',
-  //           'txt_d',
-  //           'cancel',
-  //           'Pending Review Invitation',
-  //           'There is some issue, Please try again'
-  //         );
-  //       }
-  //     },
-  //     (error) => {
-  //       this.alertService.showNotificationMessage(
-  //         'danger',
-  //         'bottom',
-  //         'left',
-  //         'txt_g',
-  //         'error',
-  //         'Unexpected Error',
-  //         AppSettings.ERROR
-  //       );
-  //       this.spinnerLoader = false;
-  //     }
-  //   );
-  // }
 
   // Profile analytics table
   displayedColumns: string[] = [
@@ -436,7 +399,8 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     'equipmentType',
     'shipmentType',
     'costPerMile',
-    'notes'
+    'notes',
+    'action',
   ];
 
   toggleFilter() {
@@ -456,12 +420,12 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
   }
   getCountryFlag(countryCode: string): string {
     const country = this.countryList.find(
-      c => c.value.toLowerCase() === countryCode?.toLowerCase()
+      (c) => c.value.toLowerCase() === countryCode?.toLowerCase()
     );
     return country ? country.flag : './assets/country/us.png';
   }
 
-    // For team dropdown pagination
+  // For team dropdown pagination
   teamPage = 1;
   teamLimit = 10; // Items per load
   totalTeams = 0;
@@ -477,44 +441,48 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
       this.teamIdList = [];
       this.hasMoreTeams = true;
     }
-  
-    this.loadingMoreTeams = true;
-    if (!loadMore) this.spinnerLoader = true;
-  
+
+    // this.loadingMoreTeams = true;
+    // if (!loadMore) this.spinnerLoader = true;
+
     const params = {
       limit: this.teamLimit,
-      page: this.teamPage
+      page: this.teamPage,
     };
-  
+
     const apiKey = AppSettings.APIsNameArray.TEAM.TEAMLIST;
     if (apiKey) {
       let APIparams = {
         apiKey: apiKey,
         uri: this.commonService.getAPIUriFromParams(params),
       };
-      
+
       this.commonService.getList(APIparams).subscribe(
         (response) => {
-          this.loadingMoreTeams = false;
-          this.spinnerLoader = false;
-          
+          // this.loadingMoreTeams = false;
+          // this.spinnerLoader = false;
+
           if (response?.response?.teamArray) {
-            this.teamIdList = [...this.teamIdList, ...response.response.teamArray];
+            this.teamIdList = [
+              ...this.teamIdList,
+              ...response.response.teamArray,
+            ];
             // Check if more teams are available
-            this.hasMoreTeams = response.response.teamArray.length >= this.teamLimit;
+            this.hasMoreTeams =
+              response.response.teamArray.length >= this.teamLimit;
             this.totalTeams = response.response.totalCount || 0;
           }
         },
         (error) => {
-          this.loadingMoreTeams = false;
-          this.spinnerLoader = false;
+          // this.loadingMoreTeams = false;
+          // this.spinnerLoader = false;
           console.error('Error fetching teams:', error);
         }
       );
     }
   }
   @ViewChild('teamSelect') teamSelect: MatSelect;
-  
+
   onTeamDropdownOpened(): void {
     // Initialize scroll listener when dropdown opens
     setTimeout(() => {
@@ -524,22 +492,65 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
       }
     });
   }
-  
+
   onTeamDropdownScroll(event: Event): void {
     const panel = event.target as HTMLElement;
     const scrollThreshold = 50; // pixels from bottom
-    const atBottom = panel.scrollHeight - panel.scrollTop <= panel.clientHeight + scrollThreshold;
-    
+    const atBottom =
+      panel.scrollHeight - panel.scrollTop <=
+      panel.clientHeight + scrollThreshold;
+
     if (atBottom && this.hasMoreTeams && !this.loadingMoreTeams) {
       this.teamList(true); // Load more teams
     }
   }
-  
+
   ngOnDestroy(): void {
     // Clean up scroll listener
     if (this.teamSelect && this.teamSelect.panel) {
       const panel = this.teamSelect.panel.nativeElement;
       panel.removeEventListener('scroll', this.onTeamDropdownScroll);
     }
+  }
+  onDeleteTruck(element) {
+    console.log(element, '459');
+    const params = {
+    id: element,  
+    };
+    const APIparams = {
+      apiKey: AppSettings.APIsNameArray.AVAILIBILITY.DELETE,
+      uri: this.commonService.getAPIUriFromParams(params),
+    };
+    this.commonService.delete(APIparams).subscribe({
+      next: (res) => {
+        console.log('TRUCK Deleted successfully:', res);
+        this.toastr.success(res?.message, 'Success')
+        if (!res.success) {
+          this.toastr.error(res?.message, 'Error');
+        }
+      },
+      error: (err) => {
+        console.error('Error Deleted status:', err);
+        // this.toastr.error(err?.error[0]?.message, 'Error');
+      },
+    });
+  }
+  deleteTruck(element: any) {
+    console.log(element,"535")
+    const dialogRef = this.dialog.open(PopupComponent, {
+      disableClose: true,
+      backdropClass: 'cn_custom_popup',
+      width: '460px',
+      data: {
+        openPop: 'deleteMember',
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(result,"545")
+      if (result.event === 'ok') {
+        this.onDeleteTruck(element);
+        console.log('Delete item:', element);
+      }
+    });
   }
 }

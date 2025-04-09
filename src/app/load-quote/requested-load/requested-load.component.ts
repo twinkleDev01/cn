@@ -39,6 +39,26 @@ export class RequestedLoadComponent implements OnInit {
   isFilterApplied = false;
   totalQuotes: number = 0;
   totalQuotesLimit: number = 0;
+  countryList = [
+    {
+      value: 'US',
+      name: 'United States',
+      flag: './assets/country/us.png',
+      code: '+1',
+    },
+    {
+      value: 'MX',
+      name: 'Mexico',
+      flag: './assets/country/mx.png',
+      code: '+52',
+    },
+    {
+      value: 'CA',
+      name: 'Canada',
+      flag: './assets/country/ca.png',
+      code: '+1',
+    },
+  ];
   advanceFilterForm = this.fb.group({
     shipmentTypes: [''],
     equipmentType: [''],
@@ -114,7 +134,7 @@ export class RequestedLoadComponent implements OnInit {
             this.dataSource.data = this.dataSource.data.concat(newData);
           }
           const titleCase = (str: string) =>
-            str.charAt(0).toUpperCase() + str.slice(1);
+            str?.charAt(0)?.toUpperCase() + str?.slice(1);
           this.dataSource.data = this.dataSource.data.map((d) => ({
             ...d,
             sourceLocation: [
@@ -420,7 +440,12 @@ export class RequestedLoadComponent implements OnInit {
     if (!frequency) return '';
     return frequency.toLowerCase().replace(/\s+/g, '_');
   }
-
+  getCountryFlag(countryCode: string): string {
+    const country = this.countryList.find(
+      (c) => c.value.toLowerCase() === countryCode?.toLowerCase()
+    );
+    return country ? country.flag : './assets/country/us.png';
+  }
   getNonCarrierUserData() {
     let uri = null;
     this.skeletonLoader = true;

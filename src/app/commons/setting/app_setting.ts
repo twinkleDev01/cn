@@ -153,8 +153,8 @@ export class AppSettings {
       ADD : 'load-availability/add',
       LIST : 'load-availability/list',
       EDIT: 'load-availability/update',
-      DELETE:'load-availability/delete'
-
+      DELETE:'load-availability/delete',
+      NONCARRIERAVAILIBILITY:'load-availability/non-carrier-list'
     },
 
     LOADQUOTE : {
@@ -262,5 +262,9 @@ export class AppSettings {
       NOTIFICATIONCONTROLLIST:'notification-control/list', 
       NOTIFICATIONCONTROLEDIT:'notification-control/edit'
     },
+  }
+  NOTIFICATIONCONTROL:{
+    NOTIFICATIONCONTROLLIST:'notification-control/list', 
+    NOTIFICATIONCONTROLEDIT:'notification-control/edit'
   }
 }

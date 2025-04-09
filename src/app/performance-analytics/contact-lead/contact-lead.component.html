@@ -96,9 +96,9 @@
                   <ul>
                     <li *ngFor="
                         let item of carrierContactAnalyticsData?.topCountry
-                          | keyvalue
+                          | keyvalue;let i= index
                       ">
-                      <span class="chart_txt">In {{ item.key }}: {{ item.value }}
+                      <span class="chart_txt">In {{ item.key }}: <span [ngStyle]="{ color: getFixedColors(i) }">{{ item.value }} %</span>
                       </span>
                     </li>
                   </ul>
@@ -108,9 +108,9 @@
                   <ul>
                     <li *ngFor="
                         let item of carrierContactAnalyticsData?.topCity
-                          | keyvalue
+                          | keyvalue;let i= index
                       ">
-                      <span class="chart_txt">In {{ item.key }}: {{ item.value }}
+                      <span class="chart_txt">In {{ item.key }}: <span [ngStyle]="{ color: getFixedColors(i) }">{{ item.value }} %</span>
                       </span>
                     </li>
                   </ul>
@@ -129,6 +129,7 @@
         <div class="btns_box">
           <div class="row">
             <div class="col-md-5">
+              <p class="txt_1 fw_6" [ngClass]="{ 'd-none': !showAdvancedFilter }"> Advanced Filter</p>
               <div class="comn_fltr" [ngClass]="{ 'd-none': showAdvancedFilter }">
                 <mat-form-field appearance="none">
                   <mat-label>Quick Search</mat-label>
@@ -160,7 +161,6 @@
           </div>
           <div class="filter_box" [ngClass]="{ 'd-none': !showAdvancedFilter }">
             <div class="filtr_con">
-              <p class="txt_2 fw_6 mb-3">Advanced Filter</p>
               <form class="cn_field" [formGroup]="filterForm">
                 <div class="row">
                   <div class="col-md-3">

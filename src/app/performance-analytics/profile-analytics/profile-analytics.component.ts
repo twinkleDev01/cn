@@ -378,6 +378,12 @@ console.log(filterValue, this.dataSource.filterPredicate,'llllllllllllllllll')
     return colors;
   }
 
+  getFixedColors(length: number): string {
+    const fixedColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
+  return fixedColors[length];
+  }
+  
+
 
   createUserTypeChart() {
     const ctx = document.getElementById('userTypeChartC1') as HTMLCanvasElement;

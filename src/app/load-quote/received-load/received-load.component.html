@@ -200,10 +200,12 @@
                       advanceFilterForm.value.userId)
                 }"
               >
+              <i class="fa-solid fa-circle acrive_circle"></i>
                 <i class="fa-sharp fa-solid fa-filter"></i>
               </span>
               <span class="cn_btn icn_btn" (click)="refresh()">
-                <i class="fa-duotone fa-solid fa-rotate-right"></i>
+                <i class="fa-duotone fa-solid fa-rotate-right" *ngIf="!spinnerLoader"></i>
+                <i class="fa-solid fa-rotate fa-spin" *ngIf="spinnerLoader"></i>
               </span>
             </div>
           </div>
@@ -274,7 +276,7 @@
                   highlighted:
                   advanceFilterForm.get('userId')?.value
                 }">
-                  <mat-label>Carrier Information</mat-label>
+                  <mat-label>User Information</mat-label>
                   <input
                     type="text"
                     matInput
@@ -360,9 +362,9 @@
             </div>
             <div class="ud_r">
               <div class="name_icn">
-                <a href="#" class="u_name">{{
+                <div class="u_name">{{
                   element.inviterDetails?.companyName
-                }}</a>
+                }}</div>
                 <!-- <i class="fa-duotone fa-badge-check verify_icon" matTooltip="Account not Verified"></i> -->
               </div>
               <div class="loca_rtng">
@@ -418,6 +420,7 @@
                 }"
               ></i>
               {{ element.sourceDate | customDateTime }}
+              <!-- {{ element.sourceDate }} -->
             </div>
           </div>
         </td>
@@ -495,16 +498,21 @@
       </ng-container>
       <ng-container matColumnDef="weight">
         <th mat-header-cell *matHeaderCellDef>Weight (lbs)</th>
-        <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
+        <!-- <td mat-cell *matCellDef="let element">{{ element.weight }}</td> -->
+        <td mat-cell *matCellDef="let element">  {{ element.weight ? element.weight : '-' }}</td>
       </ng-container>
       <ng-container matColumnDef="length">
         <th mat-header-cell *matHeaderCellDef>Length (ft)</th>
-        <td mat-cell *matCellDef="let element">{{ element.length }}</td>
+        <!-- <td mat-cell *matCellDef="let element">{{ element.length }}</td> -->
+        <td mat-cell *matCellDef="let element">  {{ element.length ? element.length : '-' }}</td>
       </ng-container>
       <ng-container matColumnDef="notes">
         <th mat-header-cell *matHeaderCellDef>Notes</th>
-        <td mat-cell *matCellDef="let element" class="min_w_200">
+        <!-- <td mat-cell *matCellDef="let element" class="min_w_200">
           {{ element.notes }}
+        </td> -->
+        <td mat-cell *matCellDef="let element" class="min_w_200">
+          {{ element.notes ? element.notes : '-' }}
         </td>
       </ng-container>
       <ng-container matColumnDef="action">

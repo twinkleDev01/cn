@@ -117,39 +117,32 @@ class="td_card_con">
                     </mat-form-field>
                   </div>
                 </div>
-                <div
-                  class="chart_info"
-                  [ngClass]="{ 'd-none': selectedChart !== 'country' }"
-                >
+                <div class="chart_info" [ngClass]="{ 'd-none': selectedChart !== 'country' }">
                   <p class="cif_lbl">Top Country Viewers</p>
-
                   <ul>
                     <li
                       *ngFor="
                         let item of carrierContactAnalyticsData?.topCountry
-                          | keyvalue
+                          | keyvalue;let i= index
                       "
                     >
                       <span class="chart_txt"
-                        >In {{ item.key }}: {{ item.value }}
+                        >In {{ item.key }}: <span [ngStyle]="{ color: getFixedColors(i) }">{{ item.value }} %</span>
                       </span>
                     </li>
                   </ul>
                 </div>
-                <div
-                  class="chart_info"
-                  [ngClass]="{ 'd-none': selectedChart !== 'city' }"
-                >
+                <div class="chart_info" [ngClass]="{ 'd-none': selectedChart !== 'city' }">
                   <p class="cif_lbl">Top City Viewers</p>
                   <ul>
                     <li
                       *ngFor="
                         let item of carrierContactAnalyticsData?.topCity
-                          | keyvalue
+                          | keyvalue;let i= index
                       "
                     >
                       <span class="chart_txt"
-                        >In {{ item.key }}: {{ item.value }}
+                        >In {{ item.key }}: <span [ngStyle]="{ color: getFixedColors(i) }">{{ item.value }} %</span>
                       </span>
                     </li>
                   </ul>
@@ -168,21 +161,11 @@ class="td_card_con">
         <div class="btns_box">
           <div class="row align-items-center">
             <div class="col-md-5">
-              <p
-                class="txt_1 fw_6"
-                [ngClass]="{ 'd-none': !showAdvancedFilter }"
-              >
-                Advanced Filter
-              </p>
-              <div
-                class="comn_fltr"
-                [ngClass]="{ 'd-none': showAdvancedFilter }"
-              >
+              <p class="txt_1 fw_6" [ngClass]="{ 'd-none': !showAdvancedFilter }"> Advanced Filter</p>
+              <div class="comn_fltr" [ngClass]="{ 'd-none': showAdvancedFilter }">
                 <mat-form-field appearance="none">
                   <mat-label>Quick Search</mat-label>
-                  <mat-icon matTextPrefix class="material-symbols-outlined"
-                    >filter_list</mat-icon
-                  >
+                  <mat-icon matTextPrefix class="material-symbols-outlined">filter_list</mat-icon>
                   <input
                     type="text"
                     matInput
@@ -258,13 +241,15 @@ class="td_card_con">
                     </mat-form-field>
                     </div>
                     <!-- Toggle-Profile-Viewed -->
-                     <div class="col-md-3">
-                  <p class="cn_input_lbl">Viewed Profile</p>
-                  <mat-button-toggle-group class="toggle_switch" name="fontStyle" aria-label="Font Style" formControlName="toggleControl">
-                    <mat-button-toggle value="true">Yes</mat-button-toggle>
-                    <mat-button-toggle value="false">NO</mat-button-toggle>
-                  </mat-button-toggle-group>
-                </div>
+                    <div class="col-md-3">
+                      <div class="d-flex align-items-center gap-3">
+                        <p class="cn_input_lbl mt-0">Viewed Profile</p>
+                        <mat-button-toggle-group class="toggle_switch" name="fontStyle" aria-label="Font Style" formControlName="toggleControl">
+                          <mat-button-toggle value="true">Yes</mat-button-toggle>
+                          <mat-button-toggle value="false">NO</mat-button-toggle>
+                        </mat-button-toggle-group>
+                      </div>
+                    </div>
                 <!-- PageSource -->
                 <div class="col-md-3">
                   <mat-form-field

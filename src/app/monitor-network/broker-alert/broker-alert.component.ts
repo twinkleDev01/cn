@@ -6,6 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, of, startWith } from 'rxjs';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupComponent } from 'src/app/shared/popup/popup.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-broker-alert',
@@ -34,9 +37,13 @@ export class BrokerAlertComponent implements OnInit {
   ];
   totalPages: number = 0;
   public spinnerLoader = false;
-  constructor(public commonService: CommonService,private fb: FormBuilder,private route: ActivatedRoute,) {
-    
-   }
+  constructor(
+    public commonService: CommonService,
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private toastr: ToastrService
+  ) { }
    
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -174,11 +181,10 @@ export class BrokerAlertComponent implements OnInit {
     this.loaddedScreens = this.page;
       this.commonService.getList(APIparams).subscribe(
         (response) => {
-          this.spinnerLoader = false;
           
           if (response && response.response && response.response.data ) {
             // const newData = response.response.data;
-
+            
             const newData = response.response.data.map((item:any)=>({
               ...item,
               
@@ -186,21 +192,22 @@ export class BrokerAlertComponent implements OnInit {
               // emailExpiryDate:this.formatDate(item.emailExpiryDate),
               lastEmailSendAt:this.formatDate(item.lastEmailSendAt),
               updatedAt:this.formatDate(item.updatedAt)
-
+              
             }));
             if (resetData) {
               this.dataSource.data = newData;
-            
+              
             } else {
               const existingIds = new Set(this.dataSource.data.map(item => item.id));
               const uniqueData = newData.filter(item => !existingIds.has(item.id));
               this.dataSource.data = [...this.dataSource.data, ...uniqueData];
             }
-          
-          // this.uniqueUserTypes = Array.from(new Set([...this.uniqueUserTypes, ...newUserTypes]));
-          //   this.showScrollSpinner=false
-          //   console.log(this.dataSource, 'Updated DataSource');
+            
+            // this.uniqueUserTypes = Array.from(new Set([...this.uniqueUserTypes, ...newUserTypes]));
+            //   this.showScrollSpinner=false
+            //   console.log(this.dataSource, 'Updated DataSource');
             this.totalPages = response.response.totalPages;
+            this.spinnerLoader = false;
             // this.totalRecords = response.response.totalRecords;
           //   this.loading = false;
           //   this.cdRef.detectChanges();
@@ -359,9 +366,13 @@ const APIparams = {
 this.commonService.post(APIparams).subscribe({
   next: (res) => {
     console.log('Status updated successfully:', res);
+    if(!res.success) {
+      this.toastr.error(res?.message, 'Error');
+    }
   },
   error: (err) => {
     console.error('Error updating status:', err);
+    // this.toastr.error(err?.error[0]?.message, 'Error');
   }
 });
 }
@@ -383,7 +394,7 @@ teamList(loadMore: boolean = false): void {
   }
 
   this.loadingMoreTeams = true;
-  if (!loadMore) this.spinnerLoader = true;
+  // if (!loadMore) this.spinnerLoader = true;
 
   const params = {
     limit: this.teamLimit,
@@ -400,7 +411,7 @@ teamList(loadMore: boolean = false): void {
     this.commonService.getList(APIparams).subscribe(
       (response) => {
         this.loadingMoreTeams = false;
-        this.spinnerLoader = false;
+        // this.spinnerLoader = false;
         
         if (response?.response?.teamArray) {
           this.teamIdList = [...this.teamIdList, ...response.response.teamArray];
@@ -411,7 +422,7 @@ teamList(loadMore: boolean = false): void {
       },
       (error) => {
         this.loadingMoreTeams = false;
-        this.spinnerLoader = false;
+        // this.spinnerLoader = false;
         console.error('Error fetching teams:', error);
       }
     );
@@ -446,4 +457,22 @@ ngOnDestroy(): void {
     panel.removeEventListener('scroll', this.onTeamDropdownScroll);
   }
 }
+
+  networkAlertPopup(event:boolean, element:any) {
+    const dialogRef = this.dialog.open(PopupComponent, {
+      disableClose: true,
+      backdropClass: 'cn_custom_popup',
+      width: "460px",
+      height:"auto",
+      data: { openPop: 'changeNetworkAlert' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result.event == 'ok') {
+        this.onStatusToggle(event,element)
+      }
+    })
+  }
 }
+
+

@@ -329,6 +329,10 @@ formatDate(inputDate:string): string {
     });
   }
 
+  getFixedColors(length: number): string {
+    const fixedColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
+  return fixedColors[length];
+  }
   applyAdvancedFilter() {
     this.showAdvancedFilter = false;
     this.isFilterApplied = true;
