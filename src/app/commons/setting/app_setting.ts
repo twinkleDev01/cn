@@ -258,5 +258,9 @@ export class AppSettings {
       AUTHORITY: 'change-alert/authority',
       AUTHORITYADD:'change-alert/authority'
     },
+    NOTIFICATIONCONTROL:{
+      NOTIFICATIONCONTROLLIST:'notification-control/list', 
+      NOTIFICATIONCONTROLEDIT:'notification-control/edit'
+    },
   }
 }

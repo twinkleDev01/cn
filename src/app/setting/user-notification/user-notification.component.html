@@ -11,6 +11,7 @@
         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
       </p>
       <div class="cus_tree_view">
+        <form [formGroup]="notificationForm" (ngSubmit)="onSubmit()">
         <mat-accordion [multi]="true">
           <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header>
@@ -21,30 +22,45 @@
               <mat-panel-description></mat-panel-description>
             </mat-expansion-panel-header>
             <div class="row cus_slide_toggle">
-              <div class="col-md-3">
+              <!-- <div class="col-md-3">
                 <p class="tgle_tlt">Profile Updated Successfully</p>
                 <mat-slide-toggle>Email</mat-slide-toggle>
                 <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
-              </div>
+              </div> -->
+
               <div class="col-md-3">
                 <p class="tgle_tlt">Profile Views Alert</p>
-                <mat-radio-group appearance="none" class="cn_radio_btn">
-                  <mat-radio-button [value]="0">Instant</mat-radio-button>
-                  <mat-radio-button [value]="2">Daily</mat-radio-button>
-                  <mat-radio-button [value]="3">Weekly</mat-radio-button>
+                <mat-slide-toggle formControlName="profileViewAlert" (change)="editNotification()">Email</mat-slide-toggle>
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Profile Views Frequency</p>
+                <mat-radio-group appearance="none" class="cn_radio_btn" formControlName="profileViewFrequency" (change)="editNotification()">
+                  <mat-radio-button value="instant">Instant</mat-radio-button>
+                  <mat-radio-button value="daily">Daily</mat-radio-button>
+                  <mat-radio-button value="weekly">Weekly</mat-radio-button>
                 </mat-radio-group>
               </div>
               <div class="col-md-3">
                 <p class="tgle_tlt">Team Member Added or Removed</p>
-                <mat-slide-toggle>Email</mat-slide-toggle>
-                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+                <mat-slide-toggle formControlName="teamMemberAdd" (change)="editNotification()">Email</mat-slide-toggle>
+                <!-- <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle> -->
               </div>
               <div class="col-md-3">
+                <p class="tgle_tlt">Team Member Login Access</p>
+                <mat-slide-toggle formControlName="teamMemberLoginAccess" (change)="editNotification()">Email</mat-slide-toggle>
+                <!-- <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle> -->
+              </div>
+              <div class="col-md-3">
+                <p class="tgle_tlt">Incomplete Profile Remainder </p>
+                <mat-slide-toggle formControlName="incompleteProfileRemind" (change)="editNotification()">Email</mat-slide-toggle>
+                <!-- <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle> -->
+              </div>
+              <!-- <div class="col-md-3">
                 <p class="tgle_tlt">Subscription Expiry Alert</p>
                 <mat-slide-toggle>Email</mat-slide-toggle>
                 <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
               </div>
-              <!-- This is extra field If you needed -->
+             
               <div class="col-md-3">
                 <p class="tgle_tlt">This is extra field If you needed</p>
                 <div class="cn_mlti_selct">
@@ -52,7 +68,7 @@
                   <mat-checkbox>Daily</mat-checkbox>
                   <mat-checkbox>Weekly</mat-checkbox>
                 </div>
-              </div>
+              </div> -->
             </div>
           </mat-expansion-panel>
           <mat-expansion-panel>
@@ -66,14 +82,14 @@
             <div class="row cus_slide_toggle">
               <div class="col-md-3">
                 <p class="tgle_tlt">New Load Lead Available</p>
-                <mat-slide-toggle>Email</mat-slide-toggle>
-                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+                <mat-slide-toggle formControlName="loadQuoteRequest" (change)="editNotification()">Email</mat-slide-toggle>
+                <!-- <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle> -->
               </div>
-              <div class="col-md-3">
+              <!-- <div class="col-md-3">
                 <p class="tgle_tlt">Load Lead Expiring Soon</p>
                 <mat-slide-toggle>Email</mat-slide-toggle>
                 <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
-              </div>
+              </div> -->
             </div>
           </mat-expansion-panel>
           <mat-expansion-panel>
@@ -85,7 +101,7 @@
               <mat-panel-description></mat-panel-description>
             </mat-expansion-panel-header>
             <div class="row cus_slide_toggle">
-              <div class="col-md-3">
+              <!-- <div class="col-md-3">
                 <p class="tgle_tlt">New Review Received</p>
                 <mat-slide-toggle>Email</mat-slide-toggle>
                 <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
@@ -94,25 +110,25 @@
                 <p class="tgle_tlt">New Review Received - Reminder</p>
                 <mat-slide-toggle>Email</mat-slide-toggle>
                 <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
-              </div>
-              <div class="col-md-3">
+              </div> -->
+              <!-- <div class="col-md-3">
                 <p class="tgle_tlt">Geather Reviews Reminder</p>
                 <mat-slide-toggle>Email</mat-slide-toggle>
                 <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
-              </div>
+              </div> -->
               <div class="col-md-3">
                 <p class="tgle_tlt">Got a new Review</p>
-                <mat-slide-toggle>Email</mat-slide-toggle>
-                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+                <mat-slide-toggle formControlName="gotANewReview" (change)="editNotification()">Email</mat-slide-toggle>
+                <!-- <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle> -->
               </div>
               <div class="col-md-3">
                 <p class="tgle_tlt">Respond to Review Reminder</p>
-                <mat-slide-toggle>Email</mat-slide-toggle>
-                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+                <mat-slide-toggle formControlName="respondToReviewReminder" (change)="editNotification()">Email</mat-slide-toggle>
+                <!-- <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle> -->
               </div>
             </div>
           </mat-expansion-panel>
-          <mat-expansion-panel>
+          <!-- <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
@@ -127,7 +143,7 @@
                 <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
               </div>
             </div>
-          </mat-expansion-panel>
+          </mat-expansion-panel> -->
           <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>
@@ -139,14 +155,14 @@
             <div class="row cus_slide_toggle">
               <div class="col-md-3">
                 <p class="tgle_tlt">Truck Availability Expiring Soon</p>
-                <mat-slide-toggle>Email</mat-slide-toggle>
-                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+                <mat-slide-toggle formControlName="truckAvailabilityExpiringSoon" (change)="editNotification()">Email</mat-slide-toggle>
+                <!-- <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle> -->
               </div>
-              <div class="col-md-3">
+              <!-- <div class="col-md-3">
                 <p class="tgle_tlt">Truck Availability Request from Broker</p>
                 <mat-slide-toggle>Email</mat-slide-toggle>
                 <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
-              </div>
+              </div> -->
             </div>
           </mat-expansion-panel>
           <mat-expansion-panel>
@@ -159,14 +175,14 @@
             </mat-expansion-panel-header>
             <div class="row cus_slide_toggle">
               <div class="col-md-3">
-                <p class="tgle_tlt">Monthly Performance Summary</p>
-                <mat-slide-toggle>Email</mat-slide-toggle>
-                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+                <p class="tgle_tlt">Monthly Contact View Alert </p>
+                <mat-slide-toggle formControlName="monthlyContactViewAlert" (change)="editNotification()">Email</mat-slide-toggle>
+                <!-- <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle> -->
               </div>
               <div class="col-md-3">
-                <p class="tgle_tlt">Quarterly Revenue Insights</p>
-                <mat-slide-toggle>Email</mat-slide-toggle>
-                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+                <p class="tgle_tlt">Monthly Profile View Alert </p>
+                <mat-slide-toggle formControlName="monthlyProfileViewAlert" (change)="editNotification()">Email</mat-slide-toggle>
+                <!-- <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle> -->
               </div>
             </div>
           </mat-expansion-panel>
@@ -181,22 +197,22 @@
             <div class="row cus_slide_toggle">
               <div class="col-md-3">
                 <p class="tgle_tlt">Insurance Expiry Alert</p>
-                <mat-slide-toggle>Email</mat-slide-toggle>
-                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+                <mat-slide-toggle formControlName="insuranceExpiryAlert" (change)="editNotification()">Email</mat-slide-toggle>
+                <!-- <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle> -->
               </div>
               <div class="col-md-3">
                 <p class="tgle_tlt">FMCSA Authority Change Alert</p>
-                <mat-slide-toggle>Email</mat-slide-toggle>
-                <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
+                <mat-slide-toggle formControlName="authorityStatusChangeAlert" (change)="editNotification()">Email</mat-slide-toggle>
+                <!-- <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle> -->
               </div>
-              <div class="col-md-3">
+              <!-- <div class="col-md-3">
                 <p class="tgle_tlt">Authority Renewal Reminder</p>
                 <mat-slide-toggle>Email</mat-slide-toggle>
                 <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
-              </div>
+              </div> -->
             </div>
           </mat-expansion-panel>
-          <mat-expansion-panel>
+          <!-- <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
@@ -232,8 +248,10 @@
                 <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
               </div>
             </div>
-          </mat-expansion-panel>
+          </mat-expansion-panel> -->
         </mat-accordion>
+        <!-- <button mat-raised-button color="primary" type="submit">Save Settings</button> -->
+      </form>
       </div>
       
 
