@@ -461,7 +461,17 @@
       <ng-container matColumnDef="notes">
         <th mat-header-cell *matHeaderCellDef>Notes</th>
         <td mat-cell *matCellDef="let element" class="min_w_200">
-          {{ element.notes || "-" }}
+          <ng-container *ngIf="!expandedNotes[element.id]; else fullNote">
+            {{ element.notes?.length > 10 ? (element.notes | slice:0:10) + '...' : (element.notes || '-') }}
+            <a *ngIf="element.notes?.length > 10"
+               (click)="toggleNote(element.id)" 
+               class="view_more">Show more</a>
+          </ng-container>
+          <ng-template #fullNote>
+            {{ element.notes }}
+            <a (click)="toggleNote(element.id)"
+               class="view_less">Show less</a>
+          </ng-template>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
@@ -36,41 +36,82 @@ export class PostTruckAvailabilityComponent implements OnInit {
   public errorSource = false;
   public errorDestination = false;
   weekdays: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
+  AutoCompleteOptions: any[] = [];
+  AutoCompleteOptionsDesc: any[] = [];
+  filteredOptions:  any[] = [];
+  filteredOptionsDestination:  any[] = [];
+  dataToEdit:any
+  isEdit=false
+  rowData:any
   constructor(
     private formBuilder: FormBuilder,
     private commonService: CommonService,
     private router: Router,
     public alertService: AlertService,
+    private cdr:ChangeDetectorRef
   ) {
+    this.equipmentType = StatusSetting.equipmentType.map(item => ({
+      ...item,
+      id: Number(item.id)
+    }));
       this.minDate = new Date();
       this.minNextDate = null;
+      this.addAvailabilityForm = this.formBuilder.group({
+        sourceLocation: ['', [Validators.required, Validators.maxLength(64)]],
+        destinationLocation: ['', [Validators.required, Validators.maxLength(64)]],
+        sourceDate: [''],
+        destinationDate: [''],  
+        sourceDay: [''],
+        destinationDay: [''], 
+        sourceTime: [''],
+        destinationTime: [''],     
+        shipmentTypes: ['',[Validators.required]],
+        equipmentType: ['',[Validators.required]],      
+        miles: ['', [Validators.required,Validators.pattern(/^[.\d]+$/)]],
+        costPerMile:['',[Validators.required,Validators.pattern(/^[.\d]+$/)]],
+        notes:['',Validators.maxLength(516)],
+        truckName: ['',[Validators.required]],
+        frequency: ['',[Validators.required]],
+        weight: ['',[Validators.required]],
+        length: ['',[Validators.required]],
+        loadExpiryDate:['',[Validators.required]]
+      });
+      
+      const navigation = this.router.getCurrentNavigation();
+    this.rowData = navigation?.extras?.state?.['data'];// The full row data
+    
+    console.log(this.rowData ,'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
+    if(this.rowData ){
+      this.isEdit=true;
+      this.addAvailabilityForm.patchValue({
+        sourceLocation: `${this.rowData.sourceLocationCity}, ${this.rowData.sourceLocationState}, ${this.rowData.sourceLocationCountry}`,
+        destinationLocation: `${this.rowData.destinationLocationCity}, ${this.rowData.destinationLocationState}, ${this.rowData.destinationLocationCountry}`,
+        sourceDate: this.rowData.sourceDate, // no value in API
+        destinationDate: this.rowData.destinationDate, // no value in API
+        sourceDay: this.rowData.sourceDay,
+        destinationDay: this.rowData.destinationDay,
+        sourceTime: this.rowData.sourceTime,
+        destinationTime: this.rowData.destinationTime,
+        shipmentTypes: this.rowData.shipmentTypes,
+        equipmentType: this.rowData.equipmentType?.[0]?.equipmentTypeId ?? '', // take ID
+        miles: this.rowData.miles,
+        costPerMile: this.rowData.costPerMile,
+        notes: this.rowData.notes,
+        truckName: this.rowData.truckName,
+        frequency: this.rowData.frequency,
+        weight: this.rowData.weight,
+        length: this.rowData.length,
+        loadExpiryDate: this.rowData.loadExpiryDate
+      });
+    }
    }
 
   ngOnInit(): void {
+   
     this.shipmentType = StatusSetting.shipmentType;
     this.information=StatusSetting.information;
-    this.equipmentType = StatusSetting.equipmentType;
-    this.addAvailabilityForm = this.formBuilder.group({
-      sourceLocation: ['', [Validators.required, Validators.maxLength(64)]],
-      destinationLocation: ['', [Validators.required, Validators.maxLength(64)]],
-      sourceDate: [''],
-      destinationDate: [''],  
-      sourceDay: [''],
-      destinationDay: [''], 
-      sourceTime: [''],
-      destinationTime: [''],     
-      shipmentTypes: ['',[Validators.required]],
-      equipmentType: ['',[Validators.required]],      
-      miles: ['', [Validators.required,Validators.pattern(/^[.\d]+$/)]],
-      costPerMile:['',[Validators.required,Validators.pattern(/^[.\d]+$/)]],
-      notes:['',Validators.maxLength(516)],
-      truckName: ['',[Validators.required]],
-      frequency: ['',[Validators.required]],
-      weight: ['',[Validators.required]],
-      length: ['',[Validators.required]],
-      loadExpiryDate:['',[Validators.required]]
-    });
+    
+  
     this.addAvailabilityForm.get('frequency')?.valueChanges.subscribe(value => {
       this.setValidatorsBasedOnFrequency(value);
     });
@@ -129,7 +170,6 @@ export class PostTruckAvailabilityComponent implements OnInit {
   }
 
   addFormSubmit({ value, valid }) {
-    console.log(this.addAvailabilityForm.value)
     this.submitted = true;
     var sourceDate = value.sourceDate;
     var date = new Date(sourceDate);
@@ -144,38 +184,55 @@ export class PostTruckAvailabilityComponent implements OnInit {
     var year = date.getFullYear();
     value.destinationDate = month + '/' + day + '/' + year;
 
-    // value.sourceLocation = this.sourceLoc.id;
-    // value.destinationLocation = this.destinyLoc.id;
-    const formValue = this.addAvailabilityForm.value
-    console.log(formValue.sourceLocation)
-    const dataToSend = {
-      sourceLocation: formValue.sourceLocation,
-      destinationLocation: formValue.destinationLocation,
-      shipmentTypes: formValue.shipmentTypes, 
-      miles: formValue.miles,
-      costPerMile: formValue.costPerMile,
-      notes: formValue.notes,
-      equipmentType:formValue.equipmentType,
-      // frequency: 'daily', 
-      // loadExpiryDate: '03/11/2025', 
-      sourceTime:  value.sourceDate, 
-      destinationTime: value.destinationDate,
-      // truckName: 'my truck 6',
-      // weight: 80,    
-      // length: '50'   
-    };
-    
-    
+    var loadExpiryDate = value.loadExpiryDate;
+    var date = new Date(loadExpiryDate);
+    var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so we add 1
+    var day = date.getDate().toString().padStart(2, '0');
+    var year = date.getFullYear();
+    value.loadExpiryDate = month + '/' + day + '/' + year;
 
-    console.log(dataToSend)
+    const formValue = this.addAvailabilityForm.value
+    const frequency = this.addAvailabilityForm.get('frequency')?.value;
+  const dataToSend: any = {
+  sourceLocation: this.isEdit? this.rowData.sourceLocation : this.AutoCompleteOptions.find((item)=>formValue.sourceLocation === item?.formattedLocation)?.id,
+  destinationLocation: this.isEdit? this.rowData.destinationLocation : this.AutoCompleteOptionsDesc.find((item)=>formValue.destinationLocation === item?.formattedLocation)?.id,
+  shipmentTypes: formValue.shipmentTypes,
+  miles: formValue.miles,
+  costPerMile: formValue.costPerMile,
+  notes: formValue.notes,
+  equipmentType: formValue.equipmentType,
+  frequency: formValue.frequency,
+  loadExpiryDate:  value.loadExpiryDate,
+  truckName: formValue.truckName,
+  weight: formValue.weight,
+  length: formValue.length,
+  ...(this.isEdit && { id: this.rowData.id })
+};
+
+if (frequency === 'monthly' || frequency === 'oneTime') {
+  dataToSend.sourceDate = value.sourceDate;
+  dataToSend.destinationDate = value.destinationDate;
+  dataToSend.sourceTime=this.isEdit?  formValue.sourceTime : formValue.sourceTime ? `${formValue.sourceTime}:00` : null;
+  dataToSend.destinationTime=this.isEdit?  formValue.destinationTime : formValue.destinationTime ? `${formValue.destinationTime}:00` : null;
+} else if (frequency === 'weekly') {
+  dataToSend.sourceDay = formValue.sourceDay;
+  dataToSend.destinationDay = formValue.destinationDay;
+  dataToSend.sourceTime= this.isEdit?  formValue.sourceTime : formValue.sourceTime ? `${formValue.sourceTime}:00` : null;
+  dataToSend.destinationTime= this.isEdit?  formValue.destinationTime : formValue.destinationTime ? `${formValue.destinationTime}:00` : null;
+} else if (frequency === 'daily') {
+  dataToSend.sourceTime=this.isEdit?  formValue.sourceTime : formValue.sourceTime ? `${formValue.sourceTime}:00` : null;
+  dataToSend.destinationTime=this.isEdit?  formValue.destinationTime : formValue.destinationTime ? `${formValue.destinationTime}:00` : null;
+}
+    
     if (valid) {
       this.loading = true;
       let APIparams = {
-        apiKey: AppSettings.APIsNameArray.AVAILIBILITY.ADD,
+        apiKey:this.isEdit ? AppSettings.APIsNameArray.AVAILIBILITY.EDIT : AppSettings.APIsNameArray.AVAILIBILITY.ADD,
         uri: '',
         postBody: dataToSend,
       };
-      this.commonService.post(APIparams).subscribe(
+      const methodType = this.isEdit?'put':'post';
+      (this.commonService as any)[methodType](APIparams).subscribe(
         (success) => {
           this.loading=false;
         if (success.success === true) {
@@ -186,9 +243,18 @@ export class PostTruckAvailabilityComponent implements OnInit {
             'left',
             'txt_s',
             'check_circle',
-            'Add Load Availibility',
-            'You have successfully Added Load Availibility detials.'
+            this.isEdit ? 'Edit Load Availability' : 'Add Load Availability',
+            this.isEdit
+              ? 'You have successfully updated Load Availability details.'
+              : 'You have successfully added Load Availability details.'
           );
+          if(!this.isEdit){
+            this.submitted=false;
+            this.addAvailabilityForm.reset();
+            this.addAvailabilityForm.markAsPristine();
+            this.addAvailabilityForm.markAsUntouched();
+            this.addAvailabilityForm.updateValueAndValidity();
+          }
         } else if (success.success === false) {
           this.loading = false;
           this.submitted=false;
@@ -198,8 +264,10 @@ export class PostTruckAvailabilityComponent implements OnInit {
             'left',
             'txt_d',
             'check_circle',
-            'Add Load Availibility',
-            'You have not successfully added Load Availibility detials.'
+            this.isEdit ? 'Edit Load Availability' : 'Add Load Availability',
+  this.isEdit
+    ? 'Failed to update Load Availability details.'
+    : 'Failed to add Load Availability details.'
           );
         }
       },
@@ -333,4 +401,47 @@ export class PostTruckAvailabilityComponent implements OnInit {
           this.errorDestination = false;
         }
   }
+  onDotInputChange(value: string) {
+    this.autocompleteSearchData(value,false);
+  }
+
+  onDotInputChangeDesc(value: string) {
+    this.autocompleteSearchData(value,true);
+  }
+  autocompleteSearchData(searchdata?:any, isDestination = false): void {
+    let newParams = {
+      search: searchdata,
+      onlyCities:true
+    };
+    const apiKey =  AppSettings.APIsNameArray.EXTRA.AUTOCOMPLETE;
+
+    if (apiKey) {
+      let APIparams = {
+        apiKey: apiKey,
+        uri: this.commonService.getAPIUriFromParams(newParams),
+      };
+      this.commonService.getList(APIparams).subscribe(
+        (response) => {
+        
+
+          response.response.cityData = response.response.cityData.map(element => ({
+            ...element,
+            formattedLocation: `${element.city}, ${element.state}, ${element.country}`
+          }));
+          if(isDestination){
+            this.AutoCompleteOptionsDesc = response.response.cityData;
+            this.filteredOptionsDestination = this.AutoCompleteOptionsDesc;}
+          else{
+            this.AutoCompleteOptions = response.response.cityData;
+            this.filteredOptions = this.AutoCompleteOptions;
+          }
+        },
+        (error) => {
+          console.error('Error fetching carriers:', error);
+        }
+      );
+    }
+  }
+
+ 
 }

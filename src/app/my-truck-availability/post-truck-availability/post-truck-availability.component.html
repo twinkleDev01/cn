@@ -3,7 +3,7 @@
       <div class="form_box">
         <div class="contnt_hed">
           <div class="ch_l">
-            <h3 class="ch_tlt">Add Post Truck Availability</h3>
+            <h3 class="ch_tlt">{{ this.isEdit? 'Update' : 'Add'}} Post Truck Availability</h3>
           </div>
           <div class="ch_rl">
             <a class="cn_btn" href="/my-truck-availability">My Truck Availability List</a>
@@ -30,6 +30,9 @@
                     </mat-option>
                     <mat-option value="monthly">
                       Monthly
+                    </mat-option>
+                    <mat-option value="oneTime">
+                      One-Time
                     </mat-option>
                     
                   </mat-select>
@@ -94,26 +97,28 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="lane_addrs">
+                
                   <div class="input_field">
+                   
                     <p class="cn_input_lbl">Location<span class="txt_d"> *</span></p>
                     <mat-form-field appearance="none" style="position: relative;">
-                      <input matInput type="text" formControlName="sourceLocation" maxlength="65" [value]="sourceLoc?.location" placeholder="Type Source Location" (keyup)="searchUserType($event)" (blur)="onBlur('source')" class="form-control cn_input" />
-                      <mat-error class="error_mess d_inline" *ngIf="!errorSource && submitted && addAvailabilityForm?.get('sourceLocation').errors?.['required']">Source Location is required.</mat-error>
-                      <mat-error *ngIf="addAvailabilityForm.get('sourceLocation').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed.</mat-error>
-                      <mat-error *ngIf="errorSource" class="error_mess">Please select from the dropdown list.</mat-error>
-                      <div class="src_cty_list" *ngIf="sourceCityData?.length > 0 && sourceLocSearch && !destinationSearch">
-                        <div class="input_dropdown">
-                          <p *ngFor="let cityRecord of sourceCityData; let i=index;" (click)="getSourceLoc(cityRecord)" class="input_option">{{cityRecord?.city}}, {{cityRecord?.state}}</p>
-                        </div>
-                      </div>
-                    </mat-form-field>
-                    <div class="loard_box" *ngIf="loaderSearch">
-                      <span class="custom_spinner spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                      </span>
-                    </div>  
-                  </div>
-                  <div class="input_field"  *ngIf="addAvailabilityForm.get('frequency')?.value === 'monthly'">
+                    <input type="text"
+                    #dotInput
+                           placeholder="Enter Source Location"
+                           aria-label="DOT Number"
+                           matInput
+                           formControlName="sourceLocation"
+                           (input)="onDotInputChange(dotInput.value)"
+                           [matAutocomplete]="auto">
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" >
+                      <mat-option *ngFor="let option of filteredOptions " [value]="option?.formattedLocation">
+                      {{option?.formattedLocation}}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error class="error_mess d_inline" *ngIf="!errorSource && submitted && addAvailabilityForm?.get('sourceLocation').errors?.['required']">Source Location is required.</mat-error>
+                  </mat-form-field>
+                </div>
+                  <div class="input_field"  *ngIf="addAvailabilityForm.get('frequency')?.value === 'monthly' || addAvailabilityForm.get('frequency')?.value ==='oneTime'">
                     <p class="cn_input_lbl">Date<span class="txt_d"> *</span></p>
                    
                     <mat-form-field appearance="none" class="cn_pfix_icn">
@@ -134,7 +139,7 @@
                     </mat-form-field>
                     
                   </div>
-                  <div class="input_field" *ngIf="addAvailabilityForm.get('frequency')?.value === 'daily'">
+                  <div class="input_field">
                     <p class="cn_input_lbl">Source Time<span class="txt_d"> *</span></p>
                    
                     <mat-form-field appearance="none">
@@ -156,18 +161,25 @@
                   <div class="input_field">
                     <p class="cn_input_lbl">Location<span class="txt_d"> *</span></p>
                     <mat-form-field appearance="none" style="position: relative;">
-                      <input matInput type="text" formControlName="destinationLocation"  maxlength="65" placeholder="Enter Destination Location" class="form-control cn_input" [value]="destinyLoc?.location" (blur)="onBlur('destination')" (keyup)="searchUserTypeForDestination($event)"/>
-                      <mat-error class="error_mess d_inline" *ngIf="!errorDestination && submitted && addAvailabilityForm?.get('destinationLocation').errors?.['required']">Destination Location is required.</mat-error>
-                      <mat-error *ngIf="addAvailabilityForm.get('destinationLocation').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed</mat-error>
-                      <mat-error *ngIf="errorDestination" class="error_mess">Please select from the dropdown list.</mat-error>
-                      <div class="src_cty_list" *ngIf="destinationCityData?.length > 0 && destinationSearch && !sourceLocSearch">
-                        <div class="input_dropdown">
-                          <p *ngFor="let cityRecord of destinationCityData; let i=index;" (click)="getDestinyLoc(cityRecord)"  class="input_option">{{cityRecord.city}}, {{cityRecord.state}}</p>
-                        </div>
-                      </div>
-                    </mat-form-field>
-                  </div>
-                  <div class="input_field"  *ngIf="addAvailabilityForm.get('frequency')?.value === 'monthly'">
+                    <input type="text"
+                    #dotInput
+                           placeholder="Enter Destination Location"
+                           aria-label="DOT Number"
+                           matInput
+                           #desc
+                           formControlName="destinationLocation"
+                           (input)="onDotInputChangeDesc(desc.value)"
+                           [matAutocomplete]="autoDestination">
+                    
+                    <mat-autocomplete autoActiveFirstOption #autoDestination="matAutocomplete" >
+                      <mat-option *ngFor="let option of filteredOptionsDestination " [value]="option?.formattedLocation">
+                      {{option?.formattedLocation}}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error class="error_mess d_inline" *ngIf="!errorSource && submitted && addAvailabilityForm?.get('destinationLocation').errors?.['required']">Source Location is required.</mat-error>
+                  </mat-form-field>
+                </div>
+                  <div class="input_field"  *ngIf="addAvailabilityForm.get('frequency')?.value === 'monthly'  || addAvailabilityForm.get('frequency')?.value ==='oneTime'">
                     <p class="cn_input_lbl">Date<span class="txt_d"> *</span></p>
                     <mat-form-field appearance="none" class="cn_pfix_icn">
                       <input matInput formControlName="destinationDate" [matDatepicker]="dropDatePicker" [matDatepicker]="dp1" placeholder="Select Destination Date"  [min]="minNextDate" [readonly]="true" class="form-control cn_input">
@@ -187,7 +199,7 @@
                     </mat-form-field>
                     
                   </div>
-                  <div class="input_field" *ngIf="addAvailabilityForm.get('frequency')?.value === 'daily'">
+                  <div class="input_field">
                     <p class="cn_input_lbl">Destination Time<span class="txt_d"> *</span></p>
                     
                     <mat-form-field appearance="none">
@@ -241,6 +253,17 @@
                 <mat-error class="error_mess d_inline" *ngIf="submitted && addAvailabilityForm?.get('costPerMile').errors?.['pattern']">Please enter a valid number.</mat-error>
               </mat-form-field>
             </div>
+            <div class="col-md-3">
+              <p class="cn_input_lbl">Load Expiry Date<span class="txt_d"> *</span></p>
+                   
+              <mat-form-field appearance="none" class="cn_pfix_icn">
+                <input matInput formControlName="loadExpiryDate"  [matDatepicker]="pickupDatePicker" [matDatepicker]="dp3" placeholder="Select  Source Date" [min]="minDate" [readonly]="true" class="form-control cn_input" >
+                <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+                <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+                <mat-error *ngIf="submitted && addAvailabilityForm.get('loadExpiryDate').errors?.['required']" class="error_mess">Source Date is  required.</mat-error>
+              </mat-form-field>
+            </div>
+            
             <div class="col-md-12">
               <p class="cn_input_lbl">Notes</p>
               <mat-form-field appearance="none">
@@ -253,90 +276,14 @@
           </div>
 
           <div class="form_action">
-            <button type="submit"  class="cn_btn">Add Availability</button>
+            <button type="submit"  class="cn_btn">{{ this.isEdit? 'Update' : 'Add'}} Availability</button>
           </div>
 
 
           
-        </form><!-- Old Dynamic code -->
-          <div class="row" style="display: none;" >
-            <div class="col-md-12 mt-5">
-              <div class="row">
-                <div class="col-md-12">
-                  <h5>Source</h5>
-                </div>
-                <div class="col-md-6">
-                  <p class="cn_input_lbl">Location<span class="txt_d"> *</span></p>
-                  <mat-form-field appearance="none" style="position: relative;">
-                    <input matInput type="text" formControlName="sourceLocation" maxlength="65" [value]="sourceLoc?.location" placeholder="Type Source Location" (keyup)="searchUserType($event)" (blur)="onBlur('source')" class="form-control cn_input" />
-                    <mat-error class="error_mess d_inline" *ngIf="!errorSource && submitted && addAvailabilityForm?.get('sourceLocation').errors?.['required']">Source Location is required.</mat-error>
-                    <mat-error *ngIf="addAvailabilityForm.get('sourceLocation').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed.</mat-error>
-                    <mat-error *ngIf="errorSource" class="error_mess">Please select from the dropdown list.</mat-error>
-                    <div class="src_cty_list" *ngIf="sourceCityData?.length > 0 && sourceLocSearch && !destinationSearch">
-                    <div class="input_dropdown">
-                      <p *ngFor="let cityRecord of sourceCityData; let i=index;" (click)="getSourceLoc(cityRecord)" class="input_option">{{cityRecord?.city}}, {{cityRecord?.state}}</p>
-                    </div>
-                    </div>
-                  </mat-form-field>
-                  <div class="loard_box" *ngIf="loaderSearch">
-                    <span class="custom_spinner spinner-border" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                    </span>
-                  </div>
-                  
-                </div>
-                <div class="col-md-6">
-                  <p class="cn_input_lbl">Date
-                    <span class="txt_d"> *</span></p>
-                  <mat-form-field appearance="none" class="cn_pfix_icn">
-                    <input matInput formControlName="sourceDate" (dateChange)="updateMinNextDate($event.value)" [matDatepicker]="pickupDatePicker" [matDatepicker]="dp2" placeholder="Select  Source Date" [min]="minDate" [readonly]="true" class="form-control cn_input" >
-                    <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
-                    <mat-datepicker #dp2 disabled="false"></mat-datepicker>
-                    <mat-error *ngIf="submitted && addAvailabilityForm.get('sourceDate').errors?.['required']" class="error_mess">Source Date is  required.</mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-12">
-                  <h5>Destination</h5>
-                </div>
-                <div class="col-md-6">
-                  <p class="cn_input_lbl">Location
-                    <span class="txt_d"> *</span></p>
-                    <mat-form-field appearance="none" style="position: relative;">
-                      <input matInput type="text" formControlName="destinationLocation"  maxlength="65" placeholder="Enter Destination Location" class="form-control cn_input" [value]="destinyLoc?.location" (blur)="onBlur('destination')" (keyup)="searchUserTypeForDestination($event)"/>
-                      <mat-error class="error_mess d_inline" *ngIf="!errorDestination && submitted && addAvailabilityForm?.get('destinationLocation').errors?.['required']">Destination Location is required.</mat-error>
-                      <mat-error *ngIf="addAvailabilityForm.get('destinationLocation').errors?.['maxlength']" class="error_mess">Only 64 characters are allowed</mat-error>
-                      <mat-error *ngIf="errorDestination" class="error_mess">Please select from the dropdown list.</mat-error>
-                        <div class="src_cty_list" *ngIf="destinationCityData?.length > 0 && destinationSearch && !sourceLocSearch">
-                          <div class="input_dropdown">
-                          <p *ngFor="let cityRecord of destinationCityData; let i=index;" (click)="getDestinyLoc(cityRecord)"  class="input_option">{{cityRecord.city}}, {{cityRecord.state}}</p>
-                        </div>
-                        </div>
-                    </mat-form-field>
-                  
-
-                </div>
-              
-                <div class="col-md-6">
-                  <div>
-                    <p class="cn_input_lbl">Date<span class="txt_d"> *</span></p>
-                    <mat-form-field appearance="none" class="cn_pfix_icn">
-                      <input matInput formControlName="destinationDate" [matDatepicker]="dropDatePicker" [matDatepicker]="dp1" placeholder="Select Destination Date"  [min]="minNextDate" [readonly]="true" class="form-control cn_input">
-                      <mat-datepicker-toggle matSuffix [for]="dp1" [disabled]="dropTimedisabled"></mat-datepicker-toggle>
-                      <mat-datepicker #dp1 disabled="false"></mat-datepicker>
-                      <mat-error *ngIf="submitted && addAvailabilityForm.get('destinationDate').errors?.['required']" class="error_mess">Destination Date is required.</mat-error>
-                    </mat-form-field>
-                  </div>
-                </div> 
-                <div class="col-md-12">
-                  <h5>Other</h5>
-                </div>            
-              </div>
-            </div>
-            <div class="form_action">
-              <button type="submit"  class="cn_btn" >Add Availability</button>
-              <!-- style="background: #575757;" -->
-            </div>
-          </div>
+        </form>
+        <!-- Old Dynamic code -->
+        
       </div>
     </div>
     <div class="skt_eifr" *ngIf="skeletonLoader">

@@ -433,4 +433,9 @@ export class TruckOnDemandComponent implements OnInit {
      this.destroy$.next(true);
      this.destroy$.complete();
    }
+   expandedNotes: { [key: string]: boolean } = {};
+
+toggleNote(id: string | number) {
+  this.expandedNotes[id] = !this.expandedNotes[id];
+}
 }
