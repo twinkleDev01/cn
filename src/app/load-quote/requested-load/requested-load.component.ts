@@ -1,10 +1,11 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
 import { Chart, registerables } from 'chart.js';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-requested-load',
@@ -39,6 +40,7 @@ export class RequestedLoadComponent implements OnInit {
   isFilterApplied = false;
   totalQuotes: number = 0;
   totalQuotesLimit: number = 0;
+  teamIdList: any = [];
   countryList = [
     {
       value: 'US',
@@ -64,7 +66,7 @@ export class RequestedLoadComponent implements OnInit {
     equipmentType: [''],
     weight: [''],
     length: [''],
-    teamIds: [''],
+    teamIds: [],
   });
 
   constructor(
@@ -79,6 +81,7 @@ export class RequestedLoadComponent implements OnInit {
     this.createShipmentTypeBreakdownChart();
     this.createCityChart();
     this.fetchLoadQuoteList();
+    this.teamList();
   }
   patchFilterValues() {
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -527,4 +530,92 @@ export class RequestedLoadComponent implements OnInit {
     this.advanceFilterForm.reset();
     this.fetchLoadQuoteList(1, true);
   }
+   // For team dropdown pagination
+    teamPage = 1;
+    teamLimit = 10; // Items per load
+    totalTeams = 0;
+    loadingMoreTeams = false;
+    hasMoreTeams = true;
+    teamList(loadMore: boolean = false): void {
+      if (loadMore) {
+        if (!this.hasMoreTeams || this.loadingMoreTeams) return;
+        this.teamPage++;
+      } else {
+        // Initial load - reset
+        this.teamPage = 1;
+        this.teamIdList = [];
+        this.hasMoreTeams = true;
+      }
+  
+      // this.loadingMoreTeams = true;
+      // if (!loadMore) this.spinnerLoader = true;
+  
+      const params = {
+        limit: this.teamLimit,
+        page: this.teamPage,
+      };
+  
+      const apiKey = AppSettings.APIsNameArray.TEAM.TEAMLIST;
+      if (apiKey) {
+        let APIparams = {
+          apiKey: apiKey,
+          uri: this.commonService.getAPIUriFromParams(params),
+        };
+  
+        this.commonService.getList(APIparams).subscribe(
+          (response) => {
+            // this.loadingMoreTeams = false;
+            // this.spinnerLoader = false;
+  
+            if (response?.response?.teamArray) {
+              this.teamIdList = [
+                ...this.teamIdList,
+                ...response.response.teamArray,
+              ];
+              // Check if more teams are available
+              this.hasMoreTeams =
+                response.response.teamArray.length >= this.teamLimit;
+              this.totalTeams = response.response.totalCount || 0;
+            }
+          },
+          (error) => {
+            // this.loadingMoreTeams = false;
+            // this.spinnerLoader = false;
+            console.error('Error fetching teams:', error);
+          }
+        );
+      }
+    }
+    @ViewChild('teamSelect') teamSelect: MatSelect;
+  
+    onTeamDropdownOpened(): void {
+      // Initialize scroll listener when dropdown opens
+      setTimeout(() => {
+        if (this.teamSelect && this.teamSelect.panel) {
+          const panel = this.teamSelect.panel.nativeElement;
+          panel.addEventListener('scroll', this.onTeamDropdownScroll.bind(this));
+        }
+      });
+    }
+  
+    onTeamDropdownScroll(event: Event): void {
+      const panel = event.target as HTMLElement;
+      const scrollThreshold = 50; // pixels from bottom
+      const atBottom =
+        panel.scrollHeight - panel.scrollTop <=
+        panel.clientHeight + scrollThreshold;
+  
+      if (atBottom && this.hasMoreTeams && !this.loadingMoreTeams) {
+        this.teamList(true); // Load more teams
+      }
+    }
+  
+    ngOnDestroy(): void {
+      // Clean up scroll listener
+      if (this.teamSelect && this.teamSelect.panel) {
+        const panel = this.teamSelect.panel.nativeElement;
+        panel.removeEventListener('scroll', this.onTeamDropdownScroll);
+      }
+    }
+   
 }

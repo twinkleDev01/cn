@@ -9,6 +9,7 @@ import { AppSettings } from 'src/app/commons/setting/app_setting';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupComponent } from 'src/app/shared/popup/popup.component';
 import { ToastrService } from 'ngx-toastr';
+import { AlertService } from 'src/app/commons/service/alert.service';
 
 @Component({
   selector: 'app-broker-alert',
@@ -42,7 +43,8 @@ export class BrokerAlertComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public alertService: AlertService,
   ) { }
    
   ngOnInit(): void {
@@ -366,8 +368,29 @@ const APIparams = {
 this.commonService.post(APIparams).subscribe({
   next: (res) => {
     console.log('Status updated successfully:', res);
-    if(!res.success) {
-      this.toastr.error(res?.message, 'Error');
+    if(res.success){
+      // this.toastr.success(res.message,'Success')
+      this.alertService.showNotificationMessage(
+        'success',
+        'bottom',
+        'left',
+        'txt_s',
+        'check_circle',
+        'Success',
+        res?.message
+      );
+    }
+    else {
+      // this.toastr.error(res?.message, 'Error');
+      this.alertService.showNotificationMessage(
+        'danger',
+        'bottom',
+        'left',
+        'txt_d',
+        'check_circle',
+        'Error',
+        res?.message
+      );
     }
   },
   error: (err) => {
@@ -459,12 +482,14 @@ ngOnDestroy(): void {
 }
 
   networkAlertPopup(event:boolean, element:any) {
+    console.log(event,"462")
+    const statusText = event ? 'Active' : 'Inactive';
     const dialogRef = this.dialog.open(PopupComponent, {
       disableClose: true,
       backdropClass: 'cn_custom_popup',
       width: "460px",
       height:"auto",
-      data: { openPop: 'changeNetworkAlert' },
+      data: { openPop: 'changeNetworkAlert', statusText: statusText},
     });
 
     dialogRef.afterClosed().subscribe((result) => {

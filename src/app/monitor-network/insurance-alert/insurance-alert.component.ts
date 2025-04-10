@@ -12,6 +12,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { map, Observable, of, startWith } from 'rxjs';
+import { AlertService } from 'src/app/commons/service/alert.service';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
 import { PopupComponent } from 'src/app/shared/popup/popup.component';
@@ -80,7 +81,8 @@ export class InsuranceAlertComponent implements OnInit {
     private route: ActivatedRoute,
     private cdRef: ChangeDetectorRef,
     private dialog: MatDialog,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public alertService: AlertService,
   ) {}
 
   ngOnInit(): void {
@@ -479,8 +481,29 @@ export class InsuranceAlertComponent implements OnInit {
     this.commonService.post(APIparams).subscribe({
       next: (res) => {
         console.log('Status updated successfully:', res);
-        if (!res.success) {
-          this.toastr.error(res?.message, 'Error');
+        if(res.success){
+          // this.toastr.success(res.message,'Success')
+          this.alertService.showNotificationMessage(
+            'success',
+            'bottom',
+            'left',
+            'txt_s',
+            'check_circle',
+            'Success',
+            res?.message
+          );
+        }
+        else {
+          // this.toastr.error(res?.message, 'Error');
+          this.alertService.showNotificationMessage(
+            'danger',
+            'bottom',
+            'left',
+            'txt_d',
+            'check_circle',
+            'Error',
+            res?.message
+          );
         }
       },
       error: (err) => {
@@ -579,12 +602,13 @@ export class InsuranceAlertComponent implements OnInit {
     }
   }
   networkAlertPopup(event: boolean, element: any) {
+    const statusText = event ? 'Active' : 'Inactive';
     const dialogRef = this.dialog.open(PopupComponent, {
       disableClose: true,
       backdropClass: 'cn_custom_popup',
-      width: '460px',
-      height: 'auto',
-      data: { openPop: 'changeNetworkAlert' },
+      width: "460px",
+      height:"auto",
+      data: { openPop: 'changeNetworkAlert', statusText: statusText},
     });
 
     dialogRef.afterClosed().subscribe((result) => {

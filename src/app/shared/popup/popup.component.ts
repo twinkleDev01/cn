@@ -41,6 +41,7 @@ export interface DialogData {
   insuranceType: any,
   insuranceId: any;
   loadData: any;
+  statusText?: string; 
 }
 
 @Component({
@@ -143,7 +144,7 @@ export class PopupComponent implements OnInit {
   availabilityList = [];
   operation = [];
   fuelConsumption: any = [];
-
+  statusText: string = '';
 
   public errorMessageInsurance: string = '';
   public information: any;
@@ -162,6 +163,7 @@ export class PopupComponent implements OnInit {
   ) {
     this.minSourceDate = new Date();
     this.minNextDate = null;
+    this.statusText =  data.statusText;;
   }
 
   ngOnInit(): void {

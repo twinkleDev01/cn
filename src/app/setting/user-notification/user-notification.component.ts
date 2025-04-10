@@ -4,7 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 import { AlertService } from 'src/app/commons/service/alert.service';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
-
 @Component({
   selector: 'app-user-notification',
   templateUrl: './user-notification.component.html',
@@ -38,7 +37,6 @@ export class UserNotificationComponent implements OnInit {
     //   this.editNotification();
     // });
   }
-
   notificationControlList(){
     
     let newParams: {
@@ -67,7 +65,6 @@ export class UserNotificationComponent implements OnInit {
         }
       );
     }}
-
     editNotification(): void {
      const APIparams = {
        apiKey:  AppSettings.APIsNameArray.NOTIFICATIONCONTROL.NOTIFICATIONCONTROLEDIT,             
@@ -110,3 +107,4 @@ export class UserNotificationComponent implements OnInit {
       this.editNotification();
     }
 }
+ 

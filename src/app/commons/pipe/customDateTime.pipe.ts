@@ -19,7 +19,7 @@ export class CustomDateTimePipe implements PipeTransform {
     
     if (date.isSame(moment(), 'year')) {
       // return getFrequency ? 'monthly' : date.format('DD MMM, h A'); // Example: 10 Jul, 10 PM
-      return getFrequency ? 'monthly' : date.format('DD MMM');
+      return getFrequency ? 'monthly' : date.format('DD MMM YYYY');
     }
     
     return getFrequency ? 'yearly' : date.format('DD MMM YYYY'); // Example: 10 Jul 2023, 10 PM

@@ -92,7 +92,7 @@ class="uploadEmptyTxt">
                       </mat-select>
                     </mat-form-field>
                   </div>
-                  <div class="col-md-3"> 
+                  <!-- <div class="col-md-3"> 
                     <mat-form-field [ngClass]="{
                       highlighted:
                       advanceFilterForm.get('equipmentType')?.value 
@@ -102,6 +102,21 @@ class="uploadEmptyTxt">
                         <mat-option value="Box Truck">Box Truck</mat-option>
                         <mat-option value="Drayage Trailer">Drayage Trailer</mat-option>
                         <mat-option value="Auto Carrier Trailer">Auto Carrier Trailer</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div> -->
+                  <div class="col-md-3">
+                    <mat-form-field [ngClass]="{
+                      highlighted:
+                      advanceFilterForm.get('equipmentType')?.value
+                    }">
+                      <mat-label>Equipment Type</mat-label>
+                      <mat-select formControlName="equipmentType">
+                        <mat-option
+                          *ngFor="let equipment of equipmentTypesList"
+                          [value]="equipment.id"
+                          >{{ equipment.name }}</mat-option
+                        >
                       </mat-select>
                     </mat-form-field>
                   </div>
@@ -119,6 +134,21 @@ class="uploadEmptyTxt">
                       </mat-select>
                     </mat-form-field>
                   </div>
+                  <!-- <div class="col-md-3" >
+                    <mat-form-field [ngClass]="{
+                      highlighted:
+                      advanceFilterForm.get('shipmentTypes')?.value
+                    }">
+                      <mat-label>Shipment Type</mat-label>
+                      <mat-select formControlName="shipmentTypes">
+                        <mat-option
+                          *ngFor="let shipment of shipmentTypesList"
+                          [value]="shipment.id"
+                          >{{ shipment.name }}</mat-option
+                        >
+                      </mat-select>
+                    </mat-form-field>
+                  </div> -->
                   <div class="col-md-3">
                     <mat-form-field [ngClass]="{
                       highlighted:
@@ -187,7 +217,7 @@ class="uploadEmptyTxt">
                       <input type="text" matInput placeholder="Search">
                     </mat-form-field>
                   </div> -->
-                  <div class="col-md-12"></div>
+                  <!--  -->
                   <!-- <div class="col-md-3">
                     <p class="cn_input_lbl">Checkbox</p>
                     <mat-checkbox class="me-3">Checked</mat-checkbox>
@@ -200,18 +230,23 @@ class="uploadEmptyTxt">
                       <mat-button-toggle value="no">NO</mat-button-toggle>
                     </mat-button-toggle-group>
                   </div> -->
-                  <div class="col-md-3">
-                    <mat-form-field class="date_range_filter">
+                  <!-- SourceDate -->
+              
+                    <!-- <mat-form-field class="date_range_filter">
                       <mat-label>Source Date At</mat-label>
                       <mat-date-range-input [rangePicker]="picker">
-                        <input matStartDate placeholder="sourceDate">
-                        <input matEndDate placeholder="destinationDate">
+                        <input matStartDate placeholder="sourceStartDate" />
+                        <input matEndDate placeholder="sourceEndDate" />
                       </mat-date-range-input>
                       <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="picker"
+                      ></mat-datepicker-toggle>
                       <mat-date-range-picker #picker></mat-date-range-picker>
-                    </mat-form-field>
-                  </div>
+                    </mat-form-field> -->
+                 
+              
                   <div class="col-md-12">
                     <div class="fltr_actn">
                       <button class="cn_btn btn_bordered" (click)="resetFilters()" type="submit">Clear</button>

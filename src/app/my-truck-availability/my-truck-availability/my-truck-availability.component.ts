@@ -11,6 +11,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Subject, takeUntil } from 'rxjs';
 import { AlertService } from 'src/app/commons/service/alert.service';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
@@ -32,6 +33,9 @@ export class MyTruckAvailabilityComponent implements OnInit {
   public params: any = {};
   public orderDir = '';
   showAdvancedFilter = false;
+  public minNextDate: Date;
+  public minDate: any = Date;
+  public dropTimedisabled = true;
   subscriptionPlanType: number | null = null;
   teamIdList: any = [];
   isFilterApplied = false;
@@ -42,6 +46,10 @@ export class MyTruckAvailabilityComponent implements OnInit {
   loaddedScreens = 0;
   totalPages: number = 0;
   usertype: any;
+  configurationData: any;
+   public destroy$ = new Subject();
+   equipmentTypesList = [];
+   shipmentTypesList = [];
 
   countryList = [
     {
@@ -73,7 +81,10 @@ export class MyTruckAvailabilityComponent implements OnInit {
     private route: ActivatedRoute,
     private cdRef: ChangeDetectorRef,
      private toastr: ToastrService
-  ) {}
+  ) {
+    this.minDate = new Date();
+    this.minNextDate = null;
+  }
 
   ngOnInit(): void {
     this.usertype = localStorage.getItem('user_type');
@@ -125,7 +136,19 @@ export class MyTruckAvailabilityComponent implements OnInit {
     this.getLoadAvailibility();
     this.teamList();
     this.getSubscriptionPlan();
+    // Config Data
+    this.commonService.configData
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        if (res) {
+          this.configurationData = res;
+          this.shipmentTypesList = this.configurationData.shipmentTypesList;
+          this.equipmentTypesList = this.configurationData.equipmentTypes;
+        }
+      });
+      console.log(this.shipmentTypesList,this.equipmentTypesList,"143")
   }
+  
   getSubscriptionPlan(): void {
     const plan = localStorage.getItem('subscriptionPlanType');
     this.subscriptionPlanType = plan ? parseInt(plan, 10) : null;
@@ -235,7 +258,7 @@ export class MyTruckAvailabilityComponent implements OnInit {
     if (costPerMile) newParams.costPerMile = costPerMile;
     if (destinationLocation)
       newParams.destinationLocation = destinationLocation;
-    if (teamIds) newParams.teamIds = teamIds;
+    if (teamIds) newParams.teamIds = teamIds?.join(',');
     if (sourceDate) newParams.sourceDate = this.formatDateForAPI(sourceDate);
     if (destinationDate)
       newParams.destinationDate = this.formatDateForAPI(destinationDate);
@@ -511,6 +534,8 @@ export class MyTruckAvailabilityComponent implements OnInit {
       const panel = this.teamSelect.panel.nativeElement;
       panel.removeEventListener('scroll', this.onTeamDropdownScroll);
     }
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
   onDeleteTruck(element) {
     console.log(element, '459');
@@ -552,5 +577,12 @@ export class MyTruckAvailabilityComponent implements OnInit {
         console.log('Delete item:', element);
       }
     });
+  }
+  updateMinNextDate(selectedDate: Date) {
+    this.dropTimedisabled = false;
+    this.advanceFilterForm.get('destinationDate').setValue('');
+    const nextDay = new Date(selectedDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+    this.minNextDate = nextDay;
   }
 }
