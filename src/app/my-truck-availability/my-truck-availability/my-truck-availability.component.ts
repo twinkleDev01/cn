@@ -47,9 +47,9 @@ export class MyTruckAvailabilityComponent implements OnInit {
   totalPages: number = 0;
   usertype: any;
   configurationData: any;
-   public destroy$ = new Subject();
-   equipmentTypesList = [];
-   shipmentTypesList = [];
+  public destroy$ = new Subject();
+  equipmentTypesList = [];
+  shipmentTypesList = [];
 
   countryList = [
     {
@@ -80,7 +80,7 @@ export class MyTruckAvailabilityComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private cdRef: ChangeDetectorRef,
-     private toastr: ToastrService
+    private toastr: ToastrService
   ) {
     this.minDate = new Date();
     this.minNextDate = null;
@@ -146,9 +146,9 @@ export class MyTruckAvailabilityComponent implements OnInit {
           this.equipmentTypesList = this.configurationData.equipmentTypes;
         }
       });
-      console.log(this.shipmentTypesList,this.equipmentTypesList,"143")
+    console.log(this.shipmentTypesList, this.equipmentTypesList, '143');
   }
-  
+
   getSubscriptionPlan(): void {
     const plan = localStorage.getItem('subscriptionPlanType');
     this.subscriptionPlanType = plan ? parseInt(plan, 10) : null;
@@ -222,33 +222,40 @@ export class MyTruckAvailabilityComponent implements OnInit {
     this.dataSource.data = [];
     this.getLoadAvailibility(true);
   }
-  getLoadAvailibility(resetData: boolean = false) {
-    // let uri = null;
-
+  getLoadAvailibility(resetData: boolean = false): void {
     this.spinnerLoader = true;
-    // let APIparams, params;
-    // params = { limit: 10, page: this.page };
-    // (this.params.limit = 10),
-    //   (this.params.page = this.page),
-    //   (this.params.sort = this.orderDir);
+
+    let newParams: {
+      limit: number;
+      page: number;
+      shipmentTypes?: string;
+      equipmentType?: string;
+      frequency?: string;
+      sourceDate?: string;
+      destinationDate?: string;
+      length?: string;
+      weight?: string;
+      miles?: string;
+      costPerMile?: string;
+      destinationLocation?: string;
+      teamIds?: string;
+    } = {
+      limit: 10,
+      page: this.page,
+    };
     const {
       shipmentTypes,
       equipmentType,
       frequency,
-      sourceDate,
-      destinationDate,
       length,
       weight,
       miles,
       costPerMile,
       destinationLocation,
       teamIds,
+      sourceDate,
+      destinationDate
     } = this.advanceFilterForm.value;
-    let newParams: any = {
-      page: this.page,
-      limit: 10,
-      // sort: this.orderDir || 'desc',
-    };
     if (shipmentTypes) newParams.shipmentTypes = shipmentTypes;
     if (equipmentType) newParams.equipmentType = equipmentType;
     if (frequency) newParams.frequency = frequency;
@@ -265,39 +272,33 @@ export class MyTruckAvailabilityComponent implements OnInit {
 
     console.log('Selected Filters:', newParams);
     // Step 3: Build URLSearchParams
-    // const queryParams = new URLSearchParams();
-    // if (newParams.page) queryParams.set('page', newParams.page.toString());
-    // if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
-    // if (newParams.shipmentTypes) queryParams.set('shipmentTypes', newParams.shipmentTypes);
-    // if (newParams.equipmentType) queryParams.set('equipmentType', newParams.equipmentType);
-    // if (newParams.frequency) queryParams.set('frequency', newParams.frequency);
-    // if (newParams.length) queryParams.set('length', newParams.length);
-    // if (newParams.weight) queryParams.set('weight', newParams.weight);
-    // if (newParams.miles) queryParams.set('miles', newParams.miles);
-    // if (newParams.costPerMile) queryParams.set('costPerMile', newParams.costPerMile);
-    // if (newParams.destinationLocation) queryParams.set('destinationLocation', newParams.destinationLocation);
-    // if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
-    // if (newParams.sourceDate) queryParams.set('sourceDate', newParams.sourceDate);
-    // if (newParams.destinationDate) queryParams.set('destinationDate', newParams.destinationDate);
     const queryParams = new URLSearchParams();
-    for (let key in newParams) {
-      if (newParams[key]) {
-        queryParams.set(key, newParams[key]);
-      }
-    }
-    // Step 4: Replace browser URL with new query params
+    if (newParams.page) queryParams.set('page', newParams.page.toString());
+    if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+    if (newParams.shipmentTypes)
+      queryParams.set('shipmentTypes', newParams.shipmentTypes);
+    if (newParams.equipmentType)
+      queryParams.set('equipmentType', newParams.equipmentType);
+    if (newParams.frequency) queryParams.set('frequency', newParams.frequency);
+    if (newParams.length) queryParams.set('length', newParams.length);
+    if (newParams.weight) queryParams.set('weight', newParams.weight);
+    if (newParams.miles) queryParams.set('miles', newParams.miles);
+    if (newParams.costPerMile)
+      queryParams.set('costPerMile', newParams.costPerMile);
+    if (newParams.destinationLocation)
+      queryParams.set('destinationLocation', newParams.destinationLocation);
+    if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
+    if (newParams.sourceDate)
+      queryParams.set('sourceDate', newParams.sourceDate);
+    if (newParams.destinationDate)
+      queryParams.set('destinationDate', newParams.destinationDate);
+
+    // Replace the current history entry with new params
     history.replaceState(
       null,
       '',
       `${window.location.pathname}?${queryParams.toString()}`
     );
-
-    // if (this.params) uri = this.commonService.getAPIUriFromParams(this.params);
-    // APIparams = {
-    //   apiKey: AppSettings.APIsNameArray.AVAILIBILITY.LIST,
-    //   uri: uri,
-    // };
-    // Step 5: Call API
     const uri = this.commonService.getAPIUriFromParams(newParams);
     const APIparams = {
       apiKey: AppSettings.APIsNameArray.AVAILIBILITY.LIST,
@@ -349,52 +350,46 @@ export class MyTruckAvailabilityComponent implements OnInit {
   }
   addParams(currentPage: any = this.page) {
     this.page = currentPage;
-    const {
-      shipmentTypes,
-      equipmentType,
-      frequency,
-      sourceDate,
-      destinationDate,
-      length,
-      weight,
-      miles,
-      costPerMile,
-      destinationLocation,
-      teamIds,
-    } = this.advanceFilterForm.value;
-
-    const newParams: any = {
-      page: currentPage,
+    let newParams: {
+      limit: number;
+      page: number;
+      shipmentTypes?: string;
+      equipmentType?: string;
+      frequency?: string;
+      sourceDate?: string;
+      destinationDate?: string;
+      length?: string;
+      weight?: string;
+      miles?: string;
+      costPerMile?: string;
+      destinationLocation?: string;
+      teamIds?: string;
+    } = {
       limit: 10,
-      // sort: this.orderDir || 'desc',
+      page: currentPage,
     };
-
-    if (shipmentTypes) newParams.shipmentTypes = shipmentTypes;
-    if (equipmentType) newParams.equipmentType = equipmentType;
-    if (frequency) newParams.frequency = frequency;
-    if (length) newParams.length = length;
-    if (weight) newParams.weight = weight;
-    if (miles) newParams.miles = miles;
-    if (costPerMile) newParams.costPerMile = costPerMile;
-    if (destinationLocation)
-      newParams.destinationLocation = destinationLocation;
-    if (teamIds) newParams.teamIds = teamIds;
-    if (sourceDate) newParams.sourceDate = this.formatDateForAPI(sourceDate);
-    if (destinationDate)
-      newParams.destinationDate = this.formatDateForAPI(destinationDate);
-
     const queryParams = new URLSearchParams();
+    if (currentPage) queryParams.set('page', currentPage.toString());
+    if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+    if (newParams.shipmentTypes)
+      queryParams.set('shipmentTypes', newParams.shipmentTypes);
+    if (newParams.equipmentType)
+      queryParams.set('equipmentType', newParams.equipmentType);
+    if (newParams.frequency) queryParams.set('frequency', newParams.frequency);
+    if (newParams.length) queryParams.set('length', newParams.length);
+    if (newParams.weight) queryParams.set('weight', newParams.weight);
+    if (newParams.miles) queryParams.set('miles', newParams.miles);
+    if (newParams.costPerMile)
+      queryParams.set('costPerMile', newParams.costPerMile);
+    if (newParams.destinationLocation)
+      queryParams.set('destinationLocation', newParams.destinationLocation);
+    if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
+    if (newParams.sourceDate)
+      queryParams.set('sourceDate', newParams.sourceDate);
+    if (newParams.destinationDate)
+      queryParams.set('destinationDate', newParams.destinationDate);
 
-    for (const key in newParams) {
-      if (
-        newParams[key] !== undefined &&
-        newParams[key] !== null &&
-        newParams[key] !== ''
-      ) {
-        queryParams.set(key, newParams[key]);
-      }
-    }
-
+    // Replace the current history entry with new params
     history.replaceState(
       null,
       '',
@@ -540,7 +535,7 @@ export class MyTruckAvailabilityComponent implements OnInit {
   onDeleteTruck(element) {
     console.log(element, '459');
     const params = {
-    id: element,  
+      id: element,
     };
     const APIparams = {
       apiKey: AppSettings.APIsNameArray.AVAILIBILITY.DELETE,
@@ -549,7 +544,7 @@ export class MyTruckAvailabilityComponent implements OnInit {
     this.commonService.delete(APIparams).subscribe({
       next: (res) => {
         console.log('TRUCK Deleted successfully:', res);
-        this.toastr.success(res?.message, 'Success')
+        this.toastr.success(res?.message, 'Success');
         if (!res.success) {
           this.toastr.error(res?.message, 'Error');
         }
@@ -561,7 +556,7 @@ export class MyTruckAvailabilityComponent implements OnInit {
     });
   }
   deleteTruck(element: any) {
-    console.log(element,"535")
+    console.log(element, '535');
     const dialogRef = this.dialog.open(PopupComponent, {
       disableClose: true,
       backdropClass: 'cn_custom_popup',
@@ -571,7 +566,7 @@ export class MyTruckAvailabilityComponent implements OnInit {
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(result,"545")
+      console.log(result, '545');
       if (result.event === 'ok') {
         this.onDeleteTruck(element);
         console.log('Delete item:', element);
@@ -584,5 +579,25 @@ export class MyTruckAvailabilityComponent implements OnInit {
     const nextDay = new Date(selectedDate);
     nextDay.setDate(nextDay.getDate() + 1);
     this.minNextDate = nextDay;
+  }
+  getColorClass(frequency: string): string {
+    switch (frequency) {
+      case 'daily':
+      case 'oneTime':
+        return 's'; // Green
+      case 'weekly':
+        return 'p'; // Blue
+      case 'monthly':
+        return 'y'; // Yellow
+      case 'yearly':
+        return 'd'; // Red
+      default:
+        return '333'; // Default color
+    }
+  }
+  expandedNotes: { [key: string]: boolean } = {};
+
+  toggleNote(id: string | number) {
+    this.expandedNotes[id] = !this.expandedNotes[id];
   }
 }

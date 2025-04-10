@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { StatusSetting } from 'src/app/commons/setting/status_setting';
 import * as _moment from 'moment';
 import { AlertService } from 'src/app/commons/service/alert.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-post-truck-availability',
@@ -48,7 +49,8 @@ export class PostTruckAvailabilityComponent implements OnInit {
     private commonService: CommonService,
     private router: Router,
     public alertService: AlertService,
-    private cdr:ChangeDetectorRef
+    private cdr:ChangeDetectorRef,
+    private location: Location
   ) {
     this.equipmentType = StatusSetting.equipmentType.map(item => ({
       ...item,
@@ -248,6 +250,7 @@ if (frequency === 'monthly' || frequency === 'oneTime') {
               ? 'You have successfully updated Load Availability details.'
               : 'You have successfully added Load Availability details.'
           );
+          this.location.back();
           if(!this.isEdit){
             this.submitted=false;
             this.addAvailabilityForm.reset();

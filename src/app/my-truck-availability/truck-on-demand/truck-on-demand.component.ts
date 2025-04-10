@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
@@ -108,13 +108,8 @@ export class TruckOnDemandComponent implements OnInit {
           sourceLocation: params['sourceLocation'] || '',
           carrierId: params['carrierId'] || '',
           userId: params['userId'] || '',
-          teamIds: params['teamIds'] || '',
         });
     
-        // ✅ Restore sort direction if available
-        //  if (params['sort']) {
-        //   this.orderDir = params['sort'];
-        // }
         this.cdRef.detectChanges();
       }
     });
@@ -137,14 +132,29 @@ export class TruckOnDemandComponent implements OnInit {
     console.log('Subscription Plan Type:', this.subscriptionPlanType);
   }
   getLoadAvailibility(resetData: boolean = false) {
-    // let uri = null;
-
     this.spinnerLoader = true;
-    // let APIparams, params;
-    // params = { limit: 10, page: this.page };
-    // (this.params.limit = 10),
-    //   (this.params.page = this.page),
-    //   (this.params.sort = this.orderDir);
+
+    let newParams: {
+      limit: number;
+      page: number;
+      shipmentTypes?: string;
+      equipmentType?: string;
+      frequency?: string;
+      sourceDate?: string;
+      destinationDate?: string;
+      length?: string;
+      weight?: string;
+      miles?: string;
+      costPerMile?: string;
+      destinationLocation?: string;
+      sourceLocation?: string;
+      userId?: string;
+      carrierId?: string;
+      // teamIds?: string;
+    } = {
+      limit: 10,
+      page: this.page,
+    };
     const {
       shipmentTypes,
       equipmentType,
@@ -158,14 +168,9 @@ export class TruckOnDemandComponent implements OnInit {
       destinationLocation,
       sourceLocation,
       userId,
-      carrierId,
-      teamIds,
+      carrierId
+      // teamIds,
     } = this.advanceFilterForm.value;
-    let newParams: any = {
-      page: this.page,
-      limit: 10,
-      // sort: this.orderDir || 'desc',
-    };
     if (shipmentTypes) newParams.shipmentTypes = shipmentTypes;
     if (equipmentType) newParams.equipmentType = equipmentType;
     if (frequency) newParams.frequency = frequency;
@@ -179,46 +184,36 @@ export class TruckOnDemandComponent implements OnInit {
       newParams.sourceLocation = sourceLocation;
     if(carrierId) newParams.carrierId = carrierId;
     if(userId) newParams.userId = userId;
-    if (teamIds) newParams.teamIds = teamIds;
+    // if (teamIds) newParams.teamIds = teamIds;
     if (sourceDate) newParams.sourceDate = this.formatDateForAPI(sourceDate);
     if (destinationDate)
       newParams.destinationDate = this.formatDateForAPI(destinationDate);
 
     console.log('Selected Filters:', newParams);
     // Step 3: Build URLSearchParams
-    // const queryParams = new URLSearchParams();
-    // if (newParams.page) queryParams.set('page', newParams.page.toString());
-    // if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
-    // if (newParams.shipmentTypes) queryParams.set('shipmentTypes', newParams.shipmentTypes);
-    // if (newParams.equipmentType) queryParams.set('equipmentType', newParams.equipmentType);
-    // if (newParams.frequency) queryParams.set('frequency', newParams.frequency);
-    // if (newParams.length) queryParams.set('length', newParams.length);
-    // if (newParams.weight) queryParams.set('weight', newParams.weight);
-    // if (newParams.miles) queryParams.set('miles', newParams.miles);
-    // if (newParams.costPerMile) queryParams.set('costPerMile', newParams.costPerMile);
-    // if (newParams.destinationLocation) queryParams.set('destinationLocation', newParams.destinationLocation);
-    // if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
-    // if (newParams.sourceDate) queryParams.set('sourceDate', newParams.sourceDate);
-    // if (newParams.destinationDate) queryParams.set('destinationDate', newParams.destinationDate);
     const queryParams = new URLSearchParams();
-    for (let key in newParams) {
-      if (newParams[key]) {
-        queryParams.set(key, newParams[key]);
-      }
-    }
-    // Step 4: Replace browser URL with new query params
-    history.replaceState(
-      null,
-      '',
-      `${window.location.pathname}?${queryParams.toString()}`
-    );
-
-    // if (this.params) uri = this.commonService.getAPIUriFromParams(this.params);
-    // APIparams = {
-    //   apiKey: AppSettings.APIsNameArray.AVAILIBILITY.LIST,
-    //   uri: uri,
-    // };
-    // Step 5: Call API
+    if (newParams.page) queryParams.set('page', newParams.page.toString());
+    if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+    if (newParams.shipmentTypes) queryParams.set('shipmentTypes', newParams.shipmentTypes);
+    if (newParams.equipmentType) queryParams.set('equipmentType', newParams.equipmentType);
+    if (newParams.frequency) queryParams.set('frequency', newParams.frequency);
+    if (newParams.length) queryParams.set('length', newParams.length);
+    if (newParams.weight) queryParams.set('weight', newParams.weight);
+    if (newParams.miles) queryParams.set('miles', newParams.miles);
+    if (newParams.costPerMile) queryParams.set('costPerMile', newParams.costPerMile);
+    if (newParams.destinationLocation) queryParams.set('destinationLocation', newParams.destinationLocation);
+    // if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
+    if (newParams.sourceLocation)queryParams.set('sourceLocation', newParams.sourceLocation);
+    if(newParams.carrierId) queryParams.set('carrierId', newParams.carrierId);
+    if(newParams.userId) queryParams.set('carrierId', newParams.userId);
+    if (newParams.sourceDate) queryParams.set('sourceDate', newParams.sourceDate);
+    if (newParams.destinationDate) queryParams.set('destinationDate', newParams.destinationDate);
+  // Replace the current history entry with new params
+  history.replaceState(
+    null,
+    '',
+    `${window.location.pathname}?${queryParams.toString()}`
+  );
     const uri = this.commonService.getAPIUriFromParams(newParams);
     const APIparams = {
       apiKey: AppSettings.APIsNameArray.AVAILIBILITY.NONCARRIERAVAILIBILITY,
@@ -257,6 +252,82 @@ export class TruckOnDemandComponent implements OnInit {
       }
     );
   }
+  addParams(currentPage: any = this.page){
+    this.page = currentPage;
+    let newParams: {
+      limit: number;
+      page: number;
+      shipmentTypes?: string;
+      equipmentType?: string;
+      frequency?: string;
+      sourceDate?: string;
+      destinationDate?: string;
+      length?: string;
+      weight?: string;
+      miles?: string;
+      costPerMile?: string;
+      destinationLocation?: string;
+      sourceLocation?: string;
+      userId?: string;
+      carrierId?: string;
+      // teamIds?: string;
+    } = {
+      limit: 10,
+      page: this.page,
+    };
+    const queryParams = new URLSearchParams();
+    if (newParams.page) queryParams.set('page', newParams.page.toString());
+    if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+    if (newParams.shipmentTypes) queryParams.set('shipmentTypes', newParams.shipmentTypes);
+    if (newParams.equipmentType) queryParams.set('equipmentType', newParams.equipmentType);
+    if (newParams.frequency) queryParams.set('frequency', newParams.frequency);
+    if (newParams.length) queryParams.set('length', newParams.length);
+    if (newParams.weight) queryParams.set('weight', newParams.weight);
+    if (newParams.miles) queryParams.set('miles', newParams.miles);
+    if (newParams.costPerMile) queryParams.set('costPerMile', newParams.costPerMile);
+    if (newParams.destinationLocation) queryParams.set('destinationLocation', newParams.destinationLocation);
+    // if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
+    if (newParams.sourceLocation)queryParams.set('sourceLocation', newParams.sourceLocation);
+    if(newParams.carrierId) queryParams.set('carrierId', newParams.carrierId);
+    if(newParams.userId) queryParams.set('carrierId', newParams.userId);
+    if (newParams.sourceDate) queryParams.set('sourceDate', newParams.sourceDate);
+    if (newParams.destinationDate) queryParams.set('destinationDate', newParams.destinationDate);
+  // Replace the current history entry with new params
+  history.replaceState(
+    null,
+    '',
+    `${window.location.pathname}?${queryParams.toString()}`
+  );
+  }
+    scrollPoints: number[] = [];  
+      @HostListener('window:scroll', ['$event'])
+      onWindowScroll(event: Event) {
+        const scrollHeight = window.innerHeight + window.scrollY;
+        const documentHeight = document.documentElement.scrollHeight;
+    
+        // ✅ Bottom Scroll: Increment page and store scroll point
+        if (documentHeight - scrollHeight <= 1) {
+          if (this.page < this.totalPages) {
+            this.page += 1;
+            this.getLoadAvailibility();
+            console.log(`Page incremented: ${this.page}`);
+    
+            // Store the scroll point where page was incremented
+            this.scrollPoints.push(window.scrollY);
+          }
+        }
+    
+        // ✅ Top Scroll: Decrement page if crossing previous scroll point
+        if (window.scrollY < (this.scrollPoints[this.scrollPoints.length - 1] || 0)) {
+          if (this.page > 1) {
+            this.page -= 1;
+            this.getLoadAvailibility();
+            console.log(`Page decremented: ${this.page}`);
+            this.scrollPoints.pop();  // Remove the last point
+          }
+        }
+    
+      }
   // Profile analytics table
   displayedColumns: string[] = [
     'id',
@@ -320,7 +391,7 @@ export class TruckOnDemandComponent implements OnInit {
   applyFilter() {
     const filterValue = this.searchControl.value.trim().toLowerCase();
     this.dataSource.filterPredicate = (data: any, filter: string) => {
-      return data.truckName?.toLowerCase().includes(filter);
+      return data.carrier?.companyName?.toLowerCase().includes(filter);
     };
 
     this.dataSource.filter = filterValue;
@@ -433,9 +504,24 @@ export class TruckOnDemandComponent implements OnInit {
      this.destroy$.next(true);
      this.destroy$.complete();
    }
-   expandedNotes: { [key: string]: boolean } = {};
+   getColorClass(frequency: string): string {
+    switch (frequency) {
+      case 'daily':
+      case 'oneTime':
+        return 's'; // Green
+      case 'weekly':
+        return 'p'; // Blue
+      case 'monthly':
+        return 'y'; // Yellow
+      case 'yearly':
+        return 'd'; // Red
+      default:
+        return '333'; // Default color
+    }
+  }
+  expandedNotes: { [key: string]: boolean } = {};
 
-toggleNote(id: string | number) {
-  this.expandedNotes[id] = !this.expandedNotes[id];
-}
+  toggleNote(id: string | number) {
+    this.expandedNotes[id] = !this.expandedNotes[id];
+  }
 }

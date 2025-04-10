@@ -1,11 +1,14 @@
 // added api for broker
-import { Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
 import { Chart, registerables } from 'chart.js';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { AlertService } from 'src/app/commons/service/alert.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-received-load',
@@ -25,7 +28,7 @@ export class ReceivedLoadComponent implements OnInit {
   public page = 1;
   public orderDir = '';
 
-  public totalRecoads: number;
+  public totalRecords: number;
   public params: any = {};
 
   totalViews: number = 1000;
@@ -41,7 +44,11 @@ export class ReceivedLoadComponent implements OnInit {
   searchControl = new FormControl('');
   totalQuotes: number = 0;
   totalQuotesLimit: number = 0;
+    advanceFilterForm: FormGroup;
+    subscriptionPlanType: number | null = null;
   isFilterApplied = false;
+    configurationData: any;
+    public destroy$ = new Subject();
   countryList = [
     {
       value: 'US',
@@ -62,55 +69,108 @@ export class ReceivedLoadComponent implements OnInit {
       code: '+1',
     },
   ];
-  advanceFilterForm = this.fb.group({
-    shipmentTypes: [''],
-    equipmentType: [''],
-    weight: [''],
-    length: [''],
-    userId: [''],
-  });
 
   constructor(
     private commonService: CommonService,
     private fb: FormBuilder,
-    private activatedRoute: ActivatedRoute
+   private route: ActivatedRoute,
+        public dialog: MatDialog,
+          public alertService: AlertService,
+         private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.patchFilterValues();
-    // this.getCarrierUserData();
+    this.route.queryParams.subscribe((params) => {
+    this.advanceFilterForm = this.fb.group({
+      shipmentTypes: [''],
+      equipmentType: [''],
+      weight: [''],
+      length: [''],
+      userId: [''],
+    });
+    if (params && Object.keys(params).length) {
+      this.advanceFilterForm.patchValue({
+        shipmentTypes: params['shipmentTypes'] || '',
+        equipmentType: params['equipmentType'] || '',
+        length: params['length'] || '',
+        weight: params['weight'] || '',
+        userId: params['userId'] || ''
+      });
+  
+      this.cdRef.detectChanges();
+    }
+  });
     this.createShipmentTypeBreakdownChart();
     this.createRecShipmentChart();
     this.fetchLoadQuoteList();
     this.setupSearchFilter();
+    this.getSubscriptionPlan();
+      // Config Data
+        this.commonService.configData
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((res) => {
+            if (res) {
+              this.configurationData = res;
+              this.shipmentTypesList = this.configurationData.shipmentTypes;
+              this.equipmentTypesList = this.configurationData.equipmentTypes;
+            }
+          });
+        console.log(this.shipmentTypesList, this.equipmentTypesList, '143');
   }
-  patchFilterValues() {
-    this.activatedRoute.queryParams.subscribe((params) => {
-      const shipmentTypes = params['shipmentTypes']
-        ? params['shipmentTypes']
-        : null;
-      const equipmentType = params['equipmentType']
-        ? params['equipmentType']
-        : null;
-      const weight = params['weight'] ? params['weight'] : null;
-      const length = params['length'] ? params['length'] : null;
-      const userId = params['userId'] ? params['userId'] : null;
-      this.advanceFilterForm.patchValue({
-        shipmentTypes: +shipmentTypes,
-        equipmentType: +equipmentType,
-        weight: weight,
-        length: length,
-        userId: userId,
-      });
-    });
+  getSubscriptionPlan(): void {
+    const plan = localStorage.getItem('subscriptionPlanType');
+    this.subscriptionPlanType = plan ? parseInt(plan, 10) : null;
+    // this.subscriptionPlanType = 0
+    console.log('Subscription Plan Type:', this.subscriptionPlanType);
   }
-
-  fetchLoadQuoteList(currentPage: number = 1, clearData: boolean = false) {
-    const usertype = localStorage.getItem('user_type');
-
-    let newParams = this.addParams(currentPage);
-
+  isAdvancedFilterVisible(): boolean {
+    return this.subscriptionPlanType === 2 || this.subscriptionPlanType === 3;
+  }
+  fetchLoadQuoteList(resetData: boolean = false) {
+    this.spinnerLoader = true;
+    let newParams: {
+      limit: number;
+      page: number;
+      shipmentTypes?: string;
+      equipmentType?: string;
+      length?: string;
+      weight?: string;
+      userId?: string;
+    } = {
+      limit: 10,
+      page: this.page,
+    };
+    const {
+      shipmentTypes,
+      equipmentType,
+      length,
+      weight,
+      userId
+    } = this.advanceFilterForm.value;
     // Conditionally set the API key for CARRIER or BROKER
+    if (shipmentTypes) newParams.shipmentTypes = shipmentTypes;
+    if (equipmentType) newParams.equipmentType = equipmentType;
+    if (length) newParams.length = length;
+    if (weight) newParams.weight = weight; 
+    if (userId) newParams.userId = userId;
+    console.log('Selected Filters:', newParams);
+    // Step 3: Build URLSearchParams
+    const queryParams = new URLSearchParams();
+    if (newParams.page) queryParams.set('page', newParams.page.toString());
+    if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+    if (newParams.shipmentTypes) queryParams.set('shipmentTypes', newParams.shipmentTypes);
+    if (newParams.equipmentType) queryParams.set('equipmentType', newParams.equipmentType);
+    if (newParams.length) queryParams.set('length', newParams.length);
+    if (newParams.weight) queryParams.set('weight', newParams.weight);
+    if (newParams.userId) queryParams.set('userId', newParams.userId);
+  // Replace the current history entry with new params
+  history.replaceState(
+    null,
+    '',
+    `${window.location.pathname}?${queryParams.toString()}`
+  );
+    // Conditionally set the API key for CARRIER or BROKER
+    const usertype = localStorage.getItem('user_type');
     const apiKey =
       usertype === 'CARRIER'
         ? AppSettings.APIsNameArray.RECENTVIEW.CARRIERLOADQUOTE
@@ -126,70 +186,33 @@ export class ReceivedLoadComponent implements OnInit {
       this.loaddedScreens = this.page;
       this.commonService.getList(APIparams).subscribe((response) => {
         console.log('response', response);
-        this.showScrollSpinner = false;
-        this.totalPages = response.totalPages;
-        this.totalQuotes = response.total;
-        this.totalQuotesLimit = this.getNearByLimit(response.total);
+    
         if (response && response.response) {
-          if (clearData) {
-            this.dataSource.data = response.response;
+          const newData = response.response;
+          if (resetData) {
+            this.dataSource.data = newData;
           } else {
-            const newData = response.response.filter(
-              (d) =>
-                !this.dataSource.data.some(
-                  (existingData) => existingData.id === d.id
-                )
+            const existingIds = new Set(
+              this.dataSource.data.map((item) => item.id)
             );
-            this.dataSource.data = this.dataSource.data.concat(newData);
+            const uniqueData = newData.filter(
+              (item) => !existingIds.has(item.id)
+            );
+            this.dataSource.data = [...this.dataSource.data, ...uniqueData];
           }
-          const titleCase = (str: string) =>
-            str?.charAt(0)?.toUpperCase() + str?.slice(1);
-          this.dataSource.data = this.dataSource.data.map((d) => ({
-            ...d,
-            sourceLocation: [
-              titleCase(d.sourceLocationCity),
-              d.sourceLocationState,
-              d.sourceLocationCountry,
-            ]
-              .filter((item) => item)
-              .join(', '),
-            destinationLocation: [
-              titleCase(d.destinationLocationCity),
-              d.destinationLocationState,
-              d.destinationLocationCountry,
-            ]
-              .filter((item) => item)
-              .join(', '),
-          }));
+          console.log(response, '799', this.dataSource.data);
+          this.totalRecords = response.total;
+          this.totalPages = response.totalPages;
+          this.spinnerLoader = false;
         }
-      },(error:any)=>{
-        this.showScrollSpinner = false;
-      });
-    }
-  }
-
-  addParams(currentPage: number) {
-    const newParams = {
-      limit: 10,
-      page: currentPage,
-    };
-    const filters = this.advanceFilterForm.value;
-    const queryParams = new URLSearchParams();
-    queryParams.set('page', currentPage.toString());
-    queryParams.set('limit', newParams.limit.toString());
-    Object.keys(filters)
-      .filter((key) => filters[key])
-      .forEach((key) => {
-        newParams[key] = filters[key];
-        queryParams.set(key, filters[key]);
-      });
-
-    history.replaceState(
-      null,
-      '',
-      `${window.location.pathname}?${queryParams.toString()}`
+      },
+      (error) => {
+        this.loaddedScreens--;
+        this.message = error.error.message;
+        this.spinnerLoader = false;
+      }
     );
-    return newParams;
+  }
   }
 
   // Progress Bar Percentage calculation
@@ -197,10 +220,7 @@ export class ReceivedLoadComponent implements OnInit {
   get totalMilesCovered(): number {
     return (this.uniqueVisitors / this.totalViews) * 100;
   }
-  // get repeatVisitorsPercentage(): number {
-  //   return (this.repeatVisitors / this.totalViews) * 100;
-  // }
-
+ 
   // User dashboard chart
   createShipmentTypeBreakdownChart() {
     const ctx = document.getElementById(
@@ -403,27 +423,6 @@ export class ReceivedLoadComponent implements OnInit {
   equipmentTypesList = [];
   shipmentTypesList = [];
 
-  toggleFilter() {
-    if (
-      (this.equipmentTypesList.length === 0 ||
-        this.shipmentTypesList.length === 0) &&
-      !this.showAdvancedFilter
-    ) {
-      let APIparams = {
-        apiKey: AppSettings.APIsNameArray.EXTRA.CONFIG,
-        uri: '',
-      };
-      this.commonService.getList(APIparams).subscribe((response) => {
-        const { equipmentTypes, shipmentTypes } = response.response;
-        this.equipmentTypesList = equipmentTypes;
-        this.shipmentTypesList = shipmentTypes.filter(
-          (d) => d.name.toLowerCase() != 'parcel'
-        );
-        this.patchFilterValues();
-      });
-    }
-    this.showAdvancedFilter = !this.showAdvancedFilter;
-  }
   formatFrequency(frequency: string): string {
     if (!frequency) return '';
     return frequency.toLowerCase().replace(/\s+/g, '_');
@@ -444,96 +443,15 @@ export class ReceivedLoadComponent implements OnInit {
     this.page = 1;
     this.dataSource.data = [];
     this.showAdvancedFilter = false;
-    this.fetchLoadQuoteList(1, true);
+    this.fetchLoadQuoteList(true);
   }
   refresh() {
-    this.fetchLoadQuoteList(this.loaddedScreens);
+    this.fetchLoadQuoteList(true);
   }
-  getNearByLimit(d: number) {
-    const digitCount = d.toString().length;
-    return Math.pow(10, digitCount);
+  toggleFilter() {
+    this.showAdvancedFilter = !this.showAdvancedFilter;
   }
-  getCarrierUserData() {
-    let uri = null;
-    this.skeletonLoader = true;
-
-    // this.orderDir = this.sortingValue;
-    // this.newOld = this.sortingValueNew
-    let APIparams, params;
-    params = { limit: 5, page: this.page };
-    (this.params.limit = 5),
-      (this.params.page = this.page),
-      (this.params.sort = this.orderDir);
-
-    if (this.params) uri = this.commonService.getAPIUriFromParams(this.params);
-    if (localStorage.getItem('user_type') == 'BROKER') {
-      APIparams = {
-        apiKey: AppSettings.APIsNameArray.LOADQUOTE.BROKERLIST,
-        uri: uri,
-      };
-    } else {
-      APIparams = {
-        apiKey: AppSettings.APIsNameArray.LOADQUOTE.CARRIERLIST,
-        uri: uri,
-      };
-    }
-
-    this.commonService.getList(APIparams).subscribe(
-      (ServerRes) => {
-        if (ServerRes.success === true) {
-          this.carrierUser = ServerRes.response;
-          this.totalRecoads = ServerRes.total;
-          this.totalPage = ServerRes.totalPages;
-          this.skeletonLoader = false;
-        } else {
-          this.carrierUser = [];
-          this.skeletonLoader = false;
-        }
-      },
-      (error) => {
-        this.message = error.error.message;
-        this.carrierUser = [];
-        this.skeletonLoader = false;
-      }
-    );
-  }
-  generateFakeSkeleton(count: number): Array<number> {
-    const indexes = [];
-    for (let i = 0; i < count; i++) {
-      indexes.push(i);
-    }
-    return indexes;
-  }
-  getAPIParam(str) {
-    let APIparams, params;
-    if (str) params = { limit: 5, page: this.page, sort: this.orderDir };
-    else params = { limit: 5, page: this.page, sort: this.orderDir };
-    params = { limit: 5, page: this.page, sort: this.orderDir };
-    let url;
-    if (localStorage.getItem('user_type') == 'BROKER') {
-      url = AppSettings.APIsNameArray.LOADQUOTE.BROKERLIST;
-    } else {
-      url = AppSettings.APIsNameArray.LOADQUOTE.CARRIERLIST;
-    }
-    APIparams = {
-      apiKey: url,
-      uri: this.commonService.getAPIUriFromParams(params),
-    };
-    return APIparams;
-  }
-  getMoreData(str) {
-    var APIparams = this.getAPIParam(str);
-    this.commonService.getList(APIparams).subscribe((ServerRes) => {
-      let result = ServerRes.response;
-      this.totalPage = ServerRes.totalPages;
-      this.spinnerLoader = false;
-      if (ServerRes.response && ServerRes.response.length > 0) {
-        for (let v = 0; v < result.length; v++) {
-          if (result[v]) this.carrierUser.push(result[v]);
-        }
-      }
-    });
-  }
+   
   getCountryFlag(countryCode: string): string {
     const country = this.countryList.find(
       (c) => c.value.toLowerCase() === countryCode?.toLowerCase()
@@ -545,5 +463,61 @@ export class ReceivedLoadComponent implements OnInit {
     this.searchControl.valueChanges.subscribe(() => {
       this.applyFilter();
     });
+  }
+  scrollPoints: number[] = [];  
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll(event: Event) {
+    const scrollHeight = window.innerHeight + window.scrollY;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    // ✅ Bottom Scroll: Increment page and store scroll point
+    if (documentHeight - scrollHeight <= 1) {
+      if (this.page < this.totalPages) {
+        this.page += 1;
+        this.fetchLoadQuoteList();
+        console.log(`Page incremented: ${this.page}`);
+
+        // Store the scroll point where page was incremented
+        this.scrollPoints.push(window.scrollY);
+      }
+    }
+
+    // ✅ Top Scroll: Decrement page if crossing previous scroll point
+    if (window.scrollY < (this.scrollPoints[this.scrollPoints.length - 1] || 0)) {
+      if (this.page > 1) {
+        this.page -= 1;
+        this.fetchLoadQuoteList();
+        console.log(`Page decremented: ${this.page}`);
+        this.scrollPoints.pop();  // Remove the last point
+      }
+    }
+
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
+  onWeightInput(event: Event): void {
+    const input = (event.target as HTMLInputElement).value;
+    // Allow only digits and trim to 9 characters
+    const numericInput = input.replace(/\D/g, '').slice(0, 9);
+    this.advanceFilterForm.get('weight')?.setValue(numericInput, { emitEvent: false });
+  }
+  onLengthInput(event: Event): void {
+    const input = (event.target as HTMLInputElement).value;
+    // Allow only digits and trim to 9 characters
+    const numericInput = input.replace(/\D/g, '').slice(0, 9);
+    this.advanceFilterForm.get('length')?.setValue(numericInput, { emitEvent: false });
+  }
+  onUserIdInput(event: Event): void {
+    const input = (event.target as HTMLInputElement).value;
+    // Allow only digits and trim to 9 characters
+    const numericInput = input.replace(/\D/g, '').slice(0, 9);
+    this.advanceFilterForm.get('userId')?.setValue(numericInput, { emitEvent: false });
+  }
+  expandedNotes: { [key: string]: boolean } = {};
+
+  toggleNote(id: string | number) {
+    this.expandedNotes[id] = !this.expandedNotes[id];
   }
 }

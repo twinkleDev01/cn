@@ -1,11 +1,14 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
 import { Chart, registerables } from 'chart.js';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatSelect } from '@angular/material/select';
+import { MatDialog } from '@angular/material/dialog';
+import { AlertService } from 'src/app/commons/service/alert.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-requested-load',
@@ -23,8 +26,9 @@ export class RequestedLoadComponent implements OnInit {
   public dataNotFound = false;
   public page = 1;
   public orderDir = '';
+  subscriptionPlanType: number | null = null;
 
-  public totalRecoads: number;
+  public totalRecords: number;
   public params: any = {};
 
   totalViews: number = 1000;
@@ -37,10 +41,13 @@ export class RequestedLoadComponent implements OnInit {
   showScrollSpinner: boolean = false;
   dataSource = new MatTableDataSource([]);
   searchControl = new FormControl('');
+  advanceFilterForm: FormGroup;
   isFilterApplied = false;
   totalQuotes: number = 0;
   totalQuotesLimit: number = 0;
   teamIdList: any = [];
+    configurationData: any;
+    public destroy$ = new Subject();
   countryList = [
     {
       value: 'US',
@@ -61,131 +68,180 @@ export class RequestedLoadComponent implements OnInit {
       code: '+1',
     },
   ];
-  advanceFilterForm = this.fb.group({
-    shipmentTypes: [''],
-    equipmentType: [''],
-    weight: [''],
-    length: [''],
-    teamIds: [],
-  });
+
 
   constructor(
     private commonService: CommonService,
     private fb: FormBuilder,
-    private activatedRoute: ActivatedRoute
+    private route: ActivatedRoute,
+      public dialog: MatDialog,
+        public alertService: AlertService,
+       private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.patchFilterValues();
-    // this.getNonCarrierUserData();
+    this.route.queryParams.subscribe((params) => {
+    this.advanceFilterForm = this.fb.group({
+      shipmentTypes: [''],
+      equipmentType: [''],
+      weight: [''],
+      length: [''],
+      teamIds: [],
+    });
+    if (params && Object.keys(params).length) {
+      this.advanceFilterForm.patchValue({
+        shipmentTypes: params['shipmentTypes'] || '',
+        equipmentType: params['equipmentType'] || '',
+        length: params['length'] || '',
+        weight: params['weight'] || '',
+        teamIds: params['teamIds'] || ''
+      });
+  
+      this.cdRef.detectChanges();
+    }
+  });
     this.createShipmentTypeBreakdownChart();
     this.createCityChart();
     this.fetchLoadQuoteList();
     this.teamList();
+    this.getSubscriptionPlan();
+      // Config Data
+        this.commonService.configData
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((res) => {
+            if (res) {
+              this.configurationData = res;
+              this.shipmentTypesList = this.configurationData.shipmentTypes;
+              this.equipmentTypesList = this.configurationData.equipmentTypes;
+            }
+          });
+        console.log(this.shipmentTypesList, this.equipmentTypesList, '143');
   }
-  patchFilterValues() {
-    this.activatedRoute.queryParams.subscribe((params) => {
-      const shipmentTypes = params['shipmentTypes']
-        ? params['shipmentTypes']
-        : null;
-      const equipmentType = params['equipmentType']
-        ? params['equipmentType']
-        : null;
-      const weight = params['weight'] ? params['weight'] : null;
-      const length = params['length'] ? params['length'] : null;
-      const teamIds = params['teamIds'] ? params['teamIds'] : null;
-      this.advanceFilterForm.patchValue({
-        shipmentTypes: +shipmentTypes,
-        equipmentType: +equipmentType,
-        weight: weight,
-        length: length,
-        teamIds: teamIds,
-      });
-    });
+  getSubscriptionPlan(): void {
+    const plan = localStorage.getItem('subscriptionPlanType');
+    this.subscriptionPlanType = plan ? parseInt(plan, 10) : null;
+    // this.subscriptionPlanType = 0
+    console.log('Subscription Plan Type:', this.subscriptionPlanType);
   }
-
-  fetchLoadQuoteList(currentPage = 1, clearData: boolean = false) {
-    let newParams = this.addParams(currentPage);
-
+  isAdvancedFilterVisible(): boolean {
+    return this.subscriptionPlanType === 2 || this.subscriptionPlanType === 3;
+  }
+  fetchLoadQuoteList(resetData: boolean = false) {
+    this.spinnerLoader = true;
+    let newParams: {
+      limit: number;
+      page: number;
+      shipmentTypes?: string;
+      equipmentType?: string;
+      length?: string;
+      weight?: string;
+      teamIds?: string;
+    } = {
+      limit: 10,
+      page: this.page,
+    };
+    const {
+      shipmentTypes,
+      equipmentType,
+      length,
+      weight,
+      teamIds,
+    } = this.advanceFilterForm.value;
     // Conditionally set the API key for CARRIER or BROKER
     const apiKey = AppSettings.APIsNameArray.RECENTVIEW.COMMANQUOTELIST; // No default fallback
-
+    if (shipmentTypes) newParams.shipmentTypes = shipmentTypes;
+    if (equipmentType) newParams.equipmentType = equipmentType;
+    if (length) newParams.length = length;
+    if (weight) newParams.weight = weight; 
+    if (teamIds) newParams.teamIds = teamIds;
+    console.log('Selected Filters:', newParams);
+    // Step 3: Build URLSearchParams
+    const queryParams = new URLSearchParams();
+    if (newParams.page) queryParams.set('page', newParams.page.toString());
+    if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+    if (newParams.shipmentTypes) queryParams.set('shipmentTypes', newParams.shipmentTypes);
+    if (newParams.equipmentType) queryParams.set('equipmentType', newParams.equipmentType);
+    if (newParams.length) queryParams.set('length', newParams.length);
+    if (newParams.weight) queryParams.set('weight', newParams.weight);
+    if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
+  // Replace the current history entry with new params
+  history.replaceState(
+    null,
+    '',
+    `${window.location.pathname}?${queryParams.toString()}`
+  );
     // Only call the API if a valid API key is present
     if (apiKey) {
       let APIparams = {
         apiKey: apiKey,
         uri: this.commonService.getAPIUriFromParams(newParams),
       };
-      this.showScrollSpinner = true;
       this.loaddedScreens = this.page;
       this.commonService.getList(APIparams).subscribe((response) => {
         console.log('response', response);
-        this.showScrollSpinner = false;
-        this.totalPages = response.totalPages;
-        this.totalQuotes = response.total;
-        this.totalQuotesLimit = this.getNearByLimit(response.total);
         if (response && response.response) {
-          if (clearData) {
-            this.dataSource.data = response.response;
+          const newData = response.response;
+          if (resetData) {
+            this.dataSource.data = newData;
           } else {
-            const newData = response.response.filter(
-              (d) =>
-                !this.dataSource.data.some(
-                  (existingData) => existingData.id === d.id
-                )
+            const existingIds = new Set(
+              this.dataSource.data.map((item) => item.id)
             );
-            this.dataSource.data = this.dataSource.data.concat(newData);
+            const uniqueData = newData.filter(
+              (item) => !existingIds.has(item.id)
+            );
+            this.dataSource.data = [...this.dataSource.data, ...uniqueData];
           }
-          const titleCase = (str: string) =>
-            str?.charAt(0)?.toUpperCase() + str?.slice(1);
-          this.dataSource.data = this.dataSource.data.map((d) => ({
-            ...d,
-            sourceLocation: [
-              titleCase(d.sourceLocationCity),
-              d.sourceLocationState,
-              d.sourceLocationCountry,
-            ]
-              .filter((item) => item)
-              .join(', '),
-            destinationLocation: [
-              titleCase(d.destinationLocationCity),
-              d.destinationLocationState,
-              d.destinationLocationCountry,
-            ]
-              .filter((item) => item)
-              .join(', '),
-          }));
+          console.log(response, '799', this.dataSource.data);
+          this.totalRecords = response.total;
+          this.totalPages = response.totalPages;
+          this.spinnerLoader = false;
         }
-      });
-    }
-  }
-
-  getNearByLimit(d: number) {
-    const digitCount = d.toString().length;
-    return Math.pow(10, digitCount);
-  }
-  addParams(currentPage: number) {
-    const newParams = {
-      limit: 10,
-      page: currentPage,
-    };
-    const filters = this.advanceFilterForm.value;
-    const queryParams = new URLSearchParams();
-    queryParams.set('page', currentPage.toString());
-    queryParams.set('limit', newParams.limit.toString());
-    Object.keys(filters)
-      .filter((key) => filters[key])
-      .forEach((key) => {
-        newParams[key] = filters[key];
-        queryParams.set(key, filters[key]);
-      });
-
-    history.replaceState(
-      null,
-      '',
-      `${window.location.pathname}?${queryParams.toString()}`
+      },
+      (error) => {
+        this.loaddedScreens--;
+        this.message = error.error.message;
+        this.spinnerLoader = false;
+      }
     );
-    return newParams;
+  }
+  }
+  addParams(currentPage: any = this.page){
+    this.page = currentPage;
+    let newParams: {
+      limit: number;
+      page: number;
+      shipmentTypes?: string;
+      equipmentType?: string;
+      length?: string;
+      weight?: string;
+      teamIds?: string;
+    } = {
+      limit: 10,
+      page: this.page,
+    };
+    const queryParams = new URLSearchParams();
+    if (newParams.page) queryParams.set('page', newParams.page.toString());
+    if (newParams.limit) queryParams.set('limit', newParams.limit.toString());
+    if (newParams.shipmentTypes) queryParams.set('shipmentTypes', newParams.shipmentTypes);
+    if (newParams.equipmentType) queryParams.set('equipmentType', newParams.equipmentType);
+    if (newParams.length) queryParams.set('length', newParams.length);
+    if (newParams.weight) queryParams.set('weight', newParams.weight);
+    if (newParams.teamIds) queryParams.set('teamIds', newParams.teamIds);
+  // Replace the current history entry with new params
+  history.replaceState(
+    null,
+    '',
+    `${window.location.pathname}?${queryParams.toString()}`
+  );
+  }
+
+  applyFilters() {
+    this.showAdvancedFilter = false;
+    this.isFilterApplied = true;
+    this.page = 1;
+    this.dataSource.data = [];
+    this.fetchLoadQuoteList(true);
   }
   applyFilter() {
     const filterValue = this.searchControl.value.trim().toLowerCase();
@@ -197,13 +253,14 @@ export class RequestedLoadComponent implements OnInit {
   }
 
   applyAdvanceFilter() {
-    this.loaddedScreens = 0;
+    this.showAdvancedFilter = false;
+    this.isFilterApplied = true;
     this.page = 1;
-    this.fetchLoadQuoteList(1, true);
-    this.showAdvancedFilter = true;
+    this.dataSource.data = [];
+    this.fetchLoadQuoteList(true);
   }
   refresh() {
-    this.fetchLoadQuoteList(this.loaddedScreens);
+    this.fetchLoadQuoteList(true);
   }
   // Progress Bar Percentage calculation
   get totalViewsPercentage(): number {
@@ -419,24 +476,6 @@ export class RequestedLoadComponent implements OnInit {
   shipmentTypesList = [];
 
   toggleFilter() {
-    if (
-      (this.equipmentTypesList.length === 0 ||
-        this.shipmentTypesList.length === 0) &&
-      !this.showAdvancedFilter
-    ) {
-      let APIparams = {
-        apiKey: AppSettings.APIsNameArray.EXTRA.CONFIG,
-        uri: '',
-      };
-      this.commonService.getList(APIparams).subscribe((response) => {
-        const { equipmentTypes, shipmentTypes } = response.response;
-        this.equipmentTypesList = equipmentTypes;
-        this.shipmentTypesList = shipmentTypes.filter(
-          (d) => d.name.toLowerCase() != 'parcel'
-        );
-        this.patchFilterValues();
-      });
-    }
     this.showAdvancedFilter = !this.showAdvancedFilter;
   }
   formatFrequency(frequency: string): string {
@@ -449,76 +488,6 @@ export class RequestedLoadComponent implements OnInit {
     );
     return country ? country.flag : './assets/country/us.png';
   }
-  getNonCarrierUserData() {
-    let uri = null;
-    this.skeletonLoader = true;
-
-    // this.orderDir = this.sortingValue;
-    // this.newOld = this.sortingValueNew
-    let APIparams, params;
-    params = { limit: 5, page: this.page };
-    (this.params.limit = 5),
-      (this.params.page = this.page),
-      (this.params.sort = this.orderDir);
-
-    if (this.params) uri = this.commonService.getAPIUriFromParams(this.params);
-    APIparams = {
-      apiKey: AppSettings.APIsNameArray.LOADQUOTE.LOADQUOTESLIST,
-      uri: uri,
-    };
-    this.commonService.getList(APIparams).subscribe(
-      (ServerRes) => {
-        if (ServerRes.success === true) {
-          this.nonCarrierUser = ServerRes.response;
-          this.totalRecoads = ServerRes.total;
-          this.totalPage = ServerRes.totalPages;
-          this.skeletonLoader = false;
-        } else {
-          this.nonCarrierUser = [];
-          this.skeletonLoader = false;
-        }
-      },
-      (error) => {
-        this.message = error.error.message;
-        this.nonCarrierUser = [];
-        this.skeletonLoader = false;
-      }
-    );
-  }
-  getAPIParam(str) {
-    let APIparams, params;
-    if (str) params = { limit: 5, page: this.page, sort: this.orderDir };
-    else params = { limit: 5, page: this.page, sort: this.orderDir };
-    params = { limit: 5, page: this.page, sort: this.orderDir };
-    let url;
-    (url = AppSettings.APIsNameArray.LOADQUOTE.LOADQUOTESLIST),
-      (APIparams = {
-        apiKey: url,
-        uri: this.commonService.getAPIUriFromParams(params),
-      });
-    return APIparams;
-  }
-  getMoreData(str) {
-    var APIparams = this.getAPIParam(str);
-    this.commonService.getList(APIparams).subscribe((ServerRes) => {
-      let result = ServerRes.response;
-      this.totalPage = ServerRes.totalPages;
-      this.spinnerLoader = false;
-      if (ServerRes.response && ServerRes.response.length > 0) {
-        for (let v = 0; v < result.length; v++) {
-          if (result[v]) this.nonCarrierUser.push(result[v]);
-        }
-      }
-    });
-  }
-  generateFakeSkeleton(count: number): Array<number> {
-    const indexes = [];
-    for (let i = 0; i < count; i++) {
-      indexes.push(i);
-    }
-    return indexes;
-  }
-
   resetFilters(): void {
     console.log('Reset Filters Clicked');
     this.showAdvancedFilter = false;
@@ -528,7 +497,7 @@ export class RequestedLoadComponent implements OnInit {
     this.page = 1;
     this.dataSource.data = [];
     this.advanceFilterForm.reset();
-    this.fetchLoadQuoteList(1, true);
+    this.fetchLoadQuoteList(true);
   }
    // For team dropdown pagination
     teamPage = 1;
@@ -547,9 +516,6 @@ export class RequestedLoadComponent implements OnInit {
         this.hasMoreTeams = true;
       }
   
-      // this.loadingMoreTeams = true;
-      // if (!loadMore) this.spinnerLoader = true;
-  
       const params = {
         limit: this.teamLimit,
         page: this.teamPage,
@@ -564,9 +530,7 @@ export class RequestedLoadComponent implements OnInit {
   
         this.commonService.getList(APIparams).subscribe(
           (response) => {
-            // this.loadingMoreTeams = false;
-            // this.spinnerLoader = false;
-  
+        
             if (response?.response?.teamArray) {
               this.teamIdList = [
                 ...this.teamIdList,
@@ -579,8 +543,6 @@ export class RequestedLoadComponent implements OnInit {
             }
           },
           (error) => {
-            // this.loadingMoreTeams = false;
-            // this.spinnerLoader = false;
             console.error('Error fetching teams:', error);
           }
         );
@@ -617,5 +579,51 @@ export class RequestedLoadComponent implements OnInit {
         panel.removeEventListener('scroll', this.onTeamDropdownScroll);
       }
     }
-   
+    scrollPoints: number[] = [];  
+    @HostListener('window:scroll', ['$event'])
+    onWindowScroll(event: Event) {
+      const scrollHeight = window.innerHeight + window.scrollY;
+      const documentHeight = document.documentElement.scrollHeight;
+  
+      // ✅ Bottom Scroll: Increment page and store scroll point
+      if (documentHeight - scrollHeight <= 1) {
+        if (this.page < this.totalPages) {
+          this.page += 1;
+          this.fetchLoadQuoteList();
+          console.log(`Page incremented: ${this.page}`);
+  
+          // Store the scroll point where page was incremented
+          this.scrollPoints.push(window.scrollY);
+        }
+      }
+  
+      // ✅ Top Scroll: Decrement page if crossing previous scroll point
+      if (window.scrollY < (this.scrollPoints[this.scrollPoints.length - 1] || 0)) {
+        if (this.page > 1) {
+          this.page -= 1;
+          this.fetchLoadQuoteList();
+          console.log(`Page decremented: ${this.page}`);
+          this.scrollPoints.pop();  // Remove the last point
+        }
+      }
+  
+    }
+  
+    onWeightInput(event: Event): void {
+      const input = (event.target as HTMLInputElement).value;
+      // Allow only digits and trim to 9 characters
+      const numericInput = input.replace(/\D/g, '').slice(0, 9);
+      this.advanceFilterForm.get('weight')?.setValue(numericInput, { emitEvent: false });
+    }
+    onLengthInput(event: Event): void {
+      const input = (event.target as HTMLInputElement).value;
+      // Allow only digits and trim to 9 characters
+      const numericInput = input.replace(/\D/g, '').slice(0, 9);
+      this.advanceFilterForm.get('length')?.setValue(numericInput, { emitEvent: false });
+    }
+    expandedNotes: { [key: string]: boolean } = {};
+
+    toggleNote(id: string | number) {
+      this.expandedNotes[id] = !this.expandedNotes[id];
+    }
 }

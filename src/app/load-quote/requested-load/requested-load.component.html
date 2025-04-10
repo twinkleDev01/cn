@@ -1,12 +1,4 @@
-<div
-  appInfiniteScroll
-  [(page)]="page"
-  [(loaddedScreens)]="loaddedScreens"
-  [totalPages]="totalPages"
-  [spinnerLoader]="showScrollSpinner"
-  (updateParams)="addParams($event)"
-  (fetchData)="fetchLoadQuoteList($event)"
-  class="dashboard_chat_overview"
+<div class="dashboard_chat_overview"
 >
   <div class="dco_head">
     <div class="dcoh_l">
@@ -256,6 +248,8 @@
                     formControlName="weight"
                     matInput
                     placeholder="Search"
+                    (input)="onWeightInput($event)"
+                    
                   />
                 </mat-form-field>
               </div>
@@ -270,6 +264,7 @@
                     formControlName="length"
                     matInput
                     placeholder="Search"
+                    (input)="onLengthInput($event)"
                   />
                 </mat-form-field>
               </div>
@@ -568,7 +563,18 @@
       <ng-container matColumnDef="notes">
         <th mat-header-cell *matHeaderCellDef>Notes</th>
         <td mat-cell *matCellDef="let element" class="min_w_200">
-          {{ element.notes ? element.notes : '-' }}
+          <!-- {{ element.notes ? element.notes : '-' }} -->
+          <ng-container *ngIf="!expandedNotes[element.id]; else fullNote">
+            {{ element.notes?.length > 10 ? (element.notes | slice:0:10) + '...' : (element.notes || '-') }}
+            <a *ngIf="element.notes?.length > 10"
+               (click)="toggleNote(element.id)" 
+               class="view_more">View more</a>
+          </ng-container>
+          <ng-template #fullNote>
+            {{ element.notes }}
+            <a (click)="toggleNote(element.id)"
+               class="view_less">View less</a>
+          </ng-template>
         </td>
       </ng-container>
       <ng-container matColumnDef="action">
@@ -593,7 +599,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-row" *matNoDataRow style="text-align: center">
-        <ng-container *ngIf="!showScrollSpinner">
+        <ng-container *ngIf="!spinnerLoader">
           <td [attr.colspan]="displayedColumns.length">
             <div class="empty-state">
               <div class="empty-state__content">
@@ -609,7 +615,7 @@
       </tr>
     </table>
 
-    <div class="text-center my-5" *ngIf="showScrollSpinner">
+    <div class="text-center my-5" *ngIf="spinnerLoader">
       <span class="spinner-border" role="status" style="color: #00b4fc"></span>
     </div>
     <!-- <div class="noMore_record">
@@ -638,7 +644,7 @@
 
 <!-- <div class="uploadEmptyTxt">
   <div class="manage_availability_page">
-    <h4 class="page_heading">Requested Leads & Quotes <span>({{totalRecoads ? totalRecoads : 0}})</span></h4>
+    <h4 class="page_heading">Requested Leads & Quotes <span>({{totalRecords ? totalRecords : 0}})</span></h4>
     <div class="insu_uplod_box">
       <div class="iub_l">
         <p class="fs_14 fsn_4 txt_lb mt-5">Requested Leads refer to inquiries from shippers or brokers seeking carriers for specific loads, while Quotes are the price estimates or proposals provided by carriers in response, detailing the costs and terms for transporting the requested freight.</p>
