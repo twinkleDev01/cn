@@ -35,6 +35,7 @@ export class PostTruckAvailabilityComponent implements OnInit {
   public dropTimedisabled = true;
   public errorSource = false;
   public errorDestination = false;
+  weekdays: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -52,15 +53,71 @@ export class PostTruckAvailabilityComponent implements OnInit {
     this.equipmentType = StatusSetting.equipmentType;
     this.addAvailabilityForm = this.formBuilder.group({
       sourceLocation: ['', [Validators.required, Validators.maxLength(64)]],
-      sourceDate: ['', [Validators.required]],
       destinationLocation: ['', [Validators.required, Validators.maxLength(64)]],
-      destinationDate: ['',[Validators.required, this.validateDropDate]],      
+      sourceDate: [''],
+      destinationDate: [''],  
+      sourceDay: [''],
+      destinationDay: [''], 
+      sourceTime: [''],
+      destinationTime: [''],     
       shipmentTypes: ['',[Validators.required]],
       equipmentType: ['',[Validators.required]],      
       miles: ['', [Validators.required,Validators.pattern(/^[.\d]+$/)]],
       costPerMile:['',[Validators.required,Validators.pattern(/^[.\d]+$/)]],
       notes:['',Validators.maxLength(516)],
+      truckName: ['',[Validators.required]],
+      frequency: ['',[Validators.required]],
+      weight: ['',[Validators.required]],
+      length: ['',[Validators.required]],
+      loadExpiryDate:['',[Validators.required]]
     });
+    this.addAvailabilityForm.get('frequency')?.valueChanges.subscribe(value => {
+      this.setValidatorsBasedOnFrequency(value);
+    });
+  }
+
+  setValidatorsBasedOnFrequency(frequency: string) {
+    const sourceDate = this.addAvailabilityForm.get('sourceDate');
+    const destinationDate = this.addAvailabilityForm.get('destinationDate');
+    const sourceDay = this.addAvailabilityForm.get('sourceDay');
+    const destinationDay = this.addAvailabilityForm.get('destinationDay');
+    const sourceTime = this.addAvailabilityForm.get('sourceTime');
+    const destinationTime = this.addAvailabilityForm.get('destinationTime');
+
+  
+  
+    // First clear all validators
+    sourceDate?.clearValidators();
+    destinationDate?.clearValidators();
+    sourceDay?.clearValidators();
+    destinationDay?.clearValidators();
+    sourceTime?.clearValidators();
+    destinationTime?.clearValidators();
+
+    
+  
+    // Apply conditional validators
+    if (frequency === 'monthly') {
+      sourceDate?.setValidators([Validators.required]);
+      destinationDate?.setValidators([Validators.required]);
+    }
+  
+    if (frequency === 'weekly') {
+      sourceDay?.setValidators([Validators.required]);
+      destinationDay?.setValidators([Validators.required]);
+    }
+    if (frequency === 'daily') {
+      sourceTime?.setValidators([Validators.required]);
+      destinationTime?.setValidators([Validators.required]);
+    }
+  
+    // Update validity after changing validators
+    sourceDate?.updateValueAndValidity();
+    destinationDate?.updateValueAndValidity();
+    sourceDay?.updateValueAndValidity();
+    destinationDay?.updateValueAndValidity();
+    sourceTime?.updateValueAndValidity();
+    destinationTime?.updateValueAndValidity();
   }
 
   updateMinNextDate(selectedDate: Date) {
@@ -72,6 +129,7 @@ export class PostTruckAvailabilityComponent implements OnInit {
   }
 
   addFormSubmit({ value, valid }) {
+    console.log(this.addAvailabilityForm.value)
     this.submitted = true;
     var sourceDate = value.sourceDate;
     var date = new Date(sourceDate);
@@ -86,14 +144,36 @@ export class PostTruckAvailabilityComponent implements OnInit {
     var year = date.getFullYear();
     value.destinationDate = month + '/' + day + '/' + year;
 
-    value.sourceLocation = this.sourceLoc.id;
-    value.destinationLocation = this.destinyLoc.id;
+    // value.sourceLocation = this.sourceLoc.id;
+    // value.destinationLocation = this.destinyLoc.id;
+    const formValue = this.addAvailabilityForm.value
+    console.log(formValue.sourceLocation)
+    const dataToSend = {
+      sourceLocation: formValue.sourceLocation,
+      destinationLocation: formValue.destinationLocation,
+      shipmentTypes: formValue.shipmentTypes, 
+      miles: formValue.miles,
+      costPerMile: formValue.costPerMile,
+      notes: formValue.notes,
+      equipmentType:formValue.equipmentType,
+      // frequency: 'daily', 
+      // loadExpiryDate: '03/11/2025', 
+      sourceTime:  value.sourceDate, 
+      destinationTime: value.destinationDate,
+      // truckName: 'my truck 6',
+      // weight: 80,    
+      // length: '50'   
+    };
+    
+    
+
+    console.log(dataToSend)
     if (valid) {
       this.loading = true;
       let APIparams = {
         apiKey: AppSettings.APIsNameArray.AVAILIBILITY.ADD,
         uri: '',
-        postBody: value,
+        postBody: dataToSend,
       };
       this.commonService.post(APIparams).subscribe(
         (success) => {
@@ -192,8 +272,8 @@ export class PostTruckAvailabilityComponent implements OnInit {
   searchRecord(searchStr:any){
     var APIparams = this.getAPIInParam(searchStr);
     this.commonService.getList(APIparams).subscribe((ServerRes) => {
-      this.sourceCityData = ServerRes.response.cityData;
-      this.destinationCityData = ServerRes.response.cityData;
+      this.sourceCityData = ServerRes?.response?.cityData;
+      this.destinationCityData = ServerRes?.response?.cityData;
       this.loaderSearch = false;
       this.emtpyData=true;
     });

@@ -28,11 +28,11 @@
               <mat-slide-toggle class="ms-4">In-App Alert</mat-slide-toggle>
             </div> -->
 
-            <div class="col-md-3">
+            <div class="col-md-3" *ngIf="userType !='SHIPPER' && userType !='DISPATCHER'  &&  userType !='INSURANCE_COMPANY'">
               <p class="tgle_tlt">Profile Views Alert</p>
               <mat-slide-toggle formControlName="profileViewAlert" (change)="editNotification()">Email</mat-slide-toggle>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" *ngIf="userType !='SHIPPER' && userType !='DISPATCHER'  &&  userType !='INSURANCE_COMPANY'">
               <p class="tgle_tlt">Profile Views Frequency</p>
               <mat-radio-group appearance="none" class="cn_radio_btn" formControlName="profileViewFrequency" (change)="editNotification()">
                 <mat-radio-button value="instant">Instant</mat-radio-button>
@@ -70,8 +70,8 @@
               </div>
             </div> -->
           </div>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
+        </mat-expansion-panel >
+        <mat-expansion-panel  *ngIf="userType !='SHIPPER' && userType !='DISPATCHER' &&  userType !='INSURANCE_COMPANY'">
           <mat-expansion-panel-header>
             <mat-panel-title>
               <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
@@ -92,7 +92,7 @@
             </div> -->
           </div>
         </mat-expansion-panel>
-        <mat-expansion-panel>
+        <mat-expansion-panel  *ngIf="userType !='SHIPPER' && userType !='DISPATCHER'  &&  userType !='INSURANCE_COMPANY'">
           <mat-expansion-panel-header>
             <mat-panel-title>
               <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
@@ -144,7 +144,7 @@
             </div>
           </div>
         </mat-expansion-panel> -->
-        <mat-expansion-panel>
+        <mat-expansion-panel *ngIf="userType !='BROKER' && userType !='SHIPPER' && userType !='DISPATCHER'  &&  userType !='INSURANCE_COMPANY'">
           <mat-expansion-panel-header>
             <mat-panel-title>
               <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
@@ -165,7 +165,7 @@
             </div> -->
           </div>
         </mat-expansion-panel>
-        <mat-expansion-panel>
+        <mat-expansion-panel  *ngIf="userType !='SHIPPER' && userType !='DISPATCHER'  &&  userType !='INSURANCE_COMPANY'">
           <mat-expansion-panel-header>
             <mat-panel-title>
               <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 
@@ -186,7 +186,7 @@
             </div>
           </div>
         </mat-expansion-panel>
-        <mat-expansion-panel>
+        <mat-expansion-panel  *ngIf="userType !='SHIPPER' && userType !='DISPATCHER'  &&  userType !='INSURANCE_COMPANY'">
           <mat-expansion-panel-header>
             <mat-panel-title>
               <i class="fa-duotone fa-solid fa-angles-right me-3"></i> 

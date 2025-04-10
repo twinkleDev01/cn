@@ -12,7 +12,85 @@
         <form autocomplete="off" [formGroup]="addAvailabilityForm" (ngSubmit)="addFormSubmit(addAvailabilityForm)" class="cn_field">
           <p class="txt_lb mb-3">Welcome to the Load Submission Page! Here, you can quickly and easily add a new load to our system. Simply fill out the necessary details such as origin, destination, Shipment Type, Truck Types, Miles, Cost Per Mile and any special requirements. Once submitted, our team will match your load with the best available carriers to ensure timely and efficient delivery. Thank you for choosing our service to handle your transportation needs!</p>
 
-          <div class="add_lane_location mt-4">
+          <div class="row">
+            <div class="col-md-3 ic_dropdown">
+              <p class="cn_input_lbl">Frequency
+                <span class="txt_d"> *</span></p>
+                <mat-form-field appearance="none" class="cn_inpt_drop">
+                  <mat-select
+                    formControlName="frequency"
+                    class="form-control cn_input"
+                    placeholder="Frequency">
+                    
+                    <mat-option value="daily">
+                      Daily
+                    </mat-option>
+                    <mat-option value="weekly">
+                      Weekly
+                    </mat-option>
+                    <mat-option value="monthly">
+                      Monthly
+                    </mat-option>
+                    
+                  </mat-select>
+                  <mat-error *ngIf="submitted && addAvailabilityForm.get('frequency')?.errors?.['required']" class="error_mess">
+                    Frequency is required.
+                  </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+              <p class="cn_input_lbl">Truck Name
+                <span class="txt_d">*</span></p>
+                <mat-form-field appearance="none" class="cn_inpt_drop">
+                  <input matInput
+                         placeholder="Enter Truck Name"
+                         formControlName="truckName"
+                         class="form-control cn_input">
+                  
+                  <mat-error *ngIf="submitted && addAvailabilityForm.get('truckName')?.errors?.['required']" class="error_mess">
+                    Truck Name is required.
+                  </mat-error>
+                </mat-form-field>                
+            </div>
+            <div class="col-md-3">
+              <p class="cn_input_lbl">Weight<span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none">
+                <input matInput
+                       type="text"
+                       formControlName="weight"
+                       (keypress)="onlyNumberKey($event)"
+                       maxlength="6"
+                       placeholder="Enter Weight"
+                       class="form-control cn_input" />
+                
+                <mat-error class="error_mess d_inline" *ngIf="submitted && addAvailabilityForm?.get('weight')?.errors?.['required']">
+                  Weight is required.
+                </mat-error>
+                
+              </mat-form-field>
+              
+            </div>
+            <div class="col-md-3">
+              <p class="cn_input_lbl">Length<span class="txt_d"> *</span></p>
+              <mat-form-field appearance="none">
+                <input matInput
+                       type="text"
+                       formControlName="length"
+                       (keypress)="onlyNumberKey($event)"
+                       maxlength="6"
+                       placeholder="Enter Length"
+                       class="form-control cn_input" />
+                
+                <mat-error class="error_mess d_inline" *ngIf="submitted && addAvailabilityForm?.get('length')?.errors?.['required']">
+                  Length is required.
+                </mat-error>
+              
+              </mat-form-field>
+              
+            </div>
+          
+          </div>
+          <div class="add_lane_location mt-4" *ngIf="addAvailabilityForm.get('frequency')?.value">
             <div class="row">
               <div class="col-md-6">
                 <div class="lane_addrs">
@@ -33,16 +111,38 @@
                       <span class="custom_spinner spinner-border" role="status">
                         <span class="visually-hidden">Loading...</span>
                       </span>
-                    </div>
+                    </div>  
                   </div>
-                  <div class="input_field">
+                  <div class="input_field"  *ngIf="addAvailabilityForm.get('frequency')?.value === 'monthly'">
                     <p class="cn_input_lbl">Date<span class="txt_d"> *</span></p>
+                   
                     <mat-form-field appearance="none" class="cn_pfix_icn">
                       <input matInput formControlName="sourceDate" (dateChange)="updateMinNextDate($event.value)" [matDatepicker]="pickupDatePicker" [matDatepicker]="dp2" placeholder="Select  Source Date" [min]="minDate" [readonly]="true" class="form-control cn_input" >
                       <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
                       <mat-datepicker #dp2 disabled="false"></mat-datepicker>
                       <mat-error *ngIf="submitted && addAvailabilityForm.get('sourceDate').errors?.['required']" class="error_mess">Source Date is  required.</mat-error>
                     </mat-form-field>
+                  </div>
+                  <div class="input_field"  *ngIf="addAvailabilityForm.get('frequency')?.value === 'weekly'">
+                    <p class="cn_input_lbl">Source Day<span class="txt_d"> *</span></p>
+                   
+                    <mat-form-field appearance="none" class="cn_inpt_drop">
+                      <mat-select formControlName="sourceDay" placeholder="Select Source Day" class="form-control cn_input">
+                        <mat-option *ngFor="let day of weekdays" [value]="day">{{ day }}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="submitted && addAvailabilityForm.get('sourceDay').errors?.['required']" class="error_mess">Source Day is required.</mat-error>
+                    </mat-form-field>
+                    
+                  </div>
+                  <div class="input_field" *ngIf="addAvailabilityForm.get('frequency')?.value === 'daily'">
+                    <p class="cn_input_lbl">Source Time<span class="txt_d"> *</span></p>
+                   
+                    <mat-form-field appearance="none">
+                      <input matInput type="time" formControlName="sourceTime" placeholder="Select Source Time" class="form-control cn_input">
+                      <mat-error *ngIf="submitted && addAvailabilityForm.get('sourceTime').errors?.['required']" class="error_mess">Source Time is required.</mat-error>
+                    </mat-form-field>
+                    
+                    
                   </div>
                 </div>
               </div>
@@ -67,7 +167,7 @@
                       </div>
                     </mat-form-field>
                   </div>
-                  <div class="input_field">
+                  <div class="input_field"  *ngIf="addAvailabilityForm.get('frequency')?.value === 'monthly'">
                     <p class="cn_input_lbl">Date<span class="txt_d"> *</span></p>
                     <mat-form-field appearance="none" class="cn_pfix_icn">
                       <input matInput formControlName="destinationDate" [matDatepicker]="dropDatePicker" [matDatepicker]="dp1" placeholder="Select Destination Date"  [min]="minNextDate" [readonly]="true" class="form-control cn_input">
@@ -76,10 +176,32 @@
                       <mat-error *ngIf="submitted && addAvailabilityForm.get('destinationDate').errors?.['required']" class="error_mess">Destination Date is required.</mat-error>
                     </mat-form-field>
                   </div>
+                  <div class="input_field" *ngIf="addAvailabilityForm.get('frequency')?.value === 'weekly'">
+                    <p class="cn_input_lbl">Destination Day<span class="txt_d"> *</span></p>
+                    
+                    <mat-form-field appearance="none" class="cn_inpt_drop">
+                      <mat-select formControlName="destinationDay" placeholder="Select Destination Day" class="form-control cn_input">
+                        <mat-option *ngFor="let day of weekdays" [value]="day">{{ day }}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="submitted && addAvailabilityForm.get('destinationDay').errors?.['required']" class="error_mess">Destination Day is required.</mat-error>
+                    </mat-form-field>
+                    
+                  </div>
+                  <div class="input_field" *ngIf="addAvailabilityForm.get('frequency')?.value === 'daily'">
+                    <p class="cn_input_lbl">Destination Time<span class="txt_d"> *</span></p>
+                    
+                    <mat-form-field appearance="none">
+                      <input matInput type="time" formControlName="destinationTime" placeholder="Select Destination Time" class="form-control cn_input">
+                      <mat-error *ngIf="submitted && addAvailabilityForm.get('destinationTime').errors?.['required']" class="error_mess">Destination Time is required.</mat-error>
+                    </mat-form-field>                    
+                    
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
+          
 
           <div class="row">
             <div class="col-md-3 ic_dropdown">
@@ -129,13 +251,15 @@
               </mat-form-field>
             </div>
           </div>
+
           <div class="form_action">
-            <button type="submit" [disabled]="errorDestination||errorSource" class="cn_btn">Add Availability</button>
+            <button type="submit"  class="cn_btn">Add Availability</button>
           </div>
 
 
-          <!-- Old Dynamic code -->
-          <div class="row" style="display: none;">
+          
+        </form><!-- Old Dynamic code -->
+          <div class="row" style="display: none;" >
             <div class="col-md-12 mt-5">
               <div class="row">
                 <div class="col-md-12">
@@ -209,11 +333,10 @@
               </div>
             </div>
             <div class="form_action">
-              <button type="submit" [disabled]="errorDestination||errorSource" class="cn_btn" >Add Availability</button>
+              <button type="submit"  class="cn_btn" >Add Availability</button>
               <!-- style="background: #575757;" -->
             </div>
           </div>
-        </form>
       </div>
     </div>
     <div class="skt_eifr" *ngIf="skeletonLoader">

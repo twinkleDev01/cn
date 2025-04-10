@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { AlertService } from 'src/app/commons/service/alert.service';
 import { CommonService } from 'src/app/commons/service/common.service';
 import { AppSettings } from 'src/app/commons/setting/app_setting';
 
@@ -10,11 +11,12 @@ import { AppSettings } from 'src/app/commons/setting/app_setting';
   styleUrls: ['./user-notification.component.scss'],
 })
 export class UserNotificationComponent implements OnInit {
-  constructor( public commonService: CommonService,private fb: FormBuilder,private toastr: ToastrService) { }
+  constructor( public commonService: CommonService,private fb: FormBuilder,public alertService: AlertService,) { }
   notificationForm!: FormGroup;
-  notificationdata:any
+  notificationdata:any;
+  userType:any;
   ngOnInit(): void {
-   
+    this.userType = localStorage.getItem('user_type');
     this.notificationForm = this.fb.group({
       profileViewAlert: [true],
       profileViewFrequency: ['daily'],
@@ -78,13 +80,27 @@ export class UserNotificationComponent implements OnInit {
      this.commonService.putAllValue(APIparams).subscribe({
        next: (response) => {
          console.log('API Response:', response);
-         this.toastr.success('Notification update successfully!', 'Success');
+         this.alertService.showNotificationMessage(
+          'success',
+          'bottom',
+          'left',
+          'txt_s',
+          'check_circle',
+          'Success',
+          'Notification update successfully!'
+        );
          
        },
        error: (error) => {
-         
-         // this.toastr.error('User already exists!', 'Error');
-         this.toastr.error(error?.error[0]?.message||'Something went wrong', 'Error');
+         this.alertService.showNotificationMessage(
+          'danger',
+          'bottom',
+          'left',
+          'txt_d',
+          'check_circle',
+          'Error',
+          'Something went wrong'
+        );
          console.error('API Error:', error);
        }
      });
