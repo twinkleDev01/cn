@@ -583,13 +583,12 @@ export class MyTruckAvailabilityComponent implements OnInit {
   getColorClass(frequency: string): string {
     switch (frequency) {
       case 'daily':
-      case 'oneTime':
         return 's'; // Green
       case 'weekly':
         return 'p'; // Blue
       case 'monthly':
         return 'y'; // Yellow
-      case 'yearly':
+      case 'oneTime':
         return 'd'; // Red
       default:
         return '333'; // Default color
@@ -599,5 +598,23 @@ export class MyTruckAvailabilityComponent implements OnInit {
 
   toggleNote(id: string | number) {
     this.expandedNotes[id] = !this.expandedNotes[id];
+  }
+  onWeightInput(event: Event): void {
+    const input = (event.target as HTMLInputElement).value;
+    // Allow only digits and trim to 9 characters
+    const numericInput = input.replace(/\D/g, '').slice(0, 9);
+    this.advanceFilterForm.get('weight')?.setValue(numericInput, { emitEvent: false });
+  }
+  onLengthInput(event: Event): void {
+    const input = (event.target as HTMLInputElement).value;
+    // Allow only digits and trim to 9 characters
+    const numericInput = input.replace(/\D/g, '').slice(0, 9);
+    this.advanceFilterForm.get('length')?.setValue(numericInput, { emitEvent: false });
+  }
+  onDestinationInput(event: Event): void {
+    const input = (event.target as HTMLInputElement).value;
+    // Allow only digits and trim to 9 characters
+    const numericInput = input.replace(/\D/g, '').slice(0, 9);
+    this.advanceFilterForm.get('destinationLocation')?.setValue(numericInput, { emitEvent: false });
   }
 }

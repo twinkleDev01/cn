@@ -45,6 +45,7 @@ import { ParkingOverviewComponent } from './parking/parking-overview/parking-ove
 import { ParkingProfileComponent } from './parking/parking-profile/parking-profile.component';
 import { InfiniteScrollDirective } from './infinite-scroll.directive';
 import { CustomDateTimePipe } from '../commons/pipe/customDateTime.pipe';
+import { FrequencyDateTimePipe } from '../commons/pipe/frequency-date-time.pipe';
 
 // parking data component 
 
@@ -94,6 +95,7 @@ import { CustomDateTimePipe } from '../commons/pipe/customDateTime.pipe';
       // Pipe
       TimeAgoPipe,
       CustomDateTimePipe,
+      FrequencyDateTimePipe,
 // directive
 InfiniteScrollDirective,
       // parking data componets 
@@ -137,6 +139,7 @@ InfiniteScrollDirective,
   //  Pipe
   TimeAgoPipe,
   CustomDateTimePipe,
+  FrequencyDateTimePipe,
 // directive
 InfiniteScrollDirective,
       // parking data componets 

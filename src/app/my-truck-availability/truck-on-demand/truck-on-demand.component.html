@@ -156,7 +156,7 @@
                   advanceFilterForm.get('weight')?.value 
                 }">
                   <mat-label>Weight (lbs)</mat-label>
-                  <input type="text" formControlName="weight" matInput placeholder="Search">
+                  <input type="text" formControlName="weight" matInput placeholder="Search" (input)="onWeightInput($event)">
                 </mat-form-field>
               </div>
               <div class="col-md-3">
@@ -165,7 +165,7 @@
                   advanceFilterForm.get('length')?.value 
                 }">>
                   <mat-label>Length (ft)</mat-label>
-                  <input type="text" formControlName="length" matInput placeholder="Search">
+                  <input type="text" formControlName="length" matInput placeholder="Search" (input)="onLengthInput($event)">
                 </mat-form-field>
               </div>
               <!-- <div class="col-md-3">
@@ -198,8 +198,8 @@
                   highlighted:
                   advanceFilterForm.get('sourceLocation')?.value 
                 }">
-                  <mat-label>SourceLocation</mat-label>
-                  <input type="text" formControlName="sourceLocation" matInput placeholder="Search">
+                  <mat-label>Source Location</mat-label>
+                  <input type="text" formControlName="sourceLocation" matInput placeholder="Search" (input)="onSourceInput($event)">
                 </mat-form-field>
               </div>
               <!-- DestinationLocation -->
@@ -208,8 +208,8 @@
                   highlighted:
                   advanceFilterForm.get('destinationLocation')?.value 
                 }">
-                  <mat-label>DestinationLocation</mat-label>
-                  <input type="text" formControlName="destinationLocation" matInput placeholder="Search">
+                  <mat-label>Destination Location</mat-label>
+                  <input type="text" formControlName="destinationLocation" matInput placeholder="Search" (input)="onDestinationInput($event)">
                 </mat-form-field>
               </div>
                <!-- teamId -->
@@ -303,7 +303,13 @@
       <ng-container matColumnDef="carrierInformation">
         <th mat-header-cell *matHeaderCellDef>Carrier Information</th>
         <td mat-cell *matCellDef="let element">
-          {{ element?.carrier?.companyName || "-" }}
+          <!-- {{ element?.carrier?.companyName || "-" }} -->
+          <a 
+          [href]="'/carrier-profile/' + element.carrier?.dotNumber + '/' + formatCompanyName(element.carrier?.companyName)" 
+          class="u_name"  
+          target="_blank">
+          {{ element.carrier?.companyName }}
+        </a>
         </td>
       </ng-container>
       <ng-container matColumnDef="pickup">
@@ -323,19 +329,9 @@
                   *ngIf="element.sourceLocationCountry"
                 />
                 {{
-                  element.sourceLocationCity
-                    ? (element.sourceLocationCity | titleCase)
-                    : "-"
-                }}
-                {{
-                  element.sourceLocationState
-                    ? ", " + element.sourceLocationState
-                    : "-"
-                }}
-                {{
-                  element.sourceLocationCountry
-                    ? ", " + element.sourceLocationCountry
-                    : "-"
+                  (element.sourceLocationCity ? (element.sourceLocationCity | titleCase) : '') +
+                  (element.sourceLocationState ? ', ' + element.sourceLocationState : '') +
+                  (element.sourceLocationCountry ? ', ' + element.sourceLocationCountry : '')
                 }}
               </div>
             </div>
@@ -355,7 +351,14 @@
                   'fa-calendar-clock': element.frequency === 'yearly'
                 }"
               ></i>
-              {{ element.sourceDate | customDateTime }}
+              <!-- {{ element.sourceDate | customDateTime }} -->
+              <!-- {{ {
+                frequency: element.frequency,
+                destinationTime: element.destinationTime,
+                destinationDate: element.destinationDate,
+                destinationDay: element.destinationDay
+              } | frequencyDateTime }} -->
+              {{ element | frequencyDateTime:'source' }}
             </div>
           </div>
         </td>
@@ -376,19 +379,9 @@
                 *ngIf="element.destinationLocationCountry"
               />
               {{
-                element.destinationLocationCity
-                  ? (element.destinationLocationCity | titleCase)
-                  : "-"
-              }}
-              {{
-                element.destinationLocationState
-                  ? ", " + element.destinationLocationState
-                  : "-"
-              }}
-              {{
-                element.destinationLocationCountry
-                  ? ", " + element.destinationLocationCountry
-                  : "-"
+                (element.destinationLocationCity ? (element.destinationLocationCity | titleCase) : '') +
+                (element.destinationLocationState ? ', ' + element.destinationLocationState : '') +
+                (element.destinationLocationCountry ? ', ' + element.destinationLocationCountry : '')
               }}
             </div>
             <div
@@ -409,7 +402,14 @@
                   'fa-calendar-clock': element.frequency === 'yearly'
                 }"
               ></i>
-              {{ element.destinationDate | customDateTime }}
+              <!-- {{ element.destinationDate | customDateTime }} -->
+              <!-- {{ {
+                frequency: element.frequency,
+                destinationTime: element.destinationTime,
+                destinationDate: element.destinationDate,
+                destinationDay: element.destinationDay
+              } | frequencyDateTime }} -->
+              {{ element | frequencyDateTime:'destination' }}
             </div>
           </div>
         </td>
@@ -423,6 +423,7 @@
         <td
           mat-cell
           *matCellDef="let element"
+          [ngClass]="'txt_' + getColorClass(element.frequency)"
           class="{{ formatFrequency(element.frequency) }}"
         >
           {{ element.frequency || "-" }}

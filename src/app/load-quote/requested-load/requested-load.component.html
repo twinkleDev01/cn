@@ -446,7 +446,7 @@
                 class="flaf_icn"
                 *ngIf="element.sourceLocationCountry"
               />
-              {{
+              <!-- {{
                 element.sourceLocationCity
                   ? (element.sourceLocationCity | titleCase)
                   : ""
@@ -460,6 +460,11 @@
                 element.sourceLocationCountry
                   ? ", " + element.sourceLocationCountry
                   : ""
+              }} -->
+              {{
+                (element.sourceLocationCity ? (element.sourceLocationCity | titleCase) : '') +
+                (element.sourceLocationState ? ', ' + element.sourceLocationState : '') +
+                (element.sourceLocationCountry ? ', ' + element.sourceLocationCountry : '')
               }}
             </div>
             <div
@@ -495,7 +500,7 @@
                 class="flaf_icn"
                 *ngIf="element.destinationLocationCountry"
               />
-              {{
+              <!-- {{
                 element.destinationLocationCity
                   ? (element.destinationLocationCity | titleCase)
                   : ""
@@ -509,6 +514,11 @@
                 element.destinationLocationCountry
                   ? ", " + element.destinationLocationCountry
                   : ""
+              }} -->
+              {{
+                (element.destinationLocationCity ? (element.destinationLocationCity | titleCase) : '') +
+                (element.destinationLocationState ? ', ' + element.destinationLocationState : '') +
+                (element.destinationLocationCountry ? ', ' + element.destinationLocationCountry : '')
               }}
             </div>
             <div

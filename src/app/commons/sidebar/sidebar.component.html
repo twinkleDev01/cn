@@ -351,7 +351,7 @@
 			</li>
 
 			<!-- My Truck On Demand -->
-			<li class="lbl_1" *ngIf="userType ==='SELLER' || userType ==='BROKER' ||  userType ==='SHIPPER' || userType === 'DISPATCHER'">
+			<li class="lbl_1" [routerLinkActive]="['active']" *ngIf="userType ==='SELLER' || userType ==='BROKER' ||  userType ==='SHIPPER' || userType === 'DISPATCHER'">
 				<a class="main_menu_a" [routerLink]="['truck-on-demand']">
 					<i class="fa-sharp-duotone fa-regular fa-truck-container"></i>
 					<span (click)="isMobile ? mobMenuToggleEvent() :null">Truck On Demand</span>

@@ -155,7 +155,7 @@ class="uploadEmptyTxt">
                       advanceFilterForm.get('weight')?.value 
                     }">
                       <mat-label>Weight (lbs)</mat-label>
-                      <input type="text" formControlName="weight" matInput placeholder="Search">
+                      <input type="text" formControlName="weight" matInput placeholder="Search" (input)="onWeightInput($event)">
                     </mat-form-field>
                   </div>
                   <div class="col-md-3">
@@ -164,7 +164,7 @@ class="uploadEmptyTxt">
                       advanceFilterForm.get('length')?.value 
                     }">>
                       <mat-label>Length (ft)</mat-label>
-                      <input type="text" formControlName="length" matInput placeholder="Search">
+                      <input type="text" formControlName="length" matInput placeholder="Search" (input)="onLengthInput($event)">
                     </mat-form-field>
                   </div>
                   <div class="col-md-3">
@@ -190,8 +190,8 @@ class="uploadEmptyTxt">
                       highlighted:
                       advanceFilterForm.get('destinationLocation')?.value 
                     }">
-                      <mat-label>DestinationLocation</mat-label>
-                      <input type="text" formControlName="destinationLocation" matInput placeholder="Search">
+                      <mat-label>Destination Location</mat-label>
+                      <input type="text" formControlName="destinationLocation" matInput placeholder="Search" (input)="onDestinationInput($event)">
                     </mat-form-field>
                   </div>
                   <!-- teamId -->
@@ -297,18 +297,9 @@ class="uploadEmptyTxt">
               <div class="loca_txt">
                 <img [src]="getCountryFlag(element.sourceLocationCountry)" class="flaf_icn" />
                 {{
-                  element.sourceLocationCity
-                    ? (element.sourceLocationCity | titleCase)
-                    : "-"
-                }}  {{
-                  element.sourceLocationState
-                    ? ", " + element.sourceLocationState
-                    : "-"
-                }}
-                {{
-                  element.sourceLocationCountry
-                    ? ", " + element.sourceLocationCountry
-                    : "-"
+                  (element.sourceLocationCity ? (element.sourceLocationCity | titleCase) : '') +
+                  (element.sourceLocationState ? ', ' + element.sourceLocationState : '') +
+                  (element.sourceLocationCountry ? ', ' + element.sourceLocationCountry : '')
                 }}
               </div>
               <div class="frncy_txt {{formatFrequency(element.frequency)}} "[ngClass]="'txt_' + getColorClass(element.frequency)">
@@ -318,7 +309,8 @@ class="uploadEmptyTxt">
                   'fa-calendar-lines': element.frequency === 'Every Month',
                   'fa-calendar-clock': element.frequency === 'Only One time'
                 }"></i><i class="fa-duotone fa-calendar-week me-2"></i>
-                {{element.sourceDate | customDateTime}}
+                <!-- {{element.sourceDate | customDateTime}} -->
+                {{ element | frequencyDateTime:'source' }}
               </div>
             </div>
             
@@ -330,18 +322,9 @@ class="uploadEmptyTxt">
             <div class="loca_col">
               <div class="loca_txt"> <img [src]="getCountryFlag(element.destinationLocationCountry)" class="flaf_icn" />
                 {{
-                  element.destinationLocationCity
-                    ? (element.destinationLocationCity | titleCase)
-                    : "-"
-                }} {{
-                element.destinationLocationState
-                  ? ", " + element.destinationLocationState
-                  : "-"
-              }}
-                {{
-                  element.destinationLocationCountry
-                    ? ", " + element.destinationLocationCountry
-                    : "-"
+                  (element.destinationLocationCity ? (element.destinationLocationCity | titleCase) : '') +
+                  (element.destinationLocationState ? ', ' + element.destinationLocationState : '') +
+                  (element.destinationLocationCountry ? ', ' + element.destinationLocationCountry : '')
                 }}
               </div>
               <div class="frncy_txt {{formatFrequency(element.frequency)}}" [ngClass]="'txt_' + getColorClass(element.frequency)">
@@ -352,7 +335,8 @@ class="uploadEmptyTxt">
                   'fa-calendar-clock': element.frequency === 'Only One time'
                 }"></i>
                 <i class="fa-duotone fa-calendar-week me-2"></i>
-                {{element.destinationDate | customDateTime}}
+                <!-- {{element.destinationDate | customDateTime}} -->
+                {{ element | frequencyDateTime:'destination' }}
               </div>
             </div>
           </td>
@@ -363,7 +347,7 @@ class="uploadEmptyTxt">
         </ng-container>
         <ng-container matColumnDef="frequency">
           <th mat-header-cell *matHeaderCellDef>Frequency</th>
-          <td mat-cell *matCellDef="let element" class="{{formatFrequency(element.frequency)}}">
+          <td mat-cell *matCellDef="let element"  [ngClass]="'txt_' + getColorClass(element.frequency)" class="{{formatFrequency(element.frequency)}}">
             {{element.frequency || "-"}}
           </td>
         </ng-container>
