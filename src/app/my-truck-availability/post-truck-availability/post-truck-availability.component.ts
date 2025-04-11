@@ -143,13 +143,23 @@ export class PostTruckAvailabilityComponent implements OnInit {
     if (frequency === 'monthly') {
       sourceDate?.setValidators([Validators.required]);
       destinationDate?.setValidators([Validators.required]);
+      sourceTime?.setValidators([Validators.required]);
+      destinationTime?.setValidators([Validators.required]);
     }
   
     if (frequency === 'weekly') {
       sourceDay?.setValidators([Validators.required]);
       destinationDay?.setValidators([Validators.required]);
+      sourceTime?.setValidators([Validators.required]);
+      destinationTime?.setValidators([Validators.required]);
     }
     if (frequency === 'daily') {
+      sourceTime?.setValidators([Validators.required]);
+      destinationTime?.setValidators([Validators.required]);
+    }
+    if (frequency === 'oneTime') {
+      sourceDate?.setValidators([Validators.required]);
+      destinationDate?.setValidators([Validators.required]);
       sourceTime?.setValidators([Validators.required]);
       destinationTime?.setValidators([Validators.required]);
     }
